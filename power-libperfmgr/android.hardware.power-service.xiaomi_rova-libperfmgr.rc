@@ -14,6 +14,13 @@ on property:init.svc.zygote=restarting && property:vendor.powerhal.state=*
     setprop vendor.powerhal.rendering ""
     restart vendor.power-hal-aidl
 
+# restart powerHAL when SurfaceFlinger died
+on property:init.svc.surfaceflinger=restarting && property:vendor.powerhal.rendering=EXPENSIVE_RENDERING
+   setprop vendor.powerhal.state ""
+   setprop vendor.powerhal.audio ""
+   setprop vendor.powerhal.rendering ""
+   restart vendor.power-hal-aidl
+
 # restart powerHAL when audioHAL died
 on property:init.svc.vendor.audio-hal-2-0=restarting && property:vendor.powerhal.audio=AUDIO_STREAMING_LOW_LATENCY
     setprop vendor.powerhal.audio ""

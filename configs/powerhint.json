@@ -524,6 +524,12 @@
       "Value": "523200000"
     },
     {
+      "PowerHint": "EXPENSIVE_RENDERING",
+      "Node": "GPUMaxFreq",
+      "Duration": 0,
+      "Value": "523200000"
+    },
+    {
       "PowerHint": "LOW_POWER",
       "Node": "KernelBatterySaver",
       "Duration": 0,

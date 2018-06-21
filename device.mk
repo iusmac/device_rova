@@ -322,7 +322,7 @@ TARGET_BOARD_SUFFIX := _64
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power-service.xiaomi_rova-libperfmgr \
-    android.hardware.power@1.2.vendor
+    android.hardware.power@1.3.vendor
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
