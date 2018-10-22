@@ -882,7 +882,6 @@ vendor/lib64/vendor.qti.hardware.data.latency@1.0.so
 vendor/lib64/vendor.qti.latency@2.0.so
 
 # Listen
-vendor/lib/hw/sound_trigger.primary.msm8953.so:vendor/lib/hw/sound_trigger.primary.msm8937.so
 vendor/lib/libadpcmdec.so
 vendor/lib/libgcs-calwrapper.so
 vendor/lib/libgcs-ipc.so
@@ -891,13 +890,16 @@ vendor/lib/libgcs.so
 vendor/lib/liblistenjni.so
 vendor/lib/liblistensoundmodel2.so
 vendor/lib/libsmwrapper.so
-vendor/lib64/hw/sound_trigger.primary.msm8953.so:vendor/lib64/hw/sound_trigger.primary.msm8937.so
 vendor/lib64/libgcs-calwrapper.so
 vendor/lib64/libgcs-ipc.so
 vendor/lib64/libgcs-osal.so
 vendor/lib64/libgcs.so
 vendor/lib64/liblistenjni.so
 vendor/lib64/liblistensoundmodel2.so
+
+# Listen - from marmite (Wileyfox Swift 2)
+vendor/lib/hw/sound_trigger.primary.msm8937.so
+vendor/lib64/hw/sound_trigger.primary.msm8937.so
 
 # Media
 vendor/etc/seccomp_policy/mediacodec.policy
