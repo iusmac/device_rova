@@ -1,16 +1,12 @@
 OLD_LOCAL_PATH := $(LOCAL_PATH)
 LOCAL_PATH := $(call my-dir)
 
-include $(LOCAL_PATH)/../../../common.mk
 include $(CLEAR_VARS)
 
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
 LOCAL_CFLAGS+= -D_ANDROID_ -DQCAMERA_REDEFINE_LOG
 
 LOCAL_CFLAGS += -Wall -Wextra -Werror -Wno-unused-parameter
-
-LOCAL_C_INCLUDES+= $(kernel_includes)
-LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
 
 IMGLIB_HEADER_PATH := $(TARGET_OUT_INTERMEDIATES)/include/mm-camera/imglib
 
@@ -25,6 +21,7 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
     LOCAL_CFLAGS += -DUSE_ION
 endif
 
+LOCAL_HEADER_LIBRARIES += generated_kernel_headers
 
 LOCAL_SRC_FILES := \
     src/mm_lib2d.c
