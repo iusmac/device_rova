@@ -42,6 +42,49 @@ namespace V2_0 {
 namespace implementation {
 	constexpr std::string_view socIDPath("/sys/devices/soc0/soc_id");
 
+	std::vector<std::string> cpu_sensors_8917 =
+	{
+		"apc1-cpu0-usr",
+		"apc1-cpu1-usr",
+		"apc1-cpu2-usr",
+		"apc1-cpu3-usr",
+		"cpuss0-usr",
+		"cpuss0-usr",
+		"cpuss0-usr",
+		"cpuss0-usr",
+	};
+
+	std::vector<struct target_therm_cfg> sensor_cfg_8917 =
+	{
+		{
+			TemperatureType::CPU,
+			cpu_sensors_8917,
+			"",
+			95000,
+			115000,
+			95000,
+			true,
+		},
+		{
+			TemperatureType::GPU,
+			{ "gpu0-usr" },
+			"GPU",
+			95000,
+			115000,
+			95000,
+			true,
+		},
+		{
+			TemperatureType::SKIN,
+			{ "xo-therm-adc" },
+			"skin",
+			40000,
+			95000,
+			40000,
+			true,
+		},
+	};
+
 	std::vector<std::string> cpu_sensors_439 =
 	{
 		"apc1-cpu0-usr",
@@ -943,6 +986,11 @@ namespace implementation {
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
 		msm_soc_map = {
+		{303, sensor_cfg_8917},
+		{307, sensor_cfg_8917},
+		{308, sensor_cfg_8917},
+		{309, sensor_cfg_8917},
+		{386, sensor_cfg_8917}, // QM215
 		{353, sensor_cfg_439},
 		{354, sensor_cfg_439},
 		{363, sensor_cfg_439},
