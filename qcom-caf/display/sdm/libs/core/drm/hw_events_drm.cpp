@@ -212,8 +212,8 @@ void *HWEventsDRM::DisplayEventHandler() {
 
   struct sched_param param = {0};
   param.sched_priority = 2;
-  if (sched_setscheduler(0, SCHED_FIFO, &param) != 0) {
-    DLOGE("Couldn't set SCHED_FIFO: %d", errno);
+  if (sched_setscheduler(0, SCHED_RR, &param) != 0) {
+    DLOGE("Couldn't set SCHED_RR: %d", errno);
   }
 
   while (!exit_threads_) {
