@@ -107,8 +107,8 @@ on boot
     write /sys/module/g_android/parameters/mtp_tx_req_len 131072 
     write /sys/module/g_android/parameters/mtp_rx_req_len 131072
 
-on property:persist.vendor.usb.config=*
-    setprop persist.sys.usb.config ${persist.vendor.usb.config}
+#on property:persist.vendor.usb.config=*
+#    setprop persist.sys.usb.config ${persist.vendor.usb.config}
 
 on boot && property:ro.boot.usbconfigfs=true
         setprop sys.usb.configfs 1
