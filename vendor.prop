@@ -135,6 +135,7 @@ vendor.vidc.disable.split.mode=1
 vendor.vidc.enc.disable.pq=true
 vendor.vidc.enc.disable_bframes=1
 vendor.video.disable.ubwc=1
+media.stagefright.thumbnail.prefer_hw_codecs=true
 
 # Memory optimizations
 ro.vendor.qti.sys.fw.bservice_enable=true
