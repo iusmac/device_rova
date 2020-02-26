@@ -2,6 +2,9 @@
 dalvik.vm.dex2oat-filter=speed
 dalvik.vm.image-dex2oat-filter=speed
 
+# fastbootd
+ro.fastbootd.available=true
+
 # Fwk detect
 ro.vendor.qti.va_aosp.support=1
 
