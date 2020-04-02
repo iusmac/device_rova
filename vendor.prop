@@ -139,6 +139,9 @@ ro.vendor.qti.sys.fw.bservice_enable=true
 # Perf
 ro.vendor.extension_library=libqti-perfd-client.so
 
+# Netflix
+ro.netflix.bsp_rev=Q660-13149-1
+
 # Network manager daemon
 ro.vendor.use_data_netmgrd=true
 persist.data.netmgrd.qos.enable=true
