@@ -206,6 +206,7 @@ persist.vendor.debug.sensors.hal=i
 
 # SurfaceFlinger
 debug.sf.use_phase_offsets_as_durations=1
+debug.sf.disable_client_composition_cache=1
 debug.sf.early.app.duration=4500000
 debug.sf.early.sf.duration=5000000
 debug.sf.earlyGl.app.duration=7500000
