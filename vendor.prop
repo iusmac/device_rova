@@ -76,6 +76,7 @@ persist.vendor.dpm.feature=1
 persist.vendor.dpm.loglevel=0
 
 # Display
+debug.cpurend.vsync=false
 debug.egl.hw=0
 debug.enable.sglscale=1
 debug.gralloc.enable_fb_ubwc=1
