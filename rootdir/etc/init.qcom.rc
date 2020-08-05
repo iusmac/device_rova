@@ -454,9 +454,6 @@ on property:vold.decrypt=trigger_restart_framework
     restart vendor.audio-hal
     start wcnss-service
 
-on property:persist.env.fastdorm.enabled=true
-    setprop persist.radio.data_no_toggle 1
-
 on property:ro.vendor.iocgrp.config=1
     mkdir /dev/blkio
     mount cgroup none /dev/blkio blkio
