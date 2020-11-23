@@ -117,13 +117,13 @@ vendor/lib64/libqtigef.so
 vendor/lib64/libtinycompress_vendor.so
 
 # Audio dirac - from ugg
-vendor/etc/diracmobile.config|b99e9492e77e52ca3a511feae0409d59f6aebb87
 lib/libDiracAPI_SHARED.so:vendor/lib/libDiracAPI_SHARED.so|42b49679d38eca93fead05ea06ddbdc8108fd4b1
 lib/soundfx/libdirac.so:vendor/lib/soundfx/libdirac.so|e92652ab578e90bb9e9b09553c3554f27cb7c07f
+vendor/etc/diracmobile.config|b99e9492e77e52ca3a511feae0409d59f6aebb87
 
 # Audiosphere
-etc/permissions/audiosphere.xml
-framework/audiosphere.jar
+system/etc/permissions/audiosphere.xml
+system/framework/audiosphere.jar
 vendor/lib/soundfx/libasphere.so
 vendor/lib64/soundfx/libasphere.so
 
@@ -608,9 +608,6 @@ vendor/lib64/libsysmon_cdsp_skel.so
 vendor/bin/hvdcp_opti|d160d2193640a21b7eff70425bcdbfc775063cd5
 
 # CNE
-etc/cne/Nexus/ATT/ATT_profiles.xml
-etc/cne/Nexus/ROW/ROW_profiles.xml
-etc/cne/Nexus/VZW/VZW_profiles.xml
 product/etc/permissions/vendor.qti.hardware.data.connection-V1.0-java.xml
 product/etc/permissions/vendor.qti.hardware.data.connection-V1.1-java.xml
 product/framework/com.quicinc.cne.api-V1.1-java.jar
@@ -626,6 +623,9 @@ product/framework/vendor.qti.hardware.data.connection-V1.1-java.jar
 product/framework/vendor.qti.hardware.data.dynamicdds-V1.0-java.jar
 product/framework/vendor.qti.hardware.data.iwlan-V1.0-java.jar
 product/framework/vendor.qti.hardware.data.qmi-V1.0-java.jar
+system/etc/cne/Nexus/ATT/ATT_profiles.xml
+system/etc/cne/Nexus/ROW/ROW_profiles.xml
+system/etc/cne/Nexus/VZW/VZW_profiles.xml
 product/lib64/com.quicinc.cne.api@1.0.so
 product/lib64/com.quicinc.cne.api@1.1.so
 product/lib64/com.quicinc.cne.constants@1.0.so
@@ -704,7 +704,6 @@ etc/qdcm_calib_data_hx8394F_HD720p_video_BOE_c3b.xml:vendor/etc/qdcm_calib_data_
 etc/qdcm_calib_data_ili9881c_HD720p_video_Ebbg_c3b.xml:vendor/etc/qdcm_calib_data_ili9881c_HD720p_video_Ebbg_c3b.xml
 
 # DPM
-framework/tcmclient.jar
 product/bin/dpmd
 product/etc/dpm/dpm.conf
 product/etc/init/dpmd.rc
@@ -723,6 +722,7 @@ product/lib64/libdpmfdmgr.so
 product/lib64/libdpmframework.so
 product/lib64/libdpmtcm.so
 -product/priv-app/dpmserviceapp/dpmserviceapp.apk
+system/framework/tcmclient.jar
 vendor/bin/dpmQmiMgr
 vendor/etc/init/dpmQmiMgr.rc
 vendor/lib/com.qualcomm.qti.dpm.api@1.0.so
@@ -749,9 +749,9 @@ vendor/lib64/libspl.so
 vendor/lib64/libssd.so
 
 # FM
-lib64/fm_helium.so
-lib64/libfm-hci.so
 -product/lib64/vendor.qti.hardware.fm@1.0.so
+system/lib64/fm_helium.so
+system/lib64/libfm-hci.so
 vendor/lib64/hw/vendor.qti.hardware.fm@1.0-impl.so
 
 # Gatekeeper
@@ -956,8 +956,8 @@ vendor/lib/libperipheral_client.so
 vendor/lib64/libperipheral_client.so
 
 # Postprocessing
-etc/permissions/com.qti.snapdragon.sdk.display.xml
-framework/com.qti.snapdragon.sdk.display.jar
+system/etc/permissions/com.qti.snapdragon.sdk.display.xml
+system/framework/com.qti.snapdragon.sdk.display.jar
 vendor/bin/hw/vendor.display.color@1.0-service
 vendor/bin/hw/vendor.qti.hardware.qdutils_disp@1.0-service-qti
 vendor/bin/mm-pp-dpps
@@ -998,10 +998,10 @@ vendor/lib64/libqmi.so|f814a152f974b2305f74f90a4f1c0a20989fb253
 -vendor/lib64/libqmiservices.so|842a1b61fad7dd34753e945ee2ada0fdc9589c09
 
 # QMI
-etc/permissions/privapp-permissions-qti.xml
-etc/permissions/qti_libpermissions.xml
-etc/permissions/qti_permissions.xml
-etc/sysconfig/qti_whitelist.xml
+system/etc/permissions/privapp-permissions-qti.xml
+system/etc/permissions/qti_libpermissions.xml
+system/etc/permissions/qti_permissions.xml
+system/etc/sysconfig/qti_whitelist.xml
 vendor/bin/irsc_util
 vendor/etc/sec_config
 vendor/lib/libdiag.so
@@ -1107,7 +1107,6 @@ vendor/bin/imsdatadaemon|56e1ab6f6f6679261bcd36dd218097632da866b6
 vendor/bin/imsqmidaemon|0e5cf08e7cbd4e34fb69e6644a8c7d5e6715c306
 
 # Radio - IMS
-etc/permissions/com.qualcomm.qti.imscmservice.xml
 -product/app/imssettings/imssettings.apk
 -product/app/uceShimService/uceShimService.apk
 product/etc/permissions/com.qualcomm.qti.imscmservice-V2.0-java.xml
@@ -1139,6 +1138,7 @@ product/lib64/vendor.qti.ims.rcsconfig@1.0.so
 product/lib64/vendor.qti.imsrtpservice@2.0.so
 product/lib64/vendor.qti.imsrtpservice@2.1.so
 -product/priv-app/ims/ims.apk
+system/etc/permissions/com.qualcomm.qti.imscmservice.xml
 vendor/bin/ims_rtp_daemon
 vendor/bin/imsrcsd
 vendor/etc/init/ims_rtp_daemon.rc
