@@ -44,7 +44,6 @@ on early-init
 
     # Boost I/O performance
     write /sys/block/mmcblk0/queue/scheduler "noop"
-    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
     write /sys/block/mmcblk0/queue/nr_requests 256
     write /sys/block/mmcblk0/queue/iostats 0
 
@@ -409,11 +408,6 @@ on post-fs-data
     mkdir /persist/sensors/registry/registry
     mkdir /data/misc/sensors
     chmod 0775 /data/misc/sensors
-
-    # set aggressive read ahead for dm-0 and dm-1 during boot up
-    write /sys/block/dm-0/queue/read_ahead_kb 2048
-    write /sys/block/dm-1/queue/read_ahead_kb 2048
-    write /sys/block/dm-2/queue/read_ahead_kb 2048
 
     #Create dir for TUI
     mkdir /data/vendor/tui 0700 system system
