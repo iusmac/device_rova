@@ -19,6 +19,8 @@ allow vendor_init {
     proc_sysctl_autogroup
     proc_sysctl_schedboost
     proc_sched
+    proc_dirty
+    proc_dirty_ratio
 }:file w_file_perms;
 
 set_prop(vendor_init, vendor_power_prop)

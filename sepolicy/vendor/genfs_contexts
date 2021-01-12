@@ -43,6 +43,9 @@ genfscon sysfs /devices/platform/soc/soc:qcom,cpubw       u:object_r:sysfs_msm_s
 genfscon sysfs /devices/platform/soc/soc:qcom,gpubw       u:object_r:sysfs_msm_subsys:s0
 genfscon sysfs /devices/platform/soc/soc:qcom,mincpubw    u:object_r:sysfs_msm_subsys:s0
 
+# ProcFS
+genfscon proc /sys/vm/dirty_writeback_centisecs           u:object_r:proc_dirty:s0
+
 # Rmt
 genfscon debugfs /rmt_storage	u:object_r:debugfs_rmt:s0
 
