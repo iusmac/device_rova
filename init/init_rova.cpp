@@ -93,6 +93,7 @@ void set_variant_props(const variant_info_t variant);
 
 void property_override(char const prop[], char const value[], bool add = true);
 void set_dalvik_heap_size();
+void set_avoid_gfxaccel_config();
 void set_ro_build_prop(const std::string &prop, const std::string &value, bool product = false);
 
 static const variant_info_t rolex_info = {
@@ -126,6 +127,17 @@ static void determine_device()
 void vendor_load_properties() {
     determine_device();
     set_dalvik_heap_size();
+    set_avoid_gfxaccel_config();
+}
+
+void set_avoid_gfxaccel_config() {
+    struct sysinfo sys;
+    sysinfo(&sys);
+
+    if (sys.totalram <= 2048ull * 1024 * 1024) {
+        // Reduce memory footprint
+        property_override("ro.config.avoid_gfx_accel", "true");
+    }
 }
 
 void set_dalvik_heap_size()
