@@ -36,7 +36,7 @@ vendor.voice.record.conc.disabled=false
 vendor.voice.voip.conc.disabled=true
 
 # Audio Fluence
-persist.vendor.audio.fluence.speaker=true
+persist.vendor.audio.fluence.speaker=false
 persist.vendor.audio.fluence.voicecall=true
 persist.vendor.audio.fluence.voicerec=false
 ro.vendor.audio.sdk.fluencetype=fluence
