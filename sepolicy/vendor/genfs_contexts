@@ -41,6 +41,13 @@ genfscon debugfs /rmt_storage	u:object_r:debugfs_rmt:s0
 # RTC
 genfscon sysfs /devices/platform/soc/200f000.qcom,spmi/spmi-0/spmi0-00/200f000.qcom,spmi:qcom,pm8937@0:qcom,pm8937_rtc/rtc u:object_r:sysfs_rtc:s0
 
+# Powerstats
+genfscon sysfs /bus/iio/devices                                      u:object_r:sysfs_iio_devices:s0
+genfscon sysfs /kernel/wlan                                          u:object_r:sysfs_msm_wlan:s0
+genfscon sysfs /power/system_sleep/stats                             u:object_r:sysfs_power_stats:s0
+genfscon sysfs /power/rpmh_stats/master_stats                        u:object_r:sysfs_power_stats:s0
+genfscon sysfs /kernel/wlan/power_stats                              u:object_r:sysfs_power_stats:s0
+
 # Touchscreen
 genfscon sysfs /board_properties/virtualkeys.ft5346			u:object_r:sysfs_virtualkeys:s0
 genfscon sysfs /board_properties/virtualkeys.ft5x06_720p		u:object_r:sysfs_virtualkeys:s0
