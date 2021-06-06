@@ -97,6 +97,7 @@ ro.vendor.audio.sdk.fluencetype=fluence
 persist.vendor.bluetooth.modem_nv_support=true
 persist.vendor.qcom.bluetooth.enable.splita2dp=false
 persist.vendor.qcom.bluetooth.soc=pronto
+vendor.qcom.bluetooth.soc=pronto
 ro.vendor.bluetooth.wipower=false
 
 # Camera

@@ -9,6 +9,7 @@ allow system_app iorapd:binder call;
 
 # Generic
 allow system_app proc_vmallocinfo:file r_file_perms;
+get_prop(system_app, vendor_bluetooth_prop)
 
 # XiaomiParts
 allow system_app {
