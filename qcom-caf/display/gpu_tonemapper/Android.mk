@@ -12,7 +12,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps) $(kernel_deps)
 LOCAL_ADDITIONAL_DEPENDENCIES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 
 LOCAL_CFLAGS              := $(version_flag) -Wno-missing-field-initializers -Wall \
-                             -Wno-unused-parameter -DLOG_TAG=\"GPU_TONEMAPPER\"
+                             -Wno-unused-parameter -Wno-unreachable-code-loop-increment -DLOG_TAG=\"GPU_TONEMAPPER\"
 
 LOCAL_SRC_FILES           := TonemapFactory.cpp \
                              glengine.cpp \
