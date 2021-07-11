@@ -265,7 +265,7 @@ case "$target" in
             303|307|308|309|320|386|436)
                 # Vulkan is not supported for 8917 variants
                 setprop vendor.opengles.version 196608
-                setprop persist.graphics.vulkan.disable true
+                setprop persist.vendor.graphics.vulkan.disable true
                 setprop vendor.gralloc.disable_ahardware_buffer 1
                 # Disable adsprpcd_sensorspd daemon
                 setprop vendor.fastrpc.disable.adsprpcd_sensorspd.daemon 1
@@ -278,7 +278,7 @@ case "$target" in
     "msm8909")
         case "$soc_hwplatform" in
             *)
-                setprop persist.graphics.vulkan.disable true
+                setprop persist.vendor.graphics.vulkan.disable true
                 ;;
         esac
         ;;
