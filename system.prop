@@ -42,6 +42,9 @@ ro.fm.transmitter=false
 # Fwk detect
 ro.vendor.qti.va_aosp.support=1
 
+# LMK
+ro.lmk.filecache_min_kb=153600
+
 # Media
 media.aac_51_output_enabled=true
 media.msm8956hw=0
