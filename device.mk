@@ -392,6 +392,9 @@ PRODUCT_PACKAGES += \
     libshims_ui \
     libwui
 
+# Shipping level
+BOARD_SHIPPING_API_LEVEL := 30
+
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
