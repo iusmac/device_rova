@@ -54,6 +54,8 @@
     <ctl name="RX1 Digital Volume" value="84" />
     <ctl name="RX2 Digital Volume" value="84" />
     <ctl name="RX3 Digital Volume" value="84" />
+<!-- Xiaomi changes for rova start -->
+<!--
     <ctl name="IIR1 INP1 Volume" value="84" />
     <ctl name="IIR1 INP2 Volume" value="84" />
     <ctl name="IIR1 INP3 Volume" value="84" />
@@ -61,6 +63,16 @@
     <ctl name="ADC1 Volume" value="6" />
     <ctl name="ADC2 Volume" value="6" />
     <ctl name="ADC3 Volume" value="6" />
+-->
+    <!-- bug279292,chengong.wt,20170720,.modify,pop when dial -->
+    <ctl name="IIR1 INP1 Volume" value="53" />
+    <ctl name="IIR1 INP2 Volume" value="53" />
+    <ctl name="IIR1 INP3 Volume" value="53" />
+    <ctl name="IIR1 INP4 Volume" value="53" />
+    <ctl name="ADC1 Volume" value="4" />
+    <ctl name="ADC2 Volume" value="4" />
+    <ctl name="ADC3 Volume" value="4" />
+<!-- Xiaomi changes for rova end -->
     <ctl name="DEC1 Volume" value="84" />
     <ctl name="DEC2 Volume" value="84" />
     <ctl name="DEC2 MUX" value="ZERO" />
@@ -80,6 +92,10 @@
     <ctl name="EAR_S" value="ZERO" />
     <ctl name="HPHL" value="ZERO" />
     <ctl name="HPHR" value="ZERO" />
+<!-- Xiaomi changes for rolex start -->
+    <ctl name="Lineout_1 amp" value="DISABLE"/> 
+    <ctl name="headset amp" value="DISABLE"/>
+<!-- Xiaomi changes for rolex end -->
     <ctl name="SPK" value="ZERO" />
     <ctl name="WSA Spk Switch" value="ZERO" />
     <ctl name="SpkrMono WSA_RDAC" value="ZERO" />
@@ -933,6 +949,7 @@
     <path name="incall_music_uplink usb-headphones">
         <path name="incall_music_uplink" />
     </path>
+
     <path name="incall_music_uplink2">
         <ctl name="Incall_Music_2 Audio Mixer MultiMedia9" value="1" />
     </path>
@@ -952,6 +969,7 @@
     <path name="incall_music_uplink2 usb-headphones">
         <path name="incall_music_uplink2" />
     </path>
+
     <path name="volte-call">
         <ctl name="PRI_MI2S_RX_Voice Mixer VoLTE" value="1" />
         <ctl name="VoLTE_Tx Mixer TERT_MI2S_TX_VoLTE" value="1" />
@@ -1024,10 +1042,16 @@
 
     <!-- These are actual sound device specific mixer settings -->
     <path name="adc1">
+<!-- Xiaomi changes for rova start -->
+    	<ctl name="ADC1 Volume" value="6" />
+<!-- Xiaomi changes for rova end -->
         <ctl name="DEC1 MUX" value="ADC1" />
     </path>
 
     <path name="adc2">
+<!-- Xiaomi changes for rova start -->
+    	<ctl name="ADC2 Volume" value="6" />
+<!-- Xiaomi changes for rova end -->
         <ctl name="DEC1 MUX" value="ADC2" />
     </path>
     <path name="adc3">
@@ -1037,8 +1061,19 @@
     </path>
 
     <path name="speaker">
+<!-- Xiaomi changes for rolex start -->
+<!--
         <ctl name="RX3 MIX1 INP1" value="RX1" />
         <ctl name="SPK" value="Switch" />
+-->
+    <!-- speaker use hphr chengong.wt 20170504 -->
+        <ctl name="MI2S_RX Channels" value="One" />
+        <ctl name="RX2 MIX1 INP1" value="RX2" />
+        <ctl name="RDAC2 MUX" value="RX2" />
+        <ctl name="HPHL" value="Switch" />
+        <ctl name="HPHR" value="Switch" />
+        <ctl name="Lineout_1 amp" value="ENABLE"/>
+<!-- Xiaomi changes for rolex end -->
     </path>
 
     <path name="wsa-speaker">
@@ -1093,6 +1128,9 @@
         <ctl name="RDAC2 MUX" value="RX2" />
         <ctl name="HPHL" value="Switch" />
         <ctl name="HPHR" value="Switch" />
+<!-- Xiaomi changes for rova start -->
+        <ctl name="headset amp" value="ENABLE"/>
+<!-- Xiaomi changes for rova end -->
     </path>
 
     <path name="headset-mic">
@@ -1134,8 +1172,16 @@
         <path name="wsa-speaker" />
     </path>
 
+    <path name="handfree-mic">
+        <path name="adc3" />
+    </path>
+
     <path name="voice-speaker-mic">
-        <path name="speaker-mic" />
+<!-- Xiaomi changes for rova start -->
+        <!-- <path name="speaker-mic" /> -->
+    <!-- voice handfree use second mic chengong.wt 20170504 -->
+        <path name="handfree-mic" />
+<!-- Xiaomi changes for rova end -->
     </path>
 
     <path name="voice-headphones">
@@ -1147,8 +1193,20 @@
     </path>
 
     <path name="speaker-and-headphones">
+<!-- Xiaomi changes for rolex start -->
+<!--
         <path name="speaker" />
         <path name="headphones" />
+-->
+        <ctl name="MI2S_RX Channels" value="Two" />
+        <ctl name="RX1 MIX1 INP1" value="RX1" />
+        <ctl name="RX2 MIX1 INP1" value="RX2" />
+        <ctl name="RDAC2 MUX" value="RX2" />
+        <ctl name="HPHL" value="Switch" />
+        <ctl name="HPHR" value="Switch" />
+        <ctl name="Lineout_1 amp" value="ENABLE"/>
+        <ctl name="headset amp" value="ENABLE"/>
+<!-- Xiaomi changes for rolex end -->
     </path>
 
     <path name="usb-headphones">
@@ -1193,6 +1251,9 @@
     <!-- Dual MIC devices -->
     <path name="speaker-dmic-endfire">
         <path name="adc1" />
+<!-- Xiaomi changes for rova start -->
+    	<ctl name="ADC3 Volume" value="4" />
+<!-- Xiaomi changes for rova end -->
         <ctl name="DEC2 MUX" value="ADC2" />
         <ctl name="MI2S_TX Channels" value="Two" />
         <ctl name="ADC2 MUX" value="INP3" />
