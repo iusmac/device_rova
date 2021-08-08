@@ -12,6 +12,18 @@ on property:ro.vendor.xiaomi.device=riva
     mount none /vendor/etc/riva_mixer_paths_qrd_sku2.xml /vendor/etc/mixer_paths_qrd_sku2.xml bind
     restart vendor.audio-hal
 
+# IR
+on property:ro.vendor.xiaomi.device=rolex
+    chown system system /sys/class/leds/infrared/transmit
+    chown system system /sys/class/leds/infrared/brightness
+    setprop ro.hardware.consumerir led
+    restart vendor.ir-hal-1-0
+
+on property:ro.vendor.xiaomi.device=riva
+    chown system system /dev/spidev7.1
+    setprop ro.hardware.consumerir spidev
+    restart vendor.ir-hal-1-0
+
 # Sensors
 on property:ro.vendor.xiaomi.device=rolex
     mount none /vendor/etc/sensors/rolex_sensor_def_qcomdev.conf /vendor/etc/sensors/sensor_def_qcomdev.conf bind
