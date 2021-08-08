@@ -11,3 +11,12 @@ on property:ro.vendor.xiaomi.device=rolex
 on property:ro.vendor.xiaomi.device=riva
     mount none /vendor/etc/riva_mixer_paths_qrd_sku2.xml /vendor/etc/mixer_paths_qrd_sku2.xml bind
     restart vendor.audio-hal
+
+# Sensors
+on property:ro.vendor.xiaomi.device=rolex
+    mount none /vendor/etc/sensors/rolex_sensor_def_qcomdev.conf /vendor/etc/sensors/sensor_def_qcomdev.conf bind
+    restart vendor.sensors.qti
+
+on property:ro.vendor.xiaomi.device=riva
+    mount none /vendor/etc/sensors/riva_sensor_def_qcomdev.conf /vendor/etc/sensors/sensor_def_qcomdev.conf bind
+    restart vendor.sensors.qti
