@@ -1,0 +1,12 @@
+# IR
+genfscon sysfs /devices/platform/soc/soc:gpio-leds/leds	u:object_r:sysfs_leds:s0
+
+# Power - rolex
+genfscon sysfs /devices/platform/soc/7af5000.i2c/i2c-5/5-0057/power_supply/battery	u:object_r:sysfs_battery_supply:s0
+genfscon sysfs /devices/platform/soc/7af5000.i2c/i2c-5/5-0057/power_supply/usb		u:object_r:sysfs_usb_supply:s0
+genfscon sysfs /devices/platform/soc/7af5000.i2c/i2c-5/5-0062/power_supply/rk-bat	u:object_r:sysfs_battery_supply:s0
+
+# Power - riva
+genfscon sysfs /devices/platform/soc/7af5000.i2c/i2c-5/5-006b/power_supply/battery	u:object_r:sysfs_battery_supply:s0
+genfscon sysfs /devices/platform/soc/7af5000.i2c/i2c-5/5-006b/power_supply/usb		u:object_r:sysfs_usb_supply:s0
+genfscon sysfs /devices/platform/soc/7af5000.i2c/i2c-5/5-0055/power_supply/bms		u:object_r:sysfs_battery_supply:s0

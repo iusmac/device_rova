@@ -1,0 +1,2 @@
+# IR
+/dev/spidev7.1	u:object_r:ir_device:s0
