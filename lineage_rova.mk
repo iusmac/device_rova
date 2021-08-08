@@ -15,6 +15,11 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Inherit from rova device
 $(call inherit-product, device/xiaomi/rova/device.mk)
 
+# Overlays
+PRODUCT_PACKAGES += \
+    xiaomi_rolex_overlay_lineage \
+    xiaomi_riva_overlay_lineage
+
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := rova
 PRODUCT_NAME := lineage_rova
