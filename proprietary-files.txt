@@ -1,0 +1,17 @@
+# riva Package version:		riva-user	7.1.2 N2G47H V10.1.1.0.NCKMIFI release-keys
+# rolex Package version:	rolex-user	7.1.2 N2G47H V10.2.3.0.NCCMIXM release-keys
+
+# ConsumerIR - LED - from rolex
+vendor/lib64/hw/consumerir.led.so
+
+# ConsumerIR - spidev - from riva
+vendor/lib64/hw/consumerir.spidev.so
+
+# Display calibration - from rolex
+etc/qdcm_calib_data_hx8394F_HD720p_video_BOE_c3a.xml:vendor/etc/qdcm_calib_data_hx8394F_HD720p_video_BOE_c3a.xml
+etc/qdcm_calib_data_ili9881c_HD720p_video_Ebbg_c3a.xml:vendor/etc/qdcm_calib_data_ili9881c_HD720p_video_Ebbg_c3a.xml
+etc/qdcm_calib_data_nt35521s_HD720p_video_EBBG_c3a.xml:vendor/etc/qdcm_calib_data_nt35521s_HD720p_video_EBBG_c3a.xml
+
+# Display calibration - from riva
+etc/qdcm_calib_data_hx8394F_HD720p_video_BOE_c3b.xml:vendor/etc/qdcm_calib_data_hx8394F_HD720p_video_BOE_c3b.xml
+etc/qdcm_calib_data_ili9881c_HD720p_video_Ebbg_c3b.xml:vendor/etc/qdcm_calib_data_ili9881c_HD720p_video_Ebbg_c3b.xml
