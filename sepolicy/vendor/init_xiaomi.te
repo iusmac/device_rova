@@ -1,0 +1,2 @@
+allow init_xiaomi sysfs_leds:dir r_dir_perms;
+allow init_xiaomi sysfs_leds:file r_file_perms;
