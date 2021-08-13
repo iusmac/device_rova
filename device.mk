@@ -315,7 +315,8 @@ PRODUCT_PACKAGES += \
 # Rootdir
 PRODUCT_PACKAGES += \
     init.xiaomi.device.rc \
-    init.xiaomi.device.sh
+    init.xiaomi.device.sh \
+    init.performance_level.rc
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
