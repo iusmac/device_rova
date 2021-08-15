@@ -1,0 +1,1 @@
+allow init proc_cmdline:file r_file_perms;
