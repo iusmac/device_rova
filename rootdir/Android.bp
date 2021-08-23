@@ -63,6 +63,34 @@ prebuilt_etc {
     vendor: true,
 }
 
+prebuilt_etc {
+    name: "init.parts.rc",
+    src: "etc/init.parts.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.performance_level.rc",
+    src: "etc/init.performance_level.rc",
+    sub_dir: "init",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.xiaomi.device.rc",
+    src: "etc/init.xiaomi.device.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.xiaomi.series.rc",
+    src: "etc/init.xiaomi.series.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
 // Configuration scripts
 
 sh_binary {
@@ -74,5 +102,17 @@ sh_binary {
 sh_binary {
     name: "init.qcom.post_boot.sh",
     src: "bin/init.qcom.post_boot.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.xiaomi.device.sh",
+    src: "bin/init.xiaomi.device.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.baseband.sh",
+    src: "bin/init.baseband.sh",
     vendor: true,
 }
