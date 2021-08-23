@@ -1,0 +1,78 @@
+//
+// Copyright (C) 2021 The LineageOS Project
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+// fstab
+// TODO on S:
+// https://android-review.googlesource.com/c/platform/build/soong/+/1532503
+
+soong_config_module_type {
+    name: "xiaomi_msm8937_rootdir_prebuilt_etc",
+    module_type: "prebuilt_etc",
+    config_namespace: "XIAOMI_MSM8937_ROOTDIR",
+    variables: ["VENDOR_PARTITION"],
+    properties: ["src"],
+}
+
+soong_config_string_variable {
+    name: "VENDOR_PARTITION",
+    values: ["vendor"],
+}
+
+xiaomi_msm8937_rootdir_prebuilt_etc {
+    name: "fstab.qcom",
+    soong_config_variables: {
+        VENDOR_PARTITION: {
+            vendor: {
+                src: "etc/fstab_vendor-as-vendor.qcom",
+            },
+        },
+    },
+    vendor: true,
+}
+
+// Init scripts
+
+prebuilt_etc {
+    name: "init.msm.usb.configfs.rc",
+    src: "etc/init.msm.usb.configfs.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.qcom.rc",
+    src: "etc/init.qcom.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.qcom.usb.rc",
+    src: "etc/init.qcom.usb.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.target.rc",
+    src: "etc/init.target.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+// Configuration scripts
+
+sh_binary {
+    name: "init.qcom.sh",
+    src: "bin/init.qcom.sh",
+    vendor: true,
+}
+
+sh_binary {
+    name: "init.qcom.post_boot.sh",
+    src: "bin/init.qcom.post_boot.sh",
+    vendor: true,
+}
