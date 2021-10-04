@@ -56,9 +56,6 @@ void vendor_load_properties()
 
     string safetynet = "green";
 
-    string fp = "google/redfin/redfin:11/RQ3A.211001.001/7641976:user/release-keys";
-    string desc = "google-user 11 RQ3A.211001.001 7641976 release-keys";
-
     string hwname = GetProperty("ro.boot.hwname", "");
 
     if (hwname == "rova") {
@@ -77,8 +74,6 @@ void vendor_load_properties()
         property_override(string("ro.product.") + prop + string("name"), device);
         property_override(string("ro.product.") + prop + string("model"), model);
         property_override(string("ro.") + prop + string("build.product"), device);
-        property_override(string("ro.") + prop + string("build.fingerprint"), fp);
-        property_override(string("ro.") + prop + string("build.description"), desc);
     }
 
     // Set hardware SKU prop
