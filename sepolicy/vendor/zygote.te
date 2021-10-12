@@ -1,1 +1,3 @@
+allow zygote self:capability kill;
+get_prop(zygote, exported_camera_prop)
 get_prop(zygote, vendor_xiaomi_prop)

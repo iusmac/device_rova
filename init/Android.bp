@@ -6,7 +6,11 @@
 
 cc_library_static {
     name: "libinit_rova",
-    defaults: ["//device/xiaomi/msm8937-common:libinit_msm8937_defaults"],
+    recovery_available: true,
     srcs: ["init_rova.cpp"],
-    whole_static_libs: ["//device/xiaomi/msm8937-common:libinit_msm8937"],
+    shared_libs: ["libbase"],
+    include_dirs: [
+        "system/core/base/include",
+        "system/core/init"
+    ]
 }

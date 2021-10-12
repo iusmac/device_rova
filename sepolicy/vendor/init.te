@@ -1,1 +1,22 @@
+# Allow init bind mounting vendor files
+allow init vendor_file:file mounton;
+allow init vendor_configs_file:dir mounton;
+allow init vendor_configs_file:file mounton;
+
+# Boot reason
+allow init proc_boot_reason:file r_file_perms;
+
+# Cmdline
 allow init proc_cmdline:file r_file_perms;
+
+# Firmware
+allow init firmware_file:filesystem getattr;
+
+# LED
+allow init sysfs_leds:lnk_file r_file_perms;
+
+# Prop
+get_prop(init, vendor_xiaomi_prop)
+
+# Transitions to seclabel processes in init.rc
+domain_auto_trans(init, vendor_charger_exec, vendor_charger)

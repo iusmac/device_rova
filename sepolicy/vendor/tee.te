@@ -1,0 +1,6 @@
+typeattribute tee data_between_core_and_vendor_violators;
+
+# /data/goodix labeling
+
+allow tee system_data_file:dir create_dir_perms;
+
