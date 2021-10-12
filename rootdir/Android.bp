@@ -5,8 +5,6 @@
 //
 
 // fstab
-// TODO on S:
-// https://android-review.googlesource.com/c/platform/build/soong/+/1532503
 
 soong_config_module_type {
     name: "xiaomi_msm8937_rootdir_prebuilt_etc",
@@ -95,6 +93,13 @@ prebuilt_etc {
     name: "init.xiaomi.series.rc",
     src: "etc/init.xiaomi.series.rc",
     sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "ueventd.qcom.rc",
+    filename: "ueventd.rc",
+    src: "etc/ueventd.qcom.rc",
     vendor: true,
 }
 
