@@ -1031,7 +1031,6 @@ vendor/radio/qcril_database/qcril.db|43b7d5e7ededc9cd5c0b1f7a8941d21d4eb0c9c1
 
 # Radio
 -product/app/QtiTelephonyService/QtiTelephonyService.apk
--product/app/datastatusnotification/datastatusnotification.apk
 -product/app/embms/embms.apk
 product/etc/permissions/embms.xml
 product/etc/permissions/qcrilhook.xml
