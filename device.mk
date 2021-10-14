@@ -314,8 +314,10 @@ PRODUCT_PACKAGES += \
 
 # Rootdir
 PRODUCT_PACKAGES += \
+    init.baseband.sh \
     init.xiaomi.device.rc \
     init.xiaomi.device.sh \
+    init.xiaomi.series.rc \
     init.performance_level.rc
 
 # Screen density
