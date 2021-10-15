@@ -27,66 +27,117 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
-#define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
-#include <sys/_system_properties.h>
+#include <android-base/file.h>
+#include <cstdlib>
+#include <fstream>
+#include <string.h>
 #include <sys/sysinfo.h>
+#include <unistd.h>
 
 #include <android-base/properties.h>
-#include "property_service.h"
+#define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
+#include <sys/_system_properties.h>
+
 #include "vendor_init.h"
+#include "property_service.h"
+
+#include <string>
+#include <vector>
 
 using android::base::GetProperty;
-using android::base::SetProperty;
-using std::string;
 
-void property_override(string prop, string value)
+std::vector<std::string> ro_props_default_source_order = {
+    "odm.",
+    "product.",
+    "system.",
+    "system_ext.",
+    "vendor.",
+    "",
+};
+
+void property_override(char const prop[], char const value[], bool add)
 {
-    auto pi = (prop_info*) __system_property_find(prop.c_str());
+    auto pi = (prop_info *) __system_property_find(prop);
 
-    if (pi != nullptr)
-        __system_property_update(pi, value.c_str(), value.size());
-    else
-        __system_property_add(prop.c_str(), prop.size(), value.c_str(), value.size());
+    if (pi != nullptr) {
+        __system_property_update(pi, value, strlen(value));
+    } else if (add) {
+        __system_property_add(prop, strlen(prop), value, strlen(value));
+    }
 }
 
-void vendor_load_properties()
+void set_ro_build_prop(const std::string &prop, const std::string &value, bool product) {
+    std::string prop_name;
+
+    for (const auto &source : ro_props_default_source_order) {
+        if (product)
+            prop_name = "ro.product." + source + prop;
+        else
+            prop_name = "ro." + source + "build." + prop;
+
+        property_override(prop_name.c_str(), value.c_str(), true);
+    }
+}
+
+typedef struct variant_info {
+    std::string brand;
+    std::string device;
+    std::string marketname;
+    std::string model;
+    std::string build_description;
+    std::string build_fingerprint;
+} variant_info_t;
+
+void search_variant(const std::vector<variant_info_t> variants);
+void set_variant_props(const variant_info_t variant);
+
+void property_override(char const prop[], char const value[], bool add = true);
+void set_dalvik_heap_size();
+void set_ro_build_prop(const std::string &prop, const std::string &value, bool product = false);
+
+static const variant_info_t rolex_info = {
+    .brand = "Xiaomi",
+    .device = "rolex",
+    .marketname = "",
+    .model = "Redmi 4A",
+    .build_description = "rolex-user 7.1.2 N2G47H V10.2.3.0.NCCMIXM release-keys",
+    .build_fingerprint = "Xiaomi/rolex/rolex:7.1.2/N2G47H/V10.2.3.0.NCCMIXM:user/release-keys",
+};
+
+static const variant_info_t riva_info = {
+    .brand = "Xiaomi",
+    .device = "riva",
+    .marketname = "",
+    .model = "Redmi 5A",
+    .build_description = "riva-user 7.1.2 N2G47H V10.1.1.0.NCKMIFI release-keys",
+    .build_fingerprint = "Xiaomi/riva/riva:7.1.2/N2G47H/V10.1.1.0.NCKMIFI:user/release-keys",
+};
+
+static void determine_device()
 {
-    string device, model;
+    std::string proc_cmdline;
+    android::base::ReadFileToString("/proc/cmdline", &proc_cmdline, true);
+    if (proc_cmdline.find("S88503") != proc_cmdline.npos)
+        set_variant_props(rolex_info);
+    else if (proc_cmdline.find("S88505") != proc_cmdline.npos)
+        set_variant_props(riva_info);
+}
 
-    string safetynet = "green";
+void vendor_load_properties() {
+    determine_device();
+    set_dalvik_heap_size();
+}
 
-    string hwname = GetProperty("ro.boot.hwname", "");
-
-    if (hwname == "rova") {
-        device = "rolex";
-        model = "Redmi 4A/5A";
-    } else {
-        device = "riva";
-        model = "Redmi 4A/5A";
-    }
-
-    // Override all partitions' props
-    string prop_partitions[] = { "", "odm.", "product.", "system.", "system_ext.", "vendor." };
-    for (const string &prop : prop_partitions) {
-        property_override(string("ro.product.") + prop + string("board"), device);
-        property_override(string("ro.product.") + prop + string("device"), device);
-        property_override(string("ro.product.") + prop + string("name"), device);
-        property_override(string("ro.product.") + prop + string("model"), model);
-        property_override(string("ro.") + prop + string("build.product"), device);
-    }
-
-    // Set hardware SKU prop
-    property_override("ro.boot.product.hardware.sku", device);
-
-    // Set safetynet workaround
-    property_override("ro.boot.verifiedbootstate", safetynet);
-
-    // Set dalvik heap configuration
-    string heapstartsize, heapgrowthlimit, heapsize, heapminfree,
-			heapmaxfree, heaptargetutilization;
-
+void set_dalvik_heap_size()
+{
     struct sysinfo sys;
+    char const *heapstartsize;
+    char const *heapgrowthlimit;
+    char const *heapsize;
+    char const *heapminfree;
+    char const *heapmaxfree;
+    char const *heaptargetutilization;
+
     sysinfo(&sys);
 
     if (sys.totalram > 5072ull * 1024 * 1024) {
@@ -129,4 +180,15 @@ void vendor_load_properties()
     property_override("dalvik.vm.heaptargetutilization", heaptargetutilization);
     property_override("dalvik.vm.heapminfree", heapminfree);
     property_override("dalvik.vm.heapmaxfree", heapmaxfree);
+}
+
+void set_variant_props(const variant_info_t variant) {
+    set_ro_build_prop("brand", variant.brand, true);
+    set_ro_build_prop("device", variant.device, true);
+    set_ro_build_prop("marketname", variant.marketname, true);
+    set_ro_build_prop("model", variant.model, true);
+
+    set_ro_build_prop("fingerprint", variant.build_fingerprint);
+    property_override("ro.bootimage.build.fingerprint", variant.build_fingerprint.c_str());
+    property_override("ro.build.description", variant.build_description.c_str());
 }
