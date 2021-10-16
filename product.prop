@@ -1,0 +1,2 @@
+# IORap
+persist.device_config.runtime_native_boot.iorap_readahead_enable=true
