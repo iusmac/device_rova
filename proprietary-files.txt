@@ -967,30 +967,6 @@ vendor/etc/init/vendor.qti.hardware.alarm@1.0-service.rc
 vendor/lib64/hw/vendor.qti.hardware.alarm@1.0-impl.so
 vendor/lib64/vendor.qti.hardware.alarm@1.0.so
 
-# Power-off charging daemon - from riva O
-vendor/bin/chargeonlymode|3a777c1aec821afb8ce80e063a9145ca79ec9bd1
-vendor/res/charger/battery_fail.png|0e65ec2d5f21ecf03d3ea7e1c1b821a7ebee1728
-vendor/res/charger/battery_image_0.png|0321a7788357f53abc8caab751a301b1c9203207
-vendor/res/charger/battery_image_1.png|f06b201ffe9ab2659ff357da5e354a957b2519ca
-vendor/res/charger/battery_image_2.png|691b620342a1b758493cabe0ec82386318524f7c
-vendor/res/charger/battery_image_3.png|0ef8ee64012170b1b4be4d7202e9091acdcc87d0
-vendor/res/charger/battery_image_4.png|81e57f29bd909e2e61ab84d795b83dc940193807
-vendor/res/charger/battery_image_5.png|35da54dbe040ba65a1097a0175569709164d5b3b
-vendor/res/charger/battery_image_6.png|a09c13d71db50547551dd16793e7692efc297b3f
-vendor/res/charger/battery_image_7.png|fa82e39c33533e4247f7c0d1247dab47c65a8c1d
-vendor/res/charger/battery_num_0.png|394835f6695295d80d7b1836d5dc6e2d4ce824af
-vendor/res/charger/battery_num_10.png|b2681ea496acc048473428b443acaf7aca6ea897
-vendor/res/charger/battery_num_1.png|aabc0ecdc09755484b18fc3ece19c95bff1af770
-vendor/res/charger/battery_num_2.png|d4e89a5e3dc25e6ed9f01106707be96e2fc09c03
-vendor/res/charger/battery_num_3.png|8b19580372b5076edfaf592f2e2182fa1031d677
-vendor/res/charger/battery_num_4.png|e9d627737b2d0efa0be65db365cdb8a8672ecffe
-vendor/res/charger/battery_num_5.png|c7bf6b88490793dcd916784703046806b33b2218
-vendor/res/charger/battery_num_6.png|e76a466583d23c8e5851b00d284a6d9db9843568
-vendor/res/charger/battery_num_7.png|d31e6112790aef5fd10a84d7f23cc318f699fdb5
-vendor/res/charger/battery_num_8.png|602dd97e82b65cf17dfb764d56fa659a6eb4a5d8
-vendor/res/charger/battery_num_9.png|e782f4be101ce87298286e55d32c09deed514393
-vendor/res/charger/battery_scale.png|84066970c9fe65be5e5e752e225ce07698147a36
-
 # QMI - from tissot
 vendor/lib/libdsi_netctrl.so|78206e2c94d0a9ceb69712aeec99ed90f8fc63b3
 vendor/lib/libdsutils.so|bfc2e8fb927ccd35158ceaf4389fe54186091132

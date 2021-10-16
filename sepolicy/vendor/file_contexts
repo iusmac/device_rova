@@ -13,10 +13,6 @@
 # Camera sockets
 /data/vendor/qcam(/.*)?		u:object_r:vendor_camera_data_file:s0
 
-# Charger
-/(vendor|system/vendor)/bin/chargeonlymode	u:object_r:vendor_charger_exec:s0
-/(vendor|system/vendor)/res/charger(/.*)?	u:object_r:vendor_charger_res:s0
-
 # Cryptfshw
 /(product|system/product)/lib(64)?/vendor\.qti\.hardware\.cryptfshw@1\.0\.so           u:object_r:same_process_hal_file:s0
 

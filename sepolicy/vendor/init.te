@@ -21,9 +21,6 @@ allow init sysfs_leds:lnk_file r_file_perms;
 # Prop
 get_prop(init, vendor_xiaomi_prop)
 
-# Transitions to seclabel processes in init.rc
-domain_auto_trans(init, vendor_charger_exec, vendor_charger)
-
 # zRAM Writeback
 allow init per_boot_file:file ioctl;
 allowxperm init per_boot_file:file ioctl { F2FS_IOC_SET_PIN_FILE };
