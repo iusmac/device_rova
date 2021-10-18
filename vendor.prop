@@ -206,6 +206,9 @@ ro.surface_flinger.vsync_sf_event_phase_offset_ns=6000000
 ro.soc.manufacturer=Qualcomm
 ro.soc.model=MSM8937
 
+# System
+persist.sys.binary_xml=false
+
 # Time Services
 persist.timed.enable=true
 
