@@ -32,3 +32,32 @@ on property:ro.vendor.xiaomi.device=rolex
 on property:ro.vendor.xiaomi.device=riva
     mount none /vendor/etc/sensors/riva_sensor_def_qcomdev.conf /vendor/etc/sensors/sensor_def_qcomdev.conf bind
     restart vendor.sensors.qti
+
+# Wi-Fi
+service wcnss-service /system/vendor/bin/true
+    override
+    class main
+    user system
+    group system wifi radio
+    oneshot
+    disabled
+
+service wcnss-service_default /system/vendor/bin/wcnss_service
+    class main
+    user system
+    group system wifi radio
+    oneshot
+    disabled
+
+service wcnss-service_daisy /system/vendor/bin/wcnss_service_daisy
+    class main
+    user system
+    group system wifi radio
+    oneshot
+    disabled
+
+on property:ro.vendor.xiaomi.device=rolex
+    enable wcnss-service_daisy
+
+on property:ro.vendor.xiaomi.device=riva
+    enable wcnss-service_default

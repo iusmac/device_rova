@@ -54,3 +54,6 @@
 # Sys files
 /sys/devices(/platform)?/soc/78b6000\.i2c/i2c-2/2-[0-9a-f]+/leds(/.*)?		u:object_r:sysfs_leds:s0
 /sys/devices(/platform)?/soc/leds-qpnp-[0-9]+/leds(/.*)?				u:object_r:sysfs_leds:s0
+
+# Executables
+/(vendor|system/vendor)/bin/wcnss_service_daisy		u:object_r:wcnss_service_exec:s0

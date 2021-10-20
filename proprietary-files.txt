@@ -4,6 +4,7 @@
 # riva Package version: Xiaomi/riva/riva:8.1.0/OPM1.171019.026/V11.0.2.0.OCKMIXM:user/release-keys
 # rolex Package version:	rolex-user	7.1.2 N2G47H V10.2.3.0.NCCMIXM release-keys
 # tissot Package version: Tissot PKQ1.180917.001 V10.0.24.0.PDHMIXM
+# daisy Package version: daisy-user 10 QKQ1.191002.002 V11.0.21.0.QDLMIXM release-keys
 
 # ACDB - from riva
 etc/acdbdata/MTP/msm8952-tasha-snd-card/MTP_WCD9335_Bluetooth_cal.acdb:vendor/etc/acdbdata/MTP/msm8952-tasha-snd-card/MTP_WCD9335_Bluetooth_cal.acdb
@@ -1256,3 +1257,6 @@ vendor/lib64/libwvhidl.so
 
 # Wi-Fi - from tissot
 vendor/bin/wcnss_service|f8ecd38a41b6b7f832380b489e0c9804c34174d8
+
+# Wi-Fi - from daisy
+vendor/bin/wcnss_service:vendor/bin/wcnss_service_daisy
