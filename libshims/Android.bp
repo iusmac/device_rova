@@ -74,3 +74,14 @@ cc_library_shared {
     vendor: true,
     compile_multilib: "32",
 }
+
+cc_library_shared {
+    name: "libshim_imsvideocodec",
+    shared_libs: [
+        "libgui",
+        "libutils",
+    ],
+    srcs: [
+        "ims/libgui.cpp"
+    ],
+}
