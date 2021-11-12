@@ -3,8 +3,6 @@ cc_library_static {
     name: "liblocbatterylistener",
     vendor: true,
 
-
-
     cflags: GNSS_CFLAGS + ["-DBATTERY_LISTENER_ENABLED"],
     local_include_dirs: ["."],
 
@@ -18,7 +16,6 @@ cc_library_static {
         "android.hardware.health@1.0",
         "android.hardware.health@2.0",
         "android.hardware.health@2.1",
-        "android.hardware.power@1.2",
         "libbase",
     ],
 
