@@ -1,0 +1,1 @@
+allow gmscore_app exported_camera_prop:file { read };
