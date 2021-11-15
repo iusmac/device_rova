@@ -1,4 +1,6 @@
 get_prop(untrusted_app, virtual_ab_prop);
 
 allow untrusted_app exported_camera_prop:file { read };
-allow untrusted_app proc_net:file { read };
+allow untrusted_app proc_net:file { read open getattr };
+allow untrusted_app app_data_file:file { execute };
+dontaudit untrusted_app proc:file { read };
