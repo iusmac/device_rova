@@ -600,6 +600,9 @@ vendor/lib64/libcdsprpc.so
 vendor/lib64/libfastrpc_utf_stub.so
 vendor/lib64/libsysmon_cdsp_skel.so
 
+# Charger - from LA.UM.9.6.2.r1-04200-89xx.0
+vendor/bin/hvdcp_opti|d160d2193640a21b7eff70425bcdbfc775063cd5
+
 # CNE
 etc/cne/Nexus/ATT/ATT_profiles.xml
 etc/cne/Nexus/ROW/ROW_profiles.xml
