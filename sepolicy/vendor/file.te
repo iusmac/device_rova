@@ -11,6 +11,9 @@ type dt2w_ctrl, fs_type, proc_type;
 # FDT
 type fdt_model, fs_type, sysfs_type;
 
+# Firmware
+type wcnss_persist_file, file_type, vendor_persist_type;
+
 # FPS Info
 type sysfs_fps, sysfs_type, fs_type;
 

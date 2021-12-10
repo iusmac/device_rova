@@ -28,6 +28,7 @@
 /bt_firmware                                                  u:object_r:bt_firmware_file:s0
 /persist(/.*)?                                                u:object_r:mnt_vendor_file:s0
 /mnt/vendor/persist(/.*)?                                     u:object_r:mnt_vendor_file:s0
+/mnt/vendor/persist/WCNSS_qcom_wlan_nv.bin                    u:object_r:wcnss_persist_file:s0
 
 # HALs
 /(vendor|system/vendor)/bin/hw/android\.hardware\.lights-service\.xiaomi_msm8937      u:object_r:hal_light_default_exec:s0
