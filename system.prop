@@ -44,6 +44,7 @@ ro.vendor.qti.va_aosp.support=1
 
 # LMK
 ro.lmk.filecache_min_kb=153600
+ro.lmk.kill_timeout_ms=50
 
 # Media
 media.aac_51_output_enabled=true
