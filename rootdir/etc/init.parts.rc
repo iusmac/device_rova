@@ -1,0 +1,8 @@
+on boot
+   # Battery life saver
+   chown system system /sys/class/power_supply/battery/charging_enabled
+   chmod 0666 /sys/class/power_supply/battery/charging_enabled
+   chown system system /sys/class/power_supply/battery/capacity
+   chmod 0666 /sys/class/power_supply/battery/capacity
+   chown system system /sys/class/power_supply/battery/temp
+   chmod 0666 /sys/class/power_supply/battery/temp
