@@ -512,9 +512,6 @@
          and one pSIM) -->
     <integer name="config_num_physical_slots">2</integer>
 
-    <!-- Configuration to enable non-default PDP during IWLAN -->
-    <bool name="config_feature_iwlan_enabled">true</bool>
-
     <!-- IWLAN data service package name to bind to by default. If none is specified in an overlay, an
          empty string is passed in -->
     <string name="config_wlan_data_service_package">vendor.qti.iwlan</string>
@@ -553,17 +550,8 @@
     <!-- Flag indicating whether we should enable the adaptive sleep.-->
     <bool name="config_adaptive_sleep_available">true</bool>
 
-    <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
-    <bool name="config_intrusiveBatteryLed">true</bool>
-
-    <!-- Whether device ignores the RSSNR signal implementation -->
-    <bool name="config_ignoreRssnrSignalLevel">true</bool>
-
     <!-- Disable rounded corners on windows to improve graphics performance -->
     <bool name="config_supportsRoundedCornersOnWindows">false</bool>
-
-    <!-- Whether the device show_vendor_mismatch_message -->
-    <bool name="config_show_vendor_mismatch_message">false</bool>
 
     <!-- Remote server that can provide NTP responses. -->
     <string translatable="false" name="config_ntpServer">pool.ntp.org</string>
