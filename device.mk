@@ -322,7 +322,8 @@ PRODUCT_PACKAGES += \
     init.xiaomi.device.rc \
     init.xiaomi.device.sh \
     init.xiaomi.series.rc \
-    init.performance_level.rc
+    init.performance_level.rc \
+    init.parts.rc
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
