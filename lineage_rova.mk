@@ -24,6 +24,9 @@ PRODUCT_MODEL := Redmi 4A / 5A
 PRODUCT_MANUFACTURER := Xiaomi
 TARGET_VENDOR := Xiaomi
 
+# Boot animation
+TARGET_BOOT_ANIMATION_RES := 720
+
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
 
