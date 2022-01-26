@@ -24,4 +24,7 @@ PRODUCT_MODEL := Redmi 4A / 5A
 PRODUCT_MANUFACTURER := Xiaomi
 TARGET_VENDOR := Xiaomi
 
+# Overlay
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
+
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
