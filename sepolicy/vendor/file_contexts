@@ -28,6 +28,7 @@
 
 # HALs
 /(vendor|system/vendor)/bin/hw/android\.hardware\.lights-service\.xiaomi_msm8937      u:object_r:hal_light_default_exec:s0
+/(vendor|system/vendor)/bin/hw/vendor\.lineage\.touch@1\.0-service\.xiaomi_rova       u:object_r:hal_lineage_touch_default_exec:s0
 
 # Input devices
 /(vendor|system/vendor)/usr/idc(/.*)?                         u:object_r:vendor_idc_file:s0
@@ -49,6 +50,7 @@
 # Sys files
 /sys/devices(/platform)?/soc/78b6000\.i2c/i2c-2/2-[0-9a-f]+/leds(/.*)?		u:object_r:sysfs_leds:s0
 /sys/devices(/platform)?/soc/leds-qpnp-[0-9]+/leds(/.*)?				u:object_r:sysfs_leds:s0
+/sys/devices/soc/78b7000\.i2c/i2c-3/3-[0-9a-f]+/disable_keys            u:object_r:proc_touchpanel:s0
 
 # Executables
 /(vendor|system/vendor)/bin/wcnss_service_daisy		u:object_r:wcnss_service_exec:s0

@@ -52,6 +52,7 @@ genfscon sysfs /kernel/wlan/power_stats                              u:object_r:
 genfscon sysfs /board_properties/virtualkeys.ft5346			u:object_r:sysfs_virtualkeys:s0
 genfscon sysfs /board_properties/virtualkeys.ft5x06_720p		u:object_r:sysfs_virtualkeys:s0
 genfscon sysfs /board_properties/virtualkeys.ist30xx_ts_input		u:object_r:sysfs_virtualkeys:s0
+genfscon proc /touchpanel                                           u:object_r:proc_touchpanel:s0
 
 # Vibrator
 genfscon sysfs /devices/platform/soc/soc:vibrator_gpio/leds/vibrator	u:object_r:sysfs_vibrator:s0
