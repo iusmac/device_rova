@@ -522,6 +522,11 @@ service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /system/vendor/etc/m
 
 on charger
     setprop persist.sys.usb.config mass_storage
+
+    # Notification LED
+    chown system system /sys/class/leds/red/brightness
+    write /sys/class/leds/red/brightness 255
+
     start qcom-post-boot
 
 service vendor.power_off_alarm /vendor/bin/power_off_alarm
