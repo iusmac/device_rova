@@ -11,6 +11,9 @@ type dt2w_ctrl, fs_type, proc_type;
 # FDT
 type fdt_model, fs_type, sysfs_type;
 
+# FPS Info
+type sysfs_fps, sysfs_type, fs_type;
+
 # Powerstats
 type sysfs_iio_devices, fs_type, sysfs_type;
 type sysfs_msm_subsys, sysfs_type, fs_type;
