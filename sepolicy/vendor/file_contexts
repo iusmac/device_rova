@@ -37,6 +37,13 @@
 /(vendor|system/vendor)/usr/idc(/.*)?                         u:object_r:vendor_idc_file:s0
 /(vendor|system/vendor)/usr/keylayout(/.*)?                   u:object_r:vendor_keylayout_file:s0
 
+# I/O
+# This node is already labelled by QCOM but Lineage overrides it with
+# sysfs_io_sched_tunable label Since qti_init_shell needs to write to it, LOS's
+# private label isn't accessible by our vendor.
+# Relabel it to QCOM's sysfs_mmc_host label to get rid of denials.
+/sys/devices(/platform)?/soc/[a-f0-9]+.sdhci/mmc_host/mmc[0-9]/mmc[0-9]:[a-f0-9]+/block/mmcblk[0-9]/queue/read_ahead_kb u:object_r:sysfs_mmc_host:s0
+
 # Rild
 /(vendor|system/vendor)/radio/qcril_database/qcril\.db			u:object_r:rild_file:s0
 
