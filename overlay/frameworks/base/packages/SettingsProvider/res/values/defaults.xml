@@ -25,4 +25,16 @@
     <!-- Speed up the animations -->
     <fraction name="def_window_animation_scale">50%</fraction>
     <fraction name="def_window_transition_scale">50%</fraction>
+
+    <!-- Disable tap to wake by default-->
+    <bool name="def_double_tap_to_wake">false</bool>
+
+    <!-- Disable UI touch sounds by default -->
+    <bool name="def_sound_effects_enabled">false</bool>
+
+    <!-- Enable vibration when ringing by default -->
+    <bool name="def_vibrate_when_ringing">true</bool>
+
+    <!-- Disable mobile data by default -->
+    <bool name="def_mobile_data_always_on">false</bool>
 </resources>
