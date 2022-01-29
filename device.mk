@@ -84,6 +84,12 @@ PRODUCT_PACKAGES += \
     libmm-qcamera
 
 PRODUCT_PACKAGES += \
+    android.hardware.camera.device@3.2 \
+    android.hardware.camera.device@3.3 \
+    android.hardware.camera.device@3.4 \
+    android.hardware.camera.device@3.5 \
+    android.hardware.camera.provider@2.5 \
+    android.hardware.camera.provider@2.6 \
     libstdc++.vendor
 
 PRODUCT_PACKAGES += \
