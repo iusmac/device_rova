@@ -122,7 +122,9 @@ PRODUCT_PACKAGES += \
     libqdMetaData \
     libqdMetaData.system \
     libgenlock \
-    libtinyxml
+    libtinyxml \
+    vendor.display.config@1.0.vendor \
+    vendor.display.config@2.0
 
 # XiaomiParts
 PRODUCT_PACKAGES += \
