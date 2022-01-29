@@ -12,6 +12,9 @@ allow init proc_cmdline:file r_file_perms;
 # Firmware
 allow init firmware_file:filesystem getattr;
 
+# IOrapd
+allow init iorapd_data_file:file getattr;
+
 # LED
 allow init sysfs_leds:lnk_file r_file_perms;
 

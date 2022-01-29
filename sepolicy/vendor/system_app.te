@@ -1,3 +1,6 @@
+# IOrapd
+allow system_app iorapd:binder call;
+
 # XiaomiParts
 allow system_app {
     sysfs_hgain

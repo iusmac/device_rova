@@ -14,5 +14,10 @@ ro.fastbootd.available=true
 # Fwk detect
 ro.vendor.qti.va_aosp.support=1
 
+# IOrap
+ro.iorapd.enable=true
+iorapd.perfetto.enable=true
+iorapd.readahead.enable=true
+
 # Zygote Preforking
 persist.device_config.runtime_native.usap_pool_enabled=true
