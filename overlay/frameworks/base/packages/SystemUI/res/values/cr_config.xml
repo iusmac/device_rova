@@ -23,4 +23,7 @@
 
     <!-- FPSInfoService FPS node file path -->
     <string name="config_fpsInfoSysNode" translatable="false">/sys/devices/virtual/graphics/fb0/measured_fps</string>
+
+    <!-- The CPU temperature divider -->
+    <integer name="config_cpuTempDivider" translatable="false">1000</integer>
 </resources>
