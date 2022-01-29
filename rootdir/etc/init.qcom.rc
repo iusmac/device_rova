@@ -66,6 +66,13 @@ on init
     write /sys/kernel/slab/zs_handle/store_user 0
     write /sys/kernel/slab/zspage/store_use 0
 
+    # Setup all the sub-system as related
+    write /sys/bus/msm_subsys/devices/subsys0/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys1/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys2/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys4/restart_level RELATED
+
 on post-fs
     chmod 0755 /sys/kernel/debug/tracing
 
