@@ -227,6 +227,11 @@ function 8937_sched_dcvs_hmp()
 target=`getprop ro.board.platform`
 
 function configure_zram_parameters() {
+    zram_disabled=`getprop ro.vendor.qti.config.zram_disabled`
+    if [ "$zram_disabled" == 'true' ] || [ "$zram_disabled" == '1' ]; then
+        return 0
+    fi
+
     MemTotalStr=`cat /proc/meminfo | grep MemTotal`
     MemTotal=${MemTotalStr:16:8}
 
