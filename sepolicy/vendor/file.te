@@ -14,6 +14,9 @@ type fdt_model, fs_type, sysfs_type;
 # FPS Info
 type sysfs_fps, sysfs_type, fs_type;
 
+# Per boot
+type per_boot_file, file_type, data_file_type, core_data_file_type;
+
 # Powerstats
 type sysfs_iio_devices, fs_type, sysfs_type;
 type sysfs_msm_subsys, sysfs_type, fs_type;
