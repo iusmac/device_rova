@@ -4,6 +4,9 @@ allow system_app fm_radio_device:chr_file r_file_perms;
 # IOrapd
 allow system_app iorapd:binder call;
 
+# Generic
+allow system_app proc_vmallocinfo:file r_file_perms;
+
 # XiaomiParts
 allow system_app {
     sysfs_hgain
