@@ -14,6 +14,11 @@ ro.fastbootd.available=true
 # Fwk detect
 ro.vendor.qti.va_aosp.support=1
 
+# IOrap
+ro.iorapd.enable=true
+iorapd.perfetto.enable=true
+iorapd.readahead.enable=true
+
 # ZRAM
 ro.zram.mark_idle_delay_mins=60
 ro.zram.first_wb_delay_mins=1440
