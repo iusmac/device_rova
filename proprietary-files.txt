@@ -4,6 +4,7 @@
 # riva Package version: Xiaomi/riva/riva:8.1.0/OPM1.171019.026/V11.0.2.0.OCKMIXM:user/release-keys
 # rolex Package version:	rolex-user	7.1.2 N2G47H V10.2.3.0.NCCMIXM release-keys
 # tissot Package version: Tissot PKQ1.180917.001 V10.0.24.0.PDHMIXM
+# ugg Package version: ugg-user 7.1.2 N2G47H V11.0.2.0.NDKMIXM release-keys
 # daisy Package version: daisy-user 10 QKQ1.191002.002 V11.0.21.0.QDLMIXM release-keys
 
 # ACDB - from riva
@@ -114,6 +115,11 @@ vendor/lib64/libaudioconfigstore.so
 vendor/lib64/libaudioparsers.so
 vendor/lib64/libqtigef.so
 vendor/lib64/libtinycompress_vendor.so
+
+# Audio dirac - from ugg
+vendor/etc/diracmobile.config|b99e9492e77e52ca3a511feae0409d59f6aebb87
+lib/libDiracAPI_SHARED.so:vendor/lib/libDiracAPI_SHARED.so|42b49679d38eca93fead05ea06ddbdc8108fd4b1
+lib/soundfx/libdirac.so:vendor/lib/soundfx/libdirac.so|e92652ab578e90bb9e9b09553c3554f27cb7c07f
 
 # Audiosphere
 etc/permissions/audiosphere.xml
