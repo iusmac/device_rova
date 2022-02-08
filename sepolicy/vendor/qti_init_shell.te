@@ -6,6 +6,9 @@ allow qti_init_shell proc_sysctl_schedboost:file w_file_perms;
 
 allow qti_init_shell bluetooth_data_file:file r_file_perms;
 allow qti_init_shell sysfs_net:file rw_file_perms;
+allow qti_init_shell sysfs:file { write setattr };
+
+set_prop(qti_init_shell, ctl_start_prop)
 
 # Touchpanel
 allow qti_init_shell proc_touchpanel:dir { r_dir_perms setattr };
