@@ -13,3 +13,5 @@ set_prop(qti_init_shell, ctl_start_prop)
 # Touchpanel
 allow qti_init_shell proc_touchpanel:dir { r_dir_perms setattr };
 allow qti_init_shell proc_touchpanel:file { getattr setattr };
+
+dontaudit qti_init_shell self:capability { dac_override dac_read_search };
