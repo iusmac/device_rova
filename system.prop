@@ -15,6 +15,11 @@ ro.config.media_vol_steps=25
 ro.config.vc_call_vol_default=5
 ro.config.vc_call_vol_steps=6
 
+# Display
+debug.hwui.renderer=skiagl
+debug.renderengine.backend=skiaglthreaded
+renderthread.skia.reduceopstasksplitting=true
+
 # fastbootd
 ro.fastbootd.available=true
 
