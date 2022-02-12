@@ -15,7 +15,21 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="advanced_settings">Amplificazione audio</string>
+    <string name="advanced_summary">Controlla il guadagno dell\'audio e del microfono</string>
+
+    <!-- Audio amplification -->
+    <string name="headphone_gain">Guadagno cuffie</string>
+    <string name="speaker_gain">Guadagno altoparlanti</string>
+    <string name="microphone_gain">Guadagno microfono</string>
+
+    <!-- Custom seekbar -->
+    <string name="custom_seekbar_value">Valore: <xliff:g id="v">%s</xliff:g></string>
+    <string name="custom_seekbar_default_value">Predefinito</string>
+    <string name="custom_seekbar_default_value_to_set">Valore predefinito: <xliff:g id="v">%s</xliff:g>\nPremere a lungo per ripristinare</string>
+    <string name="custom_seekbar_default_value_is_set">Il valore predefinito è impostato</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Ottimizzazione Mi Sound</string>
     <string name="dirac_summary">Ottimizza la qualità audio</string>
@@ -56,4 +70,9 @@
     <string name="dirac_preset_country">Country</string>
     <string name="dirac_preset_dance">Dance</string>
     <string name="dirac_preset_metal">Metal</string>
+
+    <!-- Clear Speaker -->
+    <string name="clear_speaker_title">Pulizia altoparlante</string>
+    <string name="clear_speaker_summary">Riproduci un audio di 30 secondi ad alta frequenza per pulire l\'altoparlante</string>
+    <string name="clear_speaker_description">Alza il volume del dispositivo al massimo ed esegui questa funzione una o due volte se trovi che il tuo altoparlante sia ostruito dalla polvere.\n\nIn caso sia fortemente ostruito, esegui questa funzione 2-5 volte mentre scuoti il dispositivo con l\'altoparlante rivolto verso il basso.</string>
 </resources>

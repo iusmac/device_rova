@@ -15,7 +15,21 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="advanced_settings">Усиление звука</string>
+    <string name="advanced_summary">Управление усилением звука</string>
+
+    <!-- Audio amplification -->
+    <string name="headphone_gain">Усиление наушников</string>
+    <string name="speaker_gain">Усиление динамиков</string>
+    <string name="microphone_gain">Усиление микрофона</string>
+
+    <!-- Custom seekbar -->
+    <string name="custom_seekbar_value">Значение: <xliff:g id="v">%s</xliff:g></string>
+    <string name="custom_seekbar_default_value">По умолчанию</string>
+    <string name="custom_seekbar_default_value_to_set">Значение по умолчанию: <xliff:g id="v">%s</xliff:g>\nДолгое удержание для сброса</string>
+    <string name="custom_seekbar_default_value_is_set">Установлено значение по умолчанию</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Улучшение звука Mi</string>
     <string name="dirac_summary">Улучшить качество звука</string>
@@ -58,4 +72,9 @@
     <string name="dirac_preset_metal">Металл</string>
      <!-- QS tile title -->
     <string name="dirac_qs_tile_title">Mi Звук</string>
+
+    <!-- Clear Speaker -->
+    <string name="clear_speaker_title">Очистка динамика</string>
+    <string name="clear_speaker_summary">Очистка динамика путем воспроизведения 30-секундного звука</string>
+    <string name="clear_speaker_description">Выставьте максимальную громкость звука и используйте эту функцию один или два раза, если обнаружите, что динамик слегка забит пылью.\n\nЕсли динамик очень сильно засорен, запустите эту функцию 2–5 раза, встряхивая устройство динамиком обращенным вниз.</string>
 </resources>
