@@ -51,7 +51,7 @@ const static std::vector<HwLight> kAvailableLights = {
 Lights::Lights() {
     mBacklightNode = !access(kLCDFile.c_str(), F_OK) ? kLCDFile : kLCDFile2;
     mWhiteLed = !access((led_paths[WHITE] + "brightness").c_str(), W_OK);
-    mBreath = !access(((mWhiteLed ? led_paths[WHITE] : led_paths[RED]) + "blink").c_str(), W_OK);
+    mBreath = (!access(((mWhiteLed ? led_paths[WHITE] : led_paths[RED]) + "blink").c_str(), W_OK) || !access(((mWhiteLed ? led_paths[WHITE] : led_paths[RED]) + "breath").c_str(), W_OK));
 }
 
 // AIDL methods
@@ -143,8 +143,8 @@ void Lights::handleSpeakerBatteryLocked() {
 }
 
 bool Lights::setLedBreath(led_type led, uint32_t value) {
-    if (mBreath)
-        return WriteToFile(led_paths[led] + "blink", value);
+    if (!access(((mWhiteLed ? led_paths[WHITE] : led_paths[RED]) + "breath").c_str(), W_OK))
+        return WriteToFile(led_paths[led] + "breath", value);
     else
         return WriteToFile(led_paths[led] + "blink", value);
 }
