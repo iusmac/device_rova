@@ -1,5 +1,5 @@
 ## Unified Device Tree for Xiaomi Redmi 4A/5A (rolex/riva)
-If you're wondering how to build a ROM using this device tree without thinking too much, consider using [Rova Builder](https://github.com/iusmac/rova_builder/tree/11) which already contains all needed manifests and proper settings. It comes with a fully containerized and intuitive TUI (terminal user interface) tool that I wrote to reduce as much as possible machine-depended failures and missing dependencies when building. Gook luck! ;)
+If you're wondering how to build a ROM using this device tree without thinking too much, consider using [Rova Builder](https://github.com/iusmac/rova_builder/tree/12) which already contains all needed manifests and proper settings. It comes with a fully containerized and intuitive TUI (terminal user interface) tool that I wrote to reduce as much as possible machine-depended failures and missing dependencies when building. Gook luck! ;)
 
 ### Device specifications
 Basic                   | Spec Sheet
