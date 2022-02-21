@@ -1,8 +1,11 @@
+# Camera
+vendor_internal_prop(vendor_camera_prop)
+
 # Dirac
-type dirac_prop, property_type;
+vendor_restricted_prop(dirac_prop)
 
 # Power HAL
-type power_prop, property_type;
+vendor_internal_prop(power_prop)
 
 # Xiaomi
-type vendor_xiaomi_prop, property_type;
+vendor_internal_prop(vendor_xiaomi_prop)
