@@ -15,6 +15,10 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Pocket Lock -->
+    <bool name="config_pocketModeSupported">true</bool>
+    <bool name="config_pocketUseLightSensor">true</bool>
+
     <!-- Smart charging -->
     <bool name="config_smartChargingAvailable">true</bool>
 </resources>
