@@ -1,0 +1,6 @@
+# XiaomiParts
+allow system_app {
+    sysfs_hgain
+    sysfs_sgain
+    sysfs_mgain
+}:file rw_file_perms;
