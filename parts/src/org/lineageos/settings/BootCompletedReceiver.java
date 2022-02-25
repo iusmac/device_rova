@@ -65,6 +65,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                 0
             )
         );
-        new DiracUtils(context).onBootCompleted();;
+        new DiracUtils(context).onBootCompleted();
     }
 }
