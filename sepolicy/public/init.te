@@ -1,0 +1,2 @@
+get_prop(init, baseband_prop);
+set_prop(init, radio_prop);

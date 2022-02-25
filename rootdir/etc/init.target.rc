@@ -251,3 +251,11 @@ on property:sys.boot_completed=1
     write /dev/cpuset/system-background/uclamp.min 10
     write /dev/cpuset/system-background/uclamp.boosted 0
     write /dev/cpuset/system-background/uclamp.latency_sensitive 0
+
+# Baseband
+service baseband-sh /vendor/bin/init.baseband.sh
+    class late_start
+    user system
+    group system
+    oneshot
+    disabled

@@ -36,6 +36,13 @@ xiaomi_msm8937_rootdir_prebuilt_etc {
 // Init scripts
 
 prebuilt_etc {
+    name: "init.baseband.proxy.rc",
+    src: "etc/init.baseband.proxy.rc",
+    sub_dir: "init",
+    system_ext_specific: true,
+}
+
+prebuilt_etc {
     name: "init.msm.usb.configfs.rc",
     src: "etc/init.msm.usb.configfs.rc",
     sub_dir: "init/hw",

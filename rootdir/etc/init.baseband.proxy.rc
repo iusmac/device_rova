@@ -1,0 +1,2 @@
+on property:vendor.gsm.version.baseband=*
+    setprop gsm.version.baseband ${vendor.gsm.version.baseband}

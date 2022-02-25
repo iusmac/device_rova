@@ -2,6 +2,9 @@
 audio.chk.cal.us               u:object_r:audio_config_prop:s0
 audio.offload.disable          u:object_r:audio_config_prop:s0
 
+# Baseband
+vendor.gsm.version.baseband    u:object_r:baseband_prop:s0
+
 # Bluetooth
 bluetooth.hfp.client           u:object_r:vendor_bluetooth_prop:s0
 
