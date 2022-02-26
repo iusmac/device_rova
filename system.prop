@@ -1,6 +1,13 @@
 # ART
-dalvik.vm.dex2oat-filter=speed
-dalvik.vm.image-dex2oat-filter=speed
+dalvik.vm.dex2oat64.enabled=true
+dalvik.vm.dex2oat-filter=quicken
+dalvik.vm.dex2oat-threads=4
+dalvik.vm.dex2oat-cpu-set=0,1,2,3
+dalvik.vm.image-dex2oat-filter=quicken
+dalvik.vm.image-dex2oat-threads=4
+dalvik.vm.image-dex2oat-cpu-set=0,1,2,3
+ro.vendor.qti.am.reschedule_service=true
+dalvik.vm.boot-dex2oat-threads=4
 
 # Audio
 ro.config.media_vol_default=8
