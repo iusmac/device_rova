@@ -114,6 +114,7 @@ PRODUCT_PACKAGES += \
 
 # DEX
 PRODUCT_DEXPREOPT_SPEED_APPS += \
+    Launcher3QuickStep \
     SystemUI \
     Settings
 
