@@ -74,11 +74,3 @@ cc_library_shared {
     vendor: true,
     compile_multilib: "32",
 }
-
-cc_library {
-    name: "libshim_dpmframework",
-    srcs: [
-        "dpm/strdup16to8.cpp",
-        "dpm/strdup8to16.cpp",
-    ],
-}
