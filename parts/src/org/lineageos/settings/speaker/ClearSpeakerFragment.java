@@ -105,8 +105,8 @@ public class ClearSpeakerFragment extends PreferenceFragment implements
         return true;
     }
 
-    public void stopPlaying() {
-        if (mMediaPlayer != null) {
+    public void stopPlaying() throws IllegalStateException {
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.stop();
             mMediaPlayer.reset();
             mMediaPlayer.release();
