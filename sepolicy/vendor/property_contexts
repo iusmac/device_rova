@@ -26,5 +26,9 @@ vendor.powerhal.rendering      u:object_r:power_prop:s0
 # Thermal Engine
 sys.thermal.                   u:object_r:vendor_thermal_engine_prop:s0
 
+# WiFi
+vendor.wlan.                   u:object_r:vendor_wifi_prop:s0
+persist.sys.dynamic.nv         u:object_r:vendor_wifi_prop:s0
+
 # Xiaomi
 ro.vendor.xiaomi.	u:object_r:vendor_xiaomi_prop:s0
