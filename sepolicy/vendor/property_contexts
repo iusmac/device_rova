@@ -1,3 +1,7 @@
+# Audio
+audio.chk.cal.us               u:object_r:audio_config_prop:s0
+audio.offload.disable          u:object_r:audio_config_prop:s0
+
 # Bluetooth
 bluetooth.hfp.client           u:object_r:vendor_bluetooth_prop:s0
 
