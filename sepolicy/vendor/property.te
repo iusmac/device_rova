@@ -7,5 +7,8 @@ vendor_internal_prop(dirac_prop)
 # Power HAL
 vendor_internal_prop(power_prop)
 
+# Thermal Engine
+vendor_internal_prop(vendor_thermal_engine_prop)
+
 # Xiaomi
 vendor_internal_prop(vendor_xiaomi_prop)
