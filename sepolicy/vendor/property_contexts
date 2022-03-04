@@ -15,7 +15,8 @@ vendor.camera.             u:object_r:camera_prop:s0
 ctl.vendor.imsrcsd         u:object_r:vendor_ctl_vendor_imsrcsservice_prop:s0
 
 # Dirac
-persist.audio.dirac.       u:object_r:dirac_prop:s0
+persist.audio.dirac.           u:object_r:dirac_prop:s0
+ro.audio.soundfx.dirac         u:object_r:dirac_prop:s0
 
 # PowerHAL
 vendor.powerhal.audio          u:object_r:power_prop:s0

@@ -2,7 +2,7 @@
 vendor_internal_prop(vendor_camera_prop)
 
 # Dirac
-vendor_restricted_prop(dirac_prop)
+vendor_internal_prop(dirac_prop)
 
 # Power HAL
 vendor_internal_prop(power_prop)
