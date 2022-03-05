@@ -25,21 +25,29 @@
 
 #include "Power.h"
 #include "PowerExt.h"
+#include "PowerSessionManager.h"
 
 using aidl::google::hardware::power::impl::pixel::Power;
 using aidl::google::hardware::power::impl::pixel::PowerExt;
+using aidl::google::hardware::power::impl::pixel::PowerHintMonitor;
+using aidl::google::hardware::power::impl::pixel::PowerSessionManager;
 using ::android::perfmgr::HintManager;
 
-constexpr char kPowerHalConfigPath[] = "/vendor/etc/powerhint.json";
-constexpr char kPowerHalInitProp[] = "vendor.powerhal.init";
+constexpr std::string_view kPowerHalInitProp("vendor.powerhal.init");
+constexpr std::string_view kConfigProperty("vendor.powerhal.config");
+constexpr std::string_view kConfigDefaultFileName("powerhint.json");
 
 int main() {
-    LOG(INFO) << "Xiaomi Rova Power HAL AIDL Service with Extension is starting.";
+    const std::string config_path =
+            "/vendor/etc/" +
+            android::base::GetProperty(kConfigProperty.data(), kConfigDefaultFileName.data());
+    LOG(INFO) << "Xiaomi Rova Power HAL AIDL Service with Extension is starting with config: "
+              << config_path;
 
     // Parse config but do not start the looper
-    std::shared_ptr<HintManager> hm = HintManager::GetFromJSON(kPowerHalConfigPath, false);
+    std::shared_ptr<HintManager> hm = HintManager::GetFromJSON(config_path, false);
     if (!hm) {
-        LOG(FATAL) << "Invalid config: " << kPowerHalConfigPath;
+        LOG(FATAL) << "Invalid config: " << config_path;
     }
 
     // single thread
@@ -60,8 +68,13 @@ int main() {
     CHECK(status == STATUS_OK);
     LOG(INFO) << "Xiaomi Rova Power HAL AIDL Service with Extension is started.";
 
+    if (::android::base::GetIntProperty("vendor.powerhal.adpf.rate", -1) != -1) {
+        PowerHintMonitor::getInstance()->start();
+        PowerSessionManager::getInstance()->setHintManager(hm);
+    }
+
     std::thread initThread([&]() {
-        ::android::base::WaitForProperty(kPowerHalInitProp, "1");
+        ::android::base::WaitForProperty(kPowerHalInitProp.data(), "1");
         hm->Start();
     });
     initThread.detach();
