@@ -20,4 +20,4 @@ allow hal_power_default sysfs_kgsl:file rw_file_perms;
 allow hal_power_default sysfs_kgsl:lnk_file r_file_perms;
 
 # To get/set powerhal state property
-set_prop(hal_power_default, power_prop)
+set_prop(hal_power_default, vendor_power_prop)
