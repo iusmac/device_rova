@@ -1,0 +1,1 @@
+allow priv_app proc_version:file { open getattr };
