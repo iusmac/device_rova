@@ -8,18 +8,21 @@ vendor.gsm.version.baseband    u:object_r:baseband_prop:s0
 # Bluetooth
 bluetooth.hfp.client           u:object_r:vendor_bluetooth_prop:s0
 
-sys.listeners.registered   u:object_r:vendor_tee_listener_prop:s0
-sys.post_boot.parsed       u:object_r:vendor_mpctl_prop:s0
-persist.net.doxlat         u:object_r:vendor_xlat_prop:s0
-camera.dual.mode           u:object_r:camera_prop:s0
-persist.camera.            u:object_r:camera_prop:s0
-persist.vendor.camera.     u:object_r:camera_prop:s0
-vendor.camera.             u:object_r:camera_prop:s0
-ctl.vendor.imsrcsd         u:object_r:vendor_ctl_vendor_imsrcsservice_prop:s0
+# Camera
+camera.dual.mode               u:object_r:camera_prop:s0
+persist.camera.                u:object_r:camera_prop:s0
+persist.vendor.camera.         u:object_r:camera_prop:s0
+vendor.camera.                 u:object_r:camera_prop:s0
 
 # Dirac
 persist.audio.dirac.           u:object_r:dirac_prop:s0
 ro.audio.soundfx.dirac         u:object_r:dirac_prop:s0
+
+# Misc
+sys.listeners.registered       u:object_r:vendor_tee_listener_prop:s0
+sys.post_boot.parsed           u:object_r:vendor_mpctl_prop:s0
+persist.net.doxlat             u:object_r:vendor_xlat_prop:s0
+ctl.vendor.imsrcsd             u:object_r:vendor_ctl_vendor_imsrcsservice_prop:s0
 
 # PowerHAL
 vendor.powerhal.               u:object_r:vendor_power_prop:s0
@@ -32,4 +35,4 @@ vendor.wlan.                   u:object_r:vendor_wifi_prop:s0
 persist.sys.dynamic.nv         u:object_r:vendor_wifi_prop:s0
 
 # Xiaomi
-ro.vendor.xiaomi.	u:object_r:vendor_xiaomi_prop:s0
+ro.vendor.xiaomi.              u:object_r:vendor_xiaomi_prop:s0
