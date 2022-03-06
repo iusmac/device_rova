@@ -1,1 +1,3 @@
 allow gmscore_app exported_camera_prop:file { read };
+
+get_prop(gmscore_app, vendor_camera_prop)

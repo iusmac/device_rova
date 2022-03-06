@@ -9,9 +9,16 @@ vendor.gsm.version.baseband    u:object_r:baseband_prop:s0
 bluetooth.hfp.client           u:object_r:vendor_bluetooth_prop:s0
 
 # Camera
-camera.dual.mode               u:object_r:camera_prop:s0
+camera.                        u:object_r:vendor_camera_prop:s0
+cameradaemon.                  u:object_r:vendor_camera_prop:s0
+cpp.set.clock                  u:object_r:vendor_camera_prop:s0
+disable.cpp.power.collapse     u:object_r:vendor_camera_prop:s0
+persist.enable.max.pending.buf u:object_r:vendor_camera_prop:s0
+persist.partial.skip           u:object_r:vendor_camera_prop:s0
+persist.cam.pp.feat.mask       u:object_r:vendor_camera_prop:s0
 persist.camera.                u:object_r:camera_prop:s0
 persist.vendor.camera.         u:object_r:camera_prop:s0
+ro.camera.                     u:object_r:vendor_camera_prop:s0
 vendor.camera.                 u:object_r:camera_prop:s0
 
 # Dirac
@@ -23,6 +30,7 @@ sys.listeners.registered       u:object_r:vendor_tee_listener_prop:s0
 sys.post_boot.parsed           u:object_r:vendor_mpctl_prop:s0
 persist.net.doxlat             u:object_r:vendor_xlat_prop:s0
 ctl.vendor.imsrcsd             u:object_r:vendor_ctl_vendor_imsrcsservice_prop:s0
+ro.product.wt.boardid          u:object_r:exported_default_prop:s0
 
 # PowerHAL
 vendor.powerhal.               u:object_r:vendor_power_prop:s0

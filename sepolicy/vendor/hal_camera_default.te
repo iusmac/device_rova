@@ -1,3 +1,4 @@
 allow hal_camera_default camera_data_file:sock_file write;
 
 get_prop(hal_camera_default, bootanim_system_prop)
+get_prop(hal_camera_default, vendor_camera_prop)

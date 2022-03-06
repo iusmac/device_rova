@@ -5,4 +5,6 @@ allow untrusted_app proc_net:file { read open getattr };
 allow untrusted_app app_data_file:file { execute };
 dontaudit untrusted_app proc:file { read };
 
+get_prop(untrusted_app, vendor_persist_camera_prop)
+
 allow untrusted_app zygote:unix_stream_socket { getopt };
