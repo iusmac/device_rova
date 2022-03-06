@@ -1,1 +1,4 @@
 get_prop(system_server, vendor_persist_camera_prop)
+
+# Neverallows
+# allow system_server fs_bpf_tethering:dir { search };
