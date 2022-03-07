@@ -75,5 +75,5 @@
     <!-- Clear Speaker -->
     <string name="clear_speaker_title">Pulizia altoparlante</string>
     <string name="clear_speaker_summary">Riproduci un audio di 30 secondi ad alta frequenza per pulire l\'altoparlante</string>
-    <string name="clear_speaker_description">Alza il volume del dispositivo al massimo ed esegui questa funzione una o due volte se trovi che il tuo altoparlante sia ostruito dalla polvere.\n\nIn caso sia fortemente ostruito, esegui questa funzione 2-5 volte mentre scuoti il dispositivo con l\'altoparlante rivolto verso il basso.</string>
+    <string name="clear_speaker_description">Alza il volume del dispositivo al massimo ed esegui questa funzione una o due volte se trovi che il tuo altoparlante sia ostruito dalla polvere.\n\nIn caso sia fortemente ostruito, esegui questa funzione 2-5 volte mentre scuoti il dispositivo con l\'altoparlante rivolto verso il basso.\n\nATTENZIONE: assicurarsi che le cuffie siano scollegate.</string>
 </resources>
