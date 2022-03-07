@@ -7,6 +7,9 @@ vendor.gsm.version.baseband    u:object_r:baseband_prop:s0
 
 # Bluetooth
 bluetooth.hfp.client           u:object_r:vendor_bluetooth_prop:s0
+persist.vendor.btstack.        u:object_r:vendor_bluetooth_prop:s0
+ro.bluetooth.hfp.ver           u:object_r:vendor_bluetooth_prop:s0
+ro.qualcomm.bt.hci_transport   u:object_r:vendor_bluetooth_prop:s0
 
 # Camera
 camera.                        u:object_r:vendor_camera_prop:s0
