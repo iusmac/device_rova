@@ -100,7 +100,7 @@ PRODUCT_PACKAGES += \
     libstdc++.vendor
 
 PRODUCT_PACKAGES += \
-    Snap
+    GrapheneCamera
 
 # Cgroup Abstraction Layer
 PRODUCT_COPY_FILES += \
