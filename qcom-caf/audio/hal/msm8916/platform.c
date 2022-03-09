@@ -1250,7 +1250,9 @@ static void query_platform(const char *snd_card_name,
         msm_be_id_array_len  =
             sizeof(msm_device_to_be_id_internal_codec) / sizeof(msm_device_to_be_id_internal_codec[0]);
     } else if (!strncmp(snd_card_name, "msm8909-pm8916-snd-card",
-                 sizeof("msm8909-pm8916-snd-card"))) {
+                 sizeof("msm8909-pm8916-snd-card")) ||
+                 !strncmp(snd_card_name, "msm8909-snd-card",
+                 sizeof("msm8909-snd-card"))) {
         strlcpy(mixer_xml_path, MIXER_XML_PATH_MSM8909_PM8916,
                 sizeof(MIXER_XML_PATH_MSM8909_PM8916));
 
@@ -1515,6 +1517,13 @@ static void query_platform(const char *snd_card_name,
             sizeof(msm_device_to_be_id_internal_codec) / sizeof(msm_device_to_be_id_internal_codec[0]);
 
     }
+
+#if 1
+    char mixer_xml_path_custom[PROPERTY_VALUE_MAX];
+    property_get("vendor.audio.mixer_xml.path", mixer_xml_path_custom, "");
+    if (strlen(mixer_xml_path_custom) > 0)
+        strlcpy(mixer_xml_path, mixer_xml_path_custom, sizeof(mixer_xml_path_custom));
+#endif
 }
 
 void platform_set_echo_reference(struct audio_device *adev, bool enable,
@@ -2084,7 +2093,8 @@ static bool check_and_get_wsa_info(char *snd_card_name, int *wsaCount,
             read_line_from_file(name, buf, sizeof(buf));
             if (strstr(buf, file)) {
                 if (property_get_bool("vendor.audio.read.wsatz.type", false)) {
-                    struct str_parms *parms = NULL;
+                    struct str_parms *parms;
+                    parms = NULL;
                     buf[strlen(buf) - 1] = '\0';
                     audio_extn_spkr_prot_set_parameters(parms, buf, 0);
                 }

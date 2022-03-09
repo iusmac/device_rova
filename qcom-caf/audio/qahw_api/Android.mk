@@ -8,6 +8,9 @@ LOCAL_MODULE := libqahw
 LOCAL_MODULE_TAGS := optional
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/inc
 
+LOCAL_HEADER_LIBRARIES := \
+    libutils_headers \
+
 LOCAL_SRC_FILES := \
     src/qahw_api.cpp
 

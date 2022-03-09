@@ -1,4 +1,4 @@
-/* Copyright (c) 2014, 2017 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014, 2017-2020 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -33,7 +33,7 @@
 #include "pm.h"
 #include <log/log.h>
 #include <cutils/str_parms.h>
-
+#include <unistd.h>
 #ifdef DYNAMIC_LOG_ENABLED
 #include <log_xml_parser.h>
 #define LOG_MASK HAL_MOD_FILE_PM
@@ -47,8 +47,10 @@ static s_audio_subsys audio_ss;
 
 int audio_extn_pm_vote(void)
 {
-    int ret;
+    int err, intfd, ret;
     enum pm_event subsys_state;
+    char hal_prop_val[PROPERTY_VALUE_MAX];
+    bool prop_unload_image = false;
     bool pm_reg = false;
     bool pm_supp = false;
 
@@ -78,6 +80,27 @@ int audio_extn_pm_vote(void)
        pm_reg == true) {
        ALOGD("%s: Voting for subsystem power up", __func__);
        pm_client_connect(audio_ss.pm_handle);
+       if (subsys_state == EVENT_PERIPH_IS_ONLINE) {
+          if (property_get("vendor.audio.sys.init", hal_prop_val, NULL)) {
+             prop_unload_image = !(strncmp("false", hal_prop_val, sizeof("false")));
+          }
+          /*
+          * adsp-loader loads modem/adsp image at boot up to play boot tone,
+          * before peripheral manager service is up. Once PM is up, vote to PM
+          * and unload the image to give control to PM to load/unload image
+          */
+          if (prop_unload_image) {
+             intfd = open(BOOT_IMG_SYSFS_PATH, O_WRONLY);
+             if (intfd == -1) {
+                ALOGE("failed to open fd in write mode, %d", errno);
+             } else {
+                 ALOGD("%s: write to sysfs to unload image", __func__);
+                 err = write(intfd, UNLOAD_IMAGE, 1);
+                 close(intfd);
+                 property_set("vendor.audio.sys.init", "true");
+               }
+          }
+       }
     }
     return 0;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2020, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2013 The Android Open Source Project
@@ -6870,8 +6870,6 @@ static int adev_set_parameters(struct audio_hw_device *dev, const char *kvpairs)
     int val;
     int ret;
     int status = 0;
-    struct listnode *node;
-    struct audio_usecase *usecase = NULL;
 
     ALOGD("%s: enter: %s", __func__, kvpairs);
     parms = str_parms_create_str(kvpairs);
@@ -6886,19 +6884,26 @@ static int adev_set_parameters(struct audio_hw_device *dev, const char *kvpairs)
         if (strcmp(value, AUDIO_PARAMETER_VALUE_ON) == 0){
             adev->bt_sco_on = true;
         } else {
-            ALOGD("route device to handset/mic when sco is off");
+            ALOGD("route device to handset mic when sco is off");
             adev->bt_sco_on = false;
+        }
+    }
+
+    ret = str_parms_get_str(parms, "A2dpSuspended", value, sizeof(value));
+    if (ret>=0) {
+        if (!strncmp(value, "false", 5) &&
+            !audio_extn_a2dp_is_ready()) {
+            struct audio_usecase *usecase;
+            struct listnode *node;
             list_for_each(node, &adev->usecase_list) {
                 usecase = node_to_item(node, struct audio_usecase, list);
-                if ((usecase->type == PCM_PLAYBACK) && usecase->stream.out &&
-                    (usecase->stream.out->devices & AUDIO_DEVICE_OUT_ALL_SCO))
-                    usecase->stream.out->devices = AUDIO_DEVICE_OUT_EARPIECE;
-                else if ((usecase->type == PCM_CAPTURE) && usecase->stream.in &&
-                         (usecase->stream.in->device & AUDIO_DEVICE_IN_ALL_SCO))
+                if (usecase->stream.in && (usecase->type == PCM_CAPTURE) &&
+                    ((usecase->stream.in->device & ~AUDIO_DEVICE_BIT_IN) &
+                        AUDIO_DEVICE_IN_ALL_SCO)) {
+                    ALOGD("a2dp resumed, switch bt sco mic to handset mic");
                     usecase->stream.in->device = AUDIO_DEVICE_IN_BUILTIN_MIC;
-                else
-                    continue;
-                select_devices(adev, usecase->id);
+                    select_devices(adev, usecase->id);
+                }
             }
         }
     }
