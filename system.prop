@@ -21,7 +21,12 @@ ro.charger.disable_init_blank=true
 # Display
 debug.hwui.renderer=skiagl
 debug.renderengine.backend=skiaglthreaded
+persist.demo.hdmirotationlock=false
+persist.hwc.enable_vds=1
+persist.hwc.mdpcomp.enable=true
 renderthread.skia.reduceopstasksplitting=true
+ro.sf.blurs_are_expensive=1
+sdm.debug.disable_skip_validate=1
 
 # DPM
 persist.vendor.dpm.feature=1
@@ -31,6 +36,12 @@ persist.vendor.dpmhalservice.enable=1
 # fastbootd
 ro.fastbootd.available=true
 
+# Fingerprint
+persist.qfp=false
+
+# FM
+ro.fm.transmitter=false
+
 # Fwk detect
 ro.vendor.qti.va_aosp.support=1
 
@@ -38,6 +49,40 @@ ro.vendor.qti.va_aosp.support=1
 ro.iorapd.enable=true
 iorapd.perfetto.enable=true
 iorapd.readahead.enable=true
+
+# Media
+av.debug.disable.pers.cache=1
+media.aac_51_output_enabled=true
+media.msm8956hw=0
+media.stagefright.audio.sink=280
+vendor.mm.enable.qcom_parser=1048575
+mm.enable.smoothstreaming=true
+mmp.enable.3g2=true
+video.disable.ubwc=1
+
+# Memory optimizations
+ro.vendor.qti.sys.fw.bservice_enable=true
+
+# Network manager daemon
+persist.data.netmgrd.qos.enable=true
+
+# Radio
+DEVICE_PROVISIONED=1
+persist.rild.nitz_long_ons_0=""
+persist.rild.nitz_long_ons_1=""
+persist.rild.nitz_long_ons_2=""
+persist.rild.nitz_long_ons_3=""
+persist.rild.nitz_plmn=""
+persist.rild.nitz_short_ons_0=""
+persist.rild.nitz_short_ons_1=""
+persist.rild.nitz_short_ons_2=""
+persist.rild.nitz_short_ons_3=""
+rild.libargs=-d /dev/smd0
+rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
+ril.subscription.types=NV,RUIM
+
+# Time Services
+persist.timed.enable=true
 
 # ZRAM
 ro.zram.mark_idle_delay_mins=60
