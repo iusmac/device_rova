@@ -23,6 +23,11 @@ LOCAL_HEADER_LIBRARIES        := display_headers
 ifneq ($(TARGET_KERNEL_VERSION), 4.14)
 LOCAL_CFLAGS                  += -isystem  $(kernel_includes)
 endif
+ifneq ($(TARGET_GRALLOC_PROD_CAMERA_PIXEL_FORMAT),)
+LOCAL_CFLAGS                  += -DPROD_CAMERA_PIXEL_FORMAT=$(TARGET_GRALLOC_PROD_CAMERA_PIXEL_FORMAT)
+else
+LOCAL_CFLAGS                  += -DPROD_CAMERA_PIXEL_FORMAT=HAL_PIXEL_FORMAT_YCbCr_420_SP_VENUS
+endif
 LOCAL_CLANG                   := true
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps) $(kernel_deps)
 LOCAL_SRC_FILES               := gr_ion_alloc.cpp \

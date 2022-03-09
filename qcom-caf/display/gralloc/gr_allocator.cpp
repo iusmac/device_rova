@@ -219,7 +219,7 @@ int Allocator::GetImplDefinedFormat(gralloc1_producer_usage_t prod_usage,
       if (format == HAL_PIXEL_FORMAT_YCbCr_420_888) {
         gr_format = HAL_PIXEL_FORMAT_NV21_ZSL;  // NV21
       } else {
-        gr_format = HAL_PIXEL_FORMAT_YCbCr_420_SP_VENUS;  // NV12 preview
+        gr_format = PROD_CAMERA_PIXEL_FORMAT;  // NV12 preview
       }
     } else if (cons_usage & GRALLOC1_CONSUMER_USAGE_HWCOMPOSER) {
       // XXX: If we still haven't set a format, default to RGBA8888
