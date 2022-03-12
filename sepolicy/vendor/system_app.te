@@ -9,8 +9,7 @@ allow system_app proc_vmallocinfo:file r_file_perms;
 
 # XiaomiParts
 allow system_app {
-    sysfs_hgain
-    sysfs_sgain
+    sysfs_shgain
     sysfs_mgain
 }:file rw_file_perms;
 

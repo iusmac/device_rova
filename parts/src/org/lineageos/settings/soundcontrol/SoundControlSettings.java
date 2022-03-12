@@ -30,26 +30,23 @@ import org.lineageos.settings.R;
 public class SoundControlSettings extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
-    public static final String PREF_HEADPHONE_GAIN = "headphone_gain";
-    public static final String HEADPHONE_GAIN_PATH = "/sys/kernel/sound_control/headphone_gain";
-    public static final String PREF_SPEAKER_GAIN = "speaker_gain";
-    public static final String SPEAKER_GAIN_PATH = "/sys/kernel/sound_control/speaker_gain";
+    // NOTE: the kernel techpack audio driver implements speaker & headphone
+    // gain to 'headphone_gain' file
+    public static final String PREF_VOLUME_GAIN = "volume_gain";
+    public static final String VOLUME_GAIN_PATH = "/sys/kernel/sound_control/headphone_gain";
+
     public static final String PREF_MICROPHONE_GAIN = "microphone_gain";
     public static final String MICROPHONE_GAIN_PATH = "/sys/kernel/sound_control/mic_gain";
 
-    private CustomSeekBarPreference mHeadphoneGain;
-    private CustomSeekBarPreference mSpeakerGain;
+    private CustomSeekBarPreference mVolumeGain;
     private CustomSeekBarPreference mMicrophoneGain;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.soundcontrol_settings, rootKey);
 
-        mHeadphoneGain = (CustomSeekBarPreference) findPreference(PREF_HEADPHONE_GAIN);
-        mHeadphoneGain.setOnPreferenceChangeListener(this);
-
-        mSpeakerGain = (CustomSeekBarPreference) findPreference(PREF_SPEAKER_GAIN);
-        mSpeakerGain.setOnPreferenceChangeListener(this);
+        mVolumeGain = (CustomSeekBarPreference) findPreference(PREF_VOLUME_GAIN);
+        mVolumeGain.setOnPreferenceChangeListener(this);
 
         mMicrophoneGain = (CustomSeekBarPreference) findPreference(PREF_MICROPHONE_GAIN);
         mMicrophoneGain.setOnPreferenceChangeListener(this);
@@ -59,12 +56,8 @@ public class SoundControlSettings extends PreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object value) {
         final String key = preference.getKey();
         switch (key) {
-            case PREF_HEADPHONE_GAIN:
-                SoundControlFileUtils.setValue(HEADPHONE_GAIN_PATH, value + " " + value);
-                break;
-
-            case PREF_SPEAKER_GAIN:
-                 SoundControlFileUtils.setValue(SPEAKER_GAIN_PATH, (int) value);
+            case PREF_VOLUME_GAIN:
+                SoundControlFileUtils.setValue(VOLUME_GAIN_PATH, value + " " + value);
                 break;
 
             case PREF_MICROPHONE_GAIN:
