@@ -26,7 +26,6 @@ import android.provider.Settings;
 import org.lineageos.settings.soundcontrol.SoundControlSettings;
 import org.lineageos.settings.soundcontrol.SoundControlFileUtils;
 import org.lineageos.settings.dirac.DiracUtils;
-import org.lineageos.settings.doze.DozeUtils;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     private static final boolean DEBUG = false;
@@ -34,11 +33,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        if (DozeUtils.isDozeEnabled(context) && DozeUtils.sensorsEnabled(context)) {
-            if (DEBUG) Log.d(TAG, "Starting Doze service");
-            DozeUtils.startService(context);
-        }
-
         int gain = Settings.Secure.getInt(
             context.getContentResolver(),
             SoundControlSettings.PREF_VOLUME_GAIN, 0
