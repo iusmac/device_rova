@@ -45,6 +45,5 @@ type debugfs_rmt, debugfs_type, fs_type;
 type proc_touchpanel, fs_type, sysfs_type, proc_type;
 
 # XiaomiParts
-type sysfs_hgain, sysfs_type, fs_type;
-type sysfs_sgain, sysfs_type, fs_type;
+type sysfs_shgain, sysfs_type, fs_type;
 type sysfs_mgain, sysfs_type, fs_type;

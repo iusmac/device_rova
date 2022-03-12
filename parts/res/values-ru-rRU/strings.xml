@@ -20,8 +20,7 @@
     <string name="advanced_summary">Управление усилением звука</string>
 
     <!-- Audio amplification -->
-    <string name="headphone_gain">Усиление наушников</string>
-    <string name="speaker_gain">Усиление динамиков</string>
+    <string name="volume_gain">Усиление наушников и динамиков</string>
     <string name="microphone_gain">Усиление микрофона</string>
 
     <!-- Custom seekbar -->

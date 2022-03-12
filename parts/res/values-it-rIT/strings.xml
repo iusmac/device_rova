@@ -20,8 +20,7 @@
     <string name="advanced_summary">Controlla il guadagno dell\'audio e del microfono</string>
 
     <!-- Audio amplification -->
-    <string name="headphone_gain">Guadagno cuffie</string>
-    <string name="speaker_gain">Guadagno altoparlanti</string>
+    <string name="volume_gain">Guadagno altoparlanti e cuffie</string>
     <string name="microphone_gain">Guadagno microfono</string>
 
     <!-- Custom seekbar -->
