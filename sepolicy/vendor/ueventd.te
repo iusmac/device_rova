@@ -12,3 +12,5 @@ allow ueventd {
     debugfs_sched_features
     debugfs_wakeup_sources
 }:file { getattr };
+
+allow ueventd metadata_file:dir { search };
