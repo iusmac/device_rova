@@ -1,10 +1,7 @@
-typeattribute qti_init_shell data_between_core_and_vendor_violators;
-
 # PowerHAL
 allow qti_init_shell proc_sysctl_autogroup:file w_file_perms;
 allow qti_init_shell proc_sysctl_schedboost:file w_file_perms;
 
-allow qti_init_shell bluetooth_data_file:file r_file_perms;
 allow qti_init_shell sysfs_net:file rw_file_perms;
 allow qti_init_shell sysfs:file { write setattr };
 allow qti_init_shell proc_boot_reason:file r_file_perms;
