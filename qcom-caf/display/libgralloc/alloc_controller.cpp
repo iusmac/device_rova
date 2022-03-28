@@ -453,7 +453,7 @@ IonController::IonController()
     allocateIonMem();
 
     char property[PROPERTY_VALUE_MAX];
-    property_get("video.disable.ubwc", property, "0");
+    property_get("vendor.video.disable.ubwc", property, "0");
     mDisableUBWCForEncode = atoi(property);
 }
 
