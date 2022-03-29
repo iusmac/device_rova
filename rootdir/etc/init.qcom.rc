@@ -420,6 +420,9 @@ on property:sys.boot_completed=1
     chown media audio /sys/kernel/wdsp0/boot
     chown media audio /sys/kernel/wcd_cpe0/fw_name
 
+    # Setup scheduler tunables
+    write /proc/sys/kernel/sched_child_runs_first 1
+
     # This initializes vendor.qti.hardware.perf service
     setprop vendor.post_boot.parsed 1
 
