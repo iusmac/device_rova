@@ -420,6 +420,11 @@ on property:sys.boot_completed=1
     chown media audio /sys/kernel/wdsp0/boot
     chown media audio /sys/kernel/wcd_cpe0/fw_name
 
+    # Setup default schedTune value for foreground/top-app
+    write /dev/stune/schedtune.prefer_idle 0
+    write /dev/stune/foreground/schedtune.prefer_idle 1
+    write /dev/stune/top-app/schedtune.prefer_idle 1
+
     # Setup scheduler tunables
     write /proc/sys/kernel/sched_child_runs_first 1
 
