@@ -110,7 +110,7 @@ service vendor.qseecomd /vendor/bin/qseecomd
    group root
    task_profiles ServiceCapacityLow
 
-service thermal-engine /vendor/bin/thermal-engine
+service thermal-engine /vendor/bin/thermal-engine -c /vendor/etc/thermal-engine.conf
    class main
    user root
    socket thermal-send-client stream 0666 system system
