@@ -75,6 +75,14 @@ cc_library_shared {
     compile_multilib: "32",
 }
 
+cc_library {
+    name: "libshim_dpmframework",
+    srcs: [
+        "dpm/strdup16to8.cpp",
+        "dpm/strdup8to16.cpp",
+    ],
+}
+
 cc_library_shared {
     name: "libshim_imsvideocodec",
     shared_libs: [

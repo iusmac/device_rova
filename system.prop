@@ -31,7 +31,6 @@ sdm.debug.disable_skip_validate=1
 # DPM
 persist.vendor.dpm.feature=1
 persist.vendor.dpm.loglevel=0
-persist.vendor.dpmhalservice.enable=1
 
 # fastbootd
 ro.fastbootd.available=true
