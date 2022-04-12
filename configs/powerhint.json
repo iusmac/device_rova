@@ -176,17 +176,11 @@
       "ResetOnInit": true
     },
     {
-      "Name": "CPUBWMinFreq",
-      "Path": "/sys/class/devfreq/soc:qcom,cpubw/min_freq",
+      "Name": "CPUBWGovernor",
+      "Path": "/sys/class/devfreq/soc:qcom,cpubw/governor",
       "Values": [
-        "5645",
-        "5126",
-        "4541",
-        "4248",
-        "2929",
-        "2270",
-        "1611",
-        "769"
+        "performance",
+        "bw_hwmon"
       ],
       "ResetOnInit": true
     },
@@ -422,9 +416,9 @@
     },
     {
       "PowerHint": "LAUNCH",
-      "Node": "CPUBWMinFreq",
+      "Node": "CPUBWGovernor",
       "Duration": 3500,
-      "Value": "5645"
+      "Value": "performance"
     },
     {
       "PowerHint": "LAUNCH",
