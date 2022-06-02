@@ -1,1 +1,0 @@
-allow flipendo zygote:unix_stream_socket { getopt };
