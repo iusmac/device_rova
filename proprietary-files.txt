@@ -727,6 +727,7 @@ vendor/lib64/libGPreqcancel_svc.so
 vendor/lib64/libQSEEComAPI.so
 vendor/lib64/libSecureUILib.so
 vendor/lib64/libStDrvInt.so
+vendor/lib64/libdisplayconfig.qti.so
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
 vendor/lib64/libops.so
