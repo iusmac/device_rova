@@ -7,6 +7,7 @@
 # tissot Package version: Tissot PKQ1.180917.001 V10.0.24.0.PDHMIXM
 # ugg Package version: ugg-user 7.1.2 N2G47H V11.0.2.0.NDKMIXM release-keys
 # daisy Package version: daisy-user 10 QKQ1.191002.002 V11.0.21.0.QDLMIXM release-keys
+# santoni Package version: santoni-user 7.1.2 N2G47H V11.0.2.0.NAMMIXM release-keys
 
 # ACDB - from riva Oreo
 vendor/etc/acdbdata/MTP/msm8952-tasha-snd-card/MTP_WCD9335_Bluetooth_cal.acdb
@@ -278,7 +279,7 @@ vendor/lib/libmmcamera_s5k3l2.so
 vendor/lib/libmmcamera_s5k5e8_ofilm_eeprom.so
 vendor/lib/libmmcamera_s5k5e8_ofilm.so
 
-# Camera modules - from riva
+# Camera modules - from riva (Nougat)
 etc/camera/msm8937_camera_riva_india.xml:vendor/etc/camera/msm8937_camera_riva_india.xml
 etc/camera/ov13855_qtech_chromatix.xml:vendor/etc/camera/ov13855_qtech_chromatix.xml
 etc/camera/ov13855_qtech_india_chromatix.xml:vendor/etc/camera/ov13855_qtech_india_chromatix.xml
@@ -481,9 +482,8 @@ vendor/lib/libmmcamera_s5k5e8_ofilm_riva.so
 vendor/lib/libmmcamera_s5k5e8_qtech_riva_eeprom.so
 vendor/lib/libmmcamera_s5k5e8_qtech_riva.so
 
-# Camera stack - from riva V9.2.4.0.NCKMIEK
+# Camera stack - from santoni
 bin/mm-qcamera-daemon:vendor/bin/mm-qcamera-daemon
-vendor/lib/libchromaflash.so
 vendor/lib/libflash_gpio.so
 vendor/lib/libflash_pmic.so
 vendor/lib/libjpegdhw.so
@@ -575,18 +575,11 @@ vendor/lib/libmmjpeg.so
 vendor/lib/libmmqjpeg_codec.so
 vendor/lib/libmmqjpegdma.so
 vendor/lib/libois_lc898122.so
-vendor/lib/liboptizoom.so
 vendor/lib/libqomx_jpegdec.so
 vendor/lib/libqomx_jpegenc_pipe.so
 vendor/lib/libqomx_jpegenc.so
 vendor/lib/libremosaic_daemon.so
 vendor/lib/libseemore.so
-vendor/lib/libtrueportrait.so
-vendor/lib/libubifocus.so
-
-# Camera TNR - from prada (Redmi 4)
-vendor/lib/libllvd_sw_tnr.so|fcdcf57426014ff9d29f394ada26a6fd830dc6e3
-vendor/lib/libmmcamera_sw_tnr.so|6b20dab49ea83f84afed555d9b60595a4c380e16
 
 # CDSP
 vendor/bin/cdsprpcd

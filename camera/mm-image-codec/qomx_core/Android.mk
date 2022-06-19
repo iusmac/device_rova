@@ -8,7 +8,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_CFLAGS := -Werror \
-                -Wno-compound-token-split-by-macro \
                    -g -O0
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../qexif
@@ -23,6 +22,7 @@ LOCAL_SRC_FILES := qomx_core.c
 
 LOCAL_MODULE           := libqomx_core
 LOCAL_VENDOR_MODULE := true
+LOCAL_PRELINK_MODULE   := false
 LOCAL_SHARED_LIBRARIES := libcutils libdl liblog
 
 LOCAL_32_BIT_ONLY := true
