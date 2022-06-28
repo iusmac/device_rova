@@ -44,11 +44,6 @@ ro.fm.transmitter=false
 # Fwk detect
 ro.vendor.qti.va_aosp.support=1
 
-# IOrap
-ro.iorapd.enable=true
-iorapd.perfetto.enable=true
-iorapd.readahead.enable=true
-
 # Media
 av.debug.disable.pers.cache=1
 media.aac_51_output_enabled=true
