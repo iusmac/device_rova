@@ -26,6 +26,7 @@ import android.provider.Settings;
 import org.lineageos.settings.soundcontrol.SoundControlSettings;
 import org.lineageos.settings.soundcontrol.SoundControlFileUtils;
 import org.lineageos.settings.dirac.DiracUtils;
+import org.lineageos.settings.smartcharging.SmartCharging;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     private static final boolean DEBUG = false;
@@ -52,5 +53,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         );
 
         new DiracUtils(context).onBootCompleted();
+        new SmartCharging(context).onBootCompleted();
     }
 }
