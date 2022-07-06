@@ -6,4 +6,10 @@
         <attr name="units" format="string|reference" />
         <attr name="continuousUpdates" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="SeekBarPreference">
+        <attr name="interval" format="integer" />
+        <attr name="units" format="string|reference" />
+        <attr name="continuousUpdates" format="boolean" />
+    </declare-styleable>
 </resources>
