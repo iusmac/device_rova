@@ -4,7 +4,20 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-cc_library_static {
+soong_config_module_type {
+    name: "xiaomi_msm8937_init_cc_library_static",
+    module_type: "cc_library_static",
+    config_namespace: "XIAOMI_MSM8937_INITDIR",
+    variables: ["ADB"],
+    properties: ["cflags"],
+}
+
+soong_config_string_variable {
+    name: "ADB",
+    values: ["rooted", "unrooted"],
+}
+
+xiaomi_msm8937_init_cc_library_static {
     name: "libinit_rova",
     recovery_available: true,
     srcs: ["init_rova.cpp"],
@@ -12,5 +25,20 @@ cc_library_static {
     include_dirs: [
         "system/libbase/include",
         "system/core/init"
-    ]
+    ],
+    soong_config_variables: {
+        ADB: {
+            rooted: {
+                cflags: [
+                    "-DFORCE_ADB_ROOT",
+                ],
+            },
+            unrooted: {
+                cflags: [],
+            },
+            conditions_default: {
+                cflags: [],
+            },
+        },
+    },
 }

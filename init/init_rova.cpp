@@ -94,6 +94,9 @@ void set_variant_props(const variant_info_t variant);
 void property_override(char const prop[], char const value[], bool add = true);
 void set_dalvik_heap_size();
 void set_avoid_gfxaccel_config();
+#ifdef FORCE_ADB_ROOT
+void force_adb_root();
+#endif
 void set_ro_build_prop(const std::string &prop, const std::string &value, bool product = false);
 
 static const variant_info_t rolex_info = {
@@ -128,6 +131,9 @@ void vendor_load_properties() {
     determine_device();
     set_dalvik_heap_size();
     set_avoid_gfxaccel_config();
+#ifdef FORCE_ADB_ROOT
+    force_adb_root();
+#endif
 }
 
 void set_avoid_gfxaccel_config() {
@@ -139,6 +145,15 @@ void set_avoid_gfxaccel_config() {
         property_override("ro.config.avoid_gfx_accel", "true");
     }
 }
+
+#ifdef FORCE_ADB_ROOT
+void force_adb_root() {
+    property_override("ro.secure", "0");
+    property_override("ro.adb.secure", "0");
+    property_override("ro.debuggable", "1");
+    property_override("persist.sys.usb.config", "adb");
+}
+#endif
 
 void set_dalvik_heap_size()
 {
