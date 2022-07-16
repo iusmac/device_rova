@@ -50,7 +50,6 @@ vendor/lib/rfsa/adsp/libdirac-capiv2.so
 -vendor/lib/libaudioparsers.so
 -vendor/lib64/libaudioparsers.so
 vendor/lib/btaudio_offload_if.so
-vendor/lib/hw/sound_trigger.primary.msm8937.so
 vendor/lib/libacdb-fts.so
 vendor/lib/libacdbloader.so
 vendor/lib/libacdbrtac.so
