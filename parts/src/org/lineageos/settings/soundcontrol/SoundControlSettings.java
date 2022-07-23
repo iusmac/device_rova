@@ -25,6 +25,7 @@ import androidx.preference.PreferenceCategory;
 
 import org.lineageos.settings.preferences.CustomSeekBarPreference;
 
+import org.lineageos.settings.PartsUtils;
 import org.lineageos.settings.R;
 
 public class SoundControlSettings extends PreferenceFragment implements
@@ -57,11 +58,11 @@ public class SoundControlSettings extends PreferenceFragment implements
         final String key = preference.getKey();
         switch (key) {
             case PREF_VOLUME_GAIN:
-                SoundControlFileUtils.setValue(VOLUME_GAIN_PATH, value + " " + value);
+                PartsUtils.setValue(VOLUME_GAIN_PATH, value + " " + value);
                 break;
 
             case PREF_MICROPHONE_GAIN:
-                SoundControlFileUtils.setValue(MICROPHONE_GAIN_PATH, (int) value);
+                PartsUtils.setValue(MICROPHONE_GAIN_PATH, (int) value);
                 break;
 
             default:

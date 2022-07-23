@@ -24,7 +24,6 @@ import android.util.Log;
 import android.provider.Settings;
 
 import org.lineageos.settings.soundcontrol.SoundControlSettings;
-import org.lineageos.settings.soundcontrol.SoundControlFileUtils;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.smartcharging.SmartCharging;
 
@@ -38,12 +37,12 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             context.getContentResolver(),
             SoundControlSettings.PREF_VOLUME_GAIN, 0
         );
-        SoundControlFileUtils.setValue(
+        PartsUtils.setValue(
             SoundControlSettings.VOLUME_GAIN_PATH,
             gain + " " + gain
         );
 
-        SoundControlFileUtils.setValue(
+        PartsUtils.setValue(
             SoundControlSettings.MICROPHONE_GAIN_PATH,
             Settings.Secure.getInt(
                 context.getContentResolver(),
