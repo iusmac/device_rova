@@ -14,6 +14,9 @@
 # Camera sockets
 /data/vendor/qcam(/.*)?		u:object_r:vendor_camera_data_file:s0
 
+# Device nodes
+/dev/stune(/.*)?	                                          u:object_r:cgroup:s0
+
 # FPS Info
 /sys/devices/virtual/graphics/fb0/measured_fps                u:object_r:sysfs_fps:s0
 
