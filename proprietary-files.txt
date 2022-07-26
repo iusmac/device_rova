@@ -8,6 +8,7 @@
 # ugg Package version: ugg-user 7.1.2 N2G47H V11.0.2.0.NDKMIXM release-keys
 # daisy Package version: daisy-user 10 QKQ1.191002.002 V11.0.21.0.QDLMIXM release-keys
 # santoni Package version: santoni-user 7.1.2 N2G47H V11.0.2.0.NAMMIXM release-keys
+# spes Package version: miui_SPESNGlobal_V13.0.2.0.SGKMIXM_586a606056_12.0
 
 # ACDB - from riva Oreo
 vendor/etc/acdbdata/MTP/msm8952-tasha-snd-card/MTP_WCD9335_Bluetooth_cal.acdb
@@ -844,6 +845,13 @@ vendor/firmware/a506_zap.b02
 vendor/firmware/a506_zap.mdt
 vendor/firmware/a530_pfp.fw
 vendor/firmware/a530_pm4.fw
+
+# HotwordEnrollment - from spes
+-product/priv-app/HotwordEnrollmentOKGoogleHEXAGON/HotwordEnrollmentOKGoogleHEXAGON.apk
+-product/priv-app/HotwordEnrollmentXGoogleHEXAGON/HotwordEnrollmentXGoogleHEXAGON.apk
+product/etc/permissions/privapp-permissions-google-hotword.xml
+system_ext/etc/permissions/com.android.hotwordenrollment.common.util.xml
+system_ext/framework/com.android.hotwordenrollment.common.util.jar
 
 # Keystore
 vendor/lib/hw/keystore.msm8953.so:vendor/lib/hw/keystore.msm8937.so
