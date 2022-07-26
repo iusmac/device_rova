@@ -418,7 +418,7 @@ on property:sys.boot_completed=1
 
     # Setup CPU boosting
     write /sys/module/cpu_boost/parameters/powerkey_input_boost_freq "0:1497600"
-    write /sys/module/cpu_boost/parameters/powerkey_input_boost_ms 800
+    write /sys/module/cpu_boost/parameters/powerkey_input_boost_ms 1200
 
     # Setup scheduler tunables
     write /proc/sys/kernel/sched_child_runs_first 1
