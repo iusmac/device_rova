@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, 2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2014, 2017-2019, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2013 The Android Open Source Project
@@ -28,6 +28,8 @@
 
 #include "effect_api.h"
 #include "equalizer.h"
+
+#define EQUALIZER_MAX_LATENCY 0
 
 /* Offload equalizer UUID: a0dac280-401c-11e3-9379-0002a5d5c51b */
 const effect_descriptor_t equalizer_descriptor = {
@@ -266,6 +268,12 @@ int equalizer_get_parameter(effect_context_t *context, effect_param_t *p,
         p->vsize = (2 + NUM_EQ_BANDS) * sizeof(uint16_t);
         break;
 
+    case EQ_PARAM_LATENCY:
+        if (p->vsize < sizeof(uint32_t))
+           p->status = -EINVAL;
+        p->vsize = sizeof(uint32_t);
+        break;
+
     default:
         p->status = -EINVAL;
     }
@@ -350,6 +358,13 @@ int equalizer_get_parameter(effect_context_t *context, effect_param_t *p,
                 }
                 break;
         }
+
+        if (p->vsize < 1) {
+            p->status = -EINVAL;
+            android_errorWriteLog(0x534e4554, "37536407");
+            break;
+        }
+
         name = (char *)value;
         strlcpy(name, equalizer_get_preset_name(eq_ctxt, param2), p->vsize - 1);
         name[p->vsize - 1] = 0;
@@ -364,6 +379,10 @@ int equalizer_get_parameter(effect_context_t *context, effect_param_t *p,
             prop[2 + i] = (int16_t)equalizer_get_band_level(eq_ctxt, i);
         }
     } break;
+
+    case EQ_PARAM_LATENCY:
+        *(uint32_t *)value = EQUALIZER_MAX_LATENCY;
+        break;
 
     default:
         p->status = -EINVAL;
@@ -438,7 +457,7 @@ int equalizer_set_parameter(effect_context_t *context, effect_param_t *p,
             if (vsize < (2 + NUM_EQ_BANDS) * sizeof(int16_t)) {
                 android_errorWriteLog(0x534e4554, "37563371");
                 ALOGE("\tERROR EQ_PARAM_PROPERTIES valueSize %d < %d",
-                                  vsize, (2 + NUM_EQ_BANDS) * sizeof(int16_t));
+                      vsize, (int) ((2 + NUM_EQ_BANDS) * sizeof(int16_t)));
                 p->status = -EINVAL;
                 break;
             }
@@ -468,10 +487,8 @@ int equalizer_set_device(effect_context_t *context,  uint32_t device)
     return 0;
 }
 
-int equalizer_reset(effect_context_t *context)
+int equalizer_reset(effect_context_t *context __unused)
 {
-    equalizer_context_t *eq_ctxt = (equalizer_context_t *)context;
-
     return 0;
 }
 
@@ -500,6 +517,8 @@ int equalizer_init(effect_context_t *context)
     set_config(context, &context->config);
 
     eq_ctxt->hw_acc_fd = -1;
+    for (int i = 0; i < NUM_EQ_BANDS; i++)
+        eq_ctxt->band_levels[i] = 0;
     memset(&(eq_ctxt->offload_eq), 0, sizeof(struct eq_params));
     offload_eq_set_preset(&(eq_ctxt->offload_eq), INVALID_PRESET);
     enable_gcov();

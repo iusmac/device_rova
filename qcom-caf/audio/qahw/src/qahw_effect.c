@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2017, 2020 The Linux Foundation. All rights reserved.
+* Copyright (c) 2017, The Linux Foundation. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -31,14 +31,13 @@
 //#define LOG_NDEBUG 0
 #define LOG_NDDEBUG 0
 
-#include <pthread.h>
 #include <cutils/list.h>
 #include <dlfcn.h>
 #include <utils/Log.h>
 #include <hardware/audio.h>
 #include <hardware/audio_effect.h>
 #include <stdlib.h>
-
+#include <pthread.h>
 #include "qahw.h"
 
 // The current effect API version.

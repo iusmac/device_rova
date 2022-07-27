@@ -61,7 +61,8 @@ enum {
     FILE_MP2,
     FILE_APTX,
     FILE_TRUEHD,
-    FILE_IEC61937
+    FILE_IEC61937,
+    FILE_APE
 };
 
 typedef enum {
@@ -145,7 +146,7 @@ typedef struct {
     pthread_mutex_t input_buffer_available_lock;
     uint32_t input_buffer_available_size;
     char *set_params;
-    unsigned int raw_data_len_in_bytes;
+    bool bt_wbs;
 }stream_config;
 
 qahw_module_handle_t * load_hal(audio_devices_t dev);

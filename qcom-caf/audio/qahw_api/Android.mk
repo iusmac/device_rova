@@ -4,12 +4,11 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+libqahwapi-inc := $(LOCAL_PATH)/inc
+
 LOCAL_MODULE := libqahw
 LOCAL_MODULE_TAGS := optional
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/inc
-
-LOCAL_HEADER_LIBRARIES := \
-    libutils_headers \
+LOCAL_C_INCLUDES   := $(libqahwapi-inc)
 
 LOCAL_SRC_FILES := \
     src/qahw_api.cpp
@@ -28,13 +27,16 @@ LOCAL_SHARED_LIBRARIES := \
     libcutils \
     libhardware \
     libdl \
+    libutils \
     libqahwwrapper
 
 LOCAL_CFLAGS += -Wall -Werror
 
-LOCAL_PRELINK_MODULE    := false
 LOCAL_VENDOR_MODULE     := true
 
+ifneq ($(filter kona lahaina holi,$(TARGET_BOARD_PLATFORM)),)
+LOCAL_SANITIZE := integer_overflow
+endif
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2016-2021, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2011 The Android Open Source Project *
@@ -45,6 +45,9 @@ __BEGIN_DECLS
 /* First generation of audio devices had version hardcoded to 0. all devices with
  * versions < 1.0 will be considered of first generation API.
  */
+#if QAHW_V1
+#define QAHW_MODULE_API_VERSION_1_0 QAHW_MAKE_API_VERSION(1, 0)
+#endif
 #define QAHW_MODULE_API_VERSION_0_0 QAHW_MAKE_API_VERSION(0, 0)
 
 /* Minimal QTI audio HAL version supported by the audio framework */
@@ -358,6 +361,16 @@ char* qahw_in_get_parameters_l(const qahw_stream_handle_t *in_handle,
 ssize_t qahw_in_read_l(qahw_stream_handle_t *in_handle,
                      qahw_in_buffer_t *in_buf);
 /*
+ * Stop input stream. Returns zero on success.
+ */
+int qahw_in_stop_l(qahw_stream_handle_t *in_handle);
+
+/* API to set capture stream specific config parameters */
+int qahw_in_set_param_data_l(qahw_stream_handle_t *in_handle,
+                            qahw_param_id param_id,
+                            qahw_param_payload *payload);
+
+/*
  * Return the amount of input frames lost in the audio driver since the
  * last call of this function.
  * Audio driver is expected to reset the value to 0 and restart counting
@@ -460,9 +473,21 @@ int qahw_create_audio_patch_l(qahw_module_handle_t *hw_module,
                         const struct audio_port_config *sinks,
                         audio_patch_handle_t *handle);
 
+int qahw_create_audio_patch_v2_l(qahw_module_handle_t *hw_module,
+                        qahw_source_port_config_t *source_port_config,
+                        qahw_sink_port_config_t *sink_port_config,
+                        audio_patch_handle_t *handle);
+
 /* Release an audio patch */
 int qahw_release_audio_patch_l(qahw_module_handle_t *hw_module,
                         audio_patch_handle_t handle);
+
+/* API to set loopback stream specific config parameters. */
+int qahw_loopback_set_param_data_l(qahw_module_handle_t *hw_module,
+                                   audio_patch_handle_t handle,
+                                   qahw_loopback_param_id param_id,
+                                   qahw_loopback_param_payload *payload);
+
 /* Fills the list of supported attributes for a given audio port.
  * As input, "port" contains the information (type, role, address etc...)
  * needed by the HAL to identify the port.

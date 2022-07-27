@@ -60,6 +60,11 @@ enum {
     EFFECT_STATE_ACTIVE,
 };
 
+enum pcm_device_param {
+    SND_CARD_NUM,
+    DEVICE_ID
+};
+
 typedef struct effect_context_s effect_context_t;
 typedef struct output_context_s output_context_t;
 
@@ -187,15 +192,10 @@ int thread_status;
 
 #define DSP_OUTPUT_LATENCY_MS 0 /* Fudge factor for latency after capture point in audio DSP */
 
-/* Retry for delay for mixer open */
-#define RETRY_NUMBER 10
-#define RETRY_US 500000
-
-#define MIXER_CARD 0
 #define SOUND_CARD 0
 
 #ifndef CAPTURE_DEVICE
-#define CAPTURE_DEVICE 8
+#define CAPTURE_DEVICE 7
 #endif
 
 /* Proxy port supports only MMAP read and those fixed parameters*/
@@ -356,6 +356,95 @@ int configure_proxy_capture(struct mixer *mixer, int value) {
     return 0;
 }
 
+// Get sound card number from pcm device
+int get_snd_card_num(char *device_info)
+{
+    char *token = NULL, *saveptr = NULL;;
+    int num = -1;
+
+    token = strtok_r(device_info, ": ", &saveptr);
+    token = strtok_r(token, "-", &saveptr);
+    if (token)
+        num = atoi(token);
+
+    return num;
+}
+
+// Get device id from pcm device
+int get_device_id(char *device_info)
+{
+    char *token = NULL, *saveptr = NULL;
+    int id = -1;
+
+    token = strtok_r(device_info, ": ", &saveptr);
+    token = strtok_r(token, "-", &saveptr);
+    while (token != NULL) {
+        token = strtok_r(NULL, "-", &saveptr);
+        if (token) {
+            id = atoi(token);
+            break;
+        }
+    }
+
+    return id;
+}
+
+int parse_device_info(int param, char *device_info)
+{
+    switch (param) {
+        case SND_CARD_NUM:
+            return get_snd_card_num(device_info);
+        case DEVICE_ID:
+            return get_device_id(device_info);
+        default:
+            ALOGE("%s: invalid pcm device param", __func__);
+            return -1;
+    }
+}
+
+/*
+* Parse a pcm device from procfs
+* Entries in pcm file will have one of two formats:
+* <snd_card_num>-<device_id>: <descriptor> : : <playback> : <capture>
+* <snd_card_num>-<device_id>: <descriptor> : : <playback or capture>
+*/
+int parse_pcm_device(char *descriptor, int param)
+{
+    const char *pcm_devices_path = "/proc/asound/pcm";
+    char *device_info = NULL;
+    size_t len = 0;
+    ssize_t bytes_read = -1;
+    FILE *fp = NULL;
+    int ret = -1;
+
+    if (descriptor == NULL) {
+        ALOGE("%s: pcm device descriptor is NULL", __func__);
+        return ret;
+    }
+
+    if ((fp = fopen(pcm_devices_path, "r")) == NULL) {
+        ALOGE("Cannot open %s file to get list of pcm devices",
+              pcm_devices_path);
+        return ret;
+    }
+
+    while ((bytes_read = getline(&device_info, &len, fp) != -1)) {
+        if (strstr(device_info, descriptor)) {
+            ret = parse_device_info(param, device_info);
+            break;
+        }
+    }
+
+    if (device_info) {
+        free(device_info);
+        device_info = NULL;
+    }
+
+    fclose(fp);
+    fp = NULL;
+
+    return ret;
+}
 
 void *capture_thread_loop(void *arg)
 {
@@ -368,6 +457,8 @@ void *capture_thread_loop(void *arg)
     struct pcm *pcm = NULL;
     int ret;
     int retry_num = 0;
+    int sound_card = SOUND_CARD;
+    int capture_device = CAPTURE_DEVICE;
 
     ALOGD("thread enter");
 
@@ -375,12 +466,12 @@ void *capture_thread_loop(void *arg)
 
     pthread_mutex_lock(&lock);
 
-    mixer = mixer_open(MIXER_CARD);
-    while (mixer == NULL && retry_num < RETRY_NUMBER) {
-        usleep(RETRY_US);
-        mixer = mixer_open(MIXER_CARD);
-        retry_num++;
-    }
+    sound_card =
+        parse_pcm_device("AFE-PROXY TX", SND_CARD_NUM);
+    sound_card =
+        (sound_card == -1)? SOUND_CARD : sound_card;
+
+    mixer = mixer_open(sound_card);
     if (mixer == NULL) {
         pthread_mutex_unlock(&lock);
         return NULL;
@@ -394,13 +485,18 @@ void *capture_thread_loop(void *arg)
             if (!capture_enabled) {
                 ret = configure_proxy_capture(mixer, 1);
                 if (ret == 0) {
-                    pcm = pcm_open(SOUND_CARD, CAPTURE_DEVICE,
+                    capture_device =
+                       parse_pcm_device("AFE-PROXY TX", DEVICE_ID);
+                    capture_device =
+                       (capture_device == -1)? CAPTURE_DEVICE : capture_device;
+                    pcm = pcm_open(sound_card, capture_device,
                                    PCM_IN|PCM_MMAP|PCM_NOIRQ, &pcm_config_capture);
                     if (pcm && !pcm_is_ready(pcm)) {
                         ALOGW("%s: %s", __func__, pcm_get_error(pcm));
                         pcm_close(pcm);
                         pcm = NULL;
                         configure_proxy_capture(mixer, 0);
+                        pthread_cond_wait(&cond, &lock);
                     } else {
                         capture_enabled = true;
                         ALOGD("%s: capture ENABLED", __func__);
@@ -866,17 +962,19 @@ int visualizer_command(effect_context_t * context, uint32_t cmdCode, uint32_t cm
 
         if (context->state == EFFECT_STATE_ACTIVE) {
             int32_t latency_ms = visu_ctxt->latency;
-            const uint32_t delta_ms = visualizer_get_delta_time_ms_from_updated_time(visu_ctxt);
+            const int32_t delta_ms = visualizer_get_delta_time_ms_from_updated_time(visu_ctxt);
             latency_ms -= delta_ms;
             if (latency_ms < 0) {
                 latency_ms = 0;
             }
             const uint32_t delta_smp = context->config.inputCfg.samplingRate * latency_ms / 1000;
 
-            int32_t capture_point = visu_ctxt->capture_idx - visu_ctxt->capture_size - delta_smp;
-            int32_t capture_size = visu_ctxt->capture_size;
+            int64_t capture_point = visu_ctxt->capture_idx;
+            capture_point -= visu_ctxt->capture_size;
+            capture_point -= delta_smp;
+            int64_t capture_size = visu_ctxt->capture_size;
             if (capture_point < 0) {
-                int32_t size = -capture_point;
+                int64_t size = -capture_point;
                 if (size > capture_size)
                     size = capture_size;
 

@@ -5,11 +5,11 @@ service vendor.xiaomi_device_script /vendor/bin/init.xiaomi.device.sh
 
 # Audio
 on property:ro.vendor.xiaomi.device=rolex
-    mount none /vendor/etc/rolex_mixer_paths_qrd_sku2.xml /vendor/etc/mixer_paths_qrd_sku2.xml bind
+    setprop vendor.audio.mixer_xml.path /vendor/etc/rolex_mixer_paths_qrd_sku2.xml
     restart vendor.audio-hal
 
 on property:ro.vendor.xiaomi.device=riva
-    mount none /vendor/etc/riva_mixer_paths_qrd_sku2.xml /vendor/etc/mixer_paths_qrd_sku2.xml bind
+    setprop vendor.audio.mixer_xml.path /vendor/etc/riva_mixer_paths_qrd_sku2.xml
     restart vendor.audio-hal
 
 # IR

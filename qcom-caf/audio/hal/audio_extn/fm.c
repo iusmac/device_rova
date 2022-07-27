@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2019 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2021, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2013 The Android Open Source Project
@@ -31,6 +31,7 @@
 #include "platform_api.h"
 #include <stdlib.h>
 #include <cutils/str_parms.h>
+#include <audio_extn.h>
 
 #ifdef DYNAMIC_LOG_ENABLED
 #include <log_xml_parser.h>
@@ -38,7 +39,6 @@
 #include <log_utils.h>
 #endif
 
-#ifdef FM_POWER_OPT
 #define AUDIO_PARAMETER_KEY_HANDLE_FM "handle_fm"
 #define AUDIO_PARAMETER_KEY_FM_VOLUME "fm_volume"
 #define AUDIO_PARAMETER_KEY_REC_PLAY_CONC "rec_play_conc_on"
@@ -85,10 +85,17 @@ static int32_t fm_set_volume(struct audio_device *adev, float value, bool persis
 {
     int32_t vol, ret = 0;
     struct mixer_ctl *ctl;
-    const char *mixer_ctl_name = FM_RX_VOLUME;
+    const char *mixer_ctl_name;
 
     ALOGV("%s: entry", __func__);
     ALOGD("%s: (%f)\n", __func__, value);
+
+    mixer_ctl_name = platform_get_mixer_FM_RX_control(adev);
+    if (!mixer_ctl_name) {
+        ALOGE("%s: Could not get FM_RX mixer control",
+              __func__);
+        return -EINVAL;
+    }
 
     if (value < 0.0) {
         ALOGW("%s: (%f) Under 0.0, assuming 0.0\n", __func__, value);
@@ -172,9 +179,7 @@ static int32_t fm_start(struct audio_device *adev, audio_devices_t outputDevices
     struct audio_usecase *uc_info;
     int32_t pcm_dev_rx_id, pcm_dev_tx_id;
 
-
     ALOGD("%s: Start FM over output device %d ", __func__, outputDevices);
-    fmmod.is_fm_running = true;
 
     fm_out = (struct stream_out *)calloc(1, sizeof(struct stream_out));
     if (!fm_out)
@@ -184,7 +189,9 @@ static int32_t fm_start(struct audio_device *adev, audio_devices_t outputDevices
     fm_out->format = AUDIO_FORMAT_PCM_16_BIT;
     fm_out->usecase = USECASE_AUDIO_PLAYBACK_FM;
     fm_out->config = pcm_config_fm;
-    fm_out->devices = outputDevices;
+    list_init(&fm_out->device_list);
+    reassign_device_list(&fm_out->device_list, outputDevices, "");
+    fmmod.is_fm_running = true;
 
     uc_info = (struct audio_usecase *)calloc(1, sizeof(struct audio_usecase));
 
@@ -196,7 +203,8 @@ static int32_t fm_start(struct audio_device *adev, audio_devices_t outputDevices
     uc_info->id = USECASE_AUDIO_PLAYBACK_FM;
     uc_info->type = PCM_PLAYBACK;
     uc_info->stream.out = fm_out;
-    uc_info->devices = outputDevices;
+    list_init(&uc_info->device_list);
+    reassign_device_list(&uc_info->device_list, outputDevices, "");
     uc_info->in_snd_device = SND_DEVICE_NONE;
     uc_info->out_snd_device = SND_DEVICE_NONE;
 
@@ -241,8 +249,7 @@ static int32_t fm_start(struct audio_device *adev, audio_devices_t outputDevices
     pcm_start(fmmod.fm_pcm_rx);
     pcm_start(fmmod.fm_pcm_tx);
 
-    fmmod.fm_device = fm_out->devices;
-    fm_set_volume(adev, fmmod.fm_volume, false);
+    fmmod.fm_device = get_device_types(&fm_out->device_list);
 
     ALOGD("%s: exit: status(%d)", __func__, ret);
     return 0;
@@ -253,7 +260,7 @@ exit:
     return ret;
 }
 
-void audio_extn_fm_get_parameters(struct str_parms *query, struct str_parms *reply)
+void fm_get_parameters(struct str_parms *query, struct str_parms *reply)
 {
     int ret, val;
     char value[32]={0};
@@ -266,7 +273,7 @@ void audio_extn_fm_get_parameters(struct str_parms *query, struct str_parms *rep
     }
 }
 
-void audio_extn_fm_set_parameters(struct audio_device *adev,
+void fm_set_parameters(struct audio_device *adev,
                                   struct str_parms *parms)
 {
     int ret, val;
@@ -371,26 +378,27 @@ void audio_extn_fm_set_parameters(struct audio_device *adev,
         ALOGV("%s: set_fm_volume from param restore volume", __func__);
     }
 
-#ifdef RECORD_PLAY_CONCURRENCY
-    ret = str_parms_get_str(parms, AUDIO_PARAMETER_KEY_REC_PLAY_CONC,
+    if(audio_extn_is_record_play_concurrency_enabled()) {
+        ret = str_parms_get_str(parms, AUDIO_PARAMETER_KEY_REC_PLAY_CONC,
                                value, sizeof(value));
-    if ((ret >= 0)
-          && (fmmod.is_fm_running == true)) {
+        if ((ret >= 0)
+              && (fmmod.is_fm_running == true)) {
 
-        if (!strncmp("true", value, sizeof("true")))
-            ALOGD("Record play concurrency ON Forcing FM device reroute");
-        else
-            ALOGD("Record play concurrency OFF Forcing FM device reroute");
+            if (!strncmp("true", value, sizeof("true")))
+                ALOGD("Record play concurrency ON Forcing FM device reroute");
+            else
+                ALOGD("Record play concurrency OFF Forcing FM device reroute");
 
-        select_devices(adev, USECASE_AUDIO_PLAYBACK_FM);
-        fm_set_volume(adev, fmmod.fm_volume, false);
+            select_devices(adev, USECASE_AUDIO_PLAYBACK_FM);
+            fm_set_volume(adev, fmmod.fm_volume, false);
+        }
     }
-#endif
 exit:
     ALOGV("%s: exit", __func__);
 }
 
-void audio_extn_fm_route_on_selected_device(struct audio_device *adev, audio_devices_t device)
+void audio_extn_fm_route_on_selected_device(struct audio_device *adev,
+                                            struct listnode *devices)
 {
     struct listnode *node;
     struct audio_usecase *usecase;
@@ -399,15 +407,13 @@ void audio_extn_fm_route_on_selected_device(struct audio_device *adev, audio_dev
         list_for_each(node, &adev->usecase_list) {
             usecase = node_to_item(node, struct audio_usecase, list);
             if (usecase->id == USECASE_AUDIO_PLAYBACK_FM) {
-                if (fmmod.fm_device != device) {
+                if (fmmod.fm_device != get_device_types(devices)) {
                     ALOGV("%s selected routing device %x current device %x"
                           "are different, reroute on selected device", __func__,
-                          fmmod.fm_device, device);
+                          fmmod.fm_device, get_device_types(devices));
                     select_devices(adev, usecase->id);
                 }
             }
         }
     }
 }
-
-#endif /* FM_POWER_OPT end */

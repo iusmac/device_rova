@@ -36,9 +36,9 @@
 #define KV_PAIR_MAX_LENGTH  1000
 
 #define FORMAT_PCM 1
-#define WAV_HEADER_LENGTH_MAX  256
+#define WAV_HEADER_LENGTH_MAX 128
 
-#define MAX_PLAYBACK_STREAMS   105 //This value is changed to suppport 100 clips in the playlist
+#define MAX_PLAYBACK_STREAMS   105 //This value is changed to suppport 100 clips in playlist
 #define PRIMARY_STREAM_INDEX   0
 
 #define KVPAIRS_MAX 100
@@ -47,7 +47,6 @@
 #define FORMAT_DESCRIPTOR_SIZE 12
 #define SUBCHUNK1_SIZE(x) ((8) + (x))
 #define SUBCHUNK2_SIZE 8
-#define DATA_CHUNK_SIZE 8
 
 #define DEFAULT_PRESET_STRENGTH -1
 
@@ -62,12 +61,6 @@
 static ssize_t get_bytes_to_read(FILE* file, int filetype);
 static void init_streams(void);
 int pthread_cancel(pthread_t thread);
-
-//START OF TRUMPET TEST
-#ifdef TRUMPET_CERTIFICATION
-#include <dlfcn.h>
-#endif
-//END OF TRUMPET TEST
 
 struct wav_header {
     uint32_t riff_id;
@@ -168,6 +161,18 @@ audio_io_handle_t stream_handle = 0x999;
                    "music_offload_wma_encode_option2=%d;" \
                    "music_offload_wma_format_tag=%d;"
 
+#define APE_KVPAIR "music_offload_ape_bits_per_sample=%d;" \
+                   "music_offload_ape_blocks_per_frame=%d;" \
+                   "music_offload_ape_compatible_version=%d;" \
+                   "music_offload_ape_compression_level=%d;" \
+                   "music_offload_ape_final_frame_blocks=%d;" \
+                   "music_offload_ape_format_flags=%d;" \
+                   "music_offload_ape_num_channels=%d;" \
+                   "music_offload_ape_sample_rate=%d;" \
+                   "music_offload_ape_total_frames=%d;" \
+                   "music_offload_sample_rate=%d;" \
+                   "music_offload_seek_table_present=%d;"
+
 #ifndef AUDIO_OUTPUT_FLAG_ASSOCIATED
 #define AUDIO_OUTPUT_FLAG_ASSOCIATED 0x10000000
 #endif
@@ -211,7 +216,7 @@ static bool request_wake_lock(bool wakelock_acquired, bool enable)
 }
 
 #ifndef AUDIO_FORMAT_AAC_LATM
-#define AUDIO_FORMAT_AAC_LATM 0x23000000UL
+#define AUDIO_FORMAT_AAC_LATM 0x80000000UL
 #define AUDIO_FORMAT_AAC_LATM_LC (AUDIO_FORMAT_AAC_LATM | AUDIO_FORMAT_AAC_SUB_LC)
 #define AUDIO_FORMAT_AAC_LATM_HE_V1 (AUDIO_FORMAT_AAC_LATM | AUDIO_FORMAT_AAC_SUB_HE_V1)
 #define AUDIO_FORMAT_AAC_LATM_HE_V2 (AUDIO_FORMAT_AAC_LATM | AUDIO_FORMAT_AAC_SUB_HE_V2)
@@ -309,6 +314,9 @@ void read_kvpair(char *kvpair, char* kvpair_values, int filetype)
         break;
     case FILE_WMA:
         kvpair_type = WMA_KVPAIR;
+        break;
+    case FILE_APE:
+        kvpair_type = APE_KVPAIR;
         break;
     default:
         break;
@@ -510,26 +518,9 @@ static int __unused is_eof (stream_config *stream) {
         return true;
     return false;
 }
-static int read_bytes(stream_config *stream, void *buff, int size, unsigned int *total_bytes_read) {
-    unsigned int bytes_read = 0;
-    if (stream->filename) {
-
-        if (stream->filetype == FILE_WAV) {
-
-            /* Read only valid data from a wav file and ignore incase of any metadata at the end*/
-            if (size < stream->raw_data_len_in_bytes - *total_bytes_read) {
-                bytes_read = fread(buff, 1, size, stream->file_stream);
-                *total_bytes_read += bytes_read;
-                return (int)bytes_read;
-            } else {
-                bytes_read = fread(buff, 1, stream->raw_data_len_in_bytes - *total_bytes_read, stream->file_stream);
-                *total_bytes_read += bytes_read;
-                return (int)bytes_read;
-            }
-        } else {
-            return fread(buff, 1, size, stream->file_stream);
-        }
-    }
+static int read_bytes(stream_config *stream, void *buff, int size) {
+    if (stream->filename)
+        return fread(buff, 1, size, stream->file_stream);
     else if (AUDIO_DEVICE_NONE != stream->input_device) {
         qahw_in_buffer_t in_buf;
         memset(&in_buf,0, sizeof(qahw_in_buffer_t));
@@ -624,6 +615,7 @@ void *start_stream_playback (void* stream_data)
     bool read_complete_file = true;
     ssize_t bytes_to_read = 0;
     int32_t latency;
+    char kvpair[KV_PAIR_MAX_LENGTH] = {0};
 
 
     memset(&drift_params, 0, sizeof(struct drift_data));
@@ -659,6 +651,14 @@ void *start_stream_playback (void* stream_data)
 
     fprintf(log_file, "stream %d: open output stream is success, out_handle %p\n", params->stream_index, params->out_handle);
 
+    if (audio_is_bluetooth_sco_device(params->output_device)) {
+        char param1[50];
+        int ret = -1;
+        snprintf(param1, sizeof(param1), "bt_wbs=%s", ((params->bt_wbs == 1) ? "on" : "off"));
+        ret = qahw_set_parameters(params->qahw_out_hal_handle, param1);
+        fprintf(log_file, " param %s set to hal with return value %d\n", param1, ret);
+    }
+
     if (kpi_mode == true) {
         measure_kpi_values(params->out_handle, params->flags & AUDIO_OUTPUT_FLAG_COMPRESS_OFFLOAD);
         rc = qahw_close_output_stream(params->out_handle);
@@ -670,11 +670,11 @@ void *start_stream_playback (void* stream_data)
     }
 
     switch(params->filetype) {
-        char kvpair[KV_PAIR_MAX_LENGTH] = {0};
         case FILE_WMA:
         case FILE_VORBIS:
         case FILE_ALAC:
         case FILE_FLAC:
+        case FILE_APE:
             fprintf(log_file, "%s:calling setparam for kvpairs\n", __func__);
             if (!(params->kvpair_values)) {
                fprintf(log_file, "stream %d: error!!No metadata for the clip\n", params->stream_index);
@@ -700,23 +700,6 @@ void *start_stream_playback (void* stream_data)
     if (is_offload) {
         fprintf(log_file, "stream %d: set callback for offload stream for playback usecase\n", params->stream_index);
         qahw_out_set_callback(params->out_handle, async_callback, params);
-    }
-
-    /* Mapping for 10 channels*/
-    struct qahw_out_channel_map_param chmap_param ={0};
-    chmap_param.channels = params->channels;
-    if (chmap_param.channels == 10) {
-        chmap_param.channel_map[0] = QAHW_PCM_CHANNEL_FL ;
-        chmap_param.channel_map[1] = QAHW_PCM_CHANNEL_FR ;
-        chmap_param.channel_map[2] = QAHW_PCM_CHANNEL_FC ;
-        chmap_param.channel_map[3] = QAHW_PCM_CHANNEL_LFE ;
-        chmap_param.channel_map[4] = QAHW_PCM_CHANNEL_LB ;
-        chmap_param.channel_map[5] = QAHW_PCM_CHANNEL_RB;
-        chmap_param.channel_map[6] = 18 ;
-        chmap_param.channel_map[7] = 19 ;
-        chmap_param.channel_map[8] = QAHW_PCM_CHANNEL_FLC ;
-        chmap_param.channel_map[9] = QAHW_PCM_CHANNEL_FRC ;
-        qahw_out_set_param_data(params->out_handle, QAHW_PARAM_OUT_CHANNEL_MAP, (qahw_param_payload *) &chmap_param);
     }
 
     // create effect thread, use thread_data to transfer command
@@ -849,11 +832,11 @@ void *start_stream_playback (void* stream_data)
             fprintf(stderr, "stream %s: failed to set kvpairs\n", params->set_params);
         }
     }
-    unsigned int total_bytes_read = 0;
+
     while (!exit && !stop_playback) {
         if (!bytes_remaining) {
             fprintf(log_file, "\nstream %d: reading bytes %zd\n", params->stream_index, bytes_wanted);
-            bytes_read = read_bytes(params, data_ptr, bytes_wanted, &total_bytes_read);
+            bytes_read = read_bytes(params, data_ptr, bytes_wanted);
             fprintf(log_file, "stream %d: read bytes %zd\n", params->stream_index, bytes_read);
             if ((!read_complete_file && (bytes_to_read <= 0)) || (bytes_read <= 0)) {
                 fprintf(log_file, "stream %d: end of file\n", params->stream_index);
@@ -1076,7 +1059,7 @@ void get_file_format(stream_config *stream_info)
 
     char header[WAV_HEADER_LENGTH_MAX] = {0};
     int wav_header_len = 0;
-    int file_length = 0;
+
     switch (stream_info->filetype) {
         case FILE_WAV:
             /*
@@ -1086,13 +1069,6 @@ void get_file_format(stream_config *stream_info)
                 fprintf(log_file, "wav header length is invalid:%d\n", wav_header_len);
                 exit(1);
             }
-            if(wav_header_len > WAV_HEADER_LENGTH_MAX)
-            {
-                fprintf(log_file, " Wave header length is not supported to exiting\n");
-                exit(1);
-            }
-            fseek(stream_info->file_stream, 0, SEEK_END);
-            file_length = ftell(stream_info->file_stream);
             fseek(stream_info->file_stream, 0, SEEK_SET);
             rc = fread (header, wav_header_len , 1, stream_info->file_stream);
             if (rc != 1) {
@@ -1108,13 +1084,6 @@ void get_file_format(stream_config *stream_info)
             memcpy (&stream_info->channels, &header[22], 2);
             memcpy (&stream_info->config.offload_info.sample_rate, &header[24], 4);
             memcpy (&stream_info->config.offload_info.bit_width, &header[34], 2);
-            /*Check if it's a data chunk*/
-            if (0 == strncmp (&header[wav_header_len - 8], "data", 4)) {
-                memcpy (&stream_info->raw_data_len_in_bytes, &header[wav_header_len - 4],4);
-                fprintf(log_file, "wav data length is:%d bytes\n", stream_info->raw_data_len_in_bytes);
-            } else {
-                stream_info->raw_data_len_in_bytes = file_length - wav_header_len;
-            }
             if (stream_info->config.offload_info.bit_width == 32)
                 stream_info->config.offload_info.format = AUDIO_FORMAT_PCM_32_BIT;
             else if (stream_info->config.offload_info.bit_width == 24)
@@ -1175,6 +1144,9 @@ void get_file_format(stream_config *stream_info)
             break;
         case FILE_IEC61937:
             stream_info->config.offload_info.format = AUDIO_FORMAT_IEC61937;
+            break;
+        case FILE_APE:
+            stream_info->config.offload_info.format = AUDIO_FORMAT_APE;
             break;
         default:
            fprintf(log_file, "Does not support given filetype\n");
@@ -1267,7 +1239,6 @@ int measure_kpi_values(qahw_stream_handle_t* out_handle, bool is_offload) {
 
     char latency_buf[200] = {0};
     fread((void *) latency_buf, 100, 1, fd_latency_node);
-    fclose(fd_latency_node);
     sscanf(latency_buf, " %llu,%llu,%*llu,%*llu,%llu,%llu", &scold, &uscold, &scont, &uscont);
     tcold = scold*1000 - ((uint64_t)ts_cold.tv_sec)*1000 + uscold/1000 - ((uint64_t)ts_cold.tv_nsec)/1000000;
     tcont = scont*1000 - ((uint64_t)ts_cont.tv_sec)*1000 + uscont/1000 - ((uint64_t)ts_cont.tv_nsec)/1000000;
@@ -1613,6 +1584,7 @@ void usage() {
     printf(" -A  --bt-addr <bt device addr>            - Required to set bt device adress for aptx decoder\n\n");
     printf(" -q  --drift query                         - Required for querying avtime vs hdmi drift\n");
     printf(" -Q  --drift query and correction          - Enable Drift query and correction\n");
+    printf(" -z  --bt-wbs                              - Set bt_wbs param\n\n");
     printf(" -P                                        - Argument to do multi-stream playback, currently 2 streams are supported to run concurrently\n");
     printf("                                             Put -P and mention required attributes for the next stream\n");
     printf("                                             0:bassboost 1:virtualizer 2:equalizer 3:visualizer(NA) 4:reverb 5:audiosphere others:null");
@@ -1696,45 +1668,27 @@ void usage() {
     printf("                                          ->Note:all the USB device commmands(above) should be accompanied with the host side commands\n\n");
     printf("hal_play_test -f interactive_audio.wav -d 2 -l out.txt -k \"mixer_ctrl=pan_scale;c=1;o=6;I=fc;O=fl,fr,fc,lfe,bl,br;M=0.5,0.5,0,0,0,0\" -i 1\n");
     printf("                                          ->kv_pair for downmix or pan_scale should folow the above sequence, one can pass downmix & pan_scale params/coeff matrices. For each control params should be sent separately \n");
+    printf("hal_play_test -f /data/ape_dsp.isf.0x152E.bitstream.0x10100400.0x2.0x12F32.rx.bin -k 16,73728,3990,2000,53808,32,2,44100,157,44100,1 -t 18 -r 48000 -c 2 -v 0.5 -d 131072");
+    printf("                                          -> kvpair(-k) values represent media-info of clip & values should be in below mentioned sequence\n");
+    printf("                                          ->bits_per_sample,blocks_per_frame,compatible_version,compression_level,final_frame_blocks,format_flags,num_channels,sample_rate,total_frames,sample_rate,seek_table_present \n");
 }
 
 int get_wav_header_length (FILE* file_stream)
 {
     int subchunk_size = 0, wav_header_len = 0;
-    char chunk_id[5];
-    chunk_id[4] = '\0';
-    fseek(file_stream, 16, SEEK_SET);
-    wav_header_len += FORMAT_DESCRIPTOR_SIZE; //FORMAT_DESCRIPTOR_SIZE
-    wav_header_len += 4; // 'fmt '
 
+    fseek(file_stream, 16, SEEK_SET);
     if(fread(&subchunk_size, 4, 1, file_stream) != 1) {
         fprintf(log_file, "Unable to read subchunk:\n");
         fprintf(stderr, "Unable to read subchunk:\n");
         exit (1);
     }
-    wav_header_len += 4; // chunk_1_size
-
     if(subchunk_size < 16) {
         fprintf(log_file, "This is not a valid wav file \n");
         fprintf(stderr, "This is not a valid wav file \n");
     } else {
-        fseek(file_stream, subchunk_size, SEEK_CUR); /* Read complet 'fmt 'chunck size*/
-        wav_header_len += subchunk_size; // chunk_1_size
-        while(fread(chunk_id, 4, 1, file_stream)) {
-            wav_header_len += 4; /* 4 bytes chunk id*/
-
-            if(!strncmp (chunk_id, "data", 4)) {
-                wav_header_len += 4;
-                break;
-            } else {
-                fread(&subchunk_size, 4, 1, file_stream);
-                wav_header_len +=  4;
-                fseek(file_stream, subchunk_size, SEEK_CUR);
-                wav_header_len += subchunk_size;
-            }
-        }
+         wav_header_len = FORMAT_DESCRIPTOR_SIZE + SUBCHUNK1_SIZE(subchunk_size) + SUBCHUNK2_SIZE;
     }
-    printf("Wave Header Length: %d\n", wav_header_len);
     return wav_header_len;
 }
 
@@ -2162,6 +2116,8 @@ int main(int argc, char* argv[]) {
         {"play-list",    required_argument,    0, 'g'},
         {"ec-ref",        no_argument,         0, 'L'},
         {"help",          no_argument,          0, 'h'},
+        {"bt-wbs",        no_argument,    0, 'z'},
+        {"HFP-call",      no_argument,          0, 'H'},
         {0, 0, 0, 0}
     };
 
@@ -2184,13 +2140,67 @@ int main(int argc, char* argv[]) {
 
     while ((opt = getopt_long(argc,
                               argv,
-                              "-f:r:c:b:d:s:v:V:l:t:a:w:k:PD:KF:Ee:A:u:m:S:C:p::x:y:qQLh:i:h:g:O:",
+                              "-f:r:c:b:d:s:v:V:l:t:a:w:k:PD:KF:Ee:A:u:m:S:C:p::x:y:qQzLh:i:h:g:H:O:",
                               long_options,
                               &option_index)) != -1) {
 
         fprintf(log_file, "for argument %c, value is %s\n", opt, optarg);
 
         switch (opt) {
+        case 'H':
+          {
+            int hfp_test_rc;
+            qahw_module_handle_t* qap_out_hal_handle = NULL;
+            qahw_stream_handle_t* out_handle;
+            const char* hfp_set_sampling_rate = "hfp_set_sampling_rate=16000";
+            const char* hfp_volume = "hfp_volume=15";
+            const char* hfp_enable = "hfp_enable=true";
+            const char* hfp_disable = "hfp_enable=false";
+            audio_config_t config;
+            config.sample_rate = 48000;
+            config.channel_mask = 0x3;
+            config.format = 1;
+            config.frame_count = 0;
+            config.offload_info.version = AUDIO_OFFLOAD_INFO_VERSION_CURRENT;
+            config.offload_info.size = sizeof(audio_offload_info_t);
+
+            wakelock_acquired = request_wake_lock(wakelock_acquired, true);
+
+            qap_out_hal_handle = load_hal(AUDIO_DEVICE_NONE);
+
+            hfp_test_rc = qahw_open_output_stream(qap_out_hal_handle,
+                                                  0x999,
+                                                  AUDIO_DEVICE_OUT_BUS,
+                                                  AUDIO_OUTPUT_FLAG_PRIMARY,
+                                                  &config,
+                                                  &out_handle,
+                                                  "BUS00_MEDIA");
+            fprintf(stderr, "hfp_test: qahw_open_output_stream result %d\n", hfp_test_rc);
+
+            hfp_test_rc = qahw_set_parameters(qap_out_hal_handle, hfp_set_sampling_rate);
+            fprintf(stderr, "hfp_test: hfp_set_sampling_rate result %d\n", hfp_test_rc);
+
+            hfp_test_rc = qahw_set_parameters(qap_out_hal_handle, hfp_volume);
+            fprintf(stderr, "hfp_test: hfp_volume result %d\n", hfp_test_rc);
+
+            hfp_test_rc = qahw_set_parameters(qap_out_hal_handle, hfp_enable);
+            fprintf(stderr, "hfp_test: hfp_enable result %d\n", hfp_test_rc);
+
+            sleep(10);
+
+            hfp_test_rc = qahw_set_parameters(qap_out_hal_handle, hfp_disable);
+            fprintf(stderr, "hfp_test: hfp_disable result %d\n", hfp_test_rc);
+
+            hfp_test_rc = qahw_close_output_stream(out_handle);
+
+            unload_hals();
+
+            wakelock_acquired = request_wake_lock(wakelock_acquired, false);
+
+            fprintf(stderr, "\nADL: BYE BYE\n");
+
+            return 0;
+          }
         case 'f':
             stream_param[i].filename = optarg;
             break;
@@ -2216,6 +2226,9 @@ int main(int argc, char* argv[]) {
             break;
         case 'V':
             enable_dump = atof(optarg);
+            break;
+        case 'z':
+            stream_param[i].bt_wbs = true;
             break;
         case 'l':
             log_filename = optarg;
@@ -2392,6 +2405,8 @@ int main(int argc, char* argv[]) {
             fprintf(stderr, " In Device config \n");
             send_device_config = true;
 
+            memset(&device_cfg_params, 0, sizeof(struct qahw_device_cfg_param));
+
             //Read Sample Rate
             if (optind < argc && *argv[optind] != '-') {
                  device_cfg_params.sample_rate = atoi(optarg);
@@ -2486,8 +2501,14 @@ int main(int argc, char* argv[]) {
 
     /* Register the SIGINT to close the App properly */
     if (signal(SIGINT, stop_signal_handler) == SIG_ERR) {
-        fprintf(log_file, "Failed to register SIGINT:%d\n",errno);
-        fprintf(stderr, "Failed to register SIGINT:%d\n",errno);
+        fprintf(log_file, "Failed to register SIGINT:%d\n", errno);
+        fprintf(stderr, "Failed to register SIGINT:%d\n", errno);
+    }
+
+    /* Register the SIGTERM to close the App properly */
+    if (signal(SIGTERM, stop_signal_handler) == SIG_ERR) {
+        fprintf(log_file, "Failed to register SIGTERM:%d\n", errno);
+        fprintf(stderr, "Failed to register SIGTERM:%d\n", errno);
     }
 
     /* Check for Dual main content */
@@ -2552,9 +2573,18 @@ int main(int argc, char* argv[]) {
                 }
         }
 
-        if (stream->output_device != AUDIO_DEVICE_NONE)
-             if ((stream->qahw_out_hal_handle = load_hal(stream->output_device)) <= 0)
+        if (stream->output_device != AUDIO_DEVICE_NONE) {
+            if ((stream->qahw_out_hal_handle = load_hal(stream->output_device)) <= 0)
                 goto exit;
+
+            /* Turn BT_SCO on if bt_sco recording */
+            if(audio_is_bluetooth_sco_device(stream->output_device)) {
+                int ret = -1;
+                const char * bt_sco_on = "BT_SCO=on";
+                ret = qahw_set_parameters(stream->qahw_out_hal_handle, bt_sco_on);
+                fprintf(log_file, " param %s set to hal with return value %d\n", bt_sco_on, ret);
+            }
+        }
 
         if (stream->input_device != AUDIO_DEVICE_NONE)
             if ((stream->qahw_in_hal_handle = load_hal(stream->input_device))== 0)
@@ -2625,6 +2655,7 @@ int main(int argc, char* argv[]) {
         fprintf(log_file, "stream %d: Output Flags:%d\n", stream->stream_index, stream->flags);
         fprintf(log_file, "stream %d: Sample Rate:%d\n", stream->stream_index, stream->config.offload_info.sample_rate);
         fprintf(log_file, "stream %d: Channels:%d\n", stream->stream_index, stream->channels);
+        fprintf(log_file, "stream %d: Channel Mask:%x\n", stream->stream_index, stream->config.channel_mask);
         fprintf(log_file, "stream %d: Bitwidth:%d\n", stream->stream_index, stream->config.offload_info.bit_width);
         fprintf(log_file, "stream %d: AAC Format Type:%d\n", stream->stream_index, stream->aac_fmt_type);
         fprintf(log_file, "stream %d: Kvpair Values:%s\n", stream->stream_index, stream->kvpair_values);
@@ -2666,33 +2697,6 @@ int main(int argc, char* argv[]) {
             stream_param[i].play_later = true;
             fprintf(log_file, "stream %d: play_later = %d\n", i, stream_param[i].play_later);
         }
-
-//START OF TRUMPET TEST
-#ifdef TRUMPET_CERTIFICATION
-
-      void *handle_trumpet = dlopen("/usr/lib/libtrumpetcertification.so", RTLD_NOW | RTLD_GLOBAL);
-      const char* error_trumpet = NULL;
-
-      if (handle_trumpet == NULL) {
-          fprintf(stderr, "failed to open libtrumpetcertification.so\n");
-      } else {
-          typedef int32_t (*_trumpet_test_main)(int, char **);  //prototype of the certification function
-          _trumpet_test_main trumpet_test_main = (_trumpet_test_main) dlsym(handle_trumpet, "trumpet_test_main");
-          error_trumpet = dlerror();
-
-          if (error_trumpet != NULL)
-              fprintf(stderr, "%s\n", error_trumpet);
-
-          if (trumpet_test_main == NULL) {
-              perror("dlsym");
-              fprintf(stderr, "Failed to find the function trumpet_test_main in libtrumpetcertification.so\n");
-          } else {
-              trumpet_test_main(argc, argv);
-          }
-          dlclose(handle_trumpet);
-      }
-#endif
-//END OF TRUMPET TEST
 
         rc = pthread_create(&playback_thread[i], NULL, start_stream_playback, (void *)&stream_param[i]);
         if (rc) {

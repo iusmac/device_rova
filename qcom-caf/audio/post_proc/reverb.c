@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 - 2014, 2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2014, 2017-2019, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2013 The Android Open Source Project
@@ -467,7 +467,6 @@ int reverb_get_parameter(effect_context_t *context, effect_param_t *p,
     int32_t param = *param_tmp++;
     void *value = p->data + voffset;
     reverb_settings_t *reverb_settings;
-    int i;
 
     ALOGV("%s: ctxt %p, param %d", __func__, reverb_ctxt, param);
 
@@ -536,6 +535,11 @@ int reverb_get_parameter(effect_context_t *context, effect_param_t *p,
            p->status = -EINVAL;
         p->vsize = sizeof(reverb_settings_t);
         break;
+    case REVERB_PARAM_LATENCY:
+        if (p->vsize < sizeof(uint32_t))
+            return -EINVAL;
+        p->vsize = sizeof(uint32_t);
+        break;
     default:
         p->status = -EINVAL;
     }
@@ -588,6 +592,9 @@ int reverb_get_parameter(effect_context_t *context, effect_param_t *p,
         reverb_settings->reflectionsDelay = reverb_get_reflections_delay(reverb_ctxt);
         reverb_settings->diffusion = reverb_get_diffusion(reverb_ctxt);
         reverb_settings->density = reverb_get_density(reverb_ctxt);
+        break;
+    case REVERB_PARAM_LATENCY:
+        *(uint16_t *)value = REVERB_MAX_LATENCY;
         break;
     default:
         p->status = -EINVAL;
@@ -689,10 +696,8 @@ int reverb_set_device(effect_context_t *context, uint32_t device)
     return 0;
 }
 
-int reverb_reset(effect_context_t *context)
+int reverb_reset(effect_context_t *context __unused)
 {
-    reverb_context_t *reverb_ctxt = (reverb_context_t *)context;
-
     return 0;
 }
 
