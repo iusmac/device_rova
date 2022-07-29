@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright (C) 2016-2020 The Linux Foundation. All rights reserved.
+<!-- Copyright (C) 2016-2019 The Linux Foundation. All rights reserved.
      Not a contribution.
 
      Copyright (C) 2013 The Android Open Source Project
@@ -141,7 +141,7 @@ Only the three quirks included above are recognized at this point:
             <Limit name="block-size" value="16x16" />
             <Limit name="blocks-per-second" min="1" max="48600" />
             <Limit name="bitrate" range="1-2000000" />
-            <Limit name="concurrent-instances" max="3" />
+            <Limit name="concurrent-instances" max="16" />
             <Limit name="performance-point-720x480" value="30" />
             <Limit name="performance-point-720x576" value="25" />
         </MediaCodec>
@@ -154,21 +154,9 @@ Only the three quirks included above are recognized at this point:
             <Limit name="block-size" value="16x16" />
             <Limit name="blocks-per-second" min="1" max="48600" />
             <Limit name="bitrate" range="1-2000000" />
-            <Limit name="concurrent-instances" max="3" />
+            <Limit name="concurrent-instances" max="16" />
             <Limit name="performance-point-720x480" value="30" />
             <Limit name="performance-point-720x576" value="25" />
-        </MediaCodec>
-        <MediaCodec name="c2.android.hevc.encoder" type="video/hevc" variant="slow-cpu" update="true" >
-            <Limit name="size" min="2x2" max="512x512" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="8x8" />
-            <Limit name="block-count" range="1-4096" /> <!-- max 512x512 -->
-            <Limit name="blocks-per-second" range="1-122880" />
-            <Limit name="frame-rate" range="1-120" />
-            <Limit name="bitrate" range="1-10000000" />
-            <Limit name="complexity" range="0-10" default="0" />
-            <Limit name="quality" range="0-100" default="80" />
-            <Feature name="bitrate-modes" value="VBR,CBR,CQ" />
         </MediaCodec>
     </Encoders>
     <Decoders>
@@ -213,6 +201,28 @@ Only the three quirks included above are recognized at this point:
             <Limit name="concurrent-instances" max="8" />
             <Limit name="performance-point-1920x1088" value="30" />
         </MediaCodec>
+        <MediaCodec name="OMX.qti.video.decoder.divxsw" type="video/divx" >
+            <Quirk name="requires-allocate-on-input-ports" />
+            <Quirk name="requires-allocate-on-output-ports" />
+            <Limit name="size" min="16x16" max="1920x1088" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" min="1" max="244800" />
+            <Limit name="bitrate" range="1-6000000" />
+            <Limit name="concurrent-instances" max="16" />
+            <Limit name="performance-point-1920x1088" value="30" />
+        </MediaCodec>
+        <MediaCodec name="OMX.qti.video.decoder.divx4sw" type="video/divx4" >
+            <Quirk name="requires-allocate-on-input-ports" />
+            <Quirk name="requires-allocate-on-output-ports" />
+            <Limit name="size" min="16x16" max="1920x1088" />
+            <Limit name="alignment" value="2x2" />
+            <Limit name="block-size" value="16x16" />
+            <Limit name="blocks-per-second" min="1" max="244800" />
+            <Limit name="bitrate" range="1-6000000" />
+            <Limit name="concurrent-instances" max="16" />
+            <Limit name="performance-point-1920x1088" value="30" />
+        </MediaCodec>
         <MediaCodec name="OMX.qti.video.decoder.mpeg4sw">
             <Quirk name="requires-allocate-on-input-ports" />
             <Quirk name="requires-allocate-on-output-ports" />
@@ -222,7 +232,7 @@ Only the three quirks included above are recognized at this point:
                 <Limit name="block-size" value="16x16" />
                 <Limit name="blocks-per-second" min="1" max="244800" />
                 <Limit name="bitrate" range="1-6000000" />
-                <Limit name="concurrent-instances" max="4" />
+                <Limit name="concurrent-instances" max="16" />
                 <Limit name="performance-point-1920x1088" value="30" />
             </Type>
             <Type name="video/mp4v-esdp">
@@ -231,7 +241,7 @@ Only the three quirks included above are recognized at this point:
                 <Limit name="block-size" value="16x16" />
                 <Limit name="blocks-per-second" min="1" max="244800" />
                 <Limit name="bitrate" range="1-6000000" />
-                <Limit name="concurrent-instances" max="4" />
+                <Limit name="concurrent-instances" max="16" />
                 <Limit name="performance-point-1920x1088" value="30" />
             </Type>
         </MediaCodec>
@@ -243,30 +253,11 @@ Only the three quirks included above are recognized at this point:
             <Limit name="block-size" value="16x16" />
             <Limit name="blocks-per-second" min="1" max="48600" />
             <Limit name="bitrate" range="1-2000000" />
-            <Limit name="concurrent-instances" max="4" />
+            <Limit name="concurrent-instances" max="16" />
             <Limit name="performance-point-720x480" value="30" />
             <Limit name="performance-point-720x576" value="25" />
         </MediaCodec>
         <MediaCodec name="OMX.google.opus.decoder" type="audio/opus" update="true" rank="100"/>
-        <MediaCodec name="c2.android.hevc.decoder" type="video/hevc" update="true">
-            <!-- profiles and levels:  ProfileMain : MainTierLevel51 -->
-            <Limit name="size" min="2x2" max="2048x2048" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="8x8" />
-            <Limit name="block-count" range="1-65536" />
-            <Limit name="blocks-per-second" range="1-491520" />
-            <Limit name="bitrate" range="1-5000000" />
-        </MediaCodec>
-        <MediaCodec name="c2.android.avc.decoder" type="video/avc" update="true">
-            <!-- profiles and levels:  ProfileHigh : Level51 -->
-            <Limit name="size" min="2x2" max="2048x2048" />
-            <Limit name="alignment" value="2x2" />
-            <Limit name="block-size" value="16x16" />
-            <Limit name="block-count" range="1-16384" />
-            <Limit name="blocks-per-second" range="1-491520" />
-            <Limit name="bitrate" range="1-40000000" />
-            <Feature name="adaptive-playback" />
-        </MediaCodec>
     </Decoders>
     <Include href="media_codecs_google_video_le.xml" />
 </MediaCodecs>

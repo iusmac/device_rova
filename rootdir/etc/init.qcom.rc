@@ -223,9 +223,12 @@ on boot
     chown system system /sys/class/backlight/panel0-backlight/max_brightness
 
     # Create directory used for display
-    # for backward compatibilit
+    # for backward compatibility
     mkdir /persist/display 0770 system graphics
     mkdir /mnt/vendor/persist/display 0770 system graphics
+
+    # Create vpp directory
+    mkdir /mnt/vendor/persist/vpp 0770 media media
 
     # Create hvdcp_opti directory
     mkdir /mnt/vendor/persist/hvdcp_opti 0770 root system
@@ -401,6 +404,9 @@ on post-fs-data
     mkdir /data/misc/sensors
     chmod 0775 /data/misc/sensors
 
+    # Create vpp directory
+    mkdir /data/vendor/vpp 0770 media media
+
     #Create dir for TUI
     mkdir /data/vendor/tui 0700 system system
 
@@ -455,6 +461,17 @@ on property:ro.vendor.iocgrp.config=1
     chmod 0664 /dev/blkio/bg/tasks
     write /dev/blkio/blkio.weight 1000
     write /dev/blkio/bg/blkio.weight 100
+
+on property:vendor.media.target.version=*
+    setprop vendor.sys.media.target.version ${vendor.media.target.version}
+
+on property:vendor.netflix.bsp_rev=*
+    setprop ro.netflix.bsp_rev ${vendor.netflix.bsp_rev}
+
+on property:vendor.media.target_variant=*
+    setprop ro.media.xml_variant.codecs ${vendor.media.target_variant}
+    setprop ro.media.xml_variant.codecs_performance ${vendor.media.target_variant}
+
 
 service vendor.qrtr-ns /vendor/bin/qrtr-ns -f
     class core

@@ -6,7 +6,7 @@ LOCAL_SRC_FILES := \
 
 LOCAL_CFLAGS :=
 
-LOCAL_HEADER_LIBRARIES := display_headers
+LOCAL_C_INCLUDES:= $(TARGET_OUT_HEADERS)/qcom/display
 
 LOCAL_SHARED_LIBRARIES := \
   libcutils \
