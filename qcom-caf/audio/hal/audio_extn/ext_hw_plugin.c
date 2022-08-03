@@ -1,30 +1,31 @@
-/* ext_hw_plugin.c
-Copyright (c) 2014-2016 The Linux Foundation. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are
-met:
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the following
-      disclaimer in the documentation and/or other materials provided
-      with the distribution.
-    * Neither the name of The Linux Foundation nor the names of its
-      contributors may be used to endorse or promote products derived
-      from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
-ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
-BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
-IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
+/*
+* Copyright (c) 2014-2021 The Linux Foundation. All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions are
+* met:
+*     * Redistributions of source code must retain the above copyright
+*       notice, this list of conditions and the following disclaimer.
+*     * Redistributions in binary form must reproduce the above
+*       copyright notice, this list of conditions and the following
+*       disclaimer in the documentation and/or other materials provided
+*       with the distribution.
+*     * Neither the name of The Linux Foundation nor the names of its
+*       contributors may be used to endorse or promote products derived
+*       from this software without specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+* ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+* BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+* BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+* OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+* IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #define LOG_TAG "audio_ext_hw_plugin"
 #define LOG_NDEBUG 0
@@ -39,8 +40,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include "platform.h"
 #include "audio_hal_plugin.h"
 
-
-#ifdef EXT_HW_PLUGIN_ENABLED
+//external feature dependency
+static fp_b64decode_t fp_b64decode;
+static fp_b64encode_t fp_b64encode;
 
 typedef int32_t (*audio_hal_plugin_init_t)(void);
 typedef int32_t (*audio_hal_plugin_deinit_t)(void);
@@ -60,60 +62,13 @@ struct ext_hw_plugin_data {
 };
 
 /* This can be defined in platform specific file or use compile flag */
+#ifdef DAEMON_SUPPORT_AUTO
+#define LIB_PLUGIN_DRIVER "libaudiohalpluginclient.so"
+#else
 #define LIB_PLUGIN_DRIVER "libaudiohalplugin.so"
+#endif
 
-/* Note: Due to ADP H/W design, SoC TERT/SEC TDM CLK and FSYNC lines are both connected
- * with CODEC and a single master is needed to provide consistent CLK and FSYNC to slaves,
- * hence configuring SoC TERT TDM as single master and bring up a dummy hostless from TERT
- * to SEC to ensure both slave SoC SEC TDM and CODEC are driven upon system boot. */
-static void audio_extn_ext_hw_plugin_enable_adev_hostless(struct audio_device *adev)
-{
-    ALOGI("%s: Enable TERT -> SEC Hostless", __func__);
-
-    char mixer_path[MIXER_PATH_MAX_LENGTH];
-    strlcpy(mixer_path, "dummy-hostless", MIXER_PATH_MAX_LENGTH);
-    ALOGD("%s: apply mixer and update path: %s", __func__, mixer_path);
-    audio_route_apply_and_update_path(adev->audio_route, mixer_path);
-
-    /* TERT TDM TX 7 HOSTLESS to SEC TDM RX 7 HOSTLESS */
-    int pcm_dev_rx = 48, pcm_dev_tx = 49;
-    struct pcm_config pcm_config_lb = {
-        .channels = 1,
-        .rate = 48000,
-        .period_size = 240,
-        .period_count = 2,
-        .format = PCM_FORMAT_S16_LE,
-        .start_threshold = 0,
-        .stop_threshold = INT_MAX,
-        .avail_min = 0,
-    };
-
-    struct pcm *pcm_tx = pcm_open(adev->snd_card,
-                                   pcm_dev_tx,
-                                   PCM_IN, &pcm_config_lb);
-    if (pcm_tx && !pcm_is_ready(pcm_tx)) {
-        ALOGE("%s: %s", __func__, pcm_get_error(pcm_tx));
-        return;
-    }
-    struct pcm *pcm_rx = pcm_open(adev->snd_card,
-                                   pcm_dev_rx,
-                                   PCM_OUT, &pcm_config_lb);
-    if (pcm_rx && !pcm_is_ready(pcm_rx)) {
-        ALOGE("%s: %s", __func__, pcm_get_error(pcm_rx));
-        return;
-    }
-
-    if (pcm_start(pcm_tx) < 0) {
-        ALOGE("%s: pcm start for pcm tx failed", __func__);
-        return;
-    }
-    if (pcm_start(pcm_rx) < 0) {
-        ALOGE("%s: pcm start for pcm rx failed", __func__);
-        return;
-    }
-}
-
-void* audio_extn_ext_hw_plugin_init(struct audio_device *adev)
+void* ext_hw_plugin_init(struct audio_device *adev, ext_hw_plugin_init_config_t init_config)
 {
     int32_t ret = 0;
     struct ext_hw_plugin_data *my_plugin = NULL;
@@ -126,6 +81,9 @@ void* audio_extn_ext_hw_plugin_init(struct audio_device *adev)
     }
 
     my_plugin->adev = adev;
+
+    fp_b64decode = init_config.fp_b64decode;
+    fp_b64encode = init_config.fp_b64encode;
 
     my_plugin->plugin_handle = dlopen(LIB_PLUGIN_DRIVER, RTLD_NOW);
     if (my_plugin->plugin_handle == NULL) {
@@ -164,9 +122,6 @@ void* audio_extn_ext_hw_plugin_init(struct audio_device *adev)
             goto plugin_init_fail;
         }
     }
-
-    audio_extn_ext_hw_plugin_enable_adev_hostless(adev);
-
     my_plugin->mic_mute = false;
     return my_plugin;
 
@@ -177,7 +132,7 @@ plugin_init_fail:
     return NULL;
 }
 
-int32_t audio_extn_ext_hw_plugin_deinit(void *plugin)
+int32_t ext_hw_plugin_deinit(void *plugin)
 {
     int32_t ret = 0;
     struct ext_hw_plugin_data *my_plugin = (struct ext_hw_plugin_data *)plugin;
@@ -186,7 +141,6 @@ int32_t audio_extn_ext_hw_plugin_deinit(void *plugin)
         ALOGE("[%s] NULL plugin pointer",__func__);
         return -EINVAL;
     }
-
     if (my_plugin->audio_hal_plugin_deinit) {
         ret = my_plugin->audio_hal_plugin_deinit();
         if (ret) {
@@ -211,7 +165,6 @@ static int32_t ext_hw_plugin_check_plugin_usecase(audio_usecase_t hal_usecase,
     case USECASE_AUDIO_PLAYBACK_LOW_LATENCY:
     case USECASE_AUDIO_PLAYBACK_MULTI_CH:
     case USECASE_AUDIO_PLAYBACK_OFFLOAD:
-#ifdef MULTIPLE_OFFLOAD_ENABLED
     case USECASE_AUDIO_PLAYBACK_OFFLOAD2:
     case USECASE_AUDIO_PLAYBACK_OFFLOAD3:
     case USECASE_AUDIO_PLAYBACK_OFFLOAD4:
@@ -220,23 +173,39 @@ static int32_t ext_hw_plugin_check_plugin_usecase(audio_usecase_t hal_usecase,
     case USECASE_AUDIO_PLAYBACK_OFFLOAD7:
     case USECASE_AUDIO_PLAYBACK_OFFLOAD8:
     case USECASE_AUDIO_PLAYBACK_OFFLOAD9:
-#endif
     case USECASE_AUDIO_PLAYBACK_ULL:
+    case USECASE_AUDIO_PLAYBACK_MEDIA:
+    case USECASE_AUDIO_PLAYBACK_SYS_NOTIFICATION:
         *plugin_usecase = AUDIO_HAL_PLUGIN_USECASE_DEFAULT_PLAYBACK;
         break;
     case USECASE_AUDIO_RECORD:
     case USECASE_AUDIO_RECORD_COMPRESS:
     case USECASE_AUDIO_RECORD_LOW_LATENCY:
     case USECASE_AUDIO_RECORD_FM_VIRTUAL:
+    case USECASE_AUDIO_RECORD_ECHO_REF_EXT:
         *plugin_usecase = AUDIO_HAL_PLUGIN_USECASE_DEFAULT_CAPTURE;
         break;
     case USECASE_AUDIO_HFP_SCO:
     case USECASE_AUDIO_HFP_SCO_WB:
+    case USECASE_AUDIO_HFP_SCO_DOWNLINK:
+    case USECASE_AUDIO_HFP_SCO_WB_DOWNLINK:
         *plugin_usecase = AUDIO_HAL_PLUGIN_USECASE_HFP_VOICE_CALL;
         break;
     case USECASE_VOICE_CALL:
     case USECASE_VOICEMMODE1_CALL:
         *plugin_usecase = AUDIO_HAL_PLUGIN_USECASE_CS_VOICE_CALL;
+        break;
+    case USECASE_AUDIO_PLAYBACK_NAV_GUIDANCE:
+        *plugin_usecase = AUDIO_HAL_PLUGIN_USECASE_DRIVER_SIDE_PLAYBACK;
+        break;
+    case USECASE_AUDIO_PLAYBACK_PHONE:
+        *plugin_usecase = AUDIO_HAL_PLUGIN_USECASE_PHONE_PLAYBACK;
+        break;
+    case USECASE_AUDIO_FM_TUNER_EXT:
+       *plugin_usecase = AUDIO_HAL_PLUGIN_USECASE_FM_TUNER;
+        break;
+    case USECASE_ICC_CALL:
+        *plugin_usecase = AUDIO_HAL_PLUGIN_USECASE_ICC;
         break;
     default:
         ret = -EINVAL;
@@ -245,7 +214,7 @@ static int32_t ext_hw_plugin_check_plugin_usecase(audio_usecase_t hal_usecase,
     return ret;
 }
 
-int32_t audio_extn_ext_hw_plugin_usecase_start(void *plugin, struct audio_usecase *usecase)
+int32_t ext_hw_plugin_usecase_start(void *plugin, struct audio_usecase *usecase)
 {
     int32_t ret = 0;
     struct ext_hw_plugin_data *my_plugin = (struct ext_hw_plugin_data *)plugin;
@@ -279,8 +248,10 @@ int32_t audio_extn_ext_hw_plugin_usecase_start(void *plugin, struct audio_usecas
             return 0;
         }
 
-        if ((usecase->type == PCM_CAPTURE) || (usecase->type == VOICE_CALL) ||
-            (usecase->type == VOIP_CALL) || (usecase->type == PCM_HFP_CALL)) {
+        if (((usecase->type == PCM_CAPTURE) || (usecase->type == VOICE_CALL) ||
+              (usecase->type == VOIP_CALL) || (usecase->type == PCM_HFP_CALL) ||
+              (usecase->type == ICC_CALL) || (usecase->type == PCM_PASSTHROUGH)) &&
+            (usecase->in_snd_device != SND_DEVICE_NONE)) {
             codec_enable.snd_dev = usecase->in_snd_device;
             /* TODO - below should be related with in_snd_dev */
             codec_enable.sample_rate = 48000;
@@ -323,9 +294,12 @@ int32_t audio_extn_ext_hw_plugin_usecase_start(void *plugin, struct audio_usecas
             }
         }
 
-        if ((usecase->type == PCM_CAPTURE) &&
-            (usecase->id ==  USECASE_AUDIO_RECORD) &&
-            (usecase->in_snd_device == SND_DEVICE_IN_SPEAKER_QMIC_AEC)) {
+        if (((usecase->type == PCM_CAPTURE) &&
+            (usecase->id == USECASE_AUDIO_RECORD) &&
+            (usecase->in_snd_device == SND_DEVICE_IN_SPEAKER_QMIC_AEC)) ||
+            ((usecase->type == PCM_HFP_CALL) &&
+            ((usecase->id == USECASE_AUDIO_HFP_SCO) || (usecase->id == USECASE_AUDIO_HFP_SCO_WB)) &&
+            (usecase->in_snd_device == SND_DEVICE_IN_VOICE_SPEAKER_MIC_HFP_MMSECNS))) {
             audio_hal_plugin_codec_enable_t codec_enable_ec = {0,};
             codec_enable_ec.snd_dev = usecase->in_snd_device;
             // TODO - below should be related with in_snd_dev
@@ -349,8 +323,9 @@ int32_t audio_extn_ext_hw_plugin_usecase_start(void *plugin, struct audio_usecas
             }
         }
 
-        if ((usecase->type == PCM_PLAYBACK) || (usecase->type == VOICE_CALL) ||
-            (usecase->type == VOIP_CALL) || (usecase->type == PCM_HFP_CALL)) {
+        if (((usecase->type == PCM_PLAYBACK) || (usecase->type == VOICE_CALL) ||
+                (usecase->type == VOIP_CALL) || (usecase->type == PCM_HFP_CALL) ||
+                (usecase->type == ICC_CALL)) && (usecase->out_snd_device != SND_DEVICE_NONE)) {
             codec_enable.snd_dev = usecase->out_snd_device;
             /* TODO - below should be related with out_snd_dev */
             codec_enable.sample_rate = 48000;
@@ -380,7 +355,7 @@ int32_t audio_extn_ext_hw_plugin_usecase_start(void *plugin, struct audio_usecas
     return ret;
 }
 
-int32_t audio_extn_ext_hw_plugin_usecase_stop(void *plugin, struct audio_usecase *usecase)
+int32_t ext_hw_plugin_usecase_stop(void *plugin, struct audio_usecase *usecase)
 {
     int32_t ret = 0;
     struct ext_hw_plugin_data *my_plugin = (struct ext_hw_plugin_data *)plugin;
@@ -416,8 +391,9 @@ int32_t audio_extn_ext_hw_plugin_usecase_stop(void *plugin, struct audio_usecase
             return -EINVAL;
         }
 
-        if ((usecase->type == PCM_PLAYBACK) || (usecase->type == VOICE_CALL) ||
-            (usecase->type == VOIP_CALL) || (usecase->type == PCM_HFP_CALL)) {
+        if (((usecase->type == PCM_PLAYBACK) || (usecase->type == VOICE_CALL) ||
+                (usecase->type == VOIP_CALL) || (usecase->type == PCM_HFP_CALL) ||
+                (usecase->type == ICC_CALL)) && (usecase->out_snd_device != SND_DEVICE_NONE)) {
             codec_disable.snd_dev = usecase->out_snd_device;
 
             ALOGD("%s: disable audio hal plugin output, %d, %d",
@@ -431,8 +407,10 @@ int32_t audio_extn_ext_hw_plugin_usecase_stop(void *plugin, struct audio_usecase
             }
             my_plugin->out_snd_dev[codec_disable.usecase] = 0;
         }
-        if ((usecase->type == PCM_CAPTURE) || (usecase->type == VOICE_CALL) ||
-            (usecase->type == VOIP_CALL) || (usecase->type == PCM_HFP_CALL)) {
+        if (((usecase->type == PCM_CAPTURE) || (usecase->type == VOICE_CALL) ||
+             (usecase->type == VOIP_CALL) || (usecase->type == PCM_HFP_CALL) ||
+             (usecase->type == PCM_PASSTHROUGH) || (usecase->type == ICC_CALL)) &&
+            (usecase->in_snd_device != SND_DEVICE_NONE)) {
             codec_disable.snd_dev = usecase->in_snd_device;
 
             ALOGD("%s: disable audio hal plugin input, %d, %d",
@@ -493,7 +471,7 @@ static int32_t ext_hw_plugin_string_to_dword(char *string_value, void **dword_pt
         ALOGE("%s: memory allocation failed", __func__);
         return -ENOMEM;
     }
-    dlen = b64decode(string_value, strlen(string_value), dptr);
+    dlen = fp_b64decode(string_value, strlen(string_value), dptr);
     if ((dlen <= 0) || ((uint32_t)dlen != 4*dword_len)){
         ALOGE("%s: data decoding failed", __func__);
         ret = -EINVAL;
@@ -560,7 +538,7 @@ static int32_t ext_hw_plugin_dword_to_string(uint32_t *dword_ptr, uint32_t dword
         goto done_dword_to_string;
     }
 
-    ret = b64encode(dptr, dlen, outptr);
+    ret = fp_b64encode(dptr, dlen, outptr);
     if(ret < 0) {
         ALOGE("[%s] failed to convert data to string ret = %d", __func__, ret);
         free(outptr);
@@ -577,7 +555,7 @@ done_dword_to_string:
 }
 
 
-int32_t audio_extn_ext_hw_plugin_set_parameters(void *plugin, struct str_parms *parms)
+int32_t ext_hw_plugin_set_parameters(void *plugin, struct str_parms *parms)
 {
 
     char *value = NULL;
@@ -608,6 +586,11 @@ int32_t audio_extn_ext_hw_plugin_set_parameters(void *plugin, struct str_parms *
     if(val == AUDIO_HAL_PLUGIN_MSG_CODEC_TUNNEL_CMD ||
         val == AUDIO_HAL_PLUGIN_MSG_CODEC_SET_PP_EQ) {
         kv_pairs = str_parms_to_str(parms);
+        if (kv_pairs == NULL) {
+            ret = -EINVAL;
+            ALOGE("%s: key-value pair is NULL", __func__);
+            goto done;
+        }
         len = strlen(kv_pairs);
         value = (char*)calloc(len, sizeof(char));
         if (value == NULL) {
@@ -699,7 +682,7 @@ done_tunnel:
                 }
             } else {
                 str_parms_del(parms, AUDIO_PARAMETER_KEY_EXT_HW_PLUGIN_DIRECTION);
-    
+
                 switch(dir) {
                 case AUDIO_HAL_PLUGIN_DIRECTION_PLAYBACK:
                 {
@@ -1021,7 +1004,7 @@ done:
     return ret;
 }
 
-int audio_extn_ext_hw_plugin_get_parameters(void *plugin,
+int ext_hw_plugin_get_parameters(void *plugin,
                   struct str_parms *query, struct str_parms *reply)
 {
     char *value = NULL;
@@ -1057,6 +1040,11 @@ int audio_extn_ext_hw_plugin_get_parameters(void *plugin,
 
     if(val == AUDIO_HAL_PLUGIN_MSG_CODEC_TUNNEL_GET_CMD) {
         kv_pairs = str_parms_to_str(query);
+        if (kv_pairs == NULL) {
+            ret = -EINVAL;
+            ALOGE("%s: key-value pair is NULL", __func__);
+            goto done_get_param;
+        }
         len = strlen(kv_pairs);
         value = (char*)calloc(len, sizeof(char));
         if (value == NULL) {
@@ -1458,7 +1446,7 @@ done_get_param:
     return ret;
 }
 
-int audio_extn_ext_hw_plugin_set_mic_mute(void *plugin, bool mute)
+int ext_hw_plugin_set_mic_mute(void *plugin, bool mute)
 {
     struct ext_hw_plugin_data *my_plugin = NULL;
     audio_hal_plugin_codec_set_pp_mute_t pp_mute;
@@ -1500,7 +1488,7 @@ int audio_extn_ext_hw_plugin_set_mic_mute(void *plugin, bool mute)
     return ret;
 }
 
-int audio_extn_ext_hw_plugin_get_mic_mute(void *plugin, bool *mute)
+int ext_hw_plugin_get_mic_mute(void *plugin, bool *mute)
 {
     struct ext_hw_plugin_data *my_plugin = (struct ext_hw_plugin_data *)plugin;
 
@@ -1515,7 +1503,7 @@ int audio_extn_ext_hw_plugin_get_mic_mute(void *plugin, bool *mute)
     return 0;
 }
 
-int audio_extn_ext_hw_plugin_set_audio_gain(void *plugin,
+int ext_hw_plugin_set_audio_gain(void *plugin,
             struct audio_usecase *usecase, uint32_t gain)
 {
     int32_t ret = 0;
@@ -1592,4 +1580,3 @@ int audio_extn_ext_hw_plugin_set_audio_gain(void *plugin,
     }
     return ret;
 }
-#endif /* EXT_HW_PLUGIN_ENABLED */

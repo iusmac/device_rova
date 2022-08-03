@@ -4,3 +4,4 @@ allow wcnss_service init:unix_stream_socket connectto;
 
 get_prop(wcnss_service, vendor_wifi_prop)
 set_prop(wcnss_service, vendor_wifi_prop)
+set_prop(wcnss_service, vendor_wifi_version)

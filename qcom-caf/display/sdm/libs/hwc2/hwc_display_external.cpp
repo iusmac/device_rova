@@ -224,7 +224,6 @@ int HWCDisplayExternal::SetState(bool connected) {
       // Restore HDMI attributes when display is reconnected.
       // This is to ensure that surfaceflinger & sdm are in sync.
       display_null_.GetFrameBufferConfig(&fb_config);
-      SetActiveDisplayConfig(active_config_);
       int status = SetFrameBufferResolution(fb_config.x_pixels, fb_config.y_pixels);
       if (status) {
         DLOGW("Set frame buffer config failed. Error = %d", error);
@@ -257,7 +256,6 @@ int HWCDisplayExternal::SetState(bool connected) {
       display_null_.SetFrameBufferConfig(fb_config);
 
       SetVsyncEnabled(HWC2::Vsync::Disable);
-      GetActiveDisplayConfig(&active_config_);
       core_intf_->DestroyDisplay(display_intf_);
       display_intf_ = &display_null_;
 
@@ -283,19 +281,6 @@ DisplayError HWCDisplayExternal::SetMixerResolution(uint32_t width, uint32_t hei
   DisplayError error = display_intf_->SetMixerResolution(width, height);
   validated_.reset();
   return error;
-}
-
-HWC2::Error HWCDisplayExternal::SetClientTarget(buffer_handle_t target, int32_t acquire_fence,
-                                               int32_t dataspace, hwc_region_t damage) {
-  HWC2::Error error = HWCDisplay::SetClientTarget(target, acquire_fence, dataspace, damage);
-  if (error != HWC2::Error::None) {
-    return error;
-  }
-  Layer *sdm_layer = client_target_->GetSDMLayer();
-  SetFrameBufferResolution(sdm_layer->input_buffer.unaligned_width,
-                           sdm_layer->input_buffer.unaligned_height);
-  DLOGI("Updated client target");
-  return HWC2::Error::None;
 }
 
 }  // namespace sdm

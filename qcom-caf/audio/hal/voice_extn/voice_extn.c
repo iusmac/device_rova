@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2018, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2020, The Linux Foundation. All rights reserved.
  * Not a contribution.
  *
  * Copyright (C) 2013 The Android Open Source Project
@@ -26,6 +26,7 @@
 #include <math.h>
 #include <log/log.h>
 #include <cutils/str_parms.h>
+#include <cutils/properties.h>
 #include <sys/ioctl.h>
 #include <time.h>
 #include <sound/voice_params.h>
@@ -83,7 +84,39 @@ struct pcm_config pcm_config_incall_music = {
     .avail_min = LOW_LATENCY_OUTPUT_PERIOD_SIZE / 4,
 };
 
+static bool voice_extn_compress_voip_enabled = false;
+static bool voice_extn_dynamic_ecns_feature_enabled = false;
+static bool voice_extn_incall_music_enabled = false;
+static bool voice_extn_multi_session_enabled = false;
+static bool voice_extn_power_mode_enabled = false;
+
 int voice_extn_is_call_state_active(struct audio_device *adev, bool *is_call_active);
+
+int compress_voip_set_parameters(struct audio_device *adev,
+                                             struct str_parms *parms);
+void compress_voip_get_parameters(struct str_parms *query,
+                                             struct str_parms *reply);
+void compress_voip_out_get_parameters(struct stream_out *out,
+                                                 struct str_parms *query,
+                                                 struct str_parms *reply);
+void compress_voip_in_get_parameters(struct stream_in *in,
+                                                struct str_parms *query,
+                                                struct str_parms *reply);
+int compress_voip_out_get_buffer_size(struct stream_out *out);
+int compress_voip_in_get_buffer_size(struct stream_in *in);
+int compress_voip_start_output_stream(struct stream_out *out);
+int compress_voip_start_input_stream(struct stream_in *in);
+int compress_voip_close_output_stream(struct audio_stream *stream);
+int compress_voip_open_output_stream(struct stream_out *out);
+int compress_voip_close_input_stream(struct audio_stream *stream);
+int compress_voip_open_input_stream(struct stream_in *in);
+int compress_voip_set_volume(struct audio_device *adev, float volume);
+int compress_voip_set_mic_mute(struct audio_device *adev, bool state);
+bool compress_voip_pcm_prop_check();
+bool compress_voip_is_active(const struct audio_device *adev);
+bool compress_voip_is_format_supported(audio_format_t format);
+bool compress_voip_is_config_supported(struct audio_config *config);
+bool compress_voip_is_started(struct audio_device *adev);
 
 static bool is_valid_call_state(int call_state)
 {
@@ -153,10 +186,14 @@ static uint32_t get_session_id_with_state(struct audio_device *adev,
     struct voice_session *session = NULL;
     int i = 0;
     uint32_t session_id = 0;
+    int max_voice_sessions = MAX_VOICE_SESSIONS;
 
-    for (i = 0; i < MAX_VOICE_SESSIONS; i++) {
+    if (!voice_extn_is_multi_session_supported())
+        max_voice_sessions = 1;
+
+    for (i = 0; i < max_voice_sessions; i++) {
         session = &adev->voice.session[i];
-        if(session->state.current == call_state){
+        if (session->state.current == call_state){
             session_id = session->vsid;
             break;
         }
@@ -172,10 +209,13 @@ static int update_calls(struct audio_device *adev)
     enum voice_lch_mode lch_mode;
     struct voice_session *session = NULL;
     int ret = 0;
+    int max_voice_sessions = MAX_VOICE_SESSIONS;
 
     ALOGD("%s: enter:", __func__);
+    if (!voice_extn_is_multi_session_supported())
+        max_voice_sessions = 1;
 
-    for (i = 0; i < MAX_VOICE_SESSIONS; i++) {
+    for (i = 0; i < max_voice_sessions; i++) {
         usecase_id = voice_extn_get_usecase_for_session_idx(i);
         session = &adev->voice.session[i];
         ALOGD("%s: cur_state=%d new_state=%d vsid=%x",
@@ -189,7 +229,7 @@ static int update_calls(struct audio_device *adev)
             case CALL_INACTIVE:
                 ALOGD("%s: INACTIVE -> ACTIVE vsid:%x", __func__, session->vsid);
                 ret = voice_start_usecase(adev, usecase_id);
-                if(ret < 0) {
+                if (ret < 0) {
                     ALOGE("%s: voice_start_usecase() failed for usecase: %d\n",
                           __func__, usecase_id);
                 } else {
@@ -227,7 +267,7 @@ static int update_calls(struct audio_device *adev)
             case CALL_LOCAL_HOLD:
                 ALOGD("%s: ACTIVE/HOLD/LOCAL_HOLD -> INACTIVE vsid:%x", __func__, session->vsid);
                 ret = voice_stop_usecase(adev, usecase_id);
-                if(ret < 0) {
+                if (ret < 0) {
                     ALOGE("%s: voice_stop_usecase() failed for usecase: %d\n",
                           __func__, usecase_id);
                 } else {
@@ -303,8 +343,12 @@ static int update_call_states(struct audio_device *adev,
     struct voice_session *session = NULL;
     int i = 0;
     bool is_call_active;
+    int max_voice_sessions = MAX_VOICE_SESSIONS;
 
-    for (i = 0; i < MAX_VOICE_SESSIONS; i++) {
+    if (!voice_extn_is_multi_session_supported())
+        max_voice_sessions = 1;
+
+    for (i = 0; i < max_voice_sessions; i++) {
         if (vsid == adev->voice.session[i].vsid) {
             session = &adev->voice.session[i];
             break;
@@ -320,8 +364,7 @@ static int update_call_states(struct audio_device *adev,
          * occured, otherwise voice calls will be started unintendedly on
          * speaker.
          */
-        if (is_call_active ||
-                (adev->voice.in_call && adev->mode == AUDIO_MODE_IN_CALL)) {
+        if (is_call_active || voice_is_in_call(adev)) {
             /* Device routing is not triggered for voice calls on the subsequent
              * subs, Hence update the call states if voice call is already
              * active on other sub.
@@ -339,6 +382,9 @@ static int update_call_states(struct audio_device *adev,
 int voice_extn_get_active_session_id(struct audio_device *adev,
                                      uint32_t *session_id)
 {
+    if (!voice_extn_is_multi_session_supported())
+        return -ENOSYS;
+
     *session_id = get_session_id_with_state(adev, CALL_ACTIVE);
     return 0;
 }
@@ -347,11 +393,14 @@ int voice_extn_is_call_state_active(struct audio_device *adev, bool *is_call_act
 {
     struct voice_session *session = NULL;
     int i = 0;
-    *is_call_active = false;
 
+    if (!voice_extn_is_multi_session_supported())
+        return -ENOSYS;
+
+    *is_call_active = false;
     for (i = 0; i < MAX_VOICE_SESSIONS; i++) {
         session = &adev->voice.session[i];
-        if(session->state.current != CALL_INACTIVE){
+        if (session->state.current != CALL_INACTIVE){
             *is_call_active = true;
             break;
         }
@@ -360,8 +409,92 @@ int voice_extn_is_call_state_active(struct audio_device *adev, bool *is_call_act
     return 0;
 }
 
+void dynamic_ecns_feature_init(bool is_feature_enabled)
+{
+    voice_extn_dynamic_ecns_feature_enabled = is_feature_enabled;
+    ALOGD(":: %s: ---- Feature DYNAMIC_ECNS is %s ----", __func__,
+                            is_feature_enabled ? "ENABLED" : "NOT ENABLED");
+}
+
+bool voice_extn_is_dynamic_ecns_enabled()
+{
+    return voice_extn_dynamic_ecns_feature_enabled;
+}
+
+void incall_music_feature_init(bool is_feature_enabled)
+{
+    voice_extn_incall_music_enabled = is_feature_enabled;
+    ALOGV("%s: ---- Feature INCALL_MUSIC is %s----", __func__,
+                                is_feature_enabled ? "ENABLED" : "NOT ENABLED");
+}
+
+bool voice_extn_is_incall_music_enabled()
+{
+    return voice_extn_incall_music_enabled;
+}
+
+void compr_voip_feature_init(bool is_feature_enabled)
+{
+    voice_extn_compress_voip_enabled = is_feature_enabled;
+    ALOGV("%s:: ---- Feature COMPRESS_VOIP is %s ----", __func__,
+                                is_feature_enabled ? "ENABLED" : "NOT ENABLED");
+}
+
+bool voice_extn_is_compress_voip_supported()
+{
+    return voice_extn_compress_voip_enabled;
+}
+
+void multi_voice_session_feature_init(bool is_feature_enabled)
+{
+    voice_extn_multi_session_enabled = is_feature_enabled;
+    ALOGV("%s:: ---- Feature MULTI VOICE SESSION is %s ----", __func__,
+                                is_feature_enabled ? "ENABLED" : "NOT ENABLED");
+}
+
+bool voice_extn_is_multi_session_supported()
+{
+    return voice_extn_multi_session_enabled;
+}
+
+void voice_power_mode_feature_init(bool is_feature_enabled)
+{
+    voice_extn_power_mode_enabled = is_feature_enabled;
+    ALOGV("%s:: ---- Feature POWER MODE is %s ----", __func__,
+                                is_feature_enabled ? "ENABLED" : "NOT ENABLED");
+}
+
+bool voice_extn_is_voice_power_mode_supported()
+{
+    return voice_extn_power_mode_enabled;
+}
+
+void voice_extn_feature_init()
+{
+    // Register feature function here
+    // every feature should have a feature flag
+    compr_voip_feature_init(
+       property_get_bool("vendor.audio.feature.compr_voip.enable",
+                          false));
+    dynamic_ecns_feature_init(
+       property_get_bool("vendor.audio.feature.dynamic_ecns.enable",
+                          false));
+    incall_music_feature_init(
+       property_get_bool("vendor.audio.feature.incall_music.enable",
+                          false));
+    multi_voice_session_feature_init(
+       property_get_bool("vendor.audio.feature.multi_voice_session.enable",
+                          false));
+    voice_power_mode_feature_init(
+       property_get_bool("vendor.audio.feature.power_mode.enable",
+                          false));
+}
+
 void voice_extn_init(struct audio_device *adev)
 {
+    if (!voice_extn_is_multi_session_supported())
+        return;
+
     adev->voice.session[VOICE_SESS_IDX].vsid =  VOICE_VSID;
     adev->voice.session[VOICE2_SESS_IDX].vsid = VOICE2_VSID;
     adev->voice.session[VOLTE_SESS_IDX].vsid =  VOLTE_VSID;
@@ -375,6 +508,8 @@ int voice_extn_get_session_from_use_case(struct audio_device *adev,
                                          const audio_usecase_t usecase_id,
                                          struct voice_session **session)
 {
+    if (!voice_extn_is_multi_session_supported())
+        return -ENOSYS;
 
     switch(usecase_id)
     {
@@ -421,6 +556,9 @@ int voice_extn_start_call(struct audio_device *adev)
      * udpated.
      */
     ALOGV("%s: enter:", __func__);
+    if (!voice_extn_is_multi_session_supported())
+        return -ENOSYS;
+
     return update_calls(adev);
 }
 
@@ -431,17 +569,23 @@ int voice_extn_stop_call(struct audio_device *adev)
 
     ALOGV("%s: enter:", __func__);
 
+    if (!voice_extn_is_multi_session_supported())
+        return -ENOSYS;
+
     /* If BT device is enabled and voice calls are ended, telephony will call
      * set_mode(AUDIO_MODE_NORMAL) which will trigger audio policy manager to
      * set routing with device BT A2DP profile. Hence end all voice calls when
      * set_mode(AUDIO_MODE_NORMAL) before BT A2DP profile is selected.
      */
-    ALOGD("%s: end all calls", __func__);
-    for (i = 0; i < MAX_VOICE_SESSIONS; i++) {
-        adev->voice.session[i].state.new = CALL_INACTIVE;
+    if (adev->mode == AUDIO_MODE_NORMAL) {
+        ALOGD("%s: end all calls", __func__);
+        for (i = 0; i < MAX_VOICE_SESSIONS; i++) {
+            adev->voice.session[i].state.new = CALL_INACTIVE;
+        }
+
+        ret = update_calls(adev);
     }
 
-    ret = update_calls(adev);
     return ret;
 }
 
@@ -471,6 +615,14 @@ int voice_extn_set_parameters(struct audio_device *adev,
         }
 
         if (is_valid_vsid(vsid) && is_valid_call_state(call_state)) {
+            err = str_parms_get_str(parms, AUDIO_PARAMETER_KEY_CALL_TYPE, str_value,
+                                    sizeof(str_value));
+            if (err >= 0) {
+                  if (!strncmp("LTE", str_value, sizeof("LTE"))) {
+                      adev->voice.lte_call = true;
+                      ALOGD("%s: %s call is active",__func__, str_value);
+                  }
+            }
             ret = update_call_states(adev, vsid, call_state);
         } else {
             ALOGE("%s: invalid vsid:%x or call_state:%d",
@@ -534,8 +686,12 @@ static int get_all_call_states_str(const struct audio_device *adev,
     int ret = 0;
     char *cur_ptr = value;
     int i, len=0;
+    int max_voice_sessions = MAX_VOICE_SESSIONS;
 
-    for (i = 0; i < MAX_VOICE_SESSIONS; i++) {
+    if (!voice_extn_is_multi_session_supported())
+        max_voice_sessions = 1;
+
+    for (i = 0; i < max_voice_sessions; i++) {
         snprintf(cur_ptr, VOICE_EXTN_PARAMETER_VALUE_MAX_LEN - len,
                  "%d:%d,",adev->voice.session[i].vsid,
                  adev->voice.session[i].state.current);
@@ -573,7 +729,8 @@ void voice_extn_get_parameters(const struct audio_device *adev,
         }
         str_parms_add_str(reply, AUDIO_PARAMETER_KEY_ALL_CALL_STATES, value);
     }
-    voice_extn_compress_voip_get_parameters(query, reply);
+    if (voice_extn_compress_voip_enabled)
+        voice_extn_compress_voip_get_parameters(query, reply);
 
     str = str_parms_to_str(reply);
     ALOGV_IF(str != NULL, "%s: exit: returns \"%s\"", __func__, str);
@@ -584,36 +741,200 @@ void voice_extn_out_get_parameters(struct stream_out *out,
                                    struct str_parms *query,
                                    struct str_parms *reply)
 {
-    voice_extn_compress_voip_out_get_parameters(out, query, reply);
+    if (voice_extn_compress_voip_enabled)
+        voice_extn_compress_voip_out_get_parameters(out, query, reply);
 }
 
 void voice_extn_in_get_parameters(struct stream_in *in,
                                   struct str_parms *query,
                                   struct str_parms *reply)
 {
-    voice_extn_compress_voip_in_get_parameters(in, query, reply);
+    if (voice_extn_compress_voip_enabled)
+        voice_extn_compress_voip_in_get_parameters(in, query, reply);
 }
+
 
 int voice_extn_check_and_set_incall_music_usecase(struct audio_device *adev,
                                                   struct stream_out *out)
 {
-    uint32_t session_id = session_id = get_session_id_with_state(adev,
-                                                                 CALL_ACTIVE);
-    if (session_id == VOICEMMODE1_VSID)
-        out->usecase = USECASE_INCALL_MUSIC_UPLINK;
-    else if (session_id == VOICEMMODE2_VSID)
-        out->usecase = USECASE_INCALL_MUSIC_UPLINK2;
-    else {
-        ALOGE("%s: Invalid session id %x", __func__, session_id);
-        out->usecase = USECASE_INCALL_MUSIC_UPLINK;
+    if (voice_extn_incall_music_enabled) {
+        uint32_t session_id = get_session_id_with_state(adev, CALL_ACTIVE);
+        if (session_id == VOICEMMODE1_VSID) {
+            out->usecase = USECASE_INCALL_MUSIC_UPLINK;
+        } else if (session_id == VOICEMMODE2_VSID) {
+            out->usecase = USECASE_INCALL_MUSIC_UPLINK2;
+        } else {
+            ALOGE("%s: Invalid session id %x", __func__, session_id);
+            out->usecase = USECASE_INCALL_MUSIC_UPLINK;
+        }
+
+        out->config = pcm_config_incall_music;
+        //FIXME: add support for MONO stream configuration when audioflinger mixer supports it
+        out->supported_channel_masks[0] = AUDIO_CHANNEL_OUT_MONO;
+        out->supported_channel_masks[1] = AUDIO_CHANNEL_OUT_STEREO;
+        out->config.rate = out->sample_rate;
+
+        ALOGV("%s: mode=%d, usecase id=%d", __func__, adev->mode, out->usecase);
+        return 0;
     }
-
-    out->config = pcm_config_incall_music;
-    //FIXME: add support for MONO stream configuration when audioflinger mixer supports it
-    out->supported_channel_masks[0] = AUDIO_CHANNEL_OUT_STEREO;
-    out->channel_mask = AUDIO_CHANNEL_OUT_STEREO;
-    out->config.rate = out->sample_rate;
-
-    ALOGV("%s: mode=%d, usecase id=%d", __func__, adev->mode, out->usecase);
-    return 0;
+    return -ENOSYS;
 }
+
+
+int voice_extn_compress_voip_set_parameters(struct audio_device *adev,
+                                            struct str_parms *parms)
+{
+    int ret = -ENOSYS;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_set_parameters(adev, parms);
+    return ret;
+}
+
+void voice_extn_compress_voip_get_parameters(struct str_parms *query,
+                                             struct str_parms *reply)
+{
+    if (voice_extn_compress_voip_enabled)
+        compress_voip_get_parameters(query, reply);
+}
+
+
+void voice_extn_compress_voip_out_get_parameters(struct stream_out *out,
+                                                 struct str_parms *query,
+                                                 struct str_parms *reply)
+{
+    if (voice_extn_compress_voip_enabled)
+        compress_voip_out_get_parameters(out, query, reply);
+}
+
+void voice_extn_compress_voip_in_get_parameters(struct stream_in *in,
+                                                struct str_parms *query,
+                                                struct str_parms *reply)
+{
+    if (voice_extn_compress_voip_enabled)
+        compress_voip_in_get_parameters(in, query, reply);
+}
+
+int voice_extn_compress_voip_out_get_buffer_size(struct stream_out *out)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_out_get_buffer_size(out);
+    return ret;
+}
+
+int voice_extn_compress_voip_in_get_buffer_size(struct stream_in *in)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_in_get_buffer_size(in);
+    return ret;
+}
+
+
+int voice_extn_compress_voip_start_output_stream(struct stream_out *out)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_start_output_stream(out);
+    return ret;
+}
+
+
+int voice_extn_compress_voip_start_input_stream(struct stream_in *in)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_start_input_stream(in);
+    return ret;
+}
+
+int voice_extn_compress_voip_close_output_stream(struct audio_stream *stream)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_close_output_stream(stream);
+    return ret;
+}
+
+
+int voice_extn_compress_voip_close_input_stream(struct audio_stream *stream)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_close_input_stream(stream);
+    return ret;
+}
+
+int voice_extn_compress_voip_open_output_stream(struct stream_out *out)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_open_output_stream(out);
+    return ret;
+}
+
+
+int voice_extn_compress_voip_open_input_stream(struct stream_in *in)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_open_input_stream(in);
+    return ret;
+}
+
+int voice_extn_compress_voip_set_volume(struct audio_device *adev, float volume)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_set_volume(adev, volume);
+    return ret;
+}
+
+int voice_extn_compress_voip_set_mic_mute(struct audio_device *adev, bool state)
+{
+    int ret = -1;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_set_mic_mute(adev, state);
+    return ret;
+}
+
+bool voice_extn_compress_voip_pcm_prop_check()
+{
+    bool ret = false;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_pcm_prop_check();
+    return ret;
+}
+
+bool voice_extn_compress_voip_is_active(const struct audio_device *adev)
+{
+    bool ret = false;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_is_active(adev);
+    return ret;
+}
+
+bool voice_extn_compress_voip_is_format_supported(audio_format_t format)
+{
+    bool ret = false;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_is_format_supported(format);
+    return ret;
+}
+
+bool voice_extn_compress_voip_is_config_supported(struct audio_config *config)
+{
+    bool ret = false;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_is_config_supported(config);
+    return ret;
+}
+
+bool voice_extn_compress_voip_is_started(struct audio_device *adev)
+{
+    bool ret = false;
+    if (voice_extn_compress_voip_enabled)
+        ret = compress_voip_is_started(adev);
+    return ret;
+}
+

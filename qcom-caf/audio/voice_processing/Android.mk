@@ -1,14 +1,22 @@
+ifneq ($(AUDIO_USE_STUB_HAL), true)
 LOCAL_PATH:= $(call my-dir)
 
 # audio preprocessing wrapper
 include $(CLEAR_VARS)
 
-LOCAL_CFLAGS += -Wno-unused-variable -Wno-gnu-designator -Wno-unused-value -Wno-unused-function
+LOCAL_CFLAGS += \
+    -Wall \
+    -Werror \
+    -Wno-unused-variable \
+    -Wno-gnu-designator \
+    -Wno-unused-value \
+    -Wno-unused-function
 
 LOCAL_MODULE:= libqcomvoiceprocessing
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_RELATIVE_PATH := soundfx
 LOCAL_VENDOR_MODULE := true
+LOCAL_MODULE_OWNER := qti
 
 LOCAL_SRC_FILES:= \
     voice_processing.c
@@ -41,5 +49,14 @@ LOCAL_CFLAGS += -Wno-shorten-64-to-32
 LOCAL_CFLAGS += -Wno-tautological-compare
 LOCAL_CFLAGS += -Wno-unused-function
 LOCAL_CFLAGS += -Wno-unused-local-typedef
+ifeq ($(TARGET_BOARD_AUTO),true)
+LOCAL_CFLAGS += -O2 -D_FORTIFY_SOURCE=2
+LOCAL_CFLAGS += -fstack-protector-strong
+endif
 
+
+ifneq ($(filter kona lahaina holi,$(TARGET_BOARD_PLATFORM)),)
+LOCAL_SANITIZE := integer_overflow
+endif
 include $(BUILD_SHARED_LIBRARY)
+endif

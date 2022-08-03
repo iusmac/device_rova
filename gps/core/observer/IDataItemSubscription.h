@@ -126,3 +126,4 @@ public:
 } // namespace loc_core
 
 #endif // #ifndef __IDATAITEMSUBSCRIPTION_H__
+

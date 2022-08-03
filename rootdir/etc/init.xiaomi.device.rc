@@ -1,15 +1,31 @@
+on boot
+    enable vendor.qcrild
+    enable vendor.qcrild2
+
+on init
+    chown wifi wifi /sys/module/wlan/parameters/fwpath
+
+on post-fs-data
+    mkdir /data/vendor/qcam 0770 camera camera
+
+# Restart camera provider after vendor.qcamerasvr is running
+on property:init.svc.vendor.qcamerasvr=running
+    exec /bin/sleep 1s
+    restart vendor.camera-provider-2-4
+
 service vendor.xiaomi_device_script /vendor/bin/init.xiaomi.device.sh
-    class main
+    class core
     user root
+    group root
     oneshot
 
 # Audio
 on property:ro.vendor.xiaomi.device=rolex
-    mount none /vendor/etc/rolex_mixer_paths_qrd_sku2.xml /vendor/etc/mixer_paths_qrd_sku2.xml bind
+    setprop vendor.audio.mixer_xml.path /vendor/etc/rolex_mixer_paths_qrd_sku2.xml
     restart vendor.audio-hal
 
 on property:ro.vendor.xiaomi.device=riva
-    mount none /vendor/etc/riva_mixer_paths_qrd_sku2.xml /vendor/etc/mixer_paths_qrd_sku2.xml bind
+    setprop vendor.audio.mixer_xml.path /vendor/etc/riva_mixer_paths_qrd_sku2.xml
     restart vendor.audio-hal
 
 # IR
@@ -24,40 +40,24 @@ on property:ro.vendor.xiaomi.device=riva
     setprop ro.hardware.consumerir spidev
     restart vendor.ir-hal-1-0
 
+# Netmgrd
+on post-fs
+    mount none /vendor/etc/data/netmgr_config_override.xml /vendor/etc/data/netmgr_config.xml bind
+
 # Sensors
+service vendor-sensor-sh /vendor/bin/init.qcom.sensors.sh
+    override
+    class core
+    user root
+    oneshot
+    disabled
+
 on property:ro.vendor.xiaomi.device=rolex
     mount none /vendor/etc/sensors/rolex_sensor_def_qcomdev.conf /vendor/etc/sensors/sensor_def_qcomdev.conf bind
-    restart vendor.sensors.qti
-
+    enable vendor-sensor-sh
 on property:ro.vendor.xiaomi.device=riva
     mount none /vendor/etc/sensors/riva_sensor_def_qcomdev.conf /vendor/etc/sensors/sensor_def_qcomdev.conf bind
-    restart vendor.sensors.qti
+    enable vendor-sensor-sh
 
-# Wi-Fi
-service wcnss-service /system/vendor/bin/true
-    override
-    class main
-    user system
-    group system wifi radio
-    oneshot
-    disabled
-
-service wcnss-service_default /system/vendor/bin/wcnss_service
-    class main
-    user system
-    group system wifi radio
-    oneshot
-    disabled
-
-service wcnss-service_daisy /system/vendor/bin/wcnss_service_daisy
-    class main
-    user system
-    group system wifi radio
-    oneshot
-    disabled
-
-on property:ro.vendor.xiaomi.device=rolex
-    enable wcnss-service_daisy
-
-on property:ro.vendor.xiaomi.device=riva
-    enable wcnss-service_default
+on property:sys.boot_completed=1
+    restart time_daemon

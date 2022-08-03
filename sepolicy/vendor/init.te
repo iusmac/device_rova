@@ -3,6 +3,9 @@ allow init vendor_file:file mounton;
 allow init vendor_configs_file:dir mounton;
 allow init vendor_configs_file:file mounton;
 
+# Baseband
+get_prop(init, baseband_prop);
+
 # Boot reason
 allow init proc_boot_reason:file r_file_perms;
 

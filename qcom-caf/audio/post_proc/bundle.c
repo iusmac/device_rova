@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2017, 2019, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2013 The Android Open Source Project
@@ -40,6 +40,7 @@
 
 #include <stdlib.h>
 #include <cutils/list.h>
+#include <cutils/str_parms.h>
 #include <log/log.h>
 #include <system/thread_defs.h>
 #include <tinyalsa/asoundlib.h>
@@ -53,7 +54,6 @@
 #include "bass_boost.h"
 #include "virtualizer.h"
 #include "reverb.h"
-#include "asphere.h"
 
 #ifdef DTS_EAGLE
 #include "effect_util.h"
@@ -290,7 +290,6 @@ __attribute__ ((visibility ("default")))
 int offload_effects_bundle_hal_stop_output(audio_io_handle_t output, int pcm_id)
 {
     int ret = -1;
-    struct listnode *node;
     struct listnode *fx_node;
     output_context_t *out_ctxt;
 
@@ -450,27 +449,22 @@ int offload_effects_bundle_set_hpx_state(bool hpx_state)
         }
     }
 
-exit:
     pthread_mutex_unlock(&lock);
     return ret;
 }
 
 /*
  * Effect Bundle Set and get param operations.
- * currently only handles audio sphere scenario,
- * but the interface itself can be utilized for any effect.
  */
 __attribute__ ((visibility ("default")))
-void offload_effects_bundle_get_parameters(struct str_parms *query,
-                                           struct str_parms *reply)
+void offload_effects_bundle_get_parameters(struct str_parms *query __unused,
+                                           struct str_parms *reply __unused)
 {
-    asphere_get_parameters(query, reply);
 }
 
 __attribute__ ((visibility ("default")))
-void offload_effects_bundle_set_parameters(struct str_parms *parms)
+void offload_effects_bundle_set_parameters(struct str_parms *parms __unused)
 {
-    asphere_set_parameters(parms);
 }
 
 /*
@@ -768,7 +762,6 @@ int effect_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
 {
 
     effect_context_t * context = (effect_context_t *)self;
-    int retsize;
     int status = 0;
 
     pthread_mutex_lock(&lock);
@@ -829,7 +822,6 @@ int effect_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
             status = -ENOSYS;
             goto exit;
         }
-        handle_asphere_on_effect_enabled(true, context, &created_effects_list);
         context->state = EFFECT_STATE_ACTIVE;
         if (context->ops.enable)
             context->ops.enable(context);
@@ -844,7 +836,6 @@ int effect_command(effect_handle_t self, uint32_t cmdCode, uint32_t cmdSize,
             status = -ENOSYS;
             goto exit;
         }
-        handle_asphere_on_effect_enabled(false, context, &created_effects_list);
         context->state = EFFECT_STATE_INITIALIZED;
         if (context->ops.disable)
             context->ops.disable(context);

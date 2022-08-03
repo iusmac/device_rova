@@ -15,12 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <!-- Default number of QS tile rows and columns -->
-    <integer name="config_qs_columns_portrait">4</integer>
-    <integer name="config_qs_rows_portrait">2</integer>
-    <integer name="config_qs_columns_landscape">6</integer>
-    <integer name="config_qs_rows_landscape">2</integer>
-
     <!-- FPSInfoService FPS node file path -->
     <string name="config_fpsInfoSysNode" translatable="false">/sys/devices/virtual/graphics/fb0/measured_fps</string>
 

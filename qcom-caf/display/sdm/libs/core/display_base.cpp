@@ -389,10 +389,6 @@ DisplayError DisplayBase::GetConfig(uint32_t index, DisplayConfigVariableInfo *v
   HWDisplayAttributes attrib;
   if (hw_intf_->GetDisplayAttributes(index, &attrib) == kErrorNone) {
     *variable_info = attrib;
-    if (dest_scale_enabled_ && index == mixer_config_index_) {
-      variable_info->x_pixels = mixer_attributes_.width;
-      variable_info->y_pixels = mixer_attributes_.height;
-    }
     return kErrorNone;
   }
 
@@ -515,19 +511,16 @@ DisplayError DisplayBase::SetActiveConfig(uint32_t index) {
   uint32_t active_index = 0;
 
   hw_intf_->GetActiveConfig(&active_index);
+
   if (active_index == index) {
-    if (!(dest_scale_enabled_ && index != panel_config_index_)) {
-      return kErrorNone;
-    }
+    return kErrorNone;
   }
   HWDisplayAttributes act_display_attributes = {};
   hw_intf_->GetDisplayAttributes(active_index, &act_display_attributes);
   HWDisplayAttributes new_display_attributes = {};
   hw_intf_->GetDisplayAttributes(index, &new_display_attributes);
-   if (new_display_attributes == act_display_attributes) {
-     if (!(dest_scale_enabled_ && index != panel_config_index_)) {
-      return kErrorNone;
-    }
+   if(new_display_attributes == act_display_attributes) {
+     return kErrorNone;
    }
   error = hw_intf_->SetDisplayAttributes(index);
   if (error != kErrorNone) {

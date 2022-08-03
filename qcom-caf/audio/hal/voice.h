@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2018, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2020, The Linux Foundation. All rights reserved.
  * Not a contribution.
  *
  * Copyright (C) 2013 The Android Open Source Project
@@ -23,11 +23,7 @@
 #define BASE_SESS_IDX       0
 #define VOICE_SESS_IDX     (BASE_SESS_IDX)
 
-#ifdef MULTI_VOICE_SESSION_ENABLED
 #define MAX_VOICE_SESSIONS 7
-#else
-#define MAX_VOICE_SESSIONS 1
-#endif
 
 #define BASE_CALL_STATE     1
 #define CALL_INACTIVE       (BASE_CALL_STATE)
@@ -60,10 +56,23 @@ struct voice_session {
 struct voice {
     struct voice_session session[MAX_VOICE_SESSIONS];
     int tty_mode;
+    bool hac;
     bool mic_mute;
     bool use_device_mute;
     float volume;
     bool in_call;
+    bool lte_call;
+    bool uc_active;
+};
+
+struct power_mode_cfg {
+   bool enable;
+   char *mixer_ctl;
+};
+
+struct island_cfg {
+   bool enable;
+   char *mixer_ctl;
 };
 
 enum {
@@ -83,8 +92,11 @@ void voice_get_parameters(struct audio_device *adev, struct str_parms *query,
                           struct str_parms *reply);
 void voice_init(struct audio_device *adev);
 bool voice_is_in_call(const struct audio_device *adev);
+bool voice_is_in_call_or_call_screen(const struct audio_device *adev);
 bool voice_is_in_call_rec_stream(const struct stream_in *in);
+bool voice_is_uc_active(const struct audio_device *adev);
 int voice_set_mic_mute(struct audio_device *dev, bool state);
+bool voice_is_lte_call_active(struct audio_device *adev);
 bool voice_get_mic_mute(struct audio_device *dev);
 int voice_set_volume(struct audio_device *adev, float volume);
 int voice_check_and_set_incall_rec_usecase(struct audio_device *adev,
@@ -102,6 +114,7 @@ void voice_check_and_update_aanc_path(struct audio_device *adev,
                                       snd_device_t out_snd_device,
                                       bool enable);
 bool voice_is_call_state_active(struct audio_device *adev);
+bool voice_is_call_state_active_in_call(struct audio_device *adev);
 void voice_set_device_mute_flag (struct audio_device *adev, bool state);
 snd_device_t voice_get_incall_rec_backend_device(struct stream_in *in);
 bool voice_check_voicecall_usecases_active(struct audio_device *adev);

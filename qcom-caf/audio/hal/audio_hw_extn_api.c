@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2016-2017, The Linux Foundation. All rights reserved.
+* Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -34,6 +34,7 @@
 #include <inttypes.h>
 #include <errno.h>
 #include <log/log.h>
+#include <cutils/atomic.h>
 #include <pthread.h>
 
 #include <hardware/audio.h>
@@ -141,6 +142,10 @@ int qahwi_get_param_data(const struct audio_hw_device *adev,
               ret = audio_extn_get_sourcetrack_data(dev,
                      (struct source_tracking_param*)payload);
               break;
+        case AUDIO_EXTN_PARAM_LICENSE_PARAMS:
+              ret = audio_extn_utils_get_license_params(dev,
+                     (struct audio_license_params *)(payload));
+              break;
        default:
              ALOGE("%s::INVALID PARAM ID:%d\n",__func__,param_id);
              ret = -EINVAL;
@@ -187,6 +192,31 @@ int qahwi_set_param_data(struct audio_hw_device *adev,
     return ret;
 }
 
+int qahwi_in_stop(struct audio_stream_in* stream) {
+    struct stream_in *in = (struct stream_in *)stream;
+    struct audio_device *adev = in->dev;
+
+    ALOGD("%s processing, in %p", __func__, in);
+
+    pthread_mutex_lock(&adev->lock);
+
+    if (!in->standby) {
+        if (in->pcm != NULL ) {
+            pcm_stop(in->pcm);
+        } else if (audio_extn_cin_attached_usecase(in)) {
+            audio_extn_cin_stop_input_stream(in);
+        }
+
+        /* Set the atomic variable when the session is stopped */
+        if (android_atomic_acquire_cas(false, true, &(in->capture_stopped)) == 0)
+            ALOGI("%s: capture_stopped bit set", __func__);
+    }
+
+    pthread_mutex_unlock(&adev->lock);
+
+    return 0;
+}
+
 ssize_t qahwi_in_read_v2(struct audio_stream_in *stream, void* buffer,
                           size_t bytes, uint64_t *timestamp)
 {
@@ -201,7 +231,8 @@ ssize_t qahwi_in_read_v2(struct audio_stream_in *stream, void* buffer,
         return -EINVAL;
     }
     if (COMPRESSED_TIMESTAMP_FLAG &&
-        (in->flags & AUDIO_INPUT_FLAG_TIMESTAMP)) {
+        ((in->flags & AUDIO_INPUT_FLAG_TIMESTAMP) ||
+         (in->flags & AUDIO_INPUT_FLAG_PASSTHROUGH))) {
         if (bytes != in->stream.common.get_buffer_size(&stream->common)) {
             ALOGE("%s: bytes requested must be fragment size in timestamp mode!", __func__);
             return -EINVAL;
@@ -210,10 +241,15 @@ ssize_t qahwi_in_read_v2(struct audio_stream_in *stream, void* buffer,
         buf = (char *) in->qahwi_in.ibuf;
         ret = in->qahwi_in.base.read(&in->stream, (void *)buf, bytes + mdata_size);
         if (ret == bytes + mdata_size) {
-           bytes_read = bytes;
-           memcpy(buffer, buf + mdata_size, bytes);
+           mdata = (struct snd_codec_metadata *) buf;
+           bytes_read = mdata->length;
+           if (bytes_read > bytes) {
+              ALOGE("%s: bytes requested to small (given %zu, required %zu)",
+                 __func__, bytes, bytes_read);
+              return -EINVAL;
+           }
+           memcpy(buffer, buf + mdata_size, bytes_read);
            if (timestamp) {
-               mdata = (struct snd_codec_metadata *) buf;
                *timestamp = mdata->timestamp;
            }
         } else {
@@ -278,7 +314,8 @@ static int qahwi_open_input_stream(struct audio_hw_device *dev,
     in->qahwi_in.is_inititalized = true;
 
     if (COMPRESSED_TIMESTAMP_FLAG &&
-        (flags & AUDIO_INPUT_FLAG_TIMESTAMP)) {
+        ((in->flags & AUDIO_INPUT_FLAG_TIMESTAMP) ||
+         (in->flags & AUDIO_INPUT_FLAG_PASSTHROUGH))) {
         // set read to NULL as this is not supported in timestamp mode
         in->stream.read = NULL;
 
@@ -410,6 +447,19 @@ static int qahwi_open_output_stream(struct audio_hw_device *dev,
         ALOGD("%s: obuf %p, buff_size %zd",
               __func__, out->qahwi_out.obuf, buf_size);
     }
+    return ret;
+}
+
+int qahwi_loopback_set_param_data(audio_patch_handle_t handle,
+                                  audio_extn_loopback_param_id param_id,
+                                  audio_extn_loopback_param_payload *payload) {
+    int ret = 0;
+
+    ret = audio_extn_hw_loopback_set_param_data(
+                                             handle,
+                                             param_id,
+                                             payload);
+
     return ret;
 }
 

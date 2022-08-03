@@ -81,6 +81,7 @@ include $(CLEAR_VARS)
 
 # Common Includes
 libmm-vdec-inc          := $(LOCAL_PATH)/inc
+libmm-vdec-inc          += $(LIBION_HEADER_PATHS)
 libmm-vdec-inc          += $(call project-path-for,qcom-media)/mm-video-v4l2/vidc/common/inc
 libmm-vdec-inc          += $(call project-path-for,qcom-media)/mm-core/inc
 libmm-vdec-inc          += $(TARGET_OUT_HEADERS)/adreno
@@ -136,6 +137,7 @@ LOCAL_VENDOR_MODULE             := true
 LOCAL_CFLAGS                    := $(libmm-vdec-def) -Werror
 
 LOCAL_HEADER_LIBRARIES := \
+        display_headers \
         media_plugin_headers \
         libnativebase_headers \
         libutils_headers \
@@ -176,6 +178,7 @@ LOCAL_VENDOR_MODULE           := true
 LOCAL_CFLAGS                  := $(libmm-vdec-def)
 
 LOCAL_HEADER_LIBRARIES := \
+        display_headers \
         media_plugin_headers \
         libnativebase_headers \
         libutils_headers \

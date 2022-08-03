@@ -6,28 +6,9 @@
 
 // fstab
 
-soong_config_module_type {
-    name: "xiaomi_msm8937_rootdir_prebuilt_etc",
-    module_type: "prebuilt_etc",
-    config_namespace: "XIAOMI_MSM8937_ROOTDIR",
-    variables: ["VENDOR_PARTITION"],
-    properties: ["src"],
-}
-
-soong_config_string_variable {
-    name: "VENDOR_PARTITION",
-    values: ["vendor"],
-}
-
-xiaomi_msm8937_rootdir_prebuilt_etc {
+prebuilt_etc {
     name: "fstab.qcom",
-    soong_config_variables: {
-        VENDOR_PARTITION: {
-            vendor: {
-                src: "etc/fstab_vendor-as-vendor.qcom",
-            },
-        },
-    },
+    src: "etc/fstab.qcom",
     vendor: true,
 }
 
@@ -76,13 +57,6 @@ prebuilt_etc {
 }
 
 prebuilt_etc {
-    name: "init.performance_level.rc",
-    src: "etc/init.performance_level.rc",
-    sub_dir: "init",
-    vendor: true,
-}
-
-prebuilt_etc {
     name: "init.xiaomi.device.rc",
     src: "etc/init.xiaomi.device.rc",
     sub_dir: "init/hw",
@@ -106,6 +80,12 @@ prebuilt_etc {
 // Configuration scripts
 
 sh_binary {
+    name: "init.class_main.sh",
+    src: "bin/init.class_main.sh",
+    vendor: true,
+}
+
+sh_binary {
     name: "init.qcom.sh",
     src: "bin/init.qcom.sh",
     vendor: true,
@@ -120,6 +100,13 @@ sh_binary {
 sh_binary {
     name: "init.qcom.post_boot.sh",
     src: "bin/init.qcom.post_boot.sh",
+    vendor: true,
+}
+
+
+sh_binary {
+    name: "init.qcom.sensors.sh",
+    src: "bin/init.qcom.sensors.sh",
     vendor: true,
 }
 

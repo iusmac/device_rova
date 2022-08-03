@@ -1,0 +1,5 @@
+runtime_resource_overlay {
+    name: "xiaomi_rolex_overlay_lineage",
+    sdk_version: "current",
+    vendor: true,
+}

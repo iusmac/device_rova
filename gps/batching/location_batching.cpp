@@ -131,3 +131,4 @@ static void getBatchedLocations(LocationAPI* client, uint32_t id, size_t count)
         gBatchingAdapter->getBatchedLocationsCommand(client, id, count);
     }
 }
+

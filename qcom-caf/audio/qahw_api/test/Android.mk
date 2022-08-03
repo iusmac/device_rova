@@ -33,6 +33,9 @@ LOCAL_32_BIT_ONLY := true
 LOCAL_C_INCLUDES += $(hal-play-inc)
 LOCAL_VENDOR_MODULE := true
 
+ifneq ($(filter kona lahaina holi,$(TARGET_BOARD_PLATFORM)),)
+LOCAL_SANITIZE := integer_overflow
+endif
 include $(BUILD_EXECUTABLE)
 
 # audio_hal_multi_record_test
@@ -54,4 +57,7 @@ LOCAL_32_BIT_ONLY := true
 
 LOCAL_VENDOR_MODULE := true
 
+ifneq ($(filter kona lahaina holi,$(TARGET_BOARD_PLATFORM)),)
+LOCAL_SANITIZE := integer_overflow
+endif
 include $(BUILD_EXECUTABLE)

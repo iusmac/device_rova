@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, 2017-2018, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2014-2015, 2017-2019, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -113,9 +113,14 @@
  */
 #define AUDIO_INPUT_FLAG_TIMESTAMP 0x80000000
 #define AUDIO_INPUT_FLAG_COMPRESS  0x40000000
+#define AUDIO_INPUT_FLAG_PASSTHROUGH 0x20000000
 
 /* MAX SECTORS for sourcetracking feature */
 #define MAX_SECTORS 8
+
+/* Max length for license string */
+#define AUDIO_PRODUCT_STR_MAX_LENGTH (64)
+#define AUDIO_LICENSE_STR_MAX_LENGTH (64)
 
 struct source_tracking_param {
     uint8_t   vad[MAX_SECTORS];
@@ -207,11 +212,21 @@ typedef enum {
                                                  */
 } audio_extn_callback_id;
 
+typedef int audio_stream_callback_t(audio_extn_callback_id event,
+                                    void *param,
+                                    void *cookie);
+
+struct audio_stream_callback_param {
+    audio_stream_callback_t *cb;    /* callback function */
+    void *cookie;                   /* callback context */
+};
+
 #define AUDIO_MAX_ADSP_STREAM_CMD_PAYLOAD_LEN 504
 
 typedef enum {
     AUDIO_STREAM_PP_EVENT = 0,
     AUDIO_STREAM_ENCDEC_EVENT = 1,
+    AUDIO_COPP_EVENT = 3,
 } audio_event_id;
 
 /* payload format for HAL parameter
@@ -243,6 +258,12 @@ struct audio_device_config_param {
    struct audio_device_cfg_param dev_cfg_params;
 };
 
+struct audio_out_presentation_position_param {
+    struct timespec timestamp;
+    uint64_t frames;
+    int32_t clock_id;
+};
+
 typedef struct mix_matrix_params {
     uint16_t num_output_channels;
     uint16_t num_input_channels;
@@ -254,6 +275,13 @@ typedef struct mix_matrix_params {
     /* member for coefficient gains in Q14 format */
     uint32_t mixer_coeffs[AUDIO_CHANNEL_COUNT_MAX][AUDIO_CHANNEL_COUNT_MAX];
 } mix_matrix_params_t;
+
+
+typedef struct audio_license_params {
+    char product[AUDIO_PRODUCT_STR_MAX_LENGTH + 1];
+    int  key;
+    char license[AUDIO_LICENSE_STR_MAX_LENGTH + 1];
+} audio_license_params_t;
 
 typedef union {
     struct source_tracking_param st_params;
@@ -268,6 +296,8 @@ typedef union {
     struct audio_out_channel_map_param channel_map_param;
     struct audio_device_cfg_param device_cfg;
     struct mix_matrix_params mm_params;
+    struct audio_license_params license_params;
+    struct audio_out_presentation_position_param pos_param;
 } audio_extn_param_payload;
 
 typedef enum {
@@ -288,7 +318,19 @@ typedef enum {
     /* Pan/scale params to be set on ASM */
     AUDIO_EXTN_PARAM_OUT_MIX_MATRIX_PARAMS,
     /* Downmix params to be set on ADM */
-    AUDIO_EXTN_PARAM_CH_MIX_MATRIX_PARAMS
+    AUDIO_EXTN_PARAM_CH_MIX_MATRIX_PARAMS,
+    /* License information */
+    AUDIO_EXTN_PARAM_LICENSE_PARAMS,
+    AUDIO_EXTN_PARAM_OUT_PRESENTATION_POSITION,
 } audio_extn_param_id;
+
+typedef union {
+    struct audio_out_render_window_param render_window_params;
+    struct audio_stream_callback_param stream_callback_params;
+} audio_extn_loopback_param_payload;
+
+typedef enum {
+    AUDIO_EXTN_PARAM_LOOPBACK_RENDER_WINDOW /* PARAM to set render window */
+} audio_extn_loopback_param_id;
 
 #endif /* AUDIO_DEFS_H */

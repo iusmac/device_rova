@@ -1,15 +1,11 @@
 # Audio
-audio.chk.cal.us               u:object_r:audio_config_prop:s0
 audio.offload.disable          u:object_r:audio_config_prop:s0
 
 # Baseband
 vendor.gsm.version.baseband    u:object_r:baseband_prop:s0
 
 # Bluetooth
-bluetooth.hfp.client           u:object_r:vendor_bluetooth_prop:s0
 persist.vendor.btstack.        u:object_r:vendor_bluetooth_prop:s0
-ro.bluetooth.hfp.ver           u:object_r:vendor_bluetooth_prop:s0
-ro.qualcomm.bt.hci_transport   u:object_r:vendor_bluetooth_prop:s0
 
 # Camera
 camera.                        u:object_r:vendor_camera_prop:s0
@@ -22,7 +18,15 @@ persist.cam.pp.feat.mask       u:object_r:vendor_camera_prop:s0
 persist.camera.                u:object_r:camera_prop:s0
 persist.vendor.camera.         u:object_r:camera_prop:s0
 ro.camera.                     u:object_r:vendor_camera_prop:s0
+camera.clientName			   u:object_r:camera_prop:s0
+camera.client.				   u:object_r:camera_prop:s0
+camera.cpp.				       u:object_r:camera_prop:s0
+camera.debug.				   u:object_r:camera_prop:s0
+camera.llvd.preview.disable	   u:object_r:camera_prop:s0
+camera.otp.filename			   u:object_r:camera_prop:s0
+cameradaemon.SaveMemAtBoot     u:object_r:camera_prop:s0
 vendor.camera.                 u:object_r:camera_prop:s0
+vendor.camera.lowpower.record.enable	u:object_r:camera_prop:s0
 media.camera.ts.monotonic      u:object_r:camera_prop:s0
 vidc.enc.dcvs.extra-buff-count u:object_r:camera_prop:s0
 
@@ -38,7 +42,6 @@ sys.listeners.registered       u:object_r:vendor_tee_listener_prop:s0
 sys.post_boot.parsed           u:object_r:vendor_mpctl_prop:s0
 persist.net.doxlat             u:object_r:vendor_xlat_prop:s0
 ro.product.wt.boardid          u:object_r:exported_default_prop:s0
-ro.kernel.ebpf.supported       u:object_r:exported_default_prop:s0
 
 # PowerHAL
 vendor.powerhal.               u:object_r:vendor_power_prop:s0
@@ -47,6 +50,7 @@ vendor.powerhal.               u:object_r:vendor_power_prop:s0
 sys.thermal.                   u:object_r:vendor_thermal_engine_prop:s0
 
 # WiFi
+vendor.wlan.driver.ath         u:object_r:vendor_wifi_version:s0
 vendor.wlan.                   u:object_r:vendor_wifi_prop:s0
 persist.sys.dynamic.nv         u:object_r:vendor_wifi_prop:s0
 

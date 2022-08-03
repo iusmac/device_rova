@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2014 - 2018, The Linux Foundation. All rights reserved.
+* Copyright (c) 2014 - 2018, 2021, The Linux Foundation. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -533,7 +533,6 @@ void HWCDisplayPrimary::SetFrameDumpConfig(uint32_t count, uint32_t bit_mask_lay
     return;
   }
 
-  SetLayerBuffer(output_buffer_info_, &output_buffer_);
   output_buffer_base_ = buffer;
   post_processed_output_ = true;
   DisablePartialUpdateOneFrame();
@@ -634,6 +633,30 @@ DisplayError HWCDisplayPrimary::GetDynamicDSIClock(uint64_t *bitclk) {
   }
 
   return kErrorNotSupported;
+}
+
+DisplayError HWCDisplayPrimary::SetStandByMode(bool enable) {
+  if (enable) {
+    if (!display_null_.IsActive()) {
+      stored_display_intf_ = display_intf_;
+      display_intf_ = &display_null_;
+      display_null_.SetActive(true);
+      DLOGD("Null display is connected successfully");
+    } else {
+      DLOGD("Null display is already connected.");
+    }
+  } else {
+    if (display_null_.IsActive()) {
+      display_intf_ = stored_display_intf_;
+      validated_.reset();
+      display_null_.SetActive(false);
+      DLOGD("Display is connected successfully");
+    } else {
+      DLOGD("Display is already connected.");
+    }
+  }
+
+  return kErrorNone;
 }
 
 }  // namespace sdm

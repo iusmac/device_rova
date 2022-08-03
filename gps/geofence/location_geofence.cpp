@@ -142,3 +142,4 @@ static void resumeGeofences(LocationAPI* client, size_t count, uint32_t* ids)
         return gGeofenceAdapter->resumeGeofencesCommand(client, count, ids);
     }
 }
+

@@ -4,8 +4,13 @@ type init_xiaomi_exec, exec_type, vendor_file_type, file_type;
 # Allow to read FDT model
 allow init_xiaomi fdt_model:file r_file_perms;
 
+# Allow to read configs
+allow init_xiaomi vendor_configs_file:dir r_dir_perms;
+allow init_xiaomi vendor_configs_file:file r_file_perms;
+
 # Allow to set prop
 set_prop(init_xiaomi, vendor_xiaomi_prop)
+set_prop(init_xiaomi, vendor_audio_prop)
 
 # Allow for transition from init domain to init_xiaomi
 init_daemon_domain(init_xiaomi)

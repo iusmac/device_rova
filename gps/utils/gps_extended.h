@@ -111,3 +111,4 @@ struct LocPosMode
 #endif /* __cplusplus */
 
 #endif /* GPS_EXTENDED_H */
+

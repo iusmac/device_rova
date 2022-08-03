@@ -1,0 +1,2 @@
+# Shell Script
+/(vendor|system/vendor)/bin/init\.baseband\.sh				u:object_r:init_baseband_exec:s0

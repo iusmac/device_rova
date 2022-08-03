@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -60,23 +60,10 @@
 #define AUDIO_PARAMETER_FFV_EC_REF_CHANNEL_COUNT "ffv_ec_ref_channel_count"
 #define AUDIO_PARAMETER_FFV_EC_REF_DEVICE "ffv_ec_ref_dev"
 #define AUDIO_PARAMETER_FFV_CHANNEL_INDEX "ffv_channel_index"
-#define AUDIO_PARAMETER_FFV_CHANNEL_COUNT "ffv_channel_count"
 
-#if LINUX_ENABLED
-#define FFV_CONFIG_FILE_PATH "/etc/BF_1out.cfg"
-#ifdef __LP64__
-#define FFV_LIB "/usr/lib64/libffv.so"
-#else
-#define FFV_LIB "/usr/lib/libffv.so"
-#endif
-#else
-#define FFV_CONFIG_FILE_PATH "/vendor/etc/BF_1out.cfg"
-#ifdef __LP64__
-#define FFV_LIB "/vendor/lib64/libffv.so"
-#else
-#define FFV_LIB "/vendor/lib/libffv.so"
-#endif
-#endif
+
+#define FFV_CONFIG_FILE_NAME "BF_1out.cfg"
+#define FFV_LIB_NAME "libffv.so"
 
 #define FFV_SAMPLING_RATE_16000 16000
 #define FFV_EC_REF_LOOPBACK_DEVICE_MONO "ec-ref-loopback-mono"
@@ -84,7 +71,7 @@
 
 #define FFV_CHANNEL_MODE_MONO 1
 #define FFV_CHANNEL_MODE_STEREO 2
-#define FFV_CHANNEL_MODE_QUAD 4
+#define FFV_CHANNEL_MODE_QUAD 6
 #define FFV_CHANNEL_MODE_HEX 6
 #define FFV_CHANNEL_MODE_OCT 8
 
@@ -118,7 +105,8 @@ do {\
 static FfvStatusType (*ffv_init_fn)(void** handle, int num_tx_in_ch,
     int num_out_ch, int num_ec_ref_ch, int frame_len, int sample_rate,
     const char *config_file_name, char *svaModelBuffer,
-    uint32_t svaModelSize, int* totMemSize);
+    uint32_t svaModelSize, int* totMemSize,
+    int product_id, const char* prduct_license);
 static void (*ffv_deinit_fn)(void* handle);
 static void (*ffv_process_fn)(void *handle, const int16_t *in_pcm,
     int16_t *out_pcm, const int16_t *ec_ref_pcm);
@@ -160,7 +148,6 @@ struct ffvmodule {
     pthread_mutex_t init_lock;
     bool capture_started;
     int target_ch_idx;
-    int ch_count;
 
 #ifdef FFV_PCM_DUMP
     FILE *fp_input;
@@ -191,7 +178,6 @@ static struct ffvmodule ffvmod = {
     .handle = NULL,
     .capture_started = false,
     .target_ch_idx = -1,
-    .ch_count = 6,
 };
 
 static struct pcm_config ffv_pcm_config = {
@@ -202,18 +188,46 @@ static struct pcm_config ffv_pcm_config = {
     .format = PCM_FORMAT_S16_LE,
 };
 
+void audio_get_lib_path(char* lib_path, int path_size)
+{
+#ifdef LINUX_ENABLED
+#ifdef __LP64__
+    /* libs are stored in /usr/lib64 */
+    snprintf(lib_path, path_size, "%s", "/usr/lib64");
+#else
+    /* libs are stored in /usr/lib */
+    snprintf(lib_path, path_size, "%s", "/usr/lib");
+#endif
+#else
+#ifdef __LP64__
+    /* libs are stored in /vendor/lib64 */
+    snprintf(lib_path, path_size, "%s", "/vendor/lib64");
+#else
+    /* libs are stored in /vendor/lib */
+    snprintf(lib_path, path_size, "%s", "/vendor/lib");
+#endif
+#endif
+}
+
 static int32_t ffv_init_lib()
 {
     int status = 0;
+    char lib_path[VENDOR_CONFIG_PATH_MAX_LENGTH];
+    char lib_file[VENDOR_CONFIG_FILE_MAX_LENGTH];
 
+    /* Get path for lib in vendor */
+    audio_get_lib_path(lib_path, sizeof(lib_path));
+
+    /* Get path for ffv_lib_file */
+    snprintf(lib_file, sizeof(lib_file), "%s/%s", lib_path, FFV_LIB_NAME);
     if (ffvmod.ffv_lib_handle) {
         ALOGE("%s: FFV library is already initialized", __func__);
         return 0;
     }
 
-    ffvmod.ffv_lib_handle = dlopen(FFV_LIB, RTLD_NOW);
+    ffvmod.ffv_lib_handle = dlopen(lib_file, RTLD_NOW);
     if (!ffvmod.ffv_lib_handle) {
-        ALOGE("%s: Unable to open %s, error %s", __func__, FFV_LIB,
+        ALOGE("%s: Unable to open %s, error %s", __func__, lib_file,
             dlerror());
         status = -ENOENT;
         goto exit;
@@ -367,13 +381,13 @@ bool audio_extn_ffv_get_enabled()
 bool  audio_extn_ffv_check_usecase(struct stream_in *in) {
     int ret = false;
     int channel_count = audio_channel_count_from_in_mask(in->channel_mask);
-    audio_devices_t devices = in->device;
     audio_source_t source = in->source;
 
     if ((audio_extn_ffv_get_enabled()) &&
             (channel_count == 1) &&
             (AUDIO_SOURCE_MIC == source) &&
-            ((AUDIO_DEVICE_IN_BUILTIN_MIC == devices) || (AUDIO_DEVICE_IN_BACK_MIC == devices)) &&
+            (is_single_device_type_equal(&in->device_list, AUDIO_DEVICE_IN_BUILTIN_MIC) ||
+             is_single_device_type_equal(&in->device_list, AUDIO_DEVICE_IN_BACK_MIC)) &&
             (in->format == AUDIO_FORMAT_PCM_16_BIT) &&
             (in->sample_rate == FFV_SAMPLING_RATE_16000)) {
         in->config.channels = channel_count;
@@ -385,12 +399,12 @@ bool  audio_extn_ffv_check_usecase(struct stream_in *in) {
     return ret;
 }
 
-int audio_extn_ffv_set_usecase(struct stream_in *in)
+int audio_extn_ffv_set_usecase(struct stream_in *in, int ffv_key, char* ffv_lic)
 {
     int ret = -EINVAL;
 
     if (audio_extn_ffv_check_usecase(in)) {
-        if (!audio_extn_ffv_stream_init(in)) {
+        if (!audio_extn_ffv_stream_init(in, ffv_key, ffv_lic)) {
             ALOGD("%s: Created FFV session succesfully", __func__);
             ret = 0;
         } else {
@@ -434,13 +448,15 @@ int32_t audio_extn_ffv_deinit()
     return 0;
 }
 
-int32_t audio_extn_ffv_stream_init(struct stream_in *in)
+int32_t audio_extn_ffv_stream_init(struct stream_in *in, int key, char* lic)
 {
     uint32_t ret = -EINVAL;
     int num_tx_in_ch, num_out_ch, num_ec_ref_ch;
     int frame_len;
     int sample_rate;
-    const char *config_file_path = FFV_CONFIG_FILE_PATH;
+    const char *config_file_path;
+    char vendor_config_path[VENDOR_CONFIG_PATH_MAX_LENGTH];
+    char platform_info_xml_path_file[VENDOR_CONFIG_FILE_MAX_LENGTH];
     int total_mem_size;
     FfvStatusType status_type;
     const char *sm_buffer = "DISABLE_KEYWORD_DETECTION";
@@ -449,6 +465,11 @@ int32_t audio_extn_ffv_stream_init(struct stream_in *in)
     int param_size = 0;
     int param_id;
 
+    audio_get_vendor_config_path(vendor_config_path, sizeof(vendor_config_path));
+    /* Get path for ffv_config_file_name in vendor */
+    snprintf(platform_info_xml_path_file, sizeof(platform_info_xml_path_file),
+            "%s/%s", vendor_config_path, FFV_CONFIG_FILE_NAME);
+    config_file_path = platform_info_xml_path_file;
     if (!audio_extn_ffv_get_enabled()) {
         ALOGE("Rejecting FFV -- init is called without enabling FFV");
         goto fail;
@@ -462,9 +483,9 @@ int32_t audio_extn_ffv_stream_init(struct stream_in *in)
     ffvmod.capture_config = ffv_pcm_config;
     ffvmod.ec_ref_config = ffv_pcm_config;
     ffvmod.out_config = ffv_pcm_config;
-    /* configure capture session with 6/8/4 channels */
+    /* configure capture session with 6/8 channels */
     ffvmod.capture_config.channels = ffvmod.split_ec_ref_data ?
-                   FFV_CHANNEL_MODE_OCT : ffvmod.ch_count;
+        FFV_CHANNEL_MODE_OCT : FFV_CHANNEL_MODE_HEX;
     ffvmod.capture_config.period_size =
                    CALCULATE_PERIOD_SIZE(FFV_PCM_BUFFER_DURATION_MS,
                                          ffvmod.capture_config.rate,
@@ -493,7 +514,7 @@ int32_t audio_extn_ffv_stream_init(struct stream_in *in)
     ALOGD("%s: config file path %s", __func__, config_file_path);
     status_type = ffv_init_fn(&ffvmod.handle, num_tx_in_ch, num_out_ch, num_ec_ref_ch,
                       frame_len, sample_rate, config_file_path, (char *)sm_buffer, 0,
-                      &total_mem_size);
+                      &total_mem_size, key, lic);
     if (status_type) {
         ALOGE("%s: ERROR. ffv_init returned %d", __func__, status_type);
         ret = -EINVAL;
@@ -910,9 +931,6 @@ void audio_extn_ffv_set_parameters(struct audio_device *adev __unused,
             } else if (val == 2) {
                 ALOGD("%s: stereo ec ref", __func__);
                 ffvmod.ec_ref_ch_cnt = FFV_CHANNEL_MODE_STEREO;
-            } else if (val == 4) {
-                ALOGD("%s: quad ec ref", __func__);
-                ffvmod.ec_ref_ch_cnt = FFV_CHANNEL_MODE_QUAD;
             } else {
                 ALOGE("%s: Invalid ec ref", __func__);
             }
@@ -931,8 +949,6 @@ void audio_extn_ffv_set_parameters(struct audio_device *adev __unused,
             } else if (val & AUDIO_DEVICE_OUT_LINE) {
                 ALOGD("%s: capture ec ref from line out", __func__);
                 ffvmod.ec_ref_dev = AUDIO_DEVICE_OUT_LINE;
-            } else {
-                ALOGE("%s: Invalid ec ref out device", __func__);
             }
         }
 
@@ -949,13 +965,6 @@ void audio_extn_ffv_set_parameters(struct audio_device *adev __unused,
             str_parms_del(parms, AUDIO_PARAMETER_FFV_CHANNEL_INDEX);
             ALOGD("%s: set target chan index %d", __func__, val);
             ffvmod.target_ch_idx = val;
-        }
-
-        ret = str_parms_get_int(parms, AUDIO_PARAMETER_FFV_CHANNEL_COUNT, &val);
-        if (ret >= 0) {
-            str_parms_del(parms, AUDIO_PARAMETER_FFV_CHANNEL_COUNT);
-            ALOGD("%s: set ffv channel count %d", __func__, val);
-            ffvmod.ch_count = val;
         }
     }
 }

@@ -32,13 +32,17 @@ ONLY_TARGET=
 KANG=
 SECTION=
 
+SETUP_MAKEFILES_ARGS=
+
 while [ "${#}" -gt 0 ]; do
     case "${1}" in
         --only-common )
                 ONLY_COMMON=true
+                SETUP_MAKEFILES_ARGS+=" ${1}"
                 ;;
         --only-target )
                 ONLY_TARGET=true
+                SETUP_MAKEFILES_ARGS+=" ${1}"
                 ;;
         -n | --no-cleanup )
                 CLEAN_VENDOR=false
@@ -63,7 +67,19 @@ fi
 
 function blob_fixup() {
     case "${1}" in
-        vendor/lib/libmmsw_platform.so|libmmsw_detail_enhancement.so)
+        product/etc/permissions/vendor.qti.hardware.data.connection-V1.0-java.xml \
+        | product/etc/permissions/vendor.qti.hardware.data.connection-V1.1-java.xml)
+            sed -i 's|version="2.0"|version="1.0"|g' "${2}"
+            ;;
+        system_ext/lib64/lib-imscamera.so)
+            for LIBSHIM_IMSVIDEOCODEC in $(grep -L "libshim_imscamera.so" "${2}"); do
+                "${PATCHELF}" --add-needed "libshim_imscamera.so" "${2}"
+            done
+            ;;
+        vendor/lib64/libQmiservices.so | vendor/lib64/libril-qc-hal-qmi.so )
+            sed -i 's|libqmiservices.so|libQmiservices.so|g' "${2}"
+            ;;
+        vendor/lib/libmmsw_platform.so|vendor/lib/libmmsw_detail_enhancement.so)
             "${PATCHELF}" --remove-needed "libbinder.so" "${2}"
             sed -i 's|libgui.so|libwui.so|g' "${2}"
             ;;
@@ -96,42 +112,21 @@ function blob_fixup() {
             ;;
         vendor/lib/libmmcamera_ppeiscore.so)
             sed -i 's|libgui.so|libwui.so|g' "${2}"
-            "${PATCHELF}" --print-needed "${2}"|grep "libshims_ui.so">/dev/null
-            if [ $? -ne 0 ]; then
+            if ! "${PATCHELF}" --print-needed "${2}" | grep "libshims_ui.so" >/dev/null; then
                 "${PATCHELF}" --add-needed "libshims_ui.so" "${2}"
             fi
             ;;
         vendor/lib/libmpbase.so)
             "${PATCHELF}" --replace-needed "libandroid.so" "libshims_android.so" "${2}"
             ;;
-        product/etc/permissions/vendor.qti.hardware.data.connection-V1.0-java.xml|product/etc/permissions/vendor.qti.hardware.data.connection-V1.1-java.xml)
-            sed -i 's/version="2.0"/version="1.0"/g' "${2}"
-            ;;
-        product/lib64/libdpmframework.so)
-            for LIBSHIM_DPMFRAMEWORK in $(grep -L "libshim_dpmframework.so" "${2}"); do
-                "${PATCHELF}" --add-needed "libshim_dpmframework.so" "${2}"
-            done
-            ;;
-        product/lib64/lib-imsvideocodec.so)
-            for LIBSHIM_IMSVIDEOCODEC in $(grep -L "libshim_imsvideocodec.so" "${2}"); do
-                "${PATCHELF}" --add-needed "libshim_imsvideocodec.so" "${2}"
-            done
-            ;;
-        vendor/lib/mediadrm/libwvdrmengine.so|vendor/lib64/mediadrm/libwvdrmengine.so)
-            "${PATCHELF}" --replace-needed "libprotobuf-cpp-lite.so" "libprotobuf-cpp-lite-v29.so" "${2}"
-            ;;
-        vendor/lib64/libsettings.so)
-            "${PATCHELF}" --replace-needed "libprotobuf-cpp-full.so" "libprotobuf-cpp-full-v29.so" "${2}"
-            ;;
-        vendor/lib64/libwvhidl.so)
-            "${PATCHELF}" --replace-needed "libprotobuf-cpp-lite.so" "libprotobuf-cpp-lite-v29.so" "${2}"
-            ;;
     esac
 }
 
+if [ -z "${ONLY_TARGET}" ]; then
     # Initialize the helper
     setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" true "${CLEAN_VENDOR}"
 
     extract "${MY_DIR}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
+fi
 
 "${MY_DIR}/setup-makefiles.sh"

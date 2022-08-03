@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2011 The Android Open Source Project
@@ -22,7 +22,7 @@
 
 #include <qahw_effect_api.h>
 
-#if __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -50,7 +50,9 @@ typedef enum
     EQ_PARAM_CUR_PRESET,            // Gets/Sets the current preset.
     EQ_PARAM_GET_NUM_OF_PRESETS,    // Gets the total number of presets the equalizer supports.
     EQ_PARAM_GET_PRESET_NAME,       // Gets the preset name based on the index.
-    EQ_PARAM_PROPERTIES             // Gets/Sets all parameters at a time.
+    EQ_PARAM_PROPERTIES,            // Gets/Sets all parameters at a time.
+    EQ_PARAM_LATENCY = 0x80000000   // Internal paramter specific to qahw.
+                                    // Used to get latency introduced by equalizer effect.
 } qahw_equalizer_params;
 
 enum
@@ -76,7 +78,7 @@ typedef struct s_equalizer_settings {
     uint16_t bandLevels[];
 } qahw_equalizer_settings;
 
-#if __cplusplus
+#ifdef __cplusplus
 }  // extern "C"
 #endif
 

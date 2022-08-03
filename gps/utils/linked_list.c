@@ -322,3 +322,4 @@ linked_list_err_type linked_list_search(void* list_data, void **data_p,
 
    return eLINKED_LIST_SUCCESS;
 }
+

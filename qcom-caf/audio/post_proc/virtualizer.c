@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, 2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2015, 2017-2019, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2013 The Android Open Source Project
@@ -21,6 +21,7 @@
 //#define LOG_NDEBUG 0
 
 #include <cutils/list.h>
+#include <cutils/properties.h>
 #include <log/log.h>
 #include <tinyalsa/asoundlib.h>
 #include <sound/audio_effects.h>
@@ -104,13 +105,14 @@ int virtualizer_set_strength(virtualizer_context_t *context, uint32_t strength)
  *  true      device is applicable for effect
  */
 bool virtualizer_is_device_supported(audio_devices_t device) {
+    if ((property_get_bool("vendor.audio.feature.afe_proxy.enable", false)) &&
+        (device == AUDIO_DEVICE_OUT_PROXY))
+           return false;
+
     switch (device) {
     case AUDIO_DEVICE_OUT_SPEAKER:
     case AUDIO_DEVICE_OUT_BLUETOOTH_SCO_CARKIT:
     case AUDIO_DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER:
-#ifdef AFE_PROXY_ENABLED
-    case AUDIO_DEVICE_OUT_PROXY:
-#endif
     case AUDIO_DEVICE_OUT_AUX_DIGITAL:
     case AUDIO_DEVICE_OUT_USB_ACCESSORY:
     case AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET:
@@ -292,7 +294,6 @@ int virtualizer_get_parameter(effect_context_t *context, effect_param_t *p,
     int32_t *param_tmp = (int32_t *)p->data;
     int32_t param = *param_tmp++;
     void *value = p->data + voffset;
-    int i;
 
     ALOGV("%s: ctxt %p, param %d", __func__, virt_ctxt, param);
 
@@ -316,6 +317,11 @@ int virtualizer_get_parameter(effect_context_t *context, effect_param_t *p,
     case VIRTUALIZER_PARAM_VIRTUALIZATION_MODE:
         if (p->vsize != sizeof(uint32_t))
            p->status = -EINVAL;
+        p->vsize = sizeof(uint32_t);
+        break;
+    case VIRTUALIZER_PARAM_LATENCY:
+        if (p->vsize < sizeof(uint32_t))
+            p->status = -EINVAL;
         p->vsize = sizeof(uint32_t);
         break;
     default:
@@ -359,6 +365,10 @@ int virtualizer_get_parameter(effect_context_t *context, effect_param_t *p,
 
     case VIRTUALIZER_PARAM_VIRTUALIZATION_MODE:
         *(uint32_t *)value  = (uint32_t) virtualizer_get_virtualization_mode(virt_ctxt);
+        break;
+
+    case VIRTUALIZER_PARAM_LATENCY:
+        *(uint32_t *)value = VIRUALIZER_MAX_LATENCY;
         break;
 
     default:
@@ -452,10 +462,8 @@ int virtualizer_set_device(effect_context_t *context, uint32_t device)
     return 0;
 }
 
-int virtualizer_reset(effect_context_t *context)
+int virtualizer_reset(effect_context_t *context __unused)
 {
-    virtualizer_context_t *virt_ctxt = (virtualizer_context_t *)context;
-
     return 0;
 }
 

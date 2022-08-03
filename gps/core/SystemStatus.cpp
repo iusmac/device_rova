@@ -1,4 +1,4 @@
-/* Copyright (c) 2017, 2019, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -1287,6 +1287,14 @@ void SystemStatus::destroyInstance()
     mInstance = NULL;
 }
 
+void SystemStatus::resetNetworkInfo() {
+    for (int i=0; i<mCache.mNetworkInfo.size(); ++i) {
+        // Reset all the cached NetworkInfo Items as disconnected
+        eventConnectionStatus(false, mCache.mNetworkInfo[i].mType, mCache.mNetworkInfo[i].mRoaming,
+                mCache.mNetworkInfo[i].mNetworkHandle);
+    }
+}
+
 IOsObserver* SystemStatus::getOsObserver()
 {
     return &mSysStatusObsvr;
@@ -1346,6 +1354,9 @@ SystemStatus::SystemStatus(const MsgTask* msgTask) :
 template <typename TYPE_REPORT, typename TYPE_ITEM>
 bool SystemStatus::setIteminReport(TYPE_REPORT& report, TYPE_ITEM&& s)
 {
+    if (s.ignore()) {
+        return false;
+    }
     if (!report.empty() && report.back().equals(static_cast<TYPE_ITEM&>(s.collate(report.back())))) {
         // there is no change - just update reported timestamp
         report.back().mUtcReported = s.mUtcReported;
@@ -1745,3 +1756,4 @@ bool SystemStatus::updatePowerConnectState(bool charging)
     return true;
 }
 } // namespace loc_core
+

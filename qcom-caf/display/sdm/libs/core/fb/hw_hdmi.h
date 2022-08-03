@@ -129,8 +129,6 @@ class HWHDMI : public HWDevice {
   mdp_color_space cdm_color_space_ = {};
   bool cdm_color_space_commit_ = false;
   DisplayInterfaceFormat pref_fmt_ = DisplayInterfaceFormat::kFormatNone;
-  uint32_t physical_screen_width_ = 240;
-  uint32_t physical_screen_height_ = 135;
 };
 
 }  // namespace sdm

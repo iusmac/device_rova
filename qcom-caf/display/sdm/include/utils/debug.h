@@ -75,7 +75,6 @@ class Debug {
   static bool IsRotatorUbwcDisabled();
   static bool IsRotatorSplitDisabled();
   static bool IsScalarDisabled();
-  static bool IsDetailEnhancerEnabled();
   static bool IsUbwcTiledFrameBuffer();
   static bool IsAVRDisabled();
   static bool IsExtAnimDisabled();

@@ -14,14 +14,11 @@ if AFE_PROXY
 AM_CFLAGS += -DAFE_PROXY_ENABLED
 endif
 
+AM_CFLAGS += -DAUDIO_GKI_ENABLED
+
 if HW_ACC_EFFECT
 AM_CFLAGS += -DHW_ACCELERATED_EFFECTS
 c_sources += hw_accelerator.c
-endif
-
-if AUDIOSPHERE
-AM_CFLAGS += -DAUDIOSPHERE_ENABLED
-c_sources += asphere.c
 endif
 
 library_include_HEADERS = $(h_sources)

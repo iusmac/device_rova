@@ -52,3 +52,4 @@ public:
 } // namespace loc_core
 
 #endif //__DATAITEMFACTORYBASE__
+

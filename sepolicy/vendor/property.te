@@ -1,8 +1,11 @@
+# Baseband
+vendor_public_prop(baseband_prop);
+
 # Camera
 system_vendor_config_prop(vendor_camera_prop)
 
 # Dirac
-vendor_internal_prop(dirac_prop)
+vendor_public_prop(dirac_prop)
 
 # Power HAL
 vendor_internal_prop(vendor_power_prop)
@@ -14,4 +17,4 @@ vendor_internal_prop(vendor_thermal_engine_prop)
 vendor_internal_prop(vendor_wifi_prop)
 
 # Xiaomi
-vendor_internal_prop(vendor_xiaomi_prop)
+vendor_public_prop(vendor_xiaomi_prop)

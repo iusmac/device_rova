@@ -9,7 +9,6 @@
 /dev/block/platform/soc/7824900.sdhci/by-name/rpm             u:object_r:custom_ab_block_device:s0
 /dev/block/platform/soc/7824900.sdhci/by-name/sbl1             u:object_r:custom_ab_block_device:s0
 /dev/block/platform/soc/7824900.sdhci/by-name/tz             u:object_r:custom_ab_block_device:s0
-/dev/block/mmcblk0p26		                                 u:object_r:persist_block_device:s0
 
 # Camera sockets
 /data/vendor/qcam(/.*)?		u:object_r:vendor_camera_data_file:s0
@@ -56,13 +55,12 @@
 /(vendor|system/vendor)/bin/hw/android\.hardware\.power\.stats@1\.0-service\.mock              u:object_r:hal_power_stats_default_exec:s0
 
 # Shell Script
-/(vendor|system/vendor)/bin/init\.baseband\.sh	u:object_r:init_baseband_exec:s0
 /(vendor|system/vendor)/bin/init\.xiaomi\..*\.sh			u:object_r:init_xiaomi_exec:s0
+
+# Sensors
+/persist/sensors(/.*)?                          u:object_r:sensors_persist_file:s0
 
 # Sys files
 /sys/devices(/platform)?/soc/78b6000\.i2c/i2c-2/2-[0-9a-f]+/leds(/.*)?		u:object_r:sysfs_leds:s0
 /sys/devices(/platform)?/soc/leds-qpnp-[0-9]+/leds(/.*)?				u:object_r:sysfs_leds:s0
 /sys/devices/soc/78b7000\.i2c/i2c-3/3-[0-9a-f]+/disable_keys            u:object_r:proc_touchpanel:s0
-
-# Executables
-/(vendor|system/vendor)/bin/wcnss_service_daisy		u:object_r:wcnss_service_exec:s0
