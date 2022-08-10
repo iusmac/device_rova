@@ -40,7 +40,7 @@
 
         <activity
             android:name=".soundcontrol.SoundControlSettingsActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/advanced_settings">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS" />
@@ -53,7 +53,7 @@
 
         <activity
             android:name=".dirac.DiracActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/dirac_title">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS" />
@@ -66,7 +66,7 @@
 
         <activity
             android:name=".speaker.ClearSpeakerActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/clear_speaker_title">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS" />
@@ -81,7 +81,7 @@
 
         <activity
             android:name=".smartcharging.SmartChargingActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/smart_charging_title">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS" />
@@ -100,5 +100,17 @@
         <service android:name=".smartcharging.SmartChargingService"
                 android:exported="false">
         </service>
+
+        <provider
+            android:name=".PartsSearchIndexablesProvider"
+            android:authorities="org.lineageos.settings"
+            android:multiprocess="false"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.READ_SEARCH_INDEXABLES"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.action.SEARCH_INDEXABLES_PROVIDER" />
+            </intent-filter>
+        </provider>
     </application>
 </manifest>

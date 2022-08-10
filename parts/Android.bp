@@ -16,6 +16,7 @@ android_app {
     overrides: ["AudioFX"],
 
     static_libs: [
+        "androidx.core_core",
         "org.lineageos.settings.resources",
     ],
 
