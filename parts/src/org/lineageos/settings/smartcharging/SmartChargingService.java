@@ -35,6 +35,10 @@ public class SmartChargingService extends Service {
     private boolean mBatteryMonitorRegistered = false;
     private SharedPreferences mSharedPrefs;
 
+    private enum stopChargingReason { OVERHEATED, OVERCHARGED, UNKNOWN }
+    private static stopChargingReason sLastStopChargingReason =
+        stopChargingReason.UNKNOWN;
+
     public BroadcastReceiver mBatteryMonitor = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -82,7 +86,7 @@ public class SmartChargingService extends Service {
 
         final int chargingLimit = SmartCharging.getChargingLimit(sharedPrefs);
         final int chargingResume = SmartCharging.getChargingResume(sharedPrefs);
-        final int tempLimit = SmartCharging.getTempLimit(sharedPrefs);
+        int tempLimit = SmartCharging.getTempLimit(sharedPrefs);
 
         if (DEBUG) {
             String msg1 = String.format("Kernel Charging Enabled: %s",
@@ -91,20 +95,39 @@ public class SmartChargingService extends Service {
                     battCap, chargingLimit, chargingResume);
             String msg3 = String.format("Battery Temperature: %.2f°C (Limit: %d°C)",
                     battTemp, tempLimit);
-            Log.d(TAG, msg1 + ", " + msg2 + ", " + msg3);
+            String msg4 = String.format("Last charging stop reason: %s",
+                    sLastStopChargingReason);
+            Log.d(TAG, msg1 + ", " + msg2 + ", " + msg3+ ", " + msg4);
+        }
+
+        final boolean isPreviouslyOverheated =
+            sLastStopChargingReason == stopChargingReason.OVERHEATED;
+
+        // Let the battery cool down by at least 3 °C since it has overheated
+        // previously. This is just to avoid charging triggering repeatedly.
+        if (isPreviouslyOverheated) {
+            tempLimit -= 3;
         }
 
         final boolean isOvercharged = chargingLimit <= battCap;
         final boolean isOverheated = tempLimit <= battTemp;
         final boolean isResumeable = chargingResume >= battCap;
 
-        if ((isOvercharged || isOverheated) && chargingEnabled) {
+        if (chargingEnabled) {
+            if (isOvercharged) {
+                sLastStopChargingReason = stopChargingReason.OVERCHARGED;
+            } else if (isOverheated) {
+                sLastStopChargingReason = stopChargingReason.OVERHEATED;
+            } else {
+                return;
+            }
             if (DEBUG) Log.d(TAG, "Stopping charging");
             SmartCharging.disableCharging();
-        } else if (isResumeable && chargingLimit != chargingResume &&
-                !isOverheated && !chargingEnabled) {
+        } else if ((isResumeable || isPreviouslyOverheated) &&
+                chargingLimit != chargingResume && !isOverheated) {
             if (DEBUG) Log.d(TAG, "Enabling charging");
             SmartCharging.enableCharging();
+            sLastStopChargingReason = stopChargingReason.UNKNOWN;
         }
     }
 
@@ -125,6 +148,7 @@ public class SmartChargingService extends Service {
             mBatteryMonitorRegistered = false;
         }
         SmartCharging.enableCharging();
+        sLastStopChargingReason = stopChargingReason.UNKNOWN;
     }
 
     @Override
