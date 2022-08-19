@@ -26,6 +26,8 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <gps_extended_c.h>
+
 #ifndef LOCATIONAPI_H
 #define LOCATIONAPI_H
 
