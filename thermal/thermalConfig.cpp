@@ -959,6 +959,7 @@ namespace implementation {
 		true,
 	};
 
+/*
 	std::vector<struct target_therm_cfg> bcl_conf = {
 		{
 			TemperatureType::BCL_VOLTAGE,
@@ -979,6 +980,7 @@ namespace implementation {
 			true,
 		},
 	};
+*/
 
 	const std::unordered_map<int, std::vector<struct target_therm_cfg>>
 		msm_soc_map = {
@@ -1087,9 +1089,11 @@ namespace implementation {
 		}
 
 		thermalConfig.push_back(bat_conf);
+/*
 		if (!bcl_defined)
 			thermalConfig.insert(thermalConfig.end(),
 				bcl_conf.begin(), bcl_conf.end());
+*/
 		LOG(DEBUG) << "Total sensors:" << thermalConfig.size();
 	}
 }  // namespace implementation
