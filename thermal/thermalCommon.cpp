@@ -375,6 +375,7 @@ int ThermalCommon::read_cdev_state(struct therm_cdev& cdev)
 	int ret = 0;
 
 	LOG(DEBUG) << "Entering " <<__func__;
+	LOG(INFO) << "Reading state of cdev " << cdev.c.name;
 	snprintf(file_name, sizeof(file_name), CDEV_CUR_STATE_PATH,
 			cdev.cdevn);
 	ret = readLineFromFile(std::string(file_name), buf);
@@ -445,6 +446,7 @@ int ThermalCommon::read_temperature(struct therm_sensor& sensor)
 	int ret = 0;
 
 	LOG(DEBUG) << "Entering " <<__func__;
+	LOG(INFO) << "Reading sensor " << sensor.t.name;
 	snprintf(file_name, sizeof(file_name), TEMPERATURE_FILE_FORMAT,
 			sensor.tzn);
 	ret = readLineFromFile(std::string(file_name), buf);
