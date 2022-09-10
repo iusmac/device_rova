@@ -129,7 +129,7 @@ TARGET_KERNEL_SOURCE := kernel/xiaomi/rova
 TARGET_KERNEL_CONFIG := rova_defconfig
 TARGET_KERNEL_VERSION := 4.9
 TARGET_KERNEL_ADDITIONAL_FLAGS := \
-    LLVM=1 \
+    LLVM=1 LLVM_IAS=0 \
     HOSTCFLAGS="-fuse-ld=lld -Wno-unused-command-line-argument"
 
 # Media
