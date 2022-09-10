@@ -18,6 +18,8 @@
 
 package org.lineageos.settings.smartcharging;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -32,24 +34,90 @@ import androidx.preference.PreferenceManager;
 public class SmartChargingService extends Service {
     private static final String TAG = "SmartChargingService";
     private static final boolean DEBUG = false;
-    private boolean mBatteryMonitorRegistered = false;
+    private static final String BATTERY_MONITOR_UPDATE_INTENT =
+        "org.lineageos.settings.smartcharging.BatteryMonitorReceiver";
+    public BatteryMonitorReceiver mBatteryMonitorReceiver = null;
     private SharedPreferences mSharedPrefs;
 
     private enum stopChargingReason { OVERHEATED, OVERCHARGED, UNKNOWN }
     private static stopChargingReason sLastStopChargingReason =
         stopChargingReason.UNKNOWN;
 
-    public BroadcastReceiver mBatteryMonitor = new BroadcastReceiver() {
+    /*
+     * This receiver may look "hairy", but it simply does what the
+     * "ACTION_BATTERY_CHANGED" intent did before. Now we use RTC Alarm Manager
+     * to endlessly repeat the logic. This workarounds the case when the device
+     * enters in an idle state + now we check less frequently instead of every
+     * 10secs as "ACTION_BATTERY_CHANGED" intent does.
+     */
+    private class BatteryMonitorReceiver extends BroadcastReceiver {
+        private boolean mIsActive = false;
+        private AlarmManager mAlarmManager = null;
+        private PendingIntent mPendingIntent = null;
+        private Context mContext = null;
+        private SharedPreferences mSharedPrefs;
+        private SmartChargingService mService = null;
+
+        public BatteryMonitorReceiver(SmartChargingService service, Context
+                context, SharedPreferences sharedPrefs) {
+            mService = service;
+            mContext = context;
+            mSharedPrefs = sharedPrefs;
+        }
+
         @Override
         public void onReceive(Context context, Intent intent) {
             if (!SmartCharging.isPlugged()) {
                 if (DEBUG) Log.d(TAG, "Charger/USB Unplugged");
-                stopBatteryMonitoring();
+                mService.stopBatteryMonitoring();
             } else {
-                update(mSharedPrefs);
+                mService.update(mSharedPrefs);
+                start();
             }
         }
-    };
+
+        public void start() {
+            if (mAlarmManager == null) {
+                mAlarmManager = (AlarmManager)
+                    mContext.getSystemService(Context.ALARM_SERVICE);
+            }
+            if (mPendingIntent == null) {
+                Intent intent = new Intent(BATTERY_MONITOR_UPDATE_INTENT);
+                mPendingIntent = PendingIntent.getBroadcast(mContext, 0, intent,
+                        PendingIntent.FLAG_IMMUTABLE |
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+            }
+
+            int intervalMin;
+            switch (sLastStopChargingReason) {
+                case OVERHEATED:
+                    intervalMin = 5;
+                    break;
+                case OVERCHARGED:
+                    intervalMin = 15;
+                    break;
+                default:
+                    intervalMin = 3;
+            }
+
+            assert mAlarmManager != null;
+            mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                    (System.currentTimeMillis() / 1000L + intervalMin * 60) * 1000L,
+                    mPendingIntent);
+            mIsActive = true;
+        }
+
+        public void stop() {
+            if (mAlarmManager != null && mPendingIntent != null) {
+                mAlarmManager.cancel(mPendingIntent);
+            }
+            mIsActive = false;
+        }
+
+        public boolean isActive() {
+            return mIsActive;
+        }
+    }
 
     public BroadcastReceiver mPowerMonitor = new BroadcastReceiver() {
         @Override
@@ -132,20 +200,22 @@ public class SmartChargingService extends Service {
     }
 
     private void startBatteryMonitoring() {
-        if (!mBatteryMonitorRegistered) {
+        if (!mBatteryMonitorReceiver.isActive()) {
             if (DEBUG) Log.d(TAG, "Creating battery monitor service");
             IntentFilter batteryMonitor = new
-                IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-            getApplicationContext().registerReceiver(mBatteryMonitor, batteryMonitor);
-            mBatteryMonitorRegistered = true;
+                IntentFilter(BATTERY_MONITOR_UPDATE_INTENT);
+            getApplicationContext().registerReceiver(mBatteryMonitorReceiver,
+                    batteryMonitor);
+            mBatteryMonitorReceiver.start();
+            update(mSharedPrefs);
         }
     }
 
     private void stopBatteryMonitoring() {
-        if (mBatteryMonitorRegistered) {
+        if (mBatteryMonitorReceiver.isActive()) {
             if (DEBUG) Log.d(TAG, "Destroying battery monitor service");
-            getApplicationContext().unregisterReceiver(mBatteryMonitor);
-            mBatteryMonitorRegistered = false;
+            getApplicationContext().unregisterReceiver(mBatteryMonitorReceiver);
+            mBatteryMonitorReceiver.stop();
         }
         SmartCharging.enableCharging();
         sLastStopChargingReason = stopChargingReason.UNKNOWN;
@@ -155,13 +225,17 @@ public class SmartChargingService extends Service {
     public void onCreate() {
         if (DEBUG) Log.d(TAG, "Creating service");
         super.onCreate();
-        mSharedPrefs =
-            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Context ctx = getApplicationContext();
+        mSharedPrefs = PreferenceManager
+            .getDefaultSharedPreferences(ctx);
 
         IntentFilter powerMonitor = new IntentFilter();
         powerMonitor.addAction(Intent.ACTION_POWER_CONNECTED);
         powerMonitor.addAction(Intent.ACTION_POWER_DISCONNECTED);
         registerReceiver(mPowerMonitor, powerMonitor);
+
+        mBatteryMonitorReceiver = new BatteryMonitorReceiver(this, ctx,
+                mSharedPrefs);
 
         if (SmartCharging.isPlugged()) {
             startBatteryMonitoring();
