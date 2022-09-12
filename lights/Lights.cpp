@@ -85,8 +85,8 @@ ndk::ScopedAStatus Lights::getLights(std::vector<HwLight>* lights) {
 
 // device methods
 void Lights::setSpeakerLightLocked(const HwLightState& state) {
-    uint32_t alpha, red, green, blue;
-    uint32_t blink;
+    uint8_t alpha, red, green, blue;
+    uint8_t blink;
     bool rc = true;
 
     // Extract brightness from AARRGGBB
@@ -142,14 +142,14 @@ void Lights::handleSpeakerBatteryLocked() {
         return setSpeakerLightLocked(mNotification);
 }
 
-bool Lights::setLedBreath(led_type led, uint32_t value) {
+bool Lights::setLedBreath(led_type led, uint8_t value) {
     if (!access(((mWhiteLed ? led_paths[WHITE] : led_paths[RED]) + "breath").c_str(), W_OK))
         return WriteToFile(led_paths[led] + "breath", value);
     else
         return WriteToFile(led_paths[led] + "blink", value);
 }
 
-bool Lights::setLedBrightness(led_type led, uint32_t value) {
+bool Lights::setLedBrightness(led_type led, uint8_t value) {
     return WriteToFile(led_paths[led] + "brightness", value);
 }
 
@@ -158,14 +158,14 @@ bool Lights::IsLit(uint32_t color) {
     return color & 0x00ffffff;
 }
 
-uint32_t Lights::RgbaToBrightness(uint32_t color) {
+uint8_t Lights::RgbaToBrightness(uint32_t color) {
     // Extract brightness from AARRGGBB.
-    uint32_t alpha = (color >> 24) & 0xFF;
+    uint8_t alpha = (color >> 24) & 0xFF;
 
     // Retrieve each of the RGB colors
-    uint32_t red = (color >> 16) & 0xFF;
-    uint32_t green = (color >> 8) & 0xFF;
-    uint32_t blue = color & 0xFF;
+    uint8_t red = (color >> 16) & 0xFF;
+    uint8_t green = (color >> 8) & 0xFF;
+    uint8_t blue = color & 0xFF;
 
     // Scale RGB colors if a brightness has been applied by the user
     if (alpha != 0xFF) {

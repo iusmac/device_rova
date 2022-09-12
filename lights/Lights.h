@@ -41,12 +41,12 @@ private:
     void setSpeakerLightLocked(const HwLightState& state);
     void handleSpeakerBatteryLocked();
 
-    bool setLedBreath(led_type led, uint32_t value);
-    bool setLedBrightness(led_type led, uint32_t value);
+    bool setLedBreath(led_type led, uint8_t value);
+    bool setLedBrightness(led_type led, uint8_t value);
 
-    bool IsLit(uint32_t color);
-    uint32_t RgbaToBrightness(uint32_t color);
+    uint8_t RgbaToBrightness(uint32_t color);
     bool WriteToFile(const std::string& path, uint32_t content);
+    bool IsLit(uint32_t color);
 
     std::string mBacklightNode;
     bool mWhiteLed;
