@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2019-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -67,16 +67,14 @@ struct GnssVisibilityControl : public IGnssVisibilityControl {
      */
     Return<bool> setCallback(const ::android::sp<::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControlCallback>& callback) override;
 
-    void statusCb(GnssNfwNotification notification);
-    bool isE911Session();
-
     /* Data call setup callback passed down to GNSS HAL implementation */
-    static void nfwStatusCb(GnssNfwNotification notification);
-    static bool isInEmergencySession();
+    void nfwStatusCb(GnssNfwNotification notification);
+    bool isInEmergencySession();
 
 private:
     Gnss* mGnss = nullptr;
     sp<IGnssVisibilityControlCallback> mGnssVisibilityControlCbIface = nullptr;
+    mutable std::mutex mMutex;
 };
 
 

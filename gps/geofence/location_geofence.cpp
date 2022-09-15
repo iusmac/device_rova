@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2019, 2021, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -44,6 +44,8 @@ static void modifyGeofences(LocationAPI* client, size_t count, uint32_t* ids,
                                GeofenceOption* options);
 static void pauseGeofences(LocationAPI* client, size_t count, uint32_t* ids);
 static void resumeGeofences(LocationAPI* client, size_t count, uint32_t* ids);
+static void updateSystemPowerState(PowerStateType systemPowerState);
+
 
 static const GeofenceInterface gGeofenceInterface = {
     sizeof(GeofenceInterface),
@@ -56,7 +58,8 @@ static const GeofenceInterface gGeofenceInterface = {
     removeGeofences,
     modifyGeofences,
     pauseGeofences,
-    resumeGeofences
+    resumeGeofences,
+    updateSystemPowerState
 };
 
 #ifndef DEBUG_X86
@@ -143,3 +146,9 @@ static void resumeGeofences(LocationAPI* client, size_t count, uint32_t* ids)
     }
 }
 
+static void updateSystemPowerState(PowerStateType systemPowerState)
+{
+    if (NULL != gGeofenceAdapter) {
+        return gGeofenceAdapter->updateSystemPowerStateCommand(systemPowerState);
+    }
+}

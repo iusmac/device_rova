@@ -72,6 +72,8 @@ typedef struct {
     double     Z;
 } LocEcef;
 
+void loc_nmea_config_output_types(GnssNmeaTypesMask enabledNmeaTypes);
+
 void loc_nmea_generate_sv(const GnssSvNotification &svNotify,
                               std::vector<std::string> &nmeaArraystr);
 
@@ -81,7 +83,8 @@ void loc_nmea_generate_pos(const UlpLocation &location,
                                unsigned char generate_nmea,
                                bool custom_gga_fix_quality,
                                std::vector<std::string> &nmeaArraystr,
-                               int& indexOfGGA);
+                               int& indexOfGGA,
+                               bool isTagBlockGroupingEnabled);
 
 #define DEBUG_NMEA_MINSIZE 6
 #define DEBUG_NMEA_MAXSIZE 4096

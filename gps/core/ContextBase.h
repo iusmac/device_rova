@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2017, 2020, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2017, 2020-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -31,10 +31,17 @@
 
 #include <stdbool.h>
 #include <ctype.h>
+#include <loc_pla.h>
 #include <MsgTask.h>
 #include <LocApiBase.h>
 #include <LBSProxyBase.h>
 #include <loc_cfg.h>
+#ifdef NO_UNORDERED_SET_OR_MAP
+    #include <map>
+    #define unordered_map map
+#else
+    #include <unordered_map>
+#endif
 
 /* GPS.conf support */
 /* NOTE: the implementaiton of the parser casts number
@@ -71,12 +78,13 @@ typedef struct loc_gps_cfg_s
     double         CONSTRAINED_TIME_UNCERTAINTY_THRESHOLD;
     uint32_t       CONSTRAINED_TIME_UNCERTAINTY_ENERGY_BUDGET;
     uint32_t       POSITION_ASSISTED_CLOCK_ESTIMATOR_ENABLED;
-    char           PROXY_APP_PACKAGE_NAME[LOC_MAX_PARAM_STRING];
     uint32_t       CP_MTLR_ES;
     uint32_t       GNSS_DEPLOYMENT;
     uint32_t       CUSTOM_NMEA_GGA_FIX_QUALITY_ENABLED;
     uint32_t       NI_SUPL_DENY_ON_NFW_LOCKED;
     uint32_t       ENABLE_NMEA_PRINT;
+    uint32_t       NMEA_TAG_BLOCK_GROUPING_ENABLED;
+    uint32_t       ROBUST_LOCATION_ENABLED;
 } loc_gps_cfg_s_type;
 
 /* NOTE: the implementation of the parser casts number
@@ -148,6 +156,7 @@ public:
     inline bool hasAgpsExtendedCapabilities() { return mLBSProxy->hasAgpsExtendedCapabilities(); }
     inline bool hasNativeXtraClient() { return mLBSProxy->hasNativeXtraClient(); }
     inline void modemPowerVote(bool power) const { return mLBSProxy->modemPowerVote(power); }
+    inline const LBSProxyBase* getLBSProxyBase() { return mLBSProxy; }
     inline IzatDevId_t getIzatDevId() const {
         return mLBSProxy->getIzatDevId();
     }
@@ -160,6 +169,7 @@ public:
     static uint8_t sFeaturesSupported[MAX_FEATURE_LENGTH];
     static bool sGnssMeasurementSupported;
     static GnssNMEARptRate sNmeaReportRate;
+    static LocationCapabilitiesMask sQwesFeatureMask;
 
     void readConfig();
     static uint32_t getCarrierCapabilities();
@@ -191,6 +201,118 @@ public:
         Check if gnss measurement is supported
     */
     static bool gnssConstellationConfig();
+
+    /*
+        set QWES feature status info
+    */
+    static inline void setQwesFeatureStatus(
+            const std::unordered_map<LocationQwesFeatureType, bool> &featureMap) {
+       std::unordered_map<LocationQwesFeatureType, bool>::const_iterator itr;
+       static LocationQwesFeatureType locQwesFeatType[LOCATION_QWES_FEATURE_TYPE_MAX];
+       for (itr = featureMap.begin(); itr != featureMap.end(); ++itr) {
+           LOC_LOGi("Feature : %d isValid: %d", itr->first, itr->second);
+           locQwesFeatType[itr->first] = itr->second;
+           switch (itr->first) {
+               case LOCATION_QWES_FEATURE_TYPE_CARRIER_PHASE:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_CARRIER_PHASE_BIT;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_CARRIER_PHASE_BIT;
+                   }
+               break;
+               case LOCATION_QWES_FEATURE_TYPE_SV_POLYNOMIAL:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_SV_POLYNOMIAL_BIT;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_SV_POLYNOMIAL_BIT;
+                   }
+               break;
+               case LOCATION_QWES_FEATURE_TYPE_GNSS_SINGLE_FREQUENCY:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_GNSS_SINGLE_FREQUENCY;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_GNSS_SINGLE_FREQUENCY;
+                   }
+               break;
+               case LOCATION_QWES_FEATURE_TYPE_SV_EPH:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_SV_EPHEMERIS_BIT;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_SV_EPHEMERIS_BIT;
+                   }
+               break;
+               case LOCATION_QWES_FEATURE_TYPE_GNSS_MULTI_FREQUENCY:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_GNSS_MULTI_FREQUENCY;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_GNSS_MULTI_FREQUENCY;
+                   }
+               break;
+               case LOCATION_QWES_FEATURE_TYPE_PPE:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_PPE;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_PPE;
+                   }
+               break;
+               case LOCATION_QWES_FEATURE_TYPE_QDR2:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_QDR2;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_QDR2;
+                   }
+               break;
+               case LOCATION_QWES_FEATURE_TYPE_QDR3:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_QDR3;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_QDR3;
+                   }
+               break;
+               case LOCATION_QWES_FEATURE_TYPE_VPE:
+                   if (itr->second) {
+                       sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_VPE;
+                   } else {
+                       sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_VPE;
+                   }
+               break;
+           }
+       }
+
+       // Set CV2X basic when time freq and tunc is set
+       // CV2X_BASIC  = LOCATION_QWES_FEATURE_TYPE_TIME_FREQUENCY &
+       //       LOCATION_QWES_FEATURE_TYPE_TIME_UNCERTAINTY
+
+       // Set CV2X premium when time freq and tunc is set
+       // CV2X_PREMIUM = CV2X_BASIC & LOCATION_QWES_FEATURE_TYPE_QDR3 &
+       //       LOCATION_QWES_FEATURE_TYPE_CLOCK_ESTIMATE
+
+       bool cv2xBasicEnabled = (1 == locQwesFeatType[LOCATION_QWES_FEATURE_TYPE_TIME_FREQUENCY]) &&
+            (1 == locQwesFeatType[LOCATION_QWES_FEATURE_TYPE_TIME_UNCERTAINTY]);
+       bool cv2xPremiumEnabled = cv2xBasicEnabled &&
+            (1 == locQwesFeatType[LOCATION_QWES_FEATURE_TYPE_QDR3]) &&
+            (1 == locQwesFeatType[LOCATION_QWES_FEATURE_TYPE_CLOCK_ESTIMATE]);
+
+       LOC_LOGd("CV2X_BASIC:%d, CV2X_PREMIUM:%d", cv2xBasicEnabled, cv2xPremiumEnabled);
+       if (cv2xBasicEnabled) {
+            sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_CV2X_LOCATION_BASIC;
+       } else {
+            sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_CV2X_LOCATION_BASIC;
+       }
+       if (cv2xPremiumEnabled) {
+            sQwesFeatureMask |= LOCATION_CAPABILITIES_QWES_CV2X_LOCATION_PREMIUM;
+       } else {
+            sQwesFeatureMask &= ~LOCATION_CAPABILITIES_QWES_CV2X_LOCATION_PREMIUM;
+       }
+    }
+
+    /*
+        get QWES feature status info
+    */
+    static inline LocationCapabilitiesMask getQwesFeatureStatus() {
+        return (ContextBase::sQwesFeatureMask);
+    }
+
 
 };
 

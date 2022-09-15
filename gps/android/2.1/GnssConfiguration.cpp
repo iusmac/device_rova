@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
  * Not a Contribution
  */
 /*
@@ -178,7 +178,7 @@ Return<bool> GnssConfiguration::setGpsLock(uint8_t lock) {
         config.gpsLock = GNSS_CONFIG_GPS_LOCK_MO;
         break;
     case 2:
-        config.gpsLock = GNSS_CONFIG_GPS_LOCK_NI;
+        config.gpsLock = GNSS_CONFIG_GPS_LOCK_NFW_ALL;
         break;
     case 3:
         config.gpsLock = GNSS_CONFIG_GPS_LOCK_MO_AND_NI;

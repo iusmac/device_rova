@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
  * Not a Contribution
  */
 /*
@@ -24,6 +24,8 @@
 #include <hidl/LegacySupport.h>
 #include "loc_cfg.h"
 #include "loc_misc_utils.h"
+#include <dlfcn.h>
+
 
 extern "C" {
 #include "vndfwk-detect.h"
@@ -43,6 +45,28 @@ using android::status_t;
 using android::OK;
 
 typedef int vendorEnhancedServiceMain(int /* argc */, char* /* argv */ []);
+
+#define GNSS_POWER_LIBNAME  "/vendor/lib64/libgnssauto_power.so"
+typedef const void* (*gnssAutoPowerHandler)(void);
+
+void initializeGnssPowerHandler() {
+
+    void * handle = nullptr;
+    const char* error = nullptr;
+    gnssAutoPowerHandler getter = nullptr;
+
+    getter = (gnssAutoPowerHandler) dlGetSymFromLib(handle, GNSS_POWER_LIBNAME,
+                                                    "initGnssAutoPowerHandler");
+
+    if (nullptr == getter) {
+        /*may not be real problem for non-automotive products*/
+        ALOGW("dlGetSymFromLib for getGnssAutoPowerHandler failed - may not be real problem.");
+    } else {
+        /*Initialize GnssAutoPowerHandler if available*/
+        getter();
+        ALOGI("GnssAutoPowerHandler Initialized!");
+    }
+}
 
 int main() {
 
@@ -72,6 +96,7 @@ int main() {
     #else
         ALOGI("LOC_HIDL_VERSION not defined.");
     #endif
+        initializeGnssPowerHandler();
         joinRpcThreadpool();
     } else {
         ALOGE("Error while registering IGnss 2.0 service: %d", status);

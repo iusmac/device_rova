@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
  * Not a Contribution
  */
 /*
@@ -61,7 +61,7 @@ Return<void> GnssDebug::getDebugData(getDebugData_cb _hidl_cb)
 
     V1_0::IGnssDebug::DebugData data = { };
 
-    if((nullptr == mGnss) || (nullptr == mGnss->getGnssInterface())){
+    if((nullptr == mGnss) || (nullptr == mGnss->getLocationControlApi())){
         LOC_LOGE("GnssDebug - Null GNSS interface");
         _hidl_cb(data);
         return Void();
@@ -69,7 +69,7 @@ Return<void> GnssDebug::getDebugData(getDebugData_cb _hidl_cb)
 
     // get debug report snapshot via hal interface
     GnssDebugReport reports = { };
-    mGnss->getGnssInterface()->getDebugReport(reports);
+    mGnss->getLocationControlApi()->getDebugReport(reports);
 
     // location block
     if (reports.mLocation.mValid) {
@@ -179,7 +179,7 @@ Return<void> GnssDebug::getDebugData_2_0(getDebugData_2_0_cb _hidl_cb)
 
     V2_0::IGnssDebug::DebugData data = { };
 
-    if((nullptr == mGnss) || (nullptr == mGnss->getGnssInterface())){
+    if((nullptr == mGnss) || (nullptr == mGnss->getLocationControlApi())){
         LOC_LOGE("GnssDebug - Null GNSS interface");
         _hidl_cb(data);
         return Void();
@@ -187,7 +187,7 @@ Return<void> GnssDebug::getDebugData_2_0(getDebugData_2_0_cb _hidl_cb)
 
     // get debug report snapshot via hal interface
     GnssDebugReport reports = { };
-    mGnss->getGnssInterface()->getDebugReport(reports);
+    mGnss->getLocationControlApi()->getDebugReport(reports);
 
     // location block
     if (reports.mLocation.mValid) {

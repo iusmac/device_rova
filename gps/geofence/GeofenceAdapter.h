@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2019, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2019, 2021, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -80,11 +80,13 @@ class GeofenceAdapter : public LocAdapterBase {
     GeofencesMap mGeofences; //map hwId to GeofenceObject
     GeofenceIdMap mGeofenceIds; //map of GeofenceKey to hwId
 
+    PowerStateType mSystemPowerState;
+
 protected:
 
     /* ==== CLIENT ========================================================================= */
     virtual void updateClientsEventMask();
-    virtual void stopClientSessions(LocationAPI* client);
+    virtual void stopClientSessions(LocationAPI* client, bool eraseSession = true);
 
 public:
 
@@ -106,6 +108,7 @@ public:
     void resumeGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids);
     void modifyGeofencesCommand(LocationAPI* client, size_t count, uint32_t* ids,
                                 GeofenceOption* options);
+    void updateSystemPowerStateCommand(PowerStateType systemPowerState);
     /* ======== RESPONSES ================================================================== */
     void reportResponse(LocationAPI* client, size_t count, LocationError* errs, uint32_t* ids);
     /* ======== UTILITIES ================================================================== */
@@ -131,6 +134,8 @@ public:
     void geofenceBreach(size_t count, uint32_t* hwIds, const Location& location,
                         GeofenceBreachType breachType, uint64_t timestamp);
     void geofenceStatus(GeofenceStatusAvailable available);
+    void pauseOrResumeGeofences(bool pauseOrResume = false /*false - pause, true - resume*/);
+    void updateSystemPowerState(PowerStateType systemPowerState);
 };
 
 #endif /* GEOFENCE_ADAPTER_H */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2019, 2021, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -55,21 +55,25 @@ class BatchingAdapter : public LocAdapterBase {
     uint32_t mOngoingTripTBFInterval;
     bool mTripWithOngoingTBFDropped;
     bool mTripWithOngoingTripDistanceDropped;
+    PowerStateType mSystemPowerState;
 
     void startTripBatchingMultiplex(LocationAPI* client, uint32_t sessionId,
                                     const BatchingOptions& batchingOptions);
     void stopTripBatchingMultiplex(LocationAPI* client, uint32_t sessionId,
                                    bool restartNeeded,
-                                   const BatchingOptions& batchOptions);
-    inline void stopTripBatchingMultiplex(LocationAPI* client, uint32_t id) {
+                                   const BatchingOptions& batchOptions,
+                                   bool eraseSession = true);
+    inline void stopTripBatchingMultiplex(LocationAPI* client, uint32_t id,
+                                             bool eraseSession = true) {
         BatchingOptions batchOptions;
-        stopTripBatchingMultiplex(client, id, false, batchOptions);
+        stopTripBatchingMultiplex(client, id, false, batchOptions, eraseSession);
     };
     void stopTripBatchingMultiplexCommon(LocationError err,
                                          LocationAPI* client,
                                          uint32_t sessionId,
                                          bool restartNeeded,
-                                         const BatchingOptions& batchOptions);
+                                         const BatchingOptions& batchOptions,
+                                         bool eraseSession = true);
     void restartTripBatching(bool queryAccumulatedDistance, uint32_t accDist = 0,
                              uint32_t numbatchedPos = 0);
     void printTripReport();
@@ -84,7 +88,7 @@ protected:
 
     /* ==== CLIENT ========================================================================= */
     virtual void updateClientsEventMask();
-    virtual void stopClientSessions(LocationAPI* client);
+    virtual void stopClientSessions(LocationAPI* client, bool eraseSession = true);
 
 public:
     BatchingAdapter();
@@ -103,6 +107,7 @@ public:
             LocationAPI* client, uint32_t id, BatchingOptions& batchOptions);
     void stopBatchingCommand(LocationAPI* client, uint32_t id);
     void getBatchedLocationsCommand(LocationAPI* client, uint32_t id, size_t count);
+    void updateSystemPowerStateCommand(PowerStateType systemPowerState);
     /* ======== RESPONSES ================================================================== */
     void reportResponse(LocationAPI* client, LocationError err, uint32_t sessionId);
     /* ======== UTILITIES ================================================================== */
@@ -116,11 +121,13 @@ public:
     void startBatching(LocationAPI* client, uint32_t sessionId,
                        const BatchingOptions& batchingOptions);
     void stopBatching(LocationAPI* client, uint32_t sessionId, bool restartNeeded,
-                      const BatchingOptions& batchOptions);
-    void stopBatching(LocationAPI* client, uint32_t sessionId) {
+                      const BatchingOptions& batchOptions, bool eraseSession = true);
+    void stopBatching(LocationAPI* client, uint32_t sessionId, bool eraseSession = true) {
         BatchingOptions batchOptions;
-        stopBatching(client, sessionId, false, batchOptions);
+        stopBatching(client, sessionId, false, batchOptions, eraseSession);
     };
+    void suspendBatchingSessions();
+    void updateSystemPowerState(PowerStateType systemPowerState);
 
     /* ==== REPORTS ======================================================================== */
     /* ======== EVENTS ====(Called from QMI Thread)========================================= */

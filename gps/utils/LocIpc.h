@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2018, 2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2018, 2020-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -35,11 +35,16 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <unordered_set>
 #include <mutex>
 #include <LocThread.h>
 
 using namespace std;
+#ifdef NO_UNORDERED_SET_OR_MAP
+    #include <set>
+    #define unordered_set set
+#else
+    #include <unordered_set>
+#endif
 
 namespace loc_util {
 
@@ -149,6 +154,9 @@ public:
                      uint32_t length, int32_t msgId = -1);
 
 private:
+    static std::string generateThreadName(const std::string& recverName);
+
+private:
     LocThread mThread;
 };
 
@@ -166,10 +174,10 @@ public:
     inline bool sendData(const uint8_t data[], uint32_t length, int32_t msgId) const {
         return isSendable() && (send(data, length, msgId) > 0);
     }
-    virtual unique_ptr<LocIpcRecver> getRecver(const shared_ptr<ILocIpcListener>& /*listener*/) {
+    virtual unique_ptr<LocIpcRecver> getRecver(const shared_ptr<ILocIpcListener>& listener) {
         return nullptr;
     }
-    inline virtual void copyDestAddrFrom(const LocIpcSender& otherSender) {}
+    inline virtual bool copyDestAddrFrom(const LocIpcSender& otherSender) { return true; }
 };
 
 class LocIpcRecver {
@@ -203,7 +211,7 @@ class Sock {
                      int sid, int flags, struct sockaddr *srcAddr, socklen_t *addrlen) const;
 public:
     int mSid;
-    inline Sock(int sid, const uint32_t maxTxSize = 8192) : mMaxTxSize(maxTxSize), mSid(sid) {}
+    inline Sock(int sid, const uint32_t maxTxSize = 7168) : mMaxTxSize(maxTxSize), mSid(sid) {}
     inline ~Sock() { close(); }
     inline bool isValid() const { return -1 != mSid; }
     ssize_t send(const void *buf, uint32_t len, int flags, const struct sockaddr *destAddr,

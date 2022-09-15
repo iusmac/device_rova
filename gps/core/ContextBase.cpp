@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2014,2016-2017,2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2014,2016-2017,2020-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -50,6 +50,7 @@ uint64_t ContextBase::sSupportedMsgMask = 0;
 bool ContextBase::sGnssMeasurementSupported = false;
 uint8_t ContextBase::sFeaturesSupported[MAX_FEATURE_LENGTH];
 GnssNMEARptRate ContextBase::sNmeaReportRate = GNSS_NMEA_REPORT_RATE_NHZ;
+LocationCapabilitiesMask ContextBase::sQwesFeatureMask = 0;
 
 const loc_param_s_type ContextBase::mGps_conf_table[] =
 {
@@ -87,13 +88,14 @@ const loc_param_s_type ContextBase::mGps_conf_table[] =
            &mGps_conf.CONSTRAINED_TIME_UNCERTAINTY_ENERGY_BUDGET, NULL, 'n'},
   {"POSITION_ASSISTED_CLOCK_ESTIMATOR_ENABLED",
            &mGps_conf.POSITION_ASSISTED_CLOCK_ESTIMATOR_ENABLED, NULL, 'n'},
-  {"PROXY_APP_PACKAGE_NAME",         &mGps_conf.PROXY_APP_PACKAGE_NAME,         NULL, 's' },
   {"CP_MTLR_ES",                     &mGps_conf.CP_MTLR_ES,                     NULL, 'n' },
   {"GNSS_DEPLOYMENT",  &mGps_conf.GNSS_DEPLOYMENT, NULL, 'n'},
   {"CUSTOM_NMEA_GGA_FIX_QUALITY_ENABLED",
            &mGps_conf.CUSTOM_NMEA_GGA_FIX_QUALITY_ENABLED, NULL, 'n'},
+  {"NMEA_TAG_BLOCK_GROUPING_ENABLED", &mGps_conf.NMEA_TAG_BLOCK_GROUPING_ENABLED, NULL, 'n'},
   {"NI_SUPL_DENY_ON_NFW_LOCKED",  &mGps_conf.NI_SUPL_DENY_ON_NFW_LOCKED, NULL, 'n'},
-  {"ENABLE_NMEA_PRINT",  &mGps_conf.ENABLE_NMEA_PRINT, NULL, 'n'}
+  {"ENABLE_NMEA_PRINT",  &mGps_conf.ENABLE_NMEA_PRINT, NULL, 'n'},
+  {"ROBUST_LOCATION_ENABLED", &mGps_conf.ROBUST_LOCATION_ENABLED, NULL, 'n'},
 };
 
 const loc_param_s_type ContextBase::mSap_conf_table[] =
@@ -191,10 +193,20 @@ void ContextBase::readConfig()
         /* default configuration QTI GNSS H/W */
         mGps_conf.GNSS_DEPLOYMENT = 0;
         mGps_conf.CUSTOM_NMEA_GGA_FIX_QUALITY_ENABLED = 0;
+        /* default NMEA Tag Block Grouping is disabled */
+        mGps_conf.NMEA_TAG_BLOCK_GROUPING_ENABLED = 0;
         /* default configuration for NI_SUPL_DENY_ON_NFW_LOCKED */
         mGps_conf.NI_SUPL_DENY_ON_NFW_LOCKED = 1;
         /* By default NMEA Printing is disabled */
         mGps_conf.ENABLE_NMEA_PRINT = 0;
+
+#ifdef USE_GLIB
+        // For LE target, disable by default
+        mGps_conf.ROBUST_LOCATION_ENABLED = 0x0;
+#else
+        // enable robust location and robust location on E911
+        mGps_conf.ROBUST_LOCATION_ENABLED = 0x11;
+#endif
 
         UTIL_READ_CONF(LOC_PATH_GPS_CONF, mGps_conf_table);
         UTIL_READ_CONF(LOC_PATH_SAP_CONF, mSap_conf_table);
@@ -332,6 +344,8 @@ void ContextBase::setEngineCapabilities(uint64_t supportedMsgMask,
             memcpy((void *)ContextBase::sFeaturesSupported,
                     (void *)featureList, sizeof(ContextBase::sFeaturesSupported));
         }
+        mGps_conf.AGPS_CONFIG_INJECT &=
+                !(isFeatureSupported(LOC_SUPPORTED_FEATURE_DSDA_CONFIGURATION));
 
         /* */
         if (ContextBase::isFeatureSupported(LOC_SUPPORTED_FEATURE_MEASUREMENTS_CORRECTION)) {

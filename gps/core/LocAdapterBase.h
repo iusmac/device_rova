@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2014, 2016-2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2014, 2016-2018, 2020-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -87,7 +87,7 @@ protected:
     LocationCapabilitiesMask getCapabilities();
     void broadcastCapabilities(LocationCapabilitiesMask mask);
     virtual void updateClientsEventMask();
-    virtual void stopClientSessions(LocationAPI* client);
+    virtual void stopClientSessions(LocationAPI* client, bool eraseSession = true);
 
 public:
     inline virtual ~LocAdapterBase() { mLocApi->removeAdapter(this); }
@@ -156,7 +156,7 @@ public:
         return ContextBase::isFeatureSupported(featureVal);
     }
 
-    uint32_t generateSessionId();
+    static uint32_t generateSessionId();
 
     inline bool isAdapterMaster() {
         return mIsMaster;
@@ -178,8 +178,7 @@ public:
         (void)count;
         (void)locationArr;
     }
-    virtual void reportSvEvent(const GnssSvNotification& svNotify,
-                               bool fromEngineHub=false);
+    virtual void reportSvEvent(const GnssSvNotification& svNotify);
     virtual void reportDataEvent(const GnssDataNotification& dataNotify, int msInWeek);
     virtual void reportNmeaEvent(const char* nmea, size_t length);
     virtual void reportSvPolynomialEvent(GnssSvPolynomial &svPolynomial);
@@ -193,7 +192,8 @@ public:
     virtual bool requestTime();
     virtual bool requestLocation();
     virtual bool requestATL(int connHandle, LocAGpsType agps_type,
-                            LocApnTypeMask apn_type_mask);
+                            LocApnTypeMask apn_type_mask,
+                            SubId sub_id=DEFAULT_SUB);
     virtual bool releaseATL(int connHandle);
     virtual bool requestNiNotifyEvent(const GnssNiNotification &notify, const void* data,
                                       const LocInEmergency emergencyState);
@@ -236,6 +236,9 @@ public:
                              removeClientCompleteCallback rmClientCb);
     void requestCapabilitiesCommand(LocationAPI* client);
 
+    virtual void reportLatencyInfoEvent(const GnssLatencyInfo& gnssLatencyInfo);
+    virtual bool reportQwesCapabilities(
+            const std::unordered_map<LocationQwesFeatureType, bool> &featureMap);
 };
 
 } // namespace loc_core

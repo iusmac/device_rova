@@ -1,4 +1,4 @@
-/* Copyright (c) 2019 - 2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2019 - 2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -158,7 +158,7 @@ void LogBuffer::signalHandler(const int code, siginfo_t *const si, void *const s
     nptrs = backtrace(buffer, sizeof(buffer)/sizeof(*buffer));
     strings = backtrace_symbols(buffer, nptrs);
     if (strings != NULL) {
-        timespec tv;
+        timespec tv = {};
         clock_gettime(CLOCK_BOOTTIME, &tv);
         uint64_t elapsedTime = (uint64_t)tv.tv_sec + (uint64_t)tv.tv_nsec/1000000000;
         for (int i = 0; i < nptrs; i++) {

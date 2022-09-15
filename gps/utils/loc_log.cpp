@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, 2015, 2020, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2012, 2015, 2020-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -222,7 +222,7 @@ RETURN VALUE
 ===========================================================================*/
 void log_buffer_insert(char *str, unsigned long buf_size, int level)
 {
-    timespec tv;
+    timespec tv = {};
     clock_gettime(CLOCK_BOOTTIME, &tv);
     uint64_t elapsedTime = (uint64_t)tv.tv_sec + (uint64_t)tv.tv_nsec/1000000000;
     string ss = str;

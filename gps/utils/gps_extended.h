@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2017 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2017, 2020-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -38,6 +38,7 @@
 #if defined(USE_GLIB) || defined(OFF_TARGET)
 #include <string.h>
 #endif
+#include <string>
 
 #ifdef __cplusplus
 extern "C" {
@@ -105,6 +106,29 @@ struct LocPosMode
     void logv() const;
 };
 
+/*
+* Encapsulates the parameters (client name, preferred subscription ID and preferred APN
+* for backhaul connect.
+*/
+struct BackhaulContext {
+    std::string clientName;
+    uint16_t prefSub;
+    std::string prefApn;
+    uint16_t prefIpType;
+    inline bool operator ==(const BackhaulContext& i1) const {
+        // we do not support multiple request from same client
+        return i1.clientName == clientName;
+    }
+
+    // Custom hash function for BackhaulContext set.
+    struct hash {
+        inline size_t operator()(BackhaulContext const& i) const {
+            // Index with client name base hash, as we support just one BackhaulRequest
+            // with the same client name.
+            return (std::hash<std::string>()(i.clientName));
+        }
+    };
+};
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
  * Not a Contribution
  */
 /*
@@ -29,7 +29,7 @@
 #include <string>
 #include "Gnss.h"
 #include "AGnssRil.h"
-#include <DataItemConcreteTypesBase.h>
+#include <DataItemConcreteTypes.h>
 
 typedef void* (getLocationInterface)();
 
@@ -54,9 +54,10 @@ Return<bool> AGnssRil::updateNetworkState(bool connected, NetworkType type, bool
     const int NetworkType_BLUETOOTH = 7;
     const int NetworkType_ETHERNET = 9;
     const int NetworkType_PROXY = 16;
+    std::string apn("");
 
     // for XTRA
-    if (nullptr != mGnss && ( nullptr != mGnss->getGnssInterface() )) {
+    if (nullptr != mGnss && ( nullptr != mGnss->getLocationControlApi() )) {
         int8_t typeout = loc_core::TYPE_UNKNOWN;
         switch(type)
         {
@@ -102,14 +103,14 @@ Return<bool> AGnssRil::updateNetworkState(bool connected, NetworkType type, bool
                 }
                 break;
         }
-        mGnss->getGnssInterface()->updateConnectionStatus(connected, false, typeout, 0);
+        mGnss->getLocationControlApi()->updateConnectionStatus(connected, typeout, false, 0, apn);
     }
     return true;
 }
 Return<bool> AGnssRil::updateNetworkState_2_0(const V2_0::IAGnssRil::NetworkAttributes& attributes) {
     ENTRY_LOG_CALLFLOW();
-
-    if (nullptr != mGnss && (nullptr != mGnss->getGnssInterface())) {
+    std::string apn = attributes.apn;
+    if (nullptr != mGnss && (nullptr != mGnss->getLocationControlApi())) {
         int8_t typeout = loc_core::TYPE_UNKNOWN;
         bool roaming = false;
         if (attributes.capabilities & IAGnssRil::NetworkCapability::NOT_METERED) {
@@ -120,8 +121,9 @@ Return<bool> AGnssRil::updateNetworkState_2_0(const V2_0::IAGnssRil::NetworkAttr
         if (attributes.capabilities & IAGnssRil::NetworkCapability::NOT_ROAMING) {
             roaming = false;
         }
-        mGnss->getGnssInterface()->updateConnectionStatus(attributes.isConnected,
-                typeout, roaming, (NetworkHandle) attributes.networkHandle);
+        LOC_LOGd("apn string received is: %s", apn.c_str());
+        mGnss->getLocationControlApi()->updateConnectionStatus(attributes.isConnected,
+                typeout, roaming, (NetworkHandle) attributes.networkHandle, apn);
     }
     return true;
 }

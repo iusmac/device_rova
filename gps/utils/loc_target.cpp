@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, 2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -68,13 +68,13 @@ static unsigned int gTarget = (unsigned int)-1;
 
 static int read_a_line(const char * file_path, char * line, int line_size)
 {
-    FILE *fp;
+    FILE *fp = NULL;
     int result = 0;
 
     * line = '\0';
     fp = fopen(file_path, "r" );
     if( fp == NULL ) {
-        LOC_LOGE("open failed: %s: %s\n", file_path, strerror(errno));
+        LOC_LOGe("open failed: %s: %s\n", file_path, strerror(errno));
         result = -1;
     } else {
         int len;
@@ -87,7 +87,7 @@ static int read_a_line(const char * file_path, char * line, int line_size)
         }
         len = len < line_size - 1? len : line_size - 1;
         line[len] = '\0';
-        LOC_LOGD("cat %s: %s", file_path, line);
+        LOC_LOGe("cat %s: %s", file_path, line);
         fclose(fp);
     }
     return result;
@@ -99,11 +99,10 @@ void loc_get_target_baseband(char *baseband, int array_length)
 {
     if(baseband && (array_length >= PROPERTY_VALUE_MAX)) {
         property_get("ro.baseband", baseband, "");
-        LOC_LOGD("%s:%d]: Baseband: %s\n", __func__, __LINE__, baseband);
+        LOC_LOGd("Baseband: %s\n", baseband);
     }
     else {
-        LOC_LOGE("%s:%d]: NULL parameter or array length less than PROPERTY_VALUE_MAX\n",
-                 __func__, __LINE__);
+        LOC_LOGe("NULL parameter or array length less than PROPERTY_VALUE_MAX\n");
     }
 }
 
@@ -113,11 +112,10 @@ void loc_get_platform_name(char *platform_name, int array_length)
 {
     if(platform_name && (array_length >= PROPERTY_VALUE_MAX)) {
         property_get("ro.board.platform", platform_name, "");
-        LOC_LOGD("%s:%d]: Target name: %s\n", __func__, __LINE__, platform_name);
+        LOC_LOGd("Target name: %s\n", platform_name);
     }
     else {
-        LOC_LOGE("%s:%d]: Null parameter or array length less than PROPERTY_VALUE_MAX\n",
-                 __func__, __LINE__);
+        LOC_LOGe("Null parameter or array length less than PROPERTY_VALUE_MAX\n");
     }
 }
 
@@ -127,11 +125,10 @@ void loc_get_auto_platform_name(char *platform_name, int array_length)
 {
     if(platform_name && (array_length >= PROPERTY_VALUE_MAX)) {
         property_get("ro.hardware.type", platform_name, "");
-        LOC_LOGD("%s:%d]: Autoplatform name: %s\n", __func__, __LINE__, platform_name);
+        LOC_LOGd("Autoplatform name: %s\n", platform_name);
     }
     else {
-        LOC_LOGE("%s:%d]: Null parameter or array length less than PROPERTY_VALUE_MAX\n",
-                 __func__, __LINE__);
+        LOC_LOGe("Null parameter or array length less than PROPERTY_VALUE_MAX\n");
     }
 }
 
@@ -143,7 +140,7 @@ void loc_get_auto_platform_name(char *platform_name, int array_length)
 int loc_identify_low_ram_target()
 {
     int ret = 0;
-    char low_ram_target[PROPERTY_VALUE_MAX];
+    char low_ram_target[PROPERTY_VALUE_MAX] = {};
     property_get("ro.config.low_ram", low_ram_target, "");
     LOC_LOGd("low ram target: %s\n", low_ram_target);
     return !(strncmp(low_ram_target, "true", PROPERTY_VALUE_MAX));

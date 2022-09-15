@@ -142,10 +142,14 @@ struct Gnss : public IGnss {
     GnssAPIClient* getApi();
     Return<bool> setGnssNiCb(const sp<IGnssNiCallback>& niCb);
     Return<bool> updateConfiguration(GnssConfig& gnssConfig);
-    const GnssInterface* getGnssInterface();
+    ILocationControlAPI* getLocationControlApi();
 
     // Callback for ODCPI request
     void odcpiRequestCb(const OdcpiRequestInfo& request);
+
+    // ILocationControlAPI callbacks
+    void onCtrlResponseCb(LocationError error, uint32_t id) {}
+    void onCtrlCollectiveResponseCb(size_t count, LocationError* errors, uint32_t* ids) {}
 
  private:
     struct GnssDeathRecipient : hidl_death_recipient {
@@ -179,7 +183,7 @@ struct Gnss : public IGnss {
 
     GnssAPIClient* mApi = nullptr;
     GnssConfig mPendingConfig;
-    const GnssInterface* mGnssInterface = nullptr;
+    ILocationControlAPI* mLocationControlApi = nullptr;
 };
 
 extern "C" V1_0::IGnss* HIDL_FETCH_IGnss(const char* name);

@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -31,6 +31,8 @@
 #include "location_interface.h"
 
 static GnssAdapter* gGnssAdapter = NULL;
+
+typedef void (createOSFramework)();
 
 static void initialize();
 static void deinitialize();
@@ -66,18 +68,19 @@ static void agpsDataConnOpen(AGpsExtType agpsType, const char* apnName, int apnL
 static void agpsDataConnClosed(AGpsExtType agpsType);
 static void agpsDataConnFailed(AGpsExtType agpsType);
 static void getDebugReport(GnssDebugReport& report);
-static void updateConnectionStatus(bool connected, int8_t type, bool roaming = false,
-                                   NetworkHandle networkHandle = NETWORK_HANDLE_UNKNOWN);
+static void updateConnectionStatus(bool connected, int8_t type, bool roaming,
+                                   NetworkHandle networkHandle, string& apn);
 static void getGnssEnergyConsumed(GnssEnergyConsumedCallback energyConsumedCb);
-static void enableNfwLocationAccess(bool enable);
+static void enableNfwLocationAccess(std::vector<std::string>& enabledNfws);
 static void nfwInit(const NfwCbInfo& cbInfo);
 static void getPowerStateChanges(std::function<void(bool)> powerStateCb);
 
-static void odcpiInit(const OdcpiRequestCallback& callback, OdcpiPrioritytype priority);
+static void odcpiInit(const odcpiRequestCallback& callback, OdcpiPrioritytype priority);
 static void odcpiInject(const Location& location);
 
 static void blockCPI(double latitude, double longitude, float accuracy,
                      int blockDurationMsec, double latLonDiffThreshold);
+static void setEsStatusCallback(std::function<void(bool)> esStatusCb);
 static void updateBatteryStatus(bool charging);
 static void updateSystemPowerState(PowerStateType systemPowerState);
 static uint32_t setConstrainedTunc (bool enable, float tuncConstraint,
@@ -98,11 +101,16 @@ static void updateNTRIPGGAConsent(bool consentAccepted);
 static void enablePPENtripStream(const GnssNtripConnectionParams& params, bool enableRTKEngine);
 static void disablePPENtripStream();
 
-static bool measCorrInit(const measCorrSetCapabilitiesCb setCapabilitiesCb);
+static bool measCorrInit(const measCorrSetCapabilitiesCallback setCapabilitiesCb);
 static bool measCorrSetCorrections(const GnssMeasurementCorrections gnssMeasCorr);
 static void measCorrClose();
-static uint32_t antennaInfoInit(const antennaInfoCb antennaInfoCallback);
+static uint32_t antennaInfoInit(const antennaInfoCallback antennaInfoCallback);
+static void getGnssAntennaeInfo();
 static void antennaInfoClose();
+static uint32_t configEngineRunState(PositioningEngineMask engType, LocEngineRunState engState);
+static uint32_t configOutputNmeaTypes(GnssNmeaTypesMask enabledNmeaTypes);
+static uint32_t setOptInStatus(bool userConsent);
+static uint32_t configEngineIntegrityRisk(PositioningEngineMask engType, uint32_t integrityRisk);
 
 static const GnssInterface gGnssInterface = {
     sizeof(GnssInterface),
@@ -136,6 +144,7 @@ static const GnssInterface gGnssInterface = {
     odcpiInit,
     odcpiInject,
     blockCPI,
+    setEsStatusCallback,
     getGnssEnergyConsumed,
     enableNfwLocationAccess,
     nfwInit,
@@ -151,6 +160,7 @@ static const GnssInterface gGnssInterface = {
     measCorrSetCorrections,
     measCorrClose,
     antennaInfoInit,
+    getGnssAntennaeInfo,
     antennaInfoClose,
     configRobustLocation,
     configMinGpsWeek,
@@ -160,7 +170,11 @@ static const GnssInterface gGnssInterface = {
     disablePPENtripStream,
     gnssUpdateSecondaryBandConfig,
     gnssGetSecondaryBandConfig,
-    resetNetworkInfo
+    resetNetworkInfo,
+    configEngineRunState,
+    configOutputNmeaTypes,
+    setOptInStatus,
+    configEngineIntegrityRisk,
 };
 
 #ifndef DEBUG_X86
@@ -173,10 +187,22 @@ const GnssInterface* getGnssInterface()
    return &gGnssInterface;
 }
 
+static void createOSFrameworkInstance() {
+    void* libHandle = nullptr;
+    createOSFramework* getter = (createOSFramework*)dlGetSymFromLib(libHandle,
+            "liblocationservice_glue.so", "createOSFramework");
+    if (getter != nullptr) {
+        (*getter)();
+    } else {
+        LOC_LOGe("dlGetSymFromLib failed for liblocationservice_glue.so");
+    }
+}
+
 static void initialize()
 {
     if (NULL == gGnssAdapter) {
         gGnssAdapter = new GnssAdapter();
+        createOSFrameworkInstance();
     }
 }
 
@@ -369,14 +395,15 @@ static void getDebugReport(GnssDebugReport& report) {
 }
 
 static void updateConnectionStatus(bool connected, int8_t type,
-                                   bool roaming, NetworkHandle networkHandle) {
+                                   bool roaming, NetworkHandle networkHandle,
+                                   string& apn) {
     if (NULL != gGnssAdapter) {
         gGnssAdapter->getSystemStatus()->eventConnectionStatus(
-                connected, type, roaming, networkHandle);
+                connected, type, roaming, networkHandle, apn);
     }
 }
 
-static void odcpiInit(const OdcpiRequestCallback& callback, OdcpiPrioritytype priority)
+static void odcpiInit(const odcpiRequestCallback& callback, OdcpiPrioritytype priority)
 {
     if (NULL != gGnssAdapter) {
         gGnssAdapter->initOdcpiCommand(callback, priority);
@@ -398,15 +425,22 @@ static void blockCPI(double latitude, double longitude, float accuracy,
     }
 }
 
+static void setEsStatusCallback(std::function<void(bool)> esStatusCb)
+{
+    if (NULL != gGnssAdapter) {
+        gGnssAdapter->setEsStatusCallbackCommand(esStatusCb);
+    }
+}
+
 static void getGnssEnergyConsumed(GnssEnergyConsumedCallback energyConsumedCb) {
     if (NULL != gGnssAdapter) {
         gGnssAdapter->getGnssEnergyConsumedCommand(energyConsumedCb);
     }
 }
 
-static void enableNfwLocationAccess(bool enable) {
+static void enableNfwLocationAccess(std::vector<std::string>& enabledNfws) {
     if (NULL != gGnssAdapter) {
-        gGnssAdapter->nfwControlCommand(enable);
+        gGnssAdapter->nfwControlCommand(enabledNfws);
     }
 }
 
@@ -483,7 +517,7 @@ static uint32_t configLeverArm(const LeverArmConfigInfo& configInfo){
     }
 }
 
-static bool measCorrInit(const measCorrSetCapabilitiesCb setCapabilitiesCb) {
+static bool measCorrInit(const measCorrSetCapabilitiesCallback setCapabilitiesCb) {
     if (NULL != gGnssAdapter) {
         return gGnssAdapter->openMeasCorrCommand(setCapabilitiesCb);
     } else {
@@ -505,7 +539,7 @@ static void measCorrClose() {
     }
 }
 
-static uint32_t antennaInfoInit(const antennaInfoCb antennaInfoCallback) {
+static uint32_t antennaInfoInit(const antennaInfoCallback antennaInfoCallback) {
     if (NULL != gGnssAdapter) {
         return gGnssAdapter->antennaInfoInitCommand(antennaInfoCallback);
     } else {
@@ -513,10 +547,16 @@ static uint32_t antennaInfoInit(const antennaInfoCb antennaInfoCallback) {
     }
 }
 
+static void getGnssAntennaeInfo() {
+    if (NULL != gGnssAdapter) {
+        gGnssAdapter->getGnssAntennaeInfoCommand();
+    }
+}
+
 static void antennaInfoClose() {
     if (NULL != gGnssAdapter) {
         return gGnssAdapter->antennaInfoCloseCommand();
-	}
+    }
 }
 
 static uint32_t configRobustLocation(bool enable, bool enableForE911){
@@ -578,5 +618,50 @@ static void disablePPENtripStream(){
     if (NULL != gGnssAdapter) {
         // Call will be enabled once GnssAdapter impl. is ready.
         gGnssAdapter->disablePPENtripStreamCommand();
+    }
+}
+
+static uint32_t configEngineRunState(PositioningEngineMask engType, LocEngineRunState engState) {
+    if (NULL != gGnssAdapter) {
+        return gGnssAdapter->configEngineRunStateCommand(engType, engState);
+    } else {
+        return 0;
+    }
+}
+
+static uint32_t configOutputNmeaTypes (GnssNmeaTypesMask enabledNmeaTypes) {
+    if (NULL != gGnssAdapter) {
+        return gGnssAdapter->configOutputNmeaTypesCommand(enabledNmeaTypes);
+    } else {
+        return 0;
+    }
+}
+
+static uint32_t setOptInStatus(bool userConsent) {
+    if (NULL != gGnssAdapter) {
+        struct RespMsg : public LocMsg {
+            uint32_t mSessionId;
+            inline RespMsg(uint32_t id) : LocMsg(), mSessionId(id) {}
+            inline void proc() const override {
+                gGnssAdapter->reportResponse(LOCATION_ERROR_SUCCESS, mSessionId);
+            }
+        };
+
+        uint32_t sessionId = gGnssAdapter->generateSessionId();
+        gGnssAdapter->getSystemStatus()->eventOptInStatus(userConsent);
+        gGnssAdapter->sendMsg(new RespMsg(sessionId));
+
+        return sessionId;
+    } else {
+        return 0;
+    }
+}
+
+static uint32_t configEngineIntegrityRisk(PositioningEngineMask engType,
+                                          uint32_t integrityRisk) {
+    if (NULL != gGnssAdapter) {
+        return gGnssAdapter->configEngineIntegrityRiskCommand(engType, integrityRisk);
+    } else {
+        return 0;
     }
 }

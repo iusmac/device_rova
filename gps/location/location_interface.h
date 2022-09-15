@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -78,13 +78,14 @@ struct GnssInterface {
     void (*agpsDataConnFailed)(AGpsExtType agpsType);
     void (*getDebugReport)(GnssDebugReport& report);
     void (*updateConnectionStatus)(bool connected, int8_t type, bool roaming,
-                                   NetworkHandle networkHandle);
-    void (*odcpiInit)(const OdcpiRequestCallback& callback, OdcpiPrioritytype priority);
+                                   NetworkHandle networkHandle, std::string& apn);
+    void (*odcpiInit)(const odcpiRequestCallback& callback, OdcpiPrioritytype priority);
     void (*odcpiInject)(const Location& location);
     void (*blockCPI)(double latitude, double longitude, float accuracy,
                      int blockDurationMsec, double latLonDiffThreshold);
+    void (*setEsStatusCallback)(std::function<void(bool)> esStatusCb);
     void (*getGnssEnergyConsumed)(GnssEnergyConsumedCallback energyConsumedCb);
-    void (*enableNfwLocationAccess)(bool enable);
+    void (*enableNfwLocationAccess)(std::vector<std::string>& enabledNfws);
     void (*nfwInit)(const NfwCbInfo& cbInfo);
     void (*getPowerStateChanges)(std::function<void(bool)> powerStateCb);
     void (*injectLocationExt)(const GnssLocationInfoNotification &locationInfo);
@@ -95,10 +96,11 @@ struct GnssInterface {
     uint32_t (*gnssUpdateSvConfig)(const GnssSvTypeConfig& constellationEnablementConfig,
                                    const GnssSvIdConfig&   blacklistSvConfig);
     uint32_t (*configLeverArm)(const LeverArmConfigInfo& configInfo);
-    bool (*measCorrInit)(const measCorrSetCapabilitiesCb setCapabilitiesCb);
+    bool (*measCorrInit)(const measCorrSetCapabilitiesCallback setCapabilitiesCb);
     bool (*measCorrSetCorrections)(const GnssMeasurementCorrections gnssMeasCorr);
     void (*measCorrClose)();
-    uint32_t (*antennaInfoInit)(const antennaInfoCb antennaInfoCallback);
+    uint32_t (*antennaInfoInit)(const antennaInfoCallback antennaInfoCallback);
+    void (*getGnssAntennaeInfo)();
     void (*antennaInfoClose) ();
     uint32_t (*configRobustLocation)(bool enable, bool enableForE911);
     uint32_t (*configMinGpsWeek)(uint16_t minGpsWeek);
@@ -109,6 +111,11 @@ struct GnssInterface {
     uint32_t (*gnssUpdateSecondaryBandConfig)(const GnssSvTypeConfig& secondaryBandConfig);
     uint32_t (*gnssGetSecondaryBandConfig)();
     void (*resetNetworkInfo)();
+    uint32_t (*configEngineRunState)(PositioningEngineMask engType,
+                                     LocEngineRunState engState);
+    uint32_t (*configOutputNmeaTypes)(GnssNmeaTypesMask enabledNmeaTypes);
+    uint32_t (*setOptInStatus)(bool userConsent);
+    uint32_t (*configEngineIntegrityRisk)(PositioningEngineMask engineType, uint32_t integrityRisk);
 };
 
 struct BatchingInterface {
@@ -122,6 +129,7 @@ struct BatchingInterface {
     void (*stopBatching)(LocationAPI* client, uint32_t id);
     void (*updateBatchingOptions)(LocationAPI* client, uint32_t id, BatchingOptions&);
     void (*getBatchedLocations)(LocationAPI* client, uint32_t id, size_t count);
+    void (*updateSystemPowerState)(PowerStateType systemPowerState);
 };
 
 struct GeofenceInterface {
@@ -137,6 +145,7 @@ struct GeofenceInterface {
                             GeofenceOption* options);
     void (*pauseGeofences)(LocationAPI* client, size_t count, uint32_t* ids);
     void (*resumeGeofences)(LocationAPI* client, size_t count, uint32_t* ids);
+    void (*updateSystemPowerState)(PowerStateType systemPowerState);
 };
 
 #endif /* LOCATION_INTERFACE_H */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2015, 2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015, 2020-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -372,7 +372,7 @@ void LocTimerContainer::expire() {
         inline MsgTimerExpire(LocTimerContainer& container) :
             LocMsg(), mTimerContainer(&container) {}
         inline virtual void proc() const {
-            struct timespec now;
+            struct timespec now = {};
             // get time spec of now
             clock_gettime(CLOCK_BOOTTIME, &now);
             LocTimerDelegate timerOfNow(now);
@@ -545,7 +545,7 @@ bool LocTimer::start(unsigned int timeOutInMs, bool wakeOnExpire) {
     bool success = false;
     mLock->lock();
     if (!mTimer) {
-        struct timespec futureTime;
+        struct timespec futureTime = {};
         clock_gettime(CLOCK_BOOTTIME, &futureTime);
         futureTime.tv_sec += timeOutInMs / 1000;
         futureTime.tv_nsec += (timeOutInMs % 1000) * 1000000;

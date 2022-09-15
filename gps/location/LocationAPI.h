@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -31,6 +31,7 @@
 
 #include "ILocationAPI.h"
 
+
 class LocationAPI : public ILocationAPI
 {
 private:
@@ -41,7 +42,7 @@ public:
     /* creates an instance to LocationAPI object.
        Will return NULL if mandatory parameters are invalid or if the maximum number
        of instances have been reached */
-    static LocationAPI* createInstance(LocationCallbacks&);
+    static ILocationAPI* createInstance(LocationCallbacks&);
 
     /* destroy/cleans up the instance, which should be called when LocationControlAPI object is
        no longer needed. LocationControlAPI* returned from createInstance will no longer valid
@@ -50,7 +51,7 @@ public:
        LocationControlAPI::createInstance, then the caller must ensure that the memory still remains
        valid until destroyCompleteCb is invoked.
     */
-    void destroy(locationApiDestroyCompleteCallback destroyCompleteCb=nullptr);
+    virtual void destroy(locationApiDestroyCompleteCallback destroyCompleteCb=nullptr);
 
     void onRemoveClientCompleteCb (LocationAdapterTypeMask adapterType);
 
@@ -178,14 +179,23 @@ public:
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters in GnssNiResponse are invalid
                 LOCATION_ERROR_ID_UNKNOWN if id does not match a gnssNiCallback */
     virtual void gnssNiResponse(uint32_t id, GnssNiResponse response) override;
-};
 
-typedef struct {
-    size_t size; // set to sizeof(LocationControlCallbacks)
-    responseCallback responseCb;                     // mandatory
-    collectiveResponseCallback collectiveResponseCb; // mandatory
-    gnssConfigCallback gnssConfigCb;                 // optional
-} LocationControlCallbacks;
+    /* ================================== NETWORK PROVIDER =========================== */
+
+    /* enableNetworkProvider enables Network Provider */
+    virtual void enableNetworkProvider();
+
+    /* disableNetworkProvider disables Network Provider */
+    virtual void disableNetworkProvider();
+
+    /* startNetworkLocation starts tracking session for
+       network location request */
+    virtual void startNetworkLocation(trackingCallback* callback);
+
+    /* stopNetworkLocation stops the ongoing tracking session for
+       network location request */
+    virtual void stopNetworkLocation(trackingCallback* callback);
+};
 
 class LocationControlAPI : public ILocationControlAPI
 {
@@ -194,15 +204,14 @@ private:
     ~LocationControlAPI();
 
 public:
-    /* creates an instance to LocationControlAPI object.
-       Will return NULL if mandatory parameters are invalid or if the maximum number
-       of instances have been reached. Only once instance allowed */
-    static LocationControlAPI* createInstance(LocationControlCallbacks&);
+    /* creates an instance to LocationControlAPI object or returns an existing instance.*/
+    static ILocationControlAPI* getInstance(LocationControlCallbacks&);
+    static ILocationControlAPI* getInstance();
 
     /* destroy/cleans up the instance, which should be called when LocationControlAPI object is
        no longer needed. LocationControlAPI* returned from createInstance will no longer valid
        after destroy is called */
-    void destroy();
+    virtual void destroy() override;
 
     /* enable will enable specific location technology to be used for calculation locations and
        will effectively start a control session if call is successful, which returns a session id
@@ -214,7 +223,7 @@ public:
                 LOCATION_ERROR_ALREADY_STARTED if an enable was already called for this techType
                 LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
                 LOCATION_ERROR_GENERAL_FAILURE if failure for any other reason */
-    uint32_t enable(LocationTechnologyType techType);
+    virtual uint32_t enable(LocationTechnologyType techType) override;
 
     /* disable will disable specific location technology to be used for calculation locations and
        effectively ends the control session if call is successful.
@@ -225,7 +234,7 @@ public:
                 LOCATION_ERROR_SUCCESS if successful
                 LOCATION_ERROR_ID_UNKNOWN if id was not returned from responseCallback from enable
                 LOCATION_ERROR_GENERAL_FAILURE if failure for any other reason */
-    void disable(uint32_t id);
+    virtual void disable(uint32_t id) override;
 
     /* gnssUpdateConfig updates the gnss specific configuration, which returns a session id array
        with an id for each of the bits set in GnssConfig.flags, order from low bits to high bits.
@@ -257,7 +266,7 @@ public:
 
       PLEASE NOTE: It is caller's resposibility to FREE the memory of the return value.
                    The memory must be freed by delete [].*/
-    uint32_t* gnssGetConfig(GnssConfigFlagsMask mask);
+    virtual uint32_t* gnssGetConfig(GnssConfigFlagsMask mask) override;
 
     /* delete specific gnss aiding data for testing, which returns a session id
        that will be returned in responseCallback to match command with response.
@@ -442,6 +451,272 @@ public:
     */
     virtual uint32_t configDeadReckoningEngineParams(
             const DeadReckoningEngineConfig& dreConfig) override;
+
+    /** @brief
+        This API is used to instruct the specified engine to be in
+        the pause/resume state. <br/>
+
+        When the engine is placed in paused state, the engine will
+        stop. If there is an on-going session, engine will no longer
+        produce fixes. In the paused state, calling API to delete
+        aiding data from the paused engine may not have effect.
+        Request to delete Aiding data shall be issued after
+        engine resume. <br/>
+
+        Currently, only DRE engine will support pause/resume
+        request. responseCb() will return not supported when request
+        is made to pause/resume none-DRE engine. <br/>
+
+        Request to pause/resume DRE engine can be made with or
+        without an on-going session. With QDR engine, on resume, GNSS
+        position & heading re-acquisition is needed for DR engine to
+        engage. If DR engine is already in the requested state, the
+        request will be no-op.  <br/>
+
+        @param
+        engType: the engine that is instructed to change its run
+        state. <br/>
+
+        engState: the new engine run state that the engine is
+        instructed to be in. <br/>
+
+        @return
+        A session id that will be returned in responseCallback to
+        match command with response. This effect is global for all
+        clients of LocationAPI responseCallback returns:
+                LOCATION_ERROR_SUCCESS if successful
+                LOCATION_ERROR_INVALID_PARAMETER if any parameters are invalid
+    */
+    virtual uint32_t configEngineRunState(PositioningEngineMask engType,
+                                          LocEngineRunState engState) override;
+
+    /** @brief
+        Set the EULA opt-in status from system user. This is used as consent to
+        use network-based positioning.
+
+        @param
+        userConsnt: user agrees to use GTP service or not.
+
+        @return
+        A session id that will be returned in responseCallback to
+        match command with response.
+    */
+    virtual uint32_t setOptInStatus(bool userConsent);
+
+    /** @brief
+        This API is used to config the NMEA sentence types.
+
+        Without prior calling this API, all NMEA sentences supported
+        in the system, as defined in NmeaTypesMask, will get
+        generated and delivered to all the location clients that
+        register to receive NMEA sentences.
+
+        The NMEA sentence types are per-device setting and calling
+        this API will impact all the location api clients that
+        register to receive NMEA sentences. This API call is not
+        incremental and the new NMEA sentence types will completely
+        overwrite the previous call.
+
+        If one or more unspecified bits are set in the NMEA mask,
+        those bits will be ignored, but the rest of the
+        configuration will get applied.
+
+        Please note that the configured NMEA sentence types are not
+        persistent.
+
+        @param
+        enabledNmeaTypes: specify the set of NMEA sentences the
+        device will generate and deliver to the location api clients
+        that register to receive NMEA sentences. <br/>
+
+        @return
+        A session id that will be returned in responseCallback to
+        match command with response.
+    */
+    virtual uint32_t configOutputNmeaTypes(
+            GnssNmeaTypesMask enabledNmeaTypes) override;
+
+   /** @brief
+        This API is used to send platform power events to GNSS adapters in order
+        to handle GNSS sessions as per platform power event.
+
+        @param
+        powerState: Current vehicle/platform power state.
+
+        @return
+        No return value.
+    */
+    virtual void powerStateEvent(PowerStateType powerState) override;
+
+    /*API to update LocationControlCallbacks.
+
+        @param
+        callbacks: LocationControlCallbacks structure.
+
+        @return
+        Returns success or failure, i.e. zero or non-zero respectively.
+    */
+    virtual uint32_t updateCallbacks(LocationControlCallbacks& callbacks) override;
+
+    /** @brief
+        Inject on-demand coarse position
+
+        @param
+        location: Location structure
+    */
+    virtual void odcpiInject(const ::Location& location) override;
+
+    /** @brief
+        Resets all cached network info in HAL.
+    */
+    virtual void resetNetworkInfo() override;
+
+    /** @brief
+        Updates battery status in HAL as indicated by framework
+
+        @param
+        charging: Battery charging status
+    */
+    virtual void updateBatteryStatus(bool charging) override;
+
+    /** @brief
+        Inject location
+
+        @param
+        latitude : Location latitude in degree
+        longitude : Location longitude in degree
+        accuracy : Location accuracy in meters
+    */
+    virtual void injectLocation(double latitude, double longitude, float accuracy) override;
+
+     /** @brief
+        Request to open AGPS Data Connection
+
+        @param
+        apgpsType: Type of agps data connection to open
+        apnName: Access Point Name
+        apnLen: Length of apName string
+        ipType: APN Bearer Type
+    */
+    virtual void agpsDataConnOpen(AGpsType agpsType, const char* apnName,
+            int apnLen, int ipType) override;
+
+    /** @brief
+        Request to close AGPS data connection
+
+        @param
+        apgpsType: Type of agps data connection to close
+    */
+    virtual void agpsDataConnClosed(AGpsType agpsType) override;
+
+    /** @brief
+        Inform AGPS data connection failure
+
+        @param
+        apgpsType: Type of agps data connection that failed
+    */
+    virtual void agpsDataConnFailed(AGpsType agpsType) override;
+
+    /** @brief
+        Update connection status
+
+        @param
+        connected: Connected Status
+        type: Type of connection, Eth, wifi, mobile etc
+        roaming: Roaming status
+        networkHandle: NetworkHandle type.
+        apn: Access Point Name if needed
+
+    */
+    virtual void updateConnectionStatus(bool connected, int8_t type, bool roaming,
+            NetworkHandle networkHandle, std::string& apn) override;
+
+    /** @brief
+        Set measurement correction
+
+        @param
+        gnssMeasCorr GnssMeasurementCorrections structure
+    */
+    virtual bool measCorrSetCorrections(const GnssMeasurementCorrections gnssMeasCorr) override;
+
+    /** @brief
+        Close measurement corrections interface
+    */
+    virtual void measCorrClose() override;
+
+    /** @brief
+         Fetch antenna info from HAL
+     */
+    virtual void getGnssAntennaeInfo() override;
+
+    /** @brief
+        Close antenna info interface
+    */
+    virtual void antennaInfoClose() override;
+
+    /** @brief
+        Get Debug Report from HAL
+
+        @param
+        report: GnssDebugReport structure
+    */
+    virtual void getDebugReport(GnssDebugReport& report) override;
+
+    /** @brief
+        Enables/disables permissions to non-framework application use of GNSS
+
+        @param
+        enable: true/false to enable / disable permission
+    */
+    virtual void enableNfwLocationAccess(std::vector<std::string>& enabledNfws) override;
+
+    /** @brief
+        This API is used to instruct the specified engine to use
+        the provided integrity risk level for protection level
+        calculation in position report. This API can be called via
+        a position session is in progress.  <br/>
+
+        Prior to calling this API for a particular engine, the
+        engine shall not calcualte the protection levels and shall
+        not include the protection levels in its position report.
+        <br/>
+
+        Currently, only PPE engine will support this function.
+        LocConfigCb() will return LOC_INT_RESPONSE_NOT_SUPPORTED
+        when request is made to none-PPE engines. <br/>
+
+        @param
+        engType: the engine that is instructed to use the specified
+        integrity risk level for protection level calculation. The
+        protection level will be returned back in
+        LocationClientApi::GnssLocation. <br/>
+
+        @param
+        integrityRisk: the integrity risk level used for
+        calculating protection level in
+        LocationClientApi::GnssLocation. <br/>
+
+        The integrity risk is defined as a probability per epoch,
+        in unit of 2.5e-10. The valid range for actual integrity is
+        [2.5e-10, 1-2.5e-10]), this corresponds to range of [1,
+        4e9-1] of this parameter. <br/>
+
+        If the specified value of integrityRisk is NOT in the valid
+        range of [1, 4e9-1], the engine shall disable/invalidate
+        the protection levels in the position report. <br/>
+
+        @return true, if the API request has been accepted. The
+        status will be returned via configCB. When returning
+        true, LocConfigCb() will be invoked to deliver
+        asynchronous processing status.
+        <br/>
+
+        @return false, if the API request has not been accepted for
+        further processing. <br/>
+    */
+    virtual uint32_t configEngineIntegrityRisk(
+            PositioningEngineMask engType, uint32_t integrityRisk) override;
+
 };
 
 #endif /* LOCATIONAPI_H */

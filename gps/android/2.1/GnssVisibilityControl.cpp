@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2019-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -48,29 +48,26 @@ using ::android::hardware::Return;
 using ::android::hardware::Void;
 using ::android::sp;
 
-static GnssVisibilityControl* spGnssVisibilityControl = nullptr;
-
 static void convertGnssNfwNotification(GnssNfwNotification& in,
     IGnssVisibilityControlCallback::NfwNotification& out);
 
 GnssVisibilityControl::GnssVisibilityControl(Gnss* gnss) : mGnss(gnss) {
-    spGnssVisibilityControl = this;
+    LocationControlCallbacks locCtrlCbs;
+    memset(&locCtrlCbs, 0, sizeof(locCtrlCbs));
+    locCtrlCbs.size = sizeof(LocationControlCallbacks);
+
+    locCtrlCbs.nfwStatusCb = [this](GnssNfwNotification notification) {
+        nfwStatusCb(notification);
+    };
+
+    locCtrlCbs.isInEmergencyStatusCb = [this] () {
+        return isInEmergencySession();
+    };
+
+    mGnss->getLocationControlApi()->updateCallbacks(locCtrlCbs);
+
 }
 GnssVisibilityControl::~GnssVisibilityControl() {
-    spGnssVisibilityControl = nullptr;
-}
-
-void GnssVisibilityControl::nfwStatusCb(GnssNfwNotification notification) {
-    if (nullptr != spGnssVisibilityControl) {
-        spGnssVisibilityControl->statusCb(notification);
-    }
-}
-
-bool GnssVisibilityControl::isInEmergencySession() {
-    if (nullptr != spGnssVisibilityControl) {
-        return spGnssVisibilityControl->isE911Session();
-    }
-    return false;
 }
 
 static void convertGnssNfwNotification(GnssNfwNotification& in,
@@ -87,15 +84,18 @@ static void convertGnssNfwNotification(GnssNfwNotification& in,
     out.isCachedLocation = in.isCachedLocation;
 }
 
-void GnssVisibilityControl::statusCb(GnssNfwNotification notification) {
+void GnssVisibilityControl::nfwStatusCb(GnssNfwNotification notification) {
+    std::unique_lock<std::mutex> lock(mMutex);
+    auto gnssVisibilityControlCbIface(mGnssVisibilityControlCbIface);
+    lock.unlock();
 
-    if (mGnssVisibilityControlCbIface != nullptr) {
+    if (gnssVisibilityControlCbIface != nullptr) {
         IGnssVisibilityControlCallback::NfwNotification nfwNotification;
 
         // Convert from one structure to another
         convertGnssNfwNotification(notification, nfwNotification);
 
-        auto r = mGnssVisibilityControlCbIface->nfwNotifyCb(nfwNotification);
+        auto r = gnssVisibilityControlCbIface->nfwNotifyCb(nfwNotification);
         if (!r.isOk()) {
             LOC_LOGw("Error invoking NFW status cb %s", r.description().c_str());
         }
@@ -104,10 +104,13 @@ void GnssVisibilityControl::statusCb(GnssNfwNotification notification) {
     }
 }
 
-bool GnssVisibilityControl::isE911Session() {
+bool GnssVisibilityControl::isInEmergencySession() {
+    std::unique_lock<std::mutex> lock(mMutex);
+    auto gnssVisibilityControlCbIface(mGnssVisibilityControlCbIface);
+    lock.unlock();
 
-    if (mGnssVisibilityControlCbIface != nullptr) {
-        auto r = mGnssVisibilityControlCbIface->isInEmergencySession();
+    if (gnssVisibilityControlCbIface != nullptr) {
+        auto r = gnssVisibilityControlCbIface->isInEmergencySession();
         if (!r.isOk()) {
             LOC_LOGw("Error invoking NFW status cb %s", r.description().c_str());
             return false;
@@ -123,20 +126,17 @@ bool GnssVisibilityControl::isE911Session() {
 // Methods from ::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControl follow.
 Return<bool> GnssVisibilityControl::enableNfwLocationAccess(const hidl_vec<::android::hardware::hidl_string>& proxyApps) {
 
-    if (nullptr == mGnss || nullptr == mGnss->getGnssInterface()) {
+    if (nullptr == mGnss || nullptr == mGnss->getLocationControlApi()) {
         LOC_LOGe("Null GNSS interface");
         return false;
     }
 
-    /* If the vector is empty we need to disable all NFW clients
-       If there is at least one app in the vector we need to enable
-       all NFW clients */
-    if (0 == proxyApps.size()) {
-        mGnss->getGnssInterface()->enableNfwLocationAccess(false);
-    } else {
-        mGnss->getGnssInterface()->enableNfwLocationAccess(true);
+    std::vector<std::string> apps;
+    for (auto i = 0; i < proxyApps.size(); i++) {
+        apps.push_back((std::string)proxyApps[i]);
     }
 
+    mGnss->getLocationControlApi()->enableNfwLocationAccess(apps);
     return true;
 }
 /**
@@ -146,18 +146,9 @@ Return<bool> GnssVisibilityControl::enableNfwLocationAccess(const hidl_vec<::and
  */
 Return<bool> GnssVisibilityControl::setCallback(const ::android::sp<::android::hardware::gnss::visibility_control::V1_0::IGnssVisibilityControlCallback>& callback) {
 
-    if (nullptr == mGnss || nullptr == mGnss->getGnssInterface()) {
-        LOC_LOGe("Null GNSS interface");
-        return false;
-    }
+    std::unique_lock<std::mutex> lock(mMutex);
     mGnssVisibilityControlCbIface = callback;
-
-    NfwCbInfo cbInfo = {};
-    cbInfo.visibilityControlCb = (void*)nfwStatusCb;
-    cbInfo.isInEmergencySession = (void*)isInEmergencySession;
-
-    mGnss->getGnssInterface()->nfwInit(cbInfo);
-
+    lock.unlock();
     return true;
 }
 

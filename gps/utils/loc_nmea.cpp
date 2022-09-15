@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2021, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -36,6 +36,7 @@
 #include <loc_cfg.h>
 
 #define GLONASS_SV_ID_OFFSET 64
+#define SBAS_SV_ID_OFFSET    (87)
 #define QZSS_SV_ID_OFFSET    (192)
 #define BDS_SV_ID_OFFSET     (200)
 #define GALILEO_SV_ID_OFFSET (300)
@@ -44,6 +45,7 @@
 #define MAX_SATELLITES_IN_USE 12
 #define MSEC_IN_ONE_WEEK      604800000ULL
 #define UTC_GPS_OFFSET_MSECS  315964800000ULL
+#define MAX_TAG_BLOCK_GROUP_CODE  (99999)
 
 // GNSS system id according to NMEA spec
 #define SYSTEM_ID_GPS          1
@@ -113,7 +115,7 @@
 typedef struct loc_nmea_sv_meta_s
 {
     char talker[3];
-    LocGnssConstellationType svType;
+    uint32_t svTypeMask;
     uint64_t mask;
     uint32_t svCount;
     uint32_t totalSvUsedCount;
@@ -149,6 +151,8 @@ typedef struct loc_sv_cache_info_s
     float pdop;
     float vdop;
 } loc_sv_cache_info;
+
+static GnssNmeaTypesMask mEnabledNmeaTypes = NMEA_TYPE_ALL;
 
 /*===========================================================================
 FUNCTION    convert_Lla_to_Ecef
@@ -292,6 +296,7 @@ static uint32_t convert_signalType_to_signalId(GnssSignalTypeMask signalType)
 
     switch (signalType) {
         case GNSS_SIGNAL_GPS_L1CA:
+        case GNSS_SIGNAL_SBAS_L1:
             signalId = SIGNAL_ID_GPS_L1CA;
             break;
         case GNSS_SIGNAL_GPS_L2:
@@ -404,7 +409,7 @@ static loc_nmea_sv_meta* loc_nmea_sv_meta_init(loc_nmea_sv_meta& sv_meta,
                                                bool needCombine)
 {
     memset(&sv_meta, 0, sizeof(sv_meta));
-    sv_meta.svType = svType;
+    sv_meta.svTypeMask = (1 << svType);
 
     switch (svType)
     {
@@ -413,6 +418,7 @@ static loc_nmea_sv_meta* loc_nmea_sv_meta_init(loc_nmea_sv_meta& sv_meta,
             sv_meta.talker[1] = 'P';
             sv_meta.mask = sv_cache_info.gps_used_mask;
             sv_meta.systemId = SYSTEM_ID_GPS;
+            sv_meta.svTypeMask |= (1 << GNSS_SV_TYPE_SBAS);
             switch (signalType) {
                 case GNSS_SIGNAL_GPS_L1CA:
                     sv_meta.svCount = sv_cache_info.gps_l1_count;
@@ -563,23 +569,28 @@ SIDE EFFECTS
    N/A
 
 ===========================================================================*/
-static int loc_nmea_put_checksum(char *pNmea, int maxSize)
+static int loc_nmea_put_checksum(char *pNmea, int maxSize, bool isTagBlock)
 {
     uint8_t checksum = 0;
     int length = 0;
+    int checksumLength = 0;
     if(NULL == pNmea)
         return 0;
 
-    pNmea++; //skip the $
+    pNmea++; //skip the $ or / for Tag Block
     while (*pNmea != '\0')
     {
         checksum ^= *pNmea++;
         length++;
     }
 
-    // length now contains nmea sentence string length not including $ sign.
-    int checksumLength = snprintf(pNmea,(maxSize-length-1),"*%02X\r\n", checksum);
-
+    if (isTagBlock) {
+        // length now contains tag block sentence string length not including / sign.
+        checksumLength = snprintf(pNmea, (maxSize-length-1), "*%02X\\", checksum);
+    } else {
+        // length now contains nmea sentence string length not including $ sign.
+        checksumLength = snprintf(pNmea, (maxSize-length-1), "*%02X\r\n", checksum);
+    }
     // total length of nmea sentence is length of nmea sentence inc $ sign plus
     // length of checksum (+1 is to cover the $ character in the length).
     return (length + checksumLength + 1);
@@ -610,7 +621,8 @@ static uint32_t loc_nmea_generate_GSA(const GpsLocationExtended &locationExtende
                               char* sentence,
                               int bufSize,
                               loc_nmea_sv_meta* sv_meta_p,
-                              std::vector<std::string> &nmeaArraystr)
+                              std::vector<std::string> &nmeaArraystr,
+                              bool isTagBlockGroupingEnabled)
 {
     if (!sentence || bufSize <= 0 || !sv_meta_p)
     {
@@ -621,9 +633,14 @@ static uint32_t loc_nmea_generate_GSA(const GpsLocationExtended &locationExtende
     char* pMarker = sentence;
     int lengthRemaining = bufSize;
     int length = 0;
+    int lengthTagBlock = 0;
 
     uint32_t svUsedCount = 0;
     uint32_t svUsedList[64] = {0};
+    uint32_t sentenceCount = 0;
+    uint32_t sentenceNumber = 1;
+    size_t svNumber = 1;
+    static uint32_t code = 1;
 
     char fixType = '\0';
 
@@ -631,7 +648,7 @@ static uint32_t loc_nmea_generate_GSA(const GpsLocationExtended &locationExtende
     uint32_t svIdOffset = sv_meta_p->svIdOffset;
     uint64_t mask = sv_meta_p->mask;
 
-    if(sv_meta_p->svType != GNSS_SV_TYPE_GLONASS) {
+    if (!(sv_meta_p->svTypeMask & (1 << GNSS_SV_TYPE_GLONASS))) {
         svIdOffset = 0;
     }
 
@@ -642,77 +659,100 @@ static uint32_t loc_nmea_generate_GSA(const GpsLocationExtended &locationExtende
         mask = mask >> 1;
     }
 
-    if (svUsedCount == 0)
+    if (svUsedCount == 0) {
         return 0;
-
-    if (sv_meta_p->totalSvUsedCount == 0)
-        fixType = '1'; // no fix
-    else if (sv_meta_p->totalSvUsedCount <= 3)
-        fixType = '2'; // 2D fix
-    else
-        fixType = '3'; // 3D fix
-
-    // Start printing the sentence
-    // Format: $--GSA,a,x,xx,xx,xx,xx,xx,xx,xx,xx,xx,xx,xx,xx,p.p,h.h,v.v,s*cc
-    // a : Mode  : A : Automatic, allowed to automatically switch 2D/3D
-    // x : Fixtype : 1 (no fix), 2 (2D fix), 3 (3D fix)
-    // xx : 12 SV ID
-    // p.p : Position DOP (Dilution of Precision)
-    // h.h : Horizontal DOP
-    // v.v : Vertical DOP
-    // s : GNSS System Id
-    // cc : Checksum value
-    length = snprintf(pMarker, lengthRemaining, "$%sGSA,A,%c,", talker, fixType);
-
-    if (length < 0 || length >= lengthRemaining)
-    {
-        LOC_LOGE("NMEA Error in string formatting");
-        return 0;
+    } else {
+        sentenceNumber = 1;
+        sentenceCount = svUsedCount / 12 + (svUsedCount % 12 != 0);
+        svNumber = 1;
     }
-    pMarker += length;
-    lengthRemaining -= length;
-
-    // Add first 12 satellite IDs
-    for (uint8_t i = 0; i < 12; i++)
-    {
-        if (i < svUsedCount)
-            length = snprintf(pMarker, lengthRemaining, "%02d,", svUsedList[i]);
+    while (sentenceNumber <= sentenceCount) {
+        pMarker = sentence;
+        lengthRemaining = bufSize;
+        if (svUsedCount > 12 && isTagBlockGroupingEnabled) {
+            lengthTagBlock = snprintf(pMarker, lengthRemaining, "\\g:%d-%d-%d", sentenceNumber,
+                     sentenceCount, code);
+            if (MAX_TAG_BLOCK_GROUP_CODE == code) {
+                code = 1;
+            }
+            lengthTagBlock = loc_nmea_put_checksum(sentence, bufSize, true);
+            pMarker += lengthTagBlock;
+            lengthRemaining -= lengthTagBlock;
+        }
+        if (sv_meta_p->totalSvUsedCount == 0)
+            fixType = '1'; // no fix
+        else if (sv_meta_p->totalSvUsedCount <= 3)
+            fixType = '2'; // 2D fix
         else
-            length = snprintf(pMarker, lengthRemaining, ",");
+            fixType = '3'; // 3D fix
 
-        if (length < 0 || length >= lengthRemaining)
-        {
+        // Start printing the sentence
+        // Format: $--GSA,a,x,xx,xx,xx,xx,xx,xx,xx,xx,xx,xx,xx,xx,p.p,h.h,v.v,s*cc
+        // a : Mode  : A : Automatic, allowed to automatically switch 2D/3D
+        // x : Fixtype : 1 (no fix), 2 (2D fix), 3 (3D fix)
+        // xx : 12 SV ID
+        // p.p : Position DOP (Dilution of Precision)
+        // h.h : Horizontal DOP
+        // v.v : Vertical DOP
+        // s : GNSS System Id
+        // cc : Checksum value
+        length = snprintf(pMarker, lengthRemaining, "$%sGSA,A,%c,", talker, fixType);
+        if (length < 0 || length >= lengthRemaining) {
             LOC_LOGE("NMEA Error in string formatting");
             return 0;
         }
         pMarker += length;
         lengthRemaining -= length;
+
+        // Add 12 satellite IDs
+        for (uint8_t i = 0; i < 12; i++, svNumber++)
+        {
+            if (svNumber <= svUsedCount)
+                length = snprintf(pMarker, lengthRemaining, "%02d,", svUsedList[svNumber - 1]);
+            else
+                length = snprintf(pMarker, lengthRemaining, ",");
+
+            if (length < 0 || length >= lengthRemaining) {
+                LOC_LOGE("NMEA Error in string formatting");
+                return 0;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+        }
+
+        // Add the position/horizontal/vertical DOP values
+        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DOP) {
+            length = snprintf(pMarker, lengthRemaining, "%.1f,%.1f,%.1f,",
+                    locationExtended.pdop,
+                    locationExtended.hdop,
+                    locationExtended.vdop);
+        } else if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_EXT_DOP) {
+            length = snprintf(pMarker, lengthRemaining, "%.1f,%.1f,%.1f,",
+                locationExtended.extDOP.PDOP,
+                locationExtended.extDOP.HDOP,
+                locationExtended.extDOP.VDOP);
+        } else {   // no dop
+            length = snprintf(pMarker, lengthRemaining, ",,,");
+        }
+        pMarker += length;
+        lengthRemaining -= length;
+
+        // system id
+        length = snprintf(pMarker, lengthRemaining, "%d", sv_meta_p->systemId);
+        pMarker += length;
+        lengthRemaining -= length;
+
+        /* Sentence is ready, add checksum and broadcast */
+        length = loc_nmea_put_checksum(sentence + lengthTagBlock, bufSize - lengthTagBlock, false);
+        nmeaArraystr.push_back(sentence);
+        sentenceNumber++;
+        if (!isTagBlockGroupingEnabled) {
+            break;
+        }
     }
-
-    // Add the position/horizontal/vertical DOP values
-    if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DOP)
-    {
-        length = snprintf(pMarker, lengthRemaining, "%.1f,%.1f,%.1f,",
-                locationExtended.pdop,
-                locationExtended.hdop,
-                locationExtended.vdop);
+    if (svUsedCount > 12 && isTagBlockGroupingEnabled) {
+        code++;
     }
-    else
-    {   // no dop
-        length = snprintf(pMarker, lengthRemaining, ",,,");
-    }
-    pMarker += length;
-    lengthRemaining -= length;
-
-    // system id
-    length = snprintf(pMarker, lengthRemaining, "%d", sv_meta_p->systemId);
-    pMarker += length;
-    lengthRemaining -= length;
-
-    /* Sentence is ready, add checksum and broadcast */
-    length = loc_nmea_put_checksum(sentence, bufSize);
-    nmeaArraystr.push_back(sentence);
-
     return svUsedCount;
 }
 
@@ -764,7 +804,7 @@ static void loc_nmea_generate_GSV(const GnssSvNotification &svNotify,
         return;
     }
 
-    if (GNSS_SV_TYPE_GLONASS == sv_meta_p->svType) {
+    if ((1 << GNSS_SV_TYPE_GLONASS) & sv_meta_p->svTypeMask) {
         svIdOffset = 0;
     }
     svNumber = 1;
@@ -822,14 +862,23 @@ static void loc_nmea_generate_GSV(const GnssSvNotification &svNotify,
                 }
             }
 
-            if (sv_meta_p->svType == svNotify.gnssSvs[svNumber - 1].type &&
+            if ((sv_meta_p->svTypeMask & (1 << svNotify.gnssSvs[svNumber - 1].type)) &&
                     sv_meta_p->signalId == convert_signalType_to_signalId(signalType))
             {
-                length = snprintf(pMarker, lengthRemaining,",%02d,%02d,%03d,",
+                if (GNSS_SV_TYPE_SBAS == svNotify.gnssSvs[svNumber - 1].type) {
+                    svIdOffset = SBAS_SV_ID_OFFSET;
+                }
+                if (GNSS_SV_TYPE_GLONASS == svNotify.gnssSvs[svNumber - 1].type &&
+                    GLO_SV_PRN_SLOT_UNKNOWN == svNotify.gnssSvs[svNumber - 1].svId) {
+                    length = snprintf(pMarker, lengthRemaining, ",,%02d,%03d,",
+                        (int)(0.5 + svNotify.gnssSvs[svNumber - 1].elevation), //float to int
+                        (int)(0.5 + svNotify.gnssSvs[svNumber - 1].azimuth)); //float to int
+                } else {
+                    length = snprintf(pMarker, lengthRemaining, ",%02d,%02d,%03d,",
                         svNotify.gnssSvs[svNumber - 1].svId - svIdOffset,
                         (int)(0.5 + svNotify.gnssSvs[svNumber - 1].elevation), //float to int
                         (int)(0.5 + svNotify.gnssSvs[svNumber - 1].azimuth)); //float to int
-
+                }
                 if (length < 0 || length >= lengthRemaining)
                 {
                     LOC_LOGE("NMEA Error in string formatting");
@@ -840,7 +889,7 @@ static void loc_nmea_generate_GSV(const GnssSvNotification &svNotify,
 
                 if (svNotify.gnssSvs[svNumber - 1].cN0Dbhz > 0)
                 {
-                    length = snprintf(pMarker, lengthRemaining,"%02d",
+                    length = snprintf(pMarker, lengthRemaining, "%02d",
                             (int)(0.5 + svNotify.gnssSvs[svNumber - 1].cN0Dbhz)); //float to int
 
                     if (length < 0 || length >= lengthRemaining)
@@ -858,11 +907,11 @@ static void loc_nmea_generate_GSV(const GnssSvNotification &svNotify,
         }
 
         // append signalId
-        length = snprintf(pMarker, lengthRemaining,",%X",sv_meta_p->signalId);
+        length = snprintf(pMarker, lengthRemaining, ",%X", sv_meta_p->signalId);
         pMarker += length;
         lengthRemaining -= length;
 
-        length = loc_nmea_put_checksum(sentence, bufSize);
+        length = loc_nmea_put_checksum(sentence, bufSize, false);
         nmeaArraystr.push_back(sentence);
         sentenceNumber++;
 
@@ -895,7 +944,7 @@ static void loc_nmea_generate_DTM(const LocLla &ref_lla,
     int lengthRemaining = bufSize;
     int length = 0;
     int datum_type;
-    char ref_datum[4] = {0};
+    char ref_datum[4] = {'W', '8', '4', '\0'};
     char local_datum[4] = {0};
     double lla_offset[3] = {0};
     char latHem, longHem;
@@ -906,20 +955,14 @@ static void loc_nmea_generate_DTM(const LocLla &ref_lla,
     datum_type = loc_get_datum_type();
     switch (datum_type) {
         case LOC_GNSS_DATUM_WGS84:
-            ref_datum[0] = 'W';
-            ref_datum[1] = '8';
-            ref_datum[2] = '4';
-            local_datum[0] = 'P';
-            local_datum[1] = '9';
-            local_datum[2] = '0';
-            break;
-        case LOC_GNSS_DATUM_PZ90:
-            ref_datum[0] = 'P';
-            ref_datum[1] = '9';
-            ref_datum[2] = '0';
             local_datum[0] = 'W';
             local_datum[1] = '8';
             local_datum[2] = '4';
+            break;
+        case LOC_GNSS_DATUM_PZ90:
+            local_datum[0] = 'P';
+            local_datum[1] = '9';
+            local_datum[2] = '0';
             break;
         default:
             break;
@@ -940,7 +983,7 @@ static void loc_nmea_generate_DTM(const LocLla &ref_lla,
         lla_offset[1] -= 360.0;
     }
     lla_offset[2] = local_lla.alt - ref_lla.alt;
-    if (lla_offset[0] > 0.0) {
+    if (lla_offset[0] >= 0.0) {
         latHem = 'N';
     } else {
         latHem = 'S';
@@ -971,7 +1014,7 @@ static void loc_nmea_generate_DTM(const LocLla &ref_lla,
     pMarker += length;
     lengthRemaining -= length;
 
-    length = loc_nmea_put_checksum(sentence, bufSize);
+    length = loc_nmea_put_checksum(sentence, bufSize, false);
 }
 
 /*===========================================================================
@@ -1287,7 +1330,8 @@ void loc_nmea_generate_pos(const UlpLocation &location,
                                unsigned char generate_nmea,
                                bool custom_gga_fix_quality,
                                std::vector<std::string> &nmeaArraystr,
-                               int& indexOfGGA)
+                               int& indexOfGGA,
+                               bool isTagBlockGroupingEnabled)
 {
     ENTRY_LOG();
 
@@ -1329,6 +1373,13 @@ void loc_nmea_generate_pos(const UlpLocation &location,
     LocLla  ref_lla;
     LocLla  local_lla;
 
+    memset(&ecef_w84, 0, sizeof(ecef_w84));
+    memset(&ecef_p90, 0, sizeof(ecef_p90));
+    memset(&lla_w84, 0, sizeof(lla_w84));
+    memset(&lla_p90, 0, sizeof(lla_p90));
+    memset(&ref_lla, 0, sizeof(ref_lla));
+    memset(&local_lla, 0, sizeof(local_lla));
+
     if (inLsTransition) {
         // During leap second transition, we need to display the extra
         // leap second of hour, minute, second as (23:59:60)
@@ -1362,81 +1413,94 @@ void loc_nmea_generate_pos(const UlpLocation &location,
         uint32_t svUsedCount = 0;
         uint32_t count = 0;
         loc_nmea_sv_meta sv_meta;
-        // -------------------
-        // ---$GPGSA/$GNGSA---
-        // -------------------
 
-        count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
-                        loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GPS,
-                        GNSS_SIGNAL_GPS_L1CA, true), nmeaArraystr);
-        if (count > 0)
-        {
-            svUsedCount += count;
-            talker[0] = sv_meta.talker[0];
-            talker[1] = sv_meta.talker[1];
-        }
+        if (mEnabledNmeaTypes & NMEA_TYPE_GSA) {
+            // -------------------
+            // ---$GPGSA/$GNGSA---
+            // -------------------
+            count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
+                            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GPS,
+                            GNSS_SIGNAL_GPS_L1CA, true), nmeaArraystr, isTagBlockGroupingEnabled);
+            if (count > 0)
+            {
+                svUsedCount += count;
+                talker[0] = sv_meta.talker[0];
+                talker[1] = sv_meta.talker[1];
+            }
 
-        // -------------------
-        // ---$GLGSA/$GNGSA---
-        // -------------------
+            // -------------------
+            // ---$GLGSA/$GNGSA---
+            // -------------------
+            count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
+                            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GLONASS,
+                            GNSS_SIGNAL_GLONASS_G1, true), nmeaArraystr, isTagBlockGroupingEnabled);
+            if (count > 0)
+            {
+                svUsedCount += count;
+                talker[0] = sv_meta.talker[0];
+                talker[1] = sv_meta.talker[1];
+            }
 
-        count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
-                        loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GLONASS,
-                        GNSS_SIGNAL_GLONASS_G1, true), nmeaArraystr);
-        if (count > 0)
-        {
-            svUsedCount += count;
-            talker[0] = sv_meta.talker[0];
-            talker[1] = sv_meta.talker[1];
-        }
+            // -------------------
+            // ---$GAGSA/$GNGSA---
+            // -------------------
+            count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
+                            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GALILEO,
+                            GNSS_SIGNAL_GALILEO_E1, true), nmeaArraystr, isTagBlockGroupingEnabled);
+            if (count > 0)
+            {
+                svUsedCount += count;
+                talker[0] = sv_meta.talker[0];
+                talker[1] = sv_meta.talker[1];
+            }
 
-        // -------------------
-        // ---$GAGSA/$GNGSA---
-        // -------------------
+            // ----------------------------
+            // ---$GBGSA/$GNGSA (BEIDOU)---
+            // ----------------------------
+            count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
+                            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_BEIDOU,
+                            GNSS_SIGNAL_BEIDOU_B1I, true), nmeaArraystr, isTagBlockGroupingEnabled);
+            if (count > 0)
+            {
+                svUsedCount += count;
+                talker[0] = sv_meta.talker[0];
+                talker[1] = sv_meta.talker[1];
+            }
 
-        count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
-                        loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GALILEO,
-                        GNSS_SIGNAL_GALILEO_E1, true), nmeaArraystr);
-        if (count > 0)
-        {
-            svUsedCount += count;
-            talker[0] = sv_meta.talker[0];
-            talker[1] = sv_meta.talker[1];
-        }
+            // --------------------------
+            // ---$GQGSA/$GNGSA (QZSS)---
+            // --------------------------
+            count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
+                            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_QZSS,
+                            GNSS_SIGNAL_QZSS_L1CA, true), nmeaArraystr, isTagBlockGroupingEnabled);
+            if (count > 0)
+            {
+                svUsedCount += count;
+                talker[0] = sv_meta.talker[0];
+                talker[1] = sv_meta.talker[1];
+            }
 
-        // ----------------------------
-        // ---$GBGSA/$GNGSA (BEIDOU)---
-        // ----------------------------
-        count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
-                        loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_BEIDOU,
-                        GNSS_SIGNAL_BEIDOU_B1I, true), nmeaArraystr);
-        if (count > 0)
-        {
-            svUsedCount += count;
-            talker[0] = sv_meta.talker[0];
-            talker[1] = sv_meta.talker[1];
-        }
+            // --------------------------
+            // ---$GIGSA/$GNGSA (NavIC)---
+            // --------------------------
 
-        // --------------------------
-        // ---$GQGSA/$GNGSA (QZSS)---
-        // --------------------------
+            count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
+                            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_NAVIC,
+                            GNSS_SIGNAL_NAVIC_L5, true), nmeaArraystr, isTagBlockGroupingEnabled);
+            if (count > 0)
+            {
+                svUsedCount += count;
+                talker[0] = sv_meta.talker[0];
+                talker[1] = sv_meta.talker[1];
+            }
 
-        count = loc_nmea_generate_GSA(locationExtended, sentence, sizeof(sentence),
-                        loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_QZSS,
-                        GNSS_SIGNAL_QZSS_L1CA, true), nmeaArraystr);
-        if (count > 0)
-        {
-            svUsedCount += count;
-            talker[0] = sv_meta.talker[0];
-            talker[1] = sv_meta.talker[1];
-        }
-
-        // if svUsedCount is 0, it means we do not generate any GSA sentence yet.
-        // in this case, generate an empty GSA sentence
-        if (svUsedCount == 0) {
-            strlcpy(sentence, "$GPGSA,A,1,,,,,,,,,,,,,,,,", sizeof(sentence));
-            length = loc_nmea_put_checksum(sentence, sizeof(sentence));
-            nmeaArraystr.push_back(sentence);
+            // if svUsedCount is 0, it means we do not generate any GSA sentence yet.
+            // in this case, generate an empty GSA sentence
+            if (svUsedCount == 0) {
+                strlcpy(sentence, "$GPGSA,A,1,,,,,,,,,,,,,,,,", sizeof(sentence));
+                length = loc_nmea_put_checksum(sentence, sizeof(sentence), false);
+                nmeaArraystr.push_back(sentence);
+            }
         }
 
         char ggaGpsQuality[3] = {'0', '\0', '\0'};
@@ -1449,411 +1513,275 @@ void loc_nmea_generate_pos(const UlpLocation &location,
         // -------------------
         // ------$--VTG-------
         // -------------------
+        if (mEnabledNmeaTypes & NMEA_TYPE_VTG) {
+            pMarker = sentence;
+            lengthRemaining = sizeof(sentence);
 
-        pMarker = sentence;
-        lengthRemaining = sizeof(sentence);
-
-        if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_BEARING)
-        {
-            float magTrack = location.gpsLocation.bearing;
-            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_MAG_DEV)
+            if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_BEARING)
             {
-                float magTrack = location.gpsLocation.bearing - locationExtended.magneticDeviation;
-                if (magTrack < 0.0)
-                    magTrack += 360.0;
-                else if (magTrack > 360.0)
-                    magTrack -= 360.0;
+                float magTrack = location.gpsLocation.bearing;
+                if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_MAG_DEV)
+                {
+                    magTrack = location.gpsLocation.bearing - locationExtended.magneticDeviation;
+                    if (magTrack < 0.0)
+                        magTrack += 360.0;
+                    else if (magTrack > 360.0)
+                        magTrack -= 360.0;
+                }
+
+                length = snprintf(pMarker, lengthRemaining, "$%sVTG,%.1lf,T,%.1lf,M,",
+                                  talker, location.gpsLocation.bearing, magTrack);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, "$%sVTG,,T,,M,", talker);
             }
 
-            length = snprintf(pMarker, lengthRemaining, "$%sVTG,%.1lf,T,%.1lf,M,", talker, location.gpsLocation.bearing, magTrack);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, "$%sVTG,,T,,M,", talker);
-        }
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
 
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
+            if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_SPEED)
+            {
+                float speedKnots = location.gpsLocation.speed * (3600.0/1852.0);
+                float speedKmPerHour = location.gpsLocation.speed * 3.6;
 
-        if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_SPEED)
-        {
-            float speedKnots = location.gpsLocation.speed * (3600.0/1852.0);
-            float speedKmPerHour = location.gpsLocation.speed * 3.6;
+                length = snprintf(pMarker, lengthRemaining, "%.1lf,N,%.1lf,K,",
+                                  speedKnots, speedKmPerHour);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",N,,K,");
+            }
 
-            length = snprintf(pMarker, lengthRemaining, "%.1lf,N,%.1lf,K,", speedKnots, speedKmPerHour);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, ",N,,K,");
-        }
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
 
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
+            length = snprintf(pMarker, lengthRemaining, "%c", vtgModeIndicator);
 
-        length = snprintf(pMarker, lengthRemaining, "%c", vtgModeIndicator);
+            length = loc_nmea_put_checksum(sentence, sizeof(sentence), false);
+            nmeaArraystr.push_back(sentence);
 
-        length = loc_nmea_put_checksum(sentence, sizeof(sentence));
-        nmeaArraystr.push_back(sentence);
+            lla_w84.lat = location.gpsLocation.latitude / 180.0 * M_PI;
+            lla_w84.lon = location.gpsLocation.longitude / 180.0 * M_PI;
+            lla_w84.alt = location.gpsLocation.altitude;
 
-        memset(&ecef_w84, 0, sizeof(ecef_w84));
-        memset(&ecef_p90, 0, sizeof(ecef_p90));
-        memset(&lla_w84, 0, sizeof(lla_w84));
-        memset(&lla_p90, 0, sizeof(lla_p90));
-        memset(&ref_lla, 0, sizeof(ref_lla));
-        memset(&local_lla, 0, sizeof(local_lla));
-        lla_w84.lat = location.gpsLocation.latitude / 180.0 * M_PI;
-        lla_w84.lon = location.gpsLocation.longitude / 180.0 * M_PI;
-        lla_w84.alt = location.gpsLocation.altitude;
+            convert_Lla_to_Ecef(lla_w84, ecef_w84);
+            convert_WGS84_to_PZ90(ecef_w84, ecef_p90);
+            convert_Ecef_to_Lla(ecef_p90, lla_p90);
 
-        convert_Lla_to_Ecef(lla_w84, ecef_w84);
-        convert_WGS84_to_PZ90(ecef_w84, ecef_p90);
-        convert_Ecef_to_Lla(ecef_p90, lla_p90);
+            ref_lla.lat = location.gpsLocation.latitude;
+            ref_lla.lon = location.gpsLocation.longitude;
+            ref_lla.alt = location.gpsLocation.altitude;
 
-        switch (datum_type) {
-            case LOC_GNSS_DATUM_WGS84:
-                ref_lla.lat = location.gpsLocation.latitude;
-                ref_lla.lon = location.gpsLocation.longitude;
-                ref_lla.alt = location.gpsLocation.altitude;
-                local_lla.lat = lla_p90.lat / M_PI * 180.0;
-                local_lla.lon = lla_p90.lon / M_PI * 180.0;
-                local_lla.alt = lla_p90.alt;
-                break;
-            case LOC_GNSS_DATUM_PZ90:
-                ref_lla.lat = lla_p90.lat / M_PI * 180.0;
-                ref_lla.lon = lla_p90.lon / M_PI * 180.0;
-                ref_lla.alt = lla_p90.alt;
-                local_lla.lat = location.gpsLocation.latitude;
-                local_lla.lon = location.gpsLocation.longitude;
-                local_lla.alt = location.gpsLocation.altitude;
-                break;
-            default:
-                break;
+            switch (datum_type) {
+                case LOC_GNSS_DATUM_WGS84:
+                    local_lla.lat = location.gpsLocation.latitude;
+                    local_lla.lon = location.gpsLocation.longitude;
+                    local_lla.alt = location.gpsLocation.altitude;
+                    break;
+                case LOC_GNSS_DATUM_PZ90:
+                    local_lla.lat = lla_p90.lat / M_PI * 180.0;
+                    local_lla.lon = lla_p90.lon / M_PI * 180.0;
+                    local_lla.alt = lla_p90.alt;
+                    break;
+                default:
+                    break;
+            }
         }
 
         // -------------------
         // ------$--DTM-------
         // -------------------
-        loc_nmea_generate_DTM(ref_lla, local_lla, talker, sentence_DTM, sizeof(sentence_DTM));
+        if (mEnabledNmeaTypes & NMEA_TYPE_DTM) {
+            loc_nmea_generate_DTM(ref_lla, local_lla, talker, sentence_DTM, sizeof(sentence_DTM));
+        }
 
         // -------------------
         // ------$--RMC-------
         // -------------------
+        if (mEnabledNmeaTypes & NMEA_TYPE_RMC) {
+            pMarker = sentence_RMC;
+            lengthRemaining = sizeof(sentence_RMC);
 
-        pMarker = sentence_RMC;
-        lengthRemaining = sizeof(sentence_RMC);
+            bool validFix = ((0 != sv_cache_info.gps_used_mask) ||
+                    (0 != sv_cache_info.glo_used_mask) ||
+                    (0 != sv_cache_info.gal_used_mask) ||
+                    (0 != sv_cache_info.qzss_used_mask) ||
+                    (0 != sv_cache_info.bds_used_mask));
 
-        bool validFix = ((0 != sv_cache_info.gps_used_mask) ||
-                (0 != sv_cache_info.glo_used_mask) ||
-                (0 != sv_cache_info.gal_used_mask) ||
-                (0 != sv_cache_info.qzss_used_mask) ||
-                (0 != sv_cache_info.bds_used_mask));
+            if (validFix) {
+                length = snprintf(pMarker, lengthRemaining, "$%sRMC,%02d%02d%02d.%02d,A,",
+                                  talker, utcHours, utcMinutes, utcSeconds, utcMSeconds/10);
+            } else {
+                length = snprintf(pMarker, lengthRemaining, "$%sRMC,%02d%02d%02d.%02d,V,",
+                                  talker, utcHours, utcMinutes, utcSeconds, utcMSeconds/10);
+            }
 
-        if (validFix) {
-            length = snprintf(pMarker, lengthRemaining, "$%sRMC,%02d%02d%02d.%02d,A,",
-                              talker, utcHours, utcMinutes, utcSeconds, utcMSeconds/10);
-        } else {
-            length = snprintf(pMarker, lengthRemaining, "$%sRMC,%02d%02d%02d.%02d,V,",
-                              talker, utcHours, utcMinutes, utcSeconds, utcMSeconds/10);
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_LAT_LONG)
-        {
-            double latitude = ref_lla.lat;
-            double longitude = ref_lla.lon;
-            char latHemisphere;
-            char lonHemisphere;
-            double latMinutes;
-            double lonMinutes;
-
-            if (latitude > 0)
+            if (length < 0 || length >= lengthRemaining)
             {
-                latHemisphere = 'N';
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_LAT_LONG)
+            {
+                double latitude = ref_lla.lat;
+                double longitude = ref_lla.lon;
+                char latHemisphere;
+                char lonHemisphere;
+                double latMinutes;
+                double lonMinutes;
+
+                if (latitude > 0)
+                {
+                    latHemisphere = 'N';
+                }
+                else
+                {
+                    latHemisphere = 'S';
+                    latitude *= -1.0;
+                }
+
+                if (longitude < 0)
+                {
+                    lonHemisphere = 'W';
+                    longitude *= -1.0;
+                }
+                else
+                {
+                    lonHemisphere = 'E';
+                }
+
+                latMinutes = fmod(latitude * 60.0, 60.0);
+                lonMinutes = fmod(longitude * 60.0, 60.0);
+
+                length = snprintf(pMarker, lengthRemaining,
+                                  "%02d%09.6lf,%c,%03d%09.6lf,%c,",
+                                  (uint8_t)floor(latitude), latMinutes, latHemisphere,
+                                  (uint8_t)floor(longitude), lonMinutes, lonHemisphere);
             }
             else
             {
-                latHemisphere = 'S';
-                latitude *= -1.0;
+                length = snprintf(pMarker, lengthRemaining, ",,,,");
             }
 
-            if (longitude < 0)
+            if (length < 0 || length >= lengthRemaining)
             {
-                lonHemisphere = 'W';
-                longitude *= -1.0;
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_SPEED)
+            {
+                float speedKnots = location.gpsLocation.speed * (3600.0/1852.0);
+                length = snprintf(pMarker, lengthRemaining, "%.1lf,", speedKnots);
             }
             else
             {
-                lonHemisphere = 'E';
+                length = snprintf(pMarker, lengthRemaining, ",");
             }
 
-            latMinutes = fmod(latitude * 60.0 , 60.0);
-            lonMinutes = fmod(longitude * 60.0 , 60.0);
-
-            length = snprintf(pMarker, lengthRemaining, "%02d%09.6lf,%c,%03d%09.6lf,%c,",
-                              (uint8_t)floor(latitude), latMinutes, latHemisphere,
-                              (uint8_t)floor(longitude),lonMinutes, lonHemisphere);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining,",,,,");
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_SPEED)
-        {
-            float speedKnots = location.gpsLocation.speed * (3600.0/1852.0);
-            length = snprintf(pMarker, lengthRemaining, "%.1lf,", speedKnots);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, ",");
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_BEARING)
-        {
-            length = snprintf(pMarker, lengthRemaining, "%.1lf,", location.gpsLocation.bearing);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, ",");
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        length = snprintf(pMarker, lengthRemaining, "%2.2d%2.2d%2.2d,",
-                          utcDay, utcMonth, utcYear);
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_MAG_DEV)
-        {
-            float magneticVariation = locationExtended.magneticDeviation;
-            char direction;
-            if (magneticVariation < 0.0)
+            if (length < 0 || length >= lengthRemaining)
             {
-                direction = 'W';
-                magneticVariation *= -1.0;
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_BEARING)
+            {
+                length = snprintf(pMarker, lengthRemaining, "%.1lf,",
+                                  location.gpsLocation.bearing);
             }
             else
             {
-                direction = 'E';
+                length = snprintf(pMarker, lengthRemaining, ",");
             }
 
-            length = snprintf(pMarker, lengthRemaining, "%.1lf,%c,",
-                              magneticVariation, direction);
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            length = snprintf(pMarker, lengthRemaining, "%2.2d%2.2d%2.2d,",
+                              utcDay, utcMonth, utcYear);
+
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_MAG_DEV)
+            {
+                float magneticVariation = locationExtended.magneticDeviation;
+                char direction;
+                if (magneticVariation < 0.0)
+                {
+                    direction = 'W';
+                    magneticVariation *= -1.0;
+                }
+                else
+                {
+                    direction = 'E';
+                }
+
+                length = snprintf(pMarker, lengthRemaining, "%.1lf,%c,",
+                                  magneticVariation, direction);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",,");
+            }
+
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            length = snprintf(pMarker, lengthRemaining, "%c", rmcModeIndicator);
+            pMarker += length;
+            lengthRemaining -= length;
+
+            // hardcode Navigation Status field to 'V'
+            length = snprintf(pMarker, lengthRemaining, ",%c", 'V');
+
+            length = loc_nmea_put_checksum(sentence_RMC, sizeof(sentence_RMC), false);
         }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, ",,");
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        length = snprintf(pMarker, lengthRemaining, "%c", rmcModeIndicator);
-        pMarker += length;
-        lengthRemaining -= length;
-
-        // hardcode Navigation Status field to 'V'
-        length = snprintf(pMarker, lengthRemaining, ",%c", 'V');
-
-        length = loc_nmea_put_checksum(sentence_RMC, sizeof(sentence_RMC));
 
         // -------------------
         // ------$--GNS-------
         // -------------------
+        if (mEnabledNmeaTypes & NMEA_TYPE_GNS) {
+            pMarker = sentence_GNS;
+            lengthRemaining = sizeof(sentence_GNS);
 
-        pMarker = sentence_GNS;
-        lengthRemaining = sizeof(sentence_GNS);
+            length = snprintf(pMarker, lengthRemaining, "$%sGNS,%02d%02d%02d.%02d,",
+                              talker, utcHours, utcMinutes, utcSeconds, utcMSeconds/10);
 
-        length = snprintf(pMarker, lengthRemaining, "$%sGNS,%02d%02d%02d.%02d," ,
-                          talker, utcHours, utcMinutes, utcSeconds, utcMSeconds/10);
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_LAT_LONG)
-        {
-            double latitude = ref_lla.lat;
-            double longitude = ref_lla.lon;
-            char latHemisphere;
-            char lonHemisphere;
-            double latMinutes;
-            double lonMinutes;
-
-            if (latitude > 0)
-            {
-                latHemisphere = 'N';
-            }
-            else
-            {
-                latHemisphere = 'S';
-                latitude *= -1.0;
-            }
-
-            if (longitude < 0)
-            {
-                lonHemisphere = 'W';
-                longitude *= -1.0;
-            }
-            else
-            {
-                lonHemisphere = 'E';
-            }
-
-            latMinutes = fmod(latitude * 60.0 , 60.0);
-            lonMinutes = fmod(longitude * 60.0 , 60.0);
-
-            length = snprintf(pMarker, lengthRemaining, "%02d%09.6lf,%c,%03d%09.6lf,%c,",
-                              (uint8_t)floor(latitude), latMinutes, latHemisphere,
-                              (uint8_t)floor(longitude),lonMinutes, lonHemisphere);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining,",,,,");
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        length = snprintf(pMarker, lengthRemaining, "%s,", gnsModeIndicator);
-
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DOP) {
-            length = snprintf(pMarker, lengthRemaining, "%02d,%.1f,",
-                              svUsedCount, locationExtended.hdop);
-        }
-        else {   // no hdop
-            length = snprintf(pMarker, lengthRemaining, "%02d,,",
-                              svUsedCount);
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_ALTITUDE_MEAN_SEA_LEVEL)
-        {
-            length = snprintf(pMarker, lengthRemaining, "%.1lf,",
-                              locationExtended.altitudeMeanSeaLevel);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining,",");
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if ((location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_ALTITUDE) &&
-            (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_ALTITUDE_MEAN_SEA_LEVEL))
-        {
-            length = snprintf(pMarker, lengthRemaining, "%.1lf,",
-                              ref_lla.alt - locationExtended.altitudeMeanSeaLevel);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, ",");
-        }
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DGNSS_DATA_AGE)
-        {
-            length = snprintf(pMarker, lengthRemaining, "%.1f,",
-                              (float)locationExtended.dgnssDataAgeMsec / 1000);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, ",");
-        }
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DGNSS_REF_STATION_ID)
-        {
-            length = snprintf(pMarker, lengthRemaining, "%04d",
-                              locationExtended.dgnssRefStationId);
             if (length < 0 || length >= lengthRemaining)
             {
                 LOC_LOGE("NMEA Error in string formatting");
@@ -1861,161 +1789,166 @@ void loc_nmea_generate_pos(const UlpLocation &location,
             }
             pMarker += length;
             lengthRemaining -= length;
+
+            if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_LAT_LONG)
+            {
+                double latitude = ref_lla.lat;
+                double longitude = ref_lla.lon;
+                char latHemisphere;
+                char lonHemisphere;
+                double latMinutes;
+                double lonMinutes;
+
+                if (latitude > 0)
+                {
+                    latHemisphere = 'N';
+                }
+                else
+                {
+                    latHemisphere = 'S';
+                    latitude *= -1.0;
+                }
+
+                if (longitude < 0)
+                {
+                    lonHemisphere = 'W';
+                    longitude *= -1.0;
+                }
+                else
+                {
+                    lonHemisphere = 'E';
+                }
+
+                latMinutes = fmod(latitude * 60.0, 60.0);
+                lonMinutes = fmod(longitude * 60.0, 60.0);
+
+                length = snprintf(pMarker, lengthRemaining,
+                                  "%02d%09.6lf,%c,%03d%09.6lf,%c,",
+                                  (uint8_t)floor(latitude), latMinutes, latHemisphere,
+                                  (uint8_t)floor(longitude), lonMinutes, lonHemisphere);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",,,,");
+            }
+
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            length = snprintf(pMarker, lengthRemaining, "%s,", gnsModeIndicator);
+
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DOP) {
+                length = snprintf(pMarker, lengthRemaining, "%02d,%.1f,",
+                                  svUsedCount, locationExtended.hdop);
+            } else if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_EXT_DOP) {
+                length = snprintf(pMarker, lengthRemaining, "%02d,%.1f,",
+                                  svUsedCount, locationExtended.extDOP.HDOP);
+            }
+            else {   // no hdop
+                length = snprintf(pMarker, lengthRemaining, "%02d,,",
+                                  svUsedCount);
+            }
+
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_ALTITUDE_MEAN_SEA_LEVEL)
+            {
+                length = snprintf(pMarker, lengthRemaining, "%.1lf,",
+                                  locationExtended.altitudeMeanSeaLevel);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",");
+            }
+
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if ((location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_ALTITUDE) &&
+                (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_ALTITUDE_MEAN_SEA_LEVEL))
+            {
+                length = snprintf(pMarker, lengthRemaining, "%.1lf,",
+                                  ref_lla.alt - locationExtended.altitudeMeanSeaLevel);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",");
+            }
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DGNSS_DATA_AGE)
+            {
+                length = snprintf(pMarker, lengthRemaining, "%.1f,",
+                                  (float)locationExtended.dgnssDataAgeMsec / 1000);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",");
+            }
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DGNSS_REF_STATION_ID)
+            {
+                length = snprintf(pMarker, lengthRemaining, "%04d",
+                                  locationExtended.dgnssRefStationId);
+                if (length < 0 || length >= lengthRemaining)
+                {
+                    LOC_LOGE("NMEA Error in string formatting");
+                    return;
+                }
+                pMarker += length;
+                lengthRemaining -= length;
+            }
+            // hardcode Navigation Status field to 'V'
+            length = snprintf(pMarker, lengthRemaining, ",%c", 'V');
+            pMarker += length;
+            lengthRemaining -= length;
+
+            length = loc_nmea_put_checksum(sentence_GNS, sizeof(sentence_GNS), false);
         }
-
-        // hardcode Navigation Status field to 'V'
-        length = snprintf(pMarker, lengthRemaining, ",%c", 'V');
-        pMarker += length;
-        lengthRemaining -= length;
-
-        length = loc_nmea_put_checksum(sentence_GNS, sizeof(sentence_GNS));
 
         // -------------------
         // ------$--GGA-------
         // -------------------
+        if (mEnabledNmeaTypes & NMEA_TYPE_GGA) {
 
-        pMarker = sentence_GGA;
-        lengthRemaining = sizeof(sentence_GGA);
+            pMarker = sentence_GGA;
+            lengthRemaining = sizeof(sentence_GGA);
 
-        length = snprintf(pMarker, lengthRemaining, "$%sGGA,%02d%02d%02d.%02d," ,
-                          talker, utcHours, utcMinutes, utcSeconds, utcMSeconds/10);
+            length = snprintf(pMarker, lengthRemaining, "$%sGGA,%02d%02d%02d.%02d,",
+                              talker, utcHours, utcMinutes, utcSeconds, utcMSeconds/10);
 
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_LAT_LONG)
-        {
-            double latitude = ref_lla.lat;
-            double longitude = ref_lla.lon;
-            char latHemisphere;
-            char lonHemisphere;
-            double latMinutes;
-            double lonMinutes;
-
-            if (latitude > 0)
-            {
-                latHemisphere = 'N';
-            }
-            else
-            {
-                latHemisphere = 'S';
-                latitude *= -1.0;
-            }
-
-            if (longitude < 0)
-            {
-                lonHemisphere = 'W';
-                longitude *= -1.0;
-            }
-            else
-            {
-                lonHemisphere = 'E';
-            }
-
-            latMinutes = fmod(latitude * 60.0 , 60.0);
-            lonMinutes = fmod(longitude * 60.0 , 60.0);
-
-            length = snprintf(pMarker, lengthRemaining, "%02d%09.6lf,%c,%03d%09.6lf,%c,",
-                              (uint8_t)floor(latitude), latMinutes, latHemisphere,
-                              (uint8_t)floor(longitude),lonMinutes, lonHemisphere);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining,",,,,");
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        // Number of satellites in use, 00-12
-        if (svUsedCount > MAX_SATELLITES_IN_USE)
-            svUsedCount = MAX_SATELLITES_IN_USE;
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DOP)
-        {
-            length = snprintf(pMarker, lengthRemaining, "%s,%02d,%.1f,",
-                              ggaGpsQuality, svUsedCount, locationExtended.hdop);
-        }
-        else
-        {   // no hdop
-            length = snprintf(pMarker, lengthRemaining, "%s,%02d,,",
-                              ggaGpsQuality, svUsedCount);
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_ALTITUDE_MEAN_SEA_LEVEL)
-        {
-            length = snprintf(pMarker, lengthRemaining, "%.1lf,M,",
-                              locationExtended.altitudeMeanSeaLevel);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining,",,");
-        }
-
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if ((location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_ALTITUDE) &&
-            (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_ALTITUDE_MEAN_SEA_LEVEL))
-        {
-            length = snprintf(pMarker, lengthRemaining, "%.1lf,M,",
-                              ref_lla.alt - locationExtended.altitudeMeanSeaLevel);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, ",,");
-        }
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DGNSS_DATA_AGE)
-        {
-            length = snprintf(pMarker, lengthRemaining, "%.1f,",
-                              (float)locationExtended.dgnssDataAgeMsec / 1000);
-        }
-        else
-        {
-            length = snprintf(pMarker, lengthRemaining, ",");
-        }
-        if (length < 0 || length >= lengthRemaining)
-        {
-            LOC_LOGE("NMEA Error in string formatting");
-            return;
-        }
-        pMarker += length;
-        lengthRemaining -= length;
-
-        if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DGNSS_REF_STATION_ID)
-        {
-            length = snprintf(pMarker, lengthRemaining, "%04d",
-                              locationExtended.dgnssRefStationId);
             if (length < 0 || length >= lengthRemaining)
             {
                 LOC_LOGE("NMEA Error in string formatting");
@@ -2023,9 +1956,149 @@ void loc_nmea_generate_pos(const UlpLocation &location,
             }
             pMarker += length;
             lengthRemaining -= length;
-        }
 
-        length = loc_nmea_put_checksum(sentence_GGA, sizeof(sentence_GGA));
+            if (location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_LAT_LONG)
+            {
+                double latitude = ref_lla.lat;
+                double longitude = ref_lla.lon;
+                char latHemisphere;
+                char lonHemisphere;
+                double latMinutes;
+                double lonMinutes;
+
+                if (latitude > 0)
+                {
+                    latHemisphere = 'N';
+                }
+                else
+                {
+                    latHemisphere = 'S';
+                    latitude *= -1.0;
+                }
+
+                if (longitude < 0)
+                {
+                    lonHemisphere = 'W';
+                    longitude *= -1.0;
+                }
+                else
+                {
+                    lonHemisphere = 'E';
+                }
+
+                latMinutes = fmod(latitude * 60.0, 60.0);
+                lonMinutes = fmod(longitude * 60.0, 60.0);
+
+                length = snprintf(pMarker, lengthRemaining, "%02d%09.6lf,%c,%03d%09.6lf,%c,",
+                                  (uint8_t)floor(latitude), latMinutes, latHemisphere,
+                                  (uint8_t)floor(longitude), lonMinutes, lonHemisphere);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",,,,");
+            }
+
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            // Number of satellites in use, 00-12
+            if (svUsedCount > MAX_SATELLITES_IN_USE)
+                svUsedCount = MAX_SATELLITES_IN_USE;
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DOP)
+            {
+                length = snprintf(pMarker, lengthRemaining, "%s,%02d,%.1f,",
+                                  ggaGpsQuality, svUsedCount, locationExtended.hdop);
+            } else if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_EXT_DOP) {
+                length = snprintf(pMarker, lengthRemaining, "%s,%02d,%.1f,",
+                                  ggaGpsQuality, svUsedCount, locationExtended.extDOP.HDOP);
+            }
+            else
+            {   // no hdop
+                length = snprintf(pMarker, lengthRemaining, "%s,%02d,,",
+                                  ggaGpsQuality, svUsedCount);
+            }
+
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_ALTITUDE_MEAN_SEA_LEVEL)
+            {
+                length = snprintf(pMarker, lengthRemaining, "%.1lf,M,",
+                                  locationExtended.altitudeMeanSeaLevel);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",,");
+            }
+
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if ((location.gpsLocation.flags & LOC_GPS_LOCATION_HAS_ALTITUDE) &&
+                (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_ALTITUDE_MEAN_SEA_LEVEL))
+            {
+                length = snprintf(pMarker, lengthRemaining, "%.1lf,M,",
+                                  ref_lla.alt - locationExtended.altitudeMeanSeaLevel);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",,");
+            }
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DGNSS_DATA_AGE)
+            {
+                length = snprintf(pMarker, lengthRemaining, "%.1f,",
+                                  (float)locationExtended.dgnssDataAgeMsec / 1000);
+            }
+            else
+            {
+                length = snprintf(pMarker, lengthRemaining, ",");
+            }
+            if (length < 0 || length >= lengthRemaining)
+            {
+                LOC_LOGE("NMEA Error in string formatting");
+                return;
+            }
+            pMarker += length;
+            lengthRemaining -= length;
+
+            if (locationExtended.flags & GPS_LOCATION_EXTENDED_HAS_DGNSS_REF_STATION_ID)
+            {
+                length = snprintf(pMarker, lengthRemaining, "%04d",
+                                  locationExtended.dgnssRefStationId);
+                if (length < 0 || length >= lengthRemaining)
+                {
+                    LOC_LOGE("NMEA Error in string formatting");
+                    return;
+                }
+                pMarker += length;
+                lengthRemaining -= length;
+            }
+
+            length = loc_nmea_put_checksum(sentence_GGA, sizeof(sentence_GGA), false);
+        }
 
         // ------$--DTM-------
         nmeaArraystr.push_back(sentence_DTM);
@@ -2047,29 +2120,41 @@ void loc_nmea_generate_pos(const UlpLocation &location,
     }
     //Send blank NMEA reports for non-final fixes
     else {
-        strlcpy(sentence, "$GPGSA,A,1,,,,,,,,,,,,,,,,", sizeof(sentence));
-        length = loc_nmea_put_checksum(sentence, sizeof(sentence));
-        nmeaArraystr.push_back(sentence);
+        if (mEnabledNmeaTypes & NMEA_TYPE_GSA) {
+            strlcpy(sentence, "$GPGSA,A,1,,,,,,,,,,,,,,,,", sizeof(sentence)); 
+            length = loc_nmea_put_checksum(sentence, sizeof(sentence), false);
+            nmeaArraystr.push_back(sentence);
+        }
 
-        strlcpy(sentence, "$GPVTG,,T,,M,,N,,K,N", sizeof(sentence));
-        length = loc_nmea_put_checksum(sentence, sizeof(sentence));
-        nmeaArraystr.push_back(sentence);
+        if (mEnabledNmeaTypes & NMEA_TYPE_VTG) {
+            strlcpy(sentence, "$GPVTG,,T,,M,,N,,K,N", sizeof(sentence));
+            length = loc_nmea_put_checksum(sentence, sizeof(sentence), false);
+            nmeaArraystr.push_back(sentence);
+        }
 
-        strlcpy(sentence, "$GPDTM,,,,,,,,", sizeof(sentence));
-        length = loc_nmea_put_checksum(sentence, sizeof(sentence));
-        nmeaArraystr.push_back(sentence);
+        if (mEnabledNmeaTypes & NMEA_TYPE_DTM) {
+            strlcpy(sentence, "$GPDTM,,,,,,,,", sizeof(sentence));
+            length = loc_nmea_put_checksum(sentence, sizeof(sentence), false);
+            nmeaArraystr.push_back(sentence);
+        }
 
-        strlcpy(sentence, "$GPRMC,,V,,,,,,,,,,N,V", sizeof(sentence));
-        length = loc_nmea_put_checksum(sentence, sizeof(sentence));
-        nmeaArraystr.push_back(sentence);
+        if (mEnabledNmeaTypes & NMEA_TYPE_RMC) {
+            strlcpy(sentence, "$GPRMC,,V,,,,,,,,,,N,V", sizeof(sentence));
+            length = loc_nmea_put_checksum(sentence, sizeof(sentence), false);
+            nmeaArraystr.push_back(sentence);
+        }
 
-        strlcpy(sentence, "$GPGNS,,,,,,N,,,,,,,V", sizeof(sentence));
-        length = loc_nmea_put_checksum(sentence, sizeof(sentence));
-        nmeaArraystr.push_back(sentence);
+        if (mEnabledNmeaTypes & NMEA_TYPE_GNS) {
+            strlcpy(sentence, "$GPGNS,,,,,,N,,,,,,,V", sizeof(sentence));
+            length = loc_nmea_put_checksum(sentence, sizeof(sentence), false);
+            nmeaArraystr.push_back(sentence);
+        }
 
-        strlcpy(sentence, "$GPGGA,,,,,,0,,,,,,,,", sizeof(sentence));
-        length = loc_nmea_put_checksum(sentence, sizeof(sentence));
-        nmeaArraystr.push_back(sentence);
+        if (mEnabledNmeaTypes & NMEA_TYPE_GGA) {
+            strlcpy(sentence, "$GPGGA,,,,,,0,,,,,,,,", sizeof(sentence));
+            length = loc_nmea_put_checksum(sentence, sizeof(sentence), false);
+            nmeaArraystr.push_back(sentence);
+        }
     }
 
     EXIT_LOG(%d, 0);
@@ -2103,14 +2188,15 @@ void loc_nmea_generate_sv(const GnssSvNotification &svNotify,
 
     //Count GPS SVs for saparating GPS from GLONASS and throw others
     for (uint32_t svOffset = 0; svOffset < svNotify.count; svOffset++) {
-        if (GNSS_SV_TYPE_GPS == svNotify.gnssSvs[svOffset].type)
+        if ((GNSS_SV_TYPE_GPS == svNotify.gnssSvs[svOffset].type) ||
+            (GNSS_SV_TYPE_SBAS == svNotify.gnssSvs[svOffset].type))
         {
             if (GNSS_SIGNAL_GPS_L5 == svNotify.gnssSvs[svOffset].gnssSignalTypeMask) {
                 sv_cache_info.gps_l5_count++;
             } else if (GNSS_SIGNAL_GPS_L2 == svNotify.gnssSvs[svOffset].gnssSignalTypeMask) {
                 sv_cache_info.gps_l2_count++;
             } else {
-                // GNSS_SIGNAL_GPS_L1CA or default
+                // GNSS_SIGNAL_GPS_L1CA, GNSS_SIGNAL_SBAS_L1 or default
                 // If no signal type in report, it means default L1
                 sv_cache_info.gps_l1_count++;
             }
@@ -2151,6 +2237,14 @@ void loc_nmea_generate_sv(const GnssSvNotification &svNotify,
         }
         else if (GNSS_SV_TYPE_BEIDOU == svNotify.gnssSvs[svOffset].type)
         {
+            // cache the used in fix mask, as it will be needed to send $PQGSA
+            // during the position report
+            if (GNSS_SV_OPTIONS_USED_IN_FIX_BIT ==
+                (svNotify.gnssSvs[svOffset].gnssSvOptionsMask &
+                  GNSS_SV_OPTIONS_USED_IN_FIX_BIT))
+            {
+                setSvMask(sv_cache_info.bds_used_mask, svNotify.gnssSvs[svOffset].svId);
+            }
             if ((GNSS_SIGNAL_BEIDOU_B2AI == svNotify.gnssSvs[svOffset].gnssSignalTypeMask) ||
                    (GNSS_SIGNAL_BEIDOU_B2AQ == svNotify.gnssSvs[svOffset].gnssSignalTypeMask)) {
                 sv_cache_info.bds_b2_count++;
@@ -2170,122 +2264,140 @@ void loc_nmea_generate_sv(const GnssSvNotification &svNotify,
     }
 
     loc_nmea_sv_meta sv_meta;
-    // ---------------------
-    // ------$GPGSV:L1CA----
-    // ---------------------
 
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GPS,
-            GNSS_SIGNAL_GPS_L1CA, false), nmeaArraystr);
+    if (mEnabledNmeaTypes & NMEA_TYPE_GPGSV) {
+        // ---------------------
+        // ------$GPGSV:L1CA----
+        // ---------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GPS,
+                GNSS_SIGNAL_GPS_L1CA, false), nmeaArraystr);
 
-    // ---------------------
-    // ------$GPGSV:L5------
-    // ---------------------
+        // ---------------------
+        // ------$GPGSV:L5------
+        // ---------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GPS,
+                GNSS_SIGNAL_GPS_L5, false), nmeaArraystr);
 
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GPS,
-            GNSS_SIGNAL_GPS_L5, false), nmeaArraystr);
+        // ---------------------
+        // ------$GPGSV:L2------
+        // ---------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GPS,
+                GNSS_SIGNAL_GPS_L2, false), nmeaArraystr);
+    }
 
-    // ---------------------
-    // ------$GPGSV:L2------
-    // ---------------------
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GPS,
-            GNSS_SIGNAL_GPS_L2, false), nmeaArraystr);
+    if (mEnabledNmeaTypes & NMEA_TYPE_GLGSV) {
+        // ---------------------
+        // ------$GLGSV:G1------
+        // ---------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GLONASS,
+                GNSS_SIGNAL_GLONASS_G1, false), nmeaArraystr);
 
-    // ---------------------
-    // ------$GLGSV:G1------
-    // ---------------------
+        // ---------------------
+        // ------$GLGSV:G2------
+        // ---------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GLONASS,
+                GNSS_SIGNAL_GLONASS_G2, false), nmeaArraystr);
+    }
 
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GLONASS,
-            GNSS_SIGNAL_GLONASS_G1, false), nmeaArraystr);
+    if (mEnabledNmeaTypes & NMEA_TYPE_GAGSV) {
+        // ---------------------
+        // ------$GAGSV:E1------
+        // ---------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GALILEO,
+                GNSS_SIGNAL_GALILEO_E1, false), nmeaArraystr);
 
-    // ---------------------
-    // ------$GLGSV:G2------
-    // ---------------------
+        // -------------------------
+        // ------$GAGSV:E5A---------
+        // -------------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GALILEO,
+                GNSS_SIGNAL_GALILEO_E5A, false), nmeaArraystr);
 
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GLONASS,
-            GNSS_SIGNAL_GLONASS_G2, false), nmeaArraystr);
+        // -------------------------
+        // ------$GAGSV:E5B---------
+        // -------------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GALILEO,
+                GNSS_SIGNAL_GALILEO_E5B, false), nmeaArraystr);
+    }
 
-    // ---------------------
-    // ------$GAGSV:E1------
-    // ---------------------
+    if (mEnabledNmeaTypes & NMEA_TYPE_GQGSV) {
+        // -----------------------------
+        // ------$GQGSV (QZSS):L1CA-----
+        // -----------------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_QZSS,
+                GNSS_SIGNAL_QZSS_L1CA, false), nmeaArraystr);
+        // -----------------------------
+        // ------$GQGSV (QZSS):L5-------
+        // -----------------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_QZSS,
+                GNSS_SIGNAL_QZSS_L5, false), nmeaArraystr);
+        // -----------------------------
+        // ------$GQGSV (QZSS):L2-------
+        // -----------------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_QZSS,
+                GNSS_SIGNAL_QZSS_L2, false), nmeaArraystr);
+    }
 
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GALILEO,
-            GNSS_SIGNAL_GALILEO_E1, false), nmeaArraystr);
+    if (mEnabledNmeaTypes & NMEA_TYPE_GBGSV) {
+        // -----------------------------
+        // ------$GBGSV (BEIDOU:B1I)----
+        // -----------------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_BEIDOU,
+                GNSS_SIGNAL_BEIDOU_B1I, false), nmeaArraystr);
+        // -----------------------------
+        // ------$GBGSV (BEIDOU:B1C)----
+        // -----------------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_BEIDOU,
+                GNSS_SIGNAL_BEIDOU_B1C, false), nmeaArraystr);
+        // -----------------------------
+        // ------$GBGSV (BEIDOU:B2AI)---
+        // -----------------------------
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_BEIDOU,
+                GNSS_SIGNAL_BEIDOU_B2AI, false), nmeaArraystr);
+    }
 
-    // -------------------------
-    // ------$GAGSV:E5A---------
-    // -------------------------
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GALILEO,
-            GNSS_SIGNAL_GALILEO_E5A, false), nmeaArraystr);
-
-    // -------------------------
-    // ------$GAGSV:E5B---------
-    // -------------------------
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_GALILEO,
-            GNSS_SIGNAL_GALILEO_E5B, false), nmeaArraystr);
-
-    // -----------------------------
-    // ------$GQGSV (QZSS):L1CA-----
-    // -----------------------------
-
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_QZSS,
-            GNSS_SIGNAL_QZSS_L1CA, false), nmeaArraystr);
-
-    // -----------------------------
-    // ------$GQGSV (QZSS):L5-------
-    // -----------------------------
-
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_QZSS,
-            GNSS_SIGNAL_QZSS_L5, false), nmeaArraystr);
-
-    // -----------------------------
-    // ------$GQGSV (QZSS):L2-------
-    // -----------------------------
-
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_QZSS,
-            GNSS_SIGNAL_QZSS_L2, false), nmeaArraystr);
-
-
-    // -----------------------------
-    // ------$GBGSV (BEIDOU:B1I)----
-    // -----------------------------
-
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_BEIDOU,
-            GNSS_SIGNAL_BEIDOU_B1I, false), nmeaArraystr);
-
-    // -----------------------------
-    // ------$GBGSV (BEIDOU:B1C)----
-    // -----------------------------
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_BEIDOU,
-            GNSS_SIGNAL_BEIDOU_B1C, false), nmeaArraystr);
-
-    // -----------------------------
-    // ------$GBGSV (BEIDOU:B2AI)---
-    // -----------------------------
-
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_BEIDOU,
-            GNSS_SIGNAL_BEIDOU_B2AI, false), nmeaArraystr);
 
     // -----------------------------
     // ------$GIGSV (NAVIC:L5)------
     // -----------------------------
-
-    loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
-            loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_NAVIC,
-            GNSS_SIGNAL_NAVIC_L5,false), nmeaArraystr);
+    if (mEnabledNmeaTypes & NMEA_TYPE_GIGSV) {
+        loc_nmea_generate_GSV(svNotify, sentence, sizeof(sentence),
+                loc_nmea_sv_meta_init(sv_meta, sv_cache_info, GNSS_SV_TYPE_NAVIC,
+                GNSS_SIGNAL_NAVIC_L5, false), nmeaArraystr);
+    }
 
     EXIT_LOG(%d, 0);
+}
+
+/*===========================================================================
+FUNCTION    loc_nmea_config_output_types
+
+DESCRIPTION
+   Configure the NMEA sentence types that will be generated.
+
+DEPENDENCIES
+   NONE
+
+RETURN VALUE
+   NONE
+
+SIDE EFFECTS
+   N/A
+
+===========================================================================*/
+void loc_nmea_config_output_types(GnssNmeaTypesMask enabledNmeaTypes) {
+    mEnabledNmeaTypes = enabledNmeaTypes;
 }

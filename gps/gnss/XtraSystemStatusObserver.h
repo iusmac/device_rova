@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -96,15 +96,19 @@ private:
     bool mXtraThrottle;
     bool mReqStatusReceived;
     bool mIsConnectivityStatusKnown;
-    shared_ptr<LocIpcSender> mSender;
+    shared_ptr<LocIpcSender> mXtraSender;
+    shared_ptr<LocIpcSender> mDgnssSender;
     string mNtripParamsString;
 
     class DelayLocTimer : public LocTimer {
-        LocIpcSender& mSender;
+        LocIpcSender& mXtraSender;
+        LocIpcSender& mDgnssSender;
     public:
-        DelayLocTimer(LocIpcSender& sender) : mSender(sender) {}
+        DelayLocTimer(LocIpcSender& xtraSender, LocIpcSender& dgnssSender) :
+                mXtraSender(xtraSender), mDgnssSender(dgnssSender) {}
         void timeOutCallback() override {
-            LocIpc::send(mSender, (const uint8_t*)"halinit", sizeof("halinit"));
+            LocIpc::send(mXtraSender, (const uint8_t*)"halinit", sizeof("halinit"));
+            LocIpc::send(mDgnssSender, (const uint8_t*)"halinit", sizeof("halinit"));
         }
     } mDelayLocTimer;
 };

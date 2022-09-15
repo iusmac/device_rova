@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2015, 2018-2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2015, 2018-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -55,7 +55,7 @@
  *============================================================================*/
 
 /* Parameter data */
-static uint32_t DEBUG_LEVEL = 0xff;
+static uint32_t DEBUG_LEVEL = UINT32_MAX;
 static uint32_t TIMESTAMP = 0;
 static uint32_t DATUM_TYPE = 0;
 static bool sVendorEnhanced = true;
@@ -440,20 +440,23 @@ void loc_read_conf_long(const char* conf_file_name, const loc_param_s_type* conf
     FILE *conf_fp = NULL;
 
     log_buffer_init(false);
-    if((conf_fp = fopen(conf_file_name, "r")) != NULL)
+    if ((conf_fp = fopen(conf_file_name, "r")) != NULL)
     {
-        LOC_LOGD("%s: using %s", __FUNCTION__, conf_file_name);
+        LOC_LOGd("using %s", conf_file_name);
         if(table_length && config_table) {
             loc_read_conf_r_long(conf_fp, config_table, table_length, string_len);
             rewind(conf_fp);
         }
-        loc_read_conf_r_long(conf_fp, loc_param_table, loc_param_num, string_len);
+        if (DEBUG_LEVEL == UINT32_MAX) {
+            /* Read default config entries*/
+            loc_read_conf_r(conf_fp, loc_param_table, loc_param_num);
+            /* Initialize logging mechanism with parsed data */
+            loc_logger_init(DEBUG_LEVEL, TIMESTAMP);
+            log_buffer_init(sLogBufferEnabled);
+            log_tag_level_map_init();
+        }
         fclose(conf_fp);
     }
-    /* Initialize logging mechanism with parsed data */
-    loc_logger_init(DEBUG_LEVEL, TIMESTAMP);
-    log_buffer_init(sLogBufferEnabled);
-    log_tag_level_map_init();
 }
 
 /*=============================================================================
@@ -541,7 +544,7 @@ static const loc_param_s_type loc_process_conf_parameter_table[] = {
     {"PREMIUM_FEATURE",            &conf.premium_feature,          NULL, 'n'},
     {"IZAT_FEATURE_MASK",          &conf.loc_feature_mask,         NULL, 'n'},
     {"PLATFORMS",                  &conf.platform_list,            NULL, 's'},
-    {"SOC_IDS",                    &conf.soc_id_list,            NULL, 's'},
+    {"SOC_IDS",                    &conf.soc_id_list,              NULL, 's'},
     {"BASEBAND",                   &conf.baseband,                 NULL, 's'},
     {"LOW_RAM_TARGETS",            &conf.low_ram_targets,          NULL, 's'},
     {"HARDWARE_TYPE",              &conf.auto_platform,            NULL, 's'},

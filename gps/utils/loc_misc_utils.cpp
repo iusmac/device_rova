@@ -1,4 +1,4 @@
-/* Copyright (c) 2014, 2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014, 2020-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -126,7 +126,7 @@ err:
 
 inline void logDlError(const char* failedCall) {
     const char * err = dlerror();
-    LOC_LOGe("%s error: %s", failedCall, (nullptr == err) ? "unknown" : err);
+    LOC_LOGw("%s error: %s", failedCall, (nullptr == err) ? "unknown" : err);
 }
 
 void* dlGetSymFromLib(void*& libHandle, const char* libName, const char* symName)
@@ -229,7 +229,7 @@ uint64_t getQTimerFreq()
 
 uint64_t getBootTimeMilliSec()
 {
-    struct timespec curTs;
+    struct timespec curTs = {};
     clock_gettime(CLOCK_BOOTTIME, &curTs);
     return (uint64_t)GET_MSEC_FROM_TS(curTs);
 }
@@ -307,15 +307,15 @@ void loc_convert_lla_gnss_to_vrp(double lla[3], float rollPitchYaw[3],
     float rn = A6DOF_WGS_B * sf * sfr + lla[2];
     float re = A6DOF_WGS_A * sfr + lla[2];
 
-    float deltaNED[3];
+    float deltaNEU[3];
 
     // gps_pos_lla = imu_pos_lla + Cbn*la_b .* [1/geo.Rn; 1/(geo.Re*geo.cL); -1];
-    Matrix_MxV(cnb, leverArm, deltaNED);
+    Matrix_MxV(cnb, leverArm, deltaNEU);
 
     // NED to lla conversion
-    lla[0] = lla[0] + deltaNED[0] / rn;
-    lla[1] = lla[1] + deltaNED[1] / (re * cl);
-    lla[2] = lla[2] - deltaNED[2];
+    lla[0] = lla[0] + deltaNEU[0] / rn;
+    lla[1] = lla[1] + deltaNEU[1] / (re * cl);
+    lla[2] = lla[2] + deltaNEU[2];
 }
 
 // Used for convert velocity from GSNS based to VRP based

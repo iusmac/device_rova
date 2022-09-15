@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
  * Not a Contribution
  */
 /*
@@ -21,6 +21,7 @@
 #ifndef ANDROID_HARDWARE_GNSS_V2_0_AGNSS_H
 #define ANDROID_HARDWARE_GNSS_V2_0_AGNSS_H
 
+#include <mutex>
 #include <android/hardware/gnss/2.0/IAGnss.h>
 #include <hidl/Status.h>
 #include <gps_extended_c.h>
@@ -59,14 +60,14 @@ struct AGnss : public V2_0::IAGnss {
     Return<bool> setServer(V2_0::IAGnssCallback::AGnssType type,
                          const hidl_string& hostname, int32_t port) override;
 
-    void statusCb(AGpsExtType type, LocAGpsStatusValue status);
-
-    /* Data call setup callback passed down to GNSS HAL implementation */
-    static void agnssStatusIpV4Cb(AGnssExtStatusIpV4 status);
+    void statusCb(AGpsExtType type, AGpsStatusValue status);
 
  private:
     Gnss* mGnss = nullptr;
+    std::mutex mMutex;
     sp<V2_0::IAGnssCallback> mAGnssCbIface = nullptr;
+
+    AGpsExtType mType;
 };
 
 }  // namespace implementation

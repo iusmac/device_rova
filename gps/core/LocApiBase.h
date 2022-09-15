@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2014, 2016-2020 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2014, 2016-2021 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -31,11 +31,20 @@
 
 #include <stddef.h>
 #include <ctype.h>
+#include <loc_pla.h>
 #include <gps_extended.h>
 #include <LocationAPI.h>
 #include <MsgTask.h>
 #include <LocSharedLock.h>
 #include <log_util.h>
+#ifdef NO_UNORDERED_SET_OR_MAP
+    #include <map>
+    #define unordered_map map
+#else
+    #include <unordered_map>
+#endif
+#include <inttypes.h>
+#include <functional>
 
 using namespace loc_util;
 
@@ -94,6 +103,7 @@ public:
     inline virtual void* getSibling2() { return NULL; }
     inline virtual double getGloRfLoss(uint32_t left,
             uint32_t center, uint32_t right, uint8_t gloFrequency) { return 0.0; }
+    inline virtual float getGeoidalSeparation(double latitude, double longitude) { return 0.0; }
 };
 
 class LocApiBase {
@@ -177,7 +187,8 @@ public:
     void requestXtraData();
     void requestTime();
     void requestLocation();
-    void requestATL(int connHandle, LocAGpsType agps_type, LocApnTypeMask apn_type_mask);
+    void requestATL(int connHandle, LocAGpsType agps_type,
+                    LocApnTypeMask apn_type_mask, SubId sub_id=DEFAULT_SUB);
     void releaseATL(int connHandle);
     void requestNiNotify(GnssNiNotification &notify, const void* data,
                          const LocInEmergency emergencyState);
@@ -194,6 +205,11 @@ public:
     void reportGnssAdditionalSystemInfo(GnssAdditionalSystemInfo& additionalSystemInfo);
     void sendNfwNotification(GnssNfwNotification& notification);
     void reportGnssConfig(uint32_t sessionId, const GnssConfig& gnssConfig);
+    void reportLatencyInfo(GnssLatencyInfo& gnssLatencyInfo);
+    void reportQwesCapabilities
+    (
+        const std::unordered_map<LocationQwesFeatureType, bool> &featureMap
+    );
 
     void geofenceBreach(size_t count, uint32_t* hwIds, Location& location,
             GeofenceBreachType breachType, uint64_t timestamp);
@@ -332,6 +348,43 @@ public:
                                               LocApiResponse* adapterResponse=nullptr);
     virtual void getConstellationMultiBandConfig(uint32_t sessionId,
                                         LocApiResponse* adapterResponse=nullptr);
+};
+
+class ElapsedRealtimeEstimator {
+    typedef struct {
+        GPSTimeStruct gpsTime;
+        int64_t qtimerTick;
+        float timeUncMsec; // in milli-seconds
+    } GpsTimeQtimerTickPair;
+
+private:
+    int64_t mCurrentClockDiff;
+    int64_t mPrevUtcTimeNanos;
+    int64_t mPrevBootTimeNanos;
+    int64_t mFixTimeStablizationThreshold;
+    int64_t mInitialTravelTime;
+    int64_t mPrevDataTimeNanos;
+    // association between gps time and qtimer value
+    // the two variable saves a pair of gps time and qtimer time
+    // read at the same point
+    GpsTimeQtimerTickPair mTimePairPVTReport;
+    GpsTimeQtimerTickPair mTimePairMeasReport;
+
+public:
+    inline ElapsedRealtimeEstimator(int64_t travelTimeNanosEstimate) :
+            mInitialTravelTime(travelTimeNanosEstimate) {
+        reset();
+    }
+    int64_t getElapsedRealtimeEstimateNanos(int64_t curDataTimeNanos,
+            bool isCurDataTimeTrustable, int64_t tbfNanos);
+    inline int64_t getElapsedRealtimeUncNanos() { return 5000000;}
+    void reset();
+    static int64_t getElapsedRealtimeQtimer(int64_t qtimerTicksAtOrigin);
+    bool getElapsedRealtimeForGpsTime(const GPSTimeStruct& gpsTimeAtOrigin,
+                            int64_t &elapsedTime, float & elpasedTimeUnc);
+    void saveGpsTimeAndQtimerPairInPvtReport(const GpsLocationExtended& locationExtended);
+    void saveGpsTimeAndQtimerPairInMeasReport(const GnssSvMeasurementSet& svMeasurementSet);
+    static bool getCurrentTime(struct timespec& currentTime, int64_t& sinceBootTimeNanos);
 };
 
 typedef LocApiBase* (getLocApi_t)(LOC_API_ADAPTER_EVENT_MASK_T exMask,
