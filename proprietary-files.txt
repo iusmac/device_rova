@@ -29,9 +29,11 @@ vendor/etc/seccomp_policy/vendor.qti.hardware.dsp.policy
 vendor/lib/libadsprpc.so
 vendor/lib/libfastcvadsp_stub.so
 vendor/lib/libfastcvopt.so
+vendor/lib/libsysmon_cdsp_skel.so
 vendor/lib/vendor.qti.hardware.dsp@1.0.so
 vendor/lib64/libadsp_default_listener.so
 vendor/lib64/libadsprpc.so
+vendor/lib64/libsysmon_cdsp_skel.so
 vendor/lib64/vendor.qti.hardware.dsp@1.0.so
 
 # ADSP Modules
@@ -965,6 +967,8 @@ system/etc/public.libraries-qti.txt
 system_ext/etc/permissions/qti_libpermissions.xml
 system_ext/etc/permissions/qti_permissions.xml
 vendor/etc/public.libraries.txt
+system_ext/etc/cdma_call_conf.xml
+system_ext/etc/spn-conf.xml
 
 # IRQ Balancer
 vendor/bin/msm_irqbalance
