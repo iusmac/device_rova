@@ -47,7 +47,7 @@
     <allow-in-power-save package="com.android.email" />
     <allow-in-power-save package="com.qualcomm.qti.callenhancement" />
     <allow-in-power-save package="com.qualcomm.qti.smartassistant" />
-    <allow-in-power-save package="com.android.providers.contacts" />
+    <allow-in-power-save package="com.skyhook.blp" />
     <!-- These telephony applications need access to non-[System]SDK APIs -->
     <hidden-api-whitelisted-app package="com.qualcomm.uimremoteserver" />
     <hidden-api-whitelisted-app package="com.qualcomm.uimremoteclient" />
@@ -100,7 +100,6 @@
     <hidden-api-whitelisted-app package="com.example.connmgr" />
     <hidden-api-whitelisted-app package="com.android.email" />
     <hidden-api-whitelisted-app package="com.cyanogenmod.filemanager" />
-    <hidden-api-whitelisted-app package="com.qualcomm.qti.presenceappSub2" />
     <hidden-api-whitelisted-app package="com.qualcomm.secureindicator" />
     <hidden-api-whitelisted-app package="com.qualcomm.qti.sysmonappExternal" />
     <hidden-api-whitelisted-app package="com.qualcomm.qti.biometrics.voiceprint.voiceprintdemo" />
@@ -117,5 +116,4 @@
     <allow-in-power-save package="com.qualcomm.location" />
     <allow-in-power-save package="com.qualcomm.location.XT" />
     <allow-implicit-broadcast action="org.codeaurora.intent.action.CALL_COMPOSER_INFO" />
-    <allow-in-power-save package="com.android.providers.contacts" />
 </config>
