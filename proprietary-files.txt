@@ -580,7 +580,6 @@ system_ext/lib64/vendor.qti.hardware.data.cne.internal.server@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.connection@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.connection@1.1.so
 system_ext/lib64/vendor.qti.hardware.data.dynamicdds@1.0.so
-system_ext/lib64/vendor.qti.hardware.data.dynamicdds@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.iwlan@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.latency@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.qmi@1.0.so
@@ -706,8 +705,8 @@ vendor/bin/mlid
 vendor/lib64/liblowi_client.so
 vendor/lib64/libminksocket.so
 
-# GNSS (HIDL)
--vendor/etc/vintf/manifest/vendor.qti.gnss@4.0-service.xml
+# GNSS (HIDL) - from LA.UM.9.6.3.r1-06200-89xx.0
+-vendor/etc/vintf/manifest/vendor.qti.gnss@4.1-service.xml
 vendor/lib64/libloc_socket.so
 vendor/lib64/vendor.qti.gnss@1.0.so
 vendor/lib64/vendor.qti.gnss@1.1.so
@@ -715,11 +714,12 @@ vendor/lib64/vendor.qti.gnss@1.2.so
 vendor/lib64/vendor.qti.gnss@2.0.so
 vendor/lib64/vendor.qti.gnss@2.1.so
 vendor/lib64/vendor.qti.gnss@3.0.so
-vendor/lib64/vendor.qti.gnss@4.0-service.so
 vendor/lib64/vendor.qti.gnss@4.0.so
+vendor/lib64/vendor.qti.gnss@4.1-service.so
+vendor/lib64/vendor.qti.gnss@4.1.so
 
-# GNSS (IMPL)
-vendor/lib64/hw/vendor.qti.gnss@4.0-impl.so
+# GNSS (IMPL) - from LA.UM.9.6.3.r1-06200-89xx.0
+vendor/lib64/hw/vendor.qti.gnss@4.1-impl.so
 vendor/lib64/libcdfw.so
 vendor/lib64/libdataitems.so
 vendor/lib64/libizat_client_api.so
@@ -850,7 +850,6 @@ system_ext/lib64/vendor.qti.ims.rcsconfig@1.1.so
 system_ext/lib64/vendor.qti.ims.rcsconfig@2.0.so
 system_ext/lib64/vendor.qti.ims.rcsconfig@2.1.so
 system_ext/lib64/vendor.qti.imsrtpservice@3.0.so
-system_ext/lib64/vendor.qti.imsrtpservice@3.0.so
 vendor/bin/imsdatadaemon
 vendor/bin/imsqmidaemon
 vendor/etc/init/imsdatadaemon.rc
@@ -902,7 +901,7 @@ vendor/lib64/vendor.qti.imsrtpservice@3.0.so
 # Keystore - from olive
 vendor/lib64/hw/keystore.msm8937.so
 
-# Location
+# Location - from LA.UM.9.6.3.r1-06200-89xx.0
 system_ext/etc/permissions/com.qti.location.sdk.xml
 system_ext/etc/permissions/com.qualcomm.location.xml
 system_ext/etc/permissions/izat.xt.srv.xml
@@ -916,6 +915,7 @@ system_ext/lib64/vendor.qti.gnss@2.0.so
 system_ext/lib64/vendor.qti.gnss@2.1.so
 system_ext/lib64/vendor.qti.gnss@3.0.so
 system_ext/lib64/vendor.qti.gnss@4.0.so
+system_ext/lib64/vendor.qti.gnss@4.1.so
 
 # Media
 vendor/etc/seccomp_policy/mediacodec.policy
