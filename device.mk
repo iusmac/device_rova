@@ -61,7 +61,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     liba2dpoffload \
-    libautohal \
     libbatterylistener \
     libcirrusspkrprot \
     libcomprcapture \
@@ -146,9 +145,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libdisplayconfig \
     libgralloc.qti \
-    liboverlay \
     libqdMetaData \
-    libgenlock \
     libtinyxml \
     vendor.display.config@1.11.vendor \
     vendor.display.config@2.0.vendor
@@ -156,10 +153,6 @@ PRODUCT_PACKAGES += \
 # XiaomiParts
 PRODUCT_PACKAGES += \
     XiaomiParts
-
-# DPM
-PRODUCT_PACKAGES += \
-    libshim_dpmframework
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -276,7 +269,6 @@ PRODUCT_PACKAGES += \
     libOmxEvrcEnc \
     libOmxG711Enc \
     libOmxQcelp13Enc \
-    libOmxSwVencHevc \
     libOmxVdec \
     libOmxVenc \
     libstagefrighthw
@@ -373,7 +365,6 @@ PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.1.vendor \
     android.hardware.secure_element@1.2.vendor \
     librmnetctl \
-    libcnefeatureconfig \
     libxml2
 
 # Rootdir
@@ -481,11 +472,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     libcld80211 \
-    libQWiFiSoftApCfg \
     libwifi-hal-ctrl \
     libwpa_client \
     hostapd \
-    dhcpcd.conf \
     wificond \
     WifiOverlay \
     wpa_supplicant \
