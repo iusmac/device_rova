@@ -285,7 +285,7 @@ public class FmFavoriteActivity extends Activity {
                                 ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.RIGHT_OF, R.id.lv_fm_label);
                     freqView.setLayoutParams(params);
-                    freqView.setTypeface(Typeface.SANS_SERIF);
+                    freqView.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
 
                     final float paddingLeftDp = 3f;
                     final float paddingLeftDpPx =
@@ -311,7 +311,7 @@ public class FmFavoriteActivity extends Activity {
                             ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.BELOW, R.id.lv_fm_label);
                 freqView.setLayoutParams(params);
-                freqView.setTypeface(freqView.getTypeface());
+                freqView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                 freqView.setPadding(0, freqView.getPaddingTop(),
                         freqView.getPaddingRight(),
                         freqView.getPaddingBottom());
