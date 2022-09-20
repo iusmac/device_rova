@@ -34,7 +34,4 @@
 
     <!-- Enable vibration when ringing by default -->
     <bool name="def_vibrate_when_ringing">true</bool>
-
-    <!-- Disable mobile data by default -->
-    <bool name="def_mobile_data_always_on">false</bool>
 </resources>
