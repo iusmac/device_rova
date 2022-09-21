@@ -14,6 +14,7 @@ GNSS_CFLAGS = [
     "-Wno-error=tautological-compare",
     "-Wno-error=switch",
     "-Wno-error=date-time",
+    "-Wno-error=enum-compare",
 ]
 
 /* Activate the following for debug purposes only,
