@@ -97,7 +97,7 @@ public class SmartChargingService extends Service {
                     intervalMin = 15;
                     break;
                 default:
-                    intervalMin = 3;
+                    intervalMin = 2;
             }
 
             assert mAlarmManager != null;
@@ -127,10 +127,14 @@ public class SmartChargingService extends Service {
                 startBatteryMonitoring();
             } else if (intent.getAction() == Intent.ACTION_POWER_DISCONNECTED) {
                 if (DEBUG) Log.d(TAG, "Charger/USB Disconnected");
+                final boolean isPreviouslyOvercharged =
+                    sLastStopChargingReason == stopChargingReason.OVERCHARGED;
+
                 int battCap = SmartCharging.getBatteryCapacity();
                 final int chargingLimit = SmartCharging.getChargingLimit(mSharedPrefs);
-                final boolean isCharged = chargingLimit == battCap;
-                if (isCharged && SmartCharging.isResetStatsNeeded(mSharedPrefs)) {
+                final boolean isCharged = chargingLimit <= battCap;
+                if (isCharged && isPreviouslyOvercharged &&
+                        SmartCharging.isResetStatsNeeded(mSharedPrefs)) {
                     resetStats();
                 }
             }
