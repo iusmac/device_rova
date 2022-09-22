@@ -283,6 +283,10 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
+# Remove unwanted packages
+PRODUCT_PACKAGES += \
+    RemovePackages
+
 # Perf
 PRODUCT_PACKAGES += \
     libqti-perfd-client
