@@ -20,8 +20,11 @@ package org.lineageos.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.UserHandle;
 
 import androidx.preference.PreferenceManager;
+
+import lineageos.providers.LineageSettings;
 
 public class DefaultSystemSettings {
     private static final String TAG = "DefaultSystemSettings";
@@ -48,5 +51,19 @@ public class DefaultSystemSettings {
     }
 
     public void onBootCompleted() {
+        if (isFirstRun("disable-nav-keys")) {
+            writeDisableNavkeysOption(true);
+        }
+    }
+
+    private void writeDisableNavkeysOption(final boolean enabled) {
+        final boolean virtualKeysEnabled = LineageSettings.System.getIntForUser(
+                mContext.getContentResolver(), LineageSettings.System.FORCE_SHOW_NAVBAR, 0,
+                UserHandle.USER_CURRENT) != 0;
+        if (enabled != virtualKeysEnabled) {
+            LineageSettings.System.putIntForUser(mContext.getContentResolver(),
+                    LineageSettings.System.FORCE_SHOW_NAVBAR, enabled ? 1 : 0,
+                    UserHandle.USER_CURRENT);
+        }
     }
 }
