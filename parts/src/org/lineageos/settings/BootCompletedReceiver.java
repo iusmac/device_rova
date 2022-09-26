@@ -53,5 +53,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
         new DiracUtils(context).onBootCompleted();
         new SmartCharging(context).onBootCompleted();
+        new DefaultSystemSettings(context).onBootCompleted();
     }
 }
