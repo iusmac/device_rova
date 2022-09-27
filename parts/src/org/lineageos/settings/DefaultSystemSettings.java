@@ -54,6 +54,10 @@ public class DefaultSystemSettings {
         if (isFirstRun("disable-nav-keys")) {
             writeDisableNavkeysOption(true);
         }
+
+        if (isFirstRun("enable-battery-light")) {
+            writeBatteryLightOption(true);
+        }
     }
 
     private void writeDisableNavkeysOption(final boolean enabled) {
@@ -63,6 +67,17 @@ public class DefaultSystemSettings {
         if (enabled != virtualKeysEnabled) {
             LineageSettings.System.putIntForUser(mContext.getContentResolver(),
                     LineageSettings.System.FORCE_SHOW_NAVBAR, enabled ? 1 : 0,
+                    UserHandle.USER_CURRENT);
+        }
+    }
+
+    private void writeBatteryLightOption(final boolean enabled) {
+        final boolean isBatteryLightEnabled = LineageSettings.System.getIntForUser(
+                mContext.getContentResolver(), LineageSettings.System.BATTERY_LIGHT_ENABLED, 0,
+                UserHandle.USER_CURRENT) != 0;
+        if (enabled != isBatteryLightEnabled) {
+            LineageSettings.System.putIntForUser(mContext.getContentResolver(),
+                    LineageSettings.System.BATTERY_LIGHT_ENABLED, enabled ? 1 : 0,
                     UserHandle.USER_CURRENT);
         }
     }
