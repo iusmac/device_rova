@@ -213,7 +213,6 @@ persist.vendor.debug.sensors.hal=i
 debug.sf.use_phase_offsets_as_durations=1
 debug.sf.layer_caching_active_layer_timeout_ms=1000
 debug.sf.disable_client_composition_cache=1
-debug.sf.enable_gl_backpressure=1
 debug.sf.late.sf.duration=10500000
 debug.sf.late.app.duration=20500000
 debug.sf.early.sf.duration=15000000
