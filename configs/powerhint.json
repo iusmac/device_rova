@@ -81,11 +81,18 @@
       "ResetOnInit": true
     },
     {
-      "Name": "GPUBWGovernor",
-      "Path": "/sys/class/devfreq/soc:qcom,gpubw/governor",
+      "Name": "GPUBusMinFreq",
+      "Path": "/sys/class/devfreq/soc:qcom,gpubw/min_freq",
       "Values": [
-          "performance",
-          "bw_vbif"
+        "5639",
+        "5126",
+        "4541",
+        "4248",
+        "2929",
+        "2270",
+        "1611",
+        "769",
+        "0"
       ],
       "ResetOnInit": true
     },
@@ -288,9 +295,9 @@
     },
     {
       "PowerHint": "VR",
-      "Node": "GPUBWGovernor",
+      "Node": "GPUBusMinFreq",
       "Duration": 0,
-      "Value": "performance"
+      "Value": "4248"
     },
     {
       "PowerHint": "VR_SUSTAINED_PERFORMANCE",
@@ -330,9 +337,9 @@
     },
     {
       "PowerHint": "VR_SUSTAINED_PERFORMANCE",
-      "Node": "GPUBWGovernor",
+      "Node": "GPUBusMinFreq",
       "Duration": 0,
-      "Value": "performance"
+      "Value": "4248"
     },
     {
       "PowerHint": "LAUNCH",
@@ -378,9 +385,9 @@
     },
     {
       "PowerHint": "LAUNCH",
-      "Node": "GPUBWGovernor",
+      "Node": "GPUBusMinFreq",
       "Duration": 3500,
-      "Value": "performance"
+      "Value": "5639"
     },
     {
       "PowerHint": "LAUNCH",
