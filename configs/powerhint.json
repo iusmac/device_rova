@@ -335,12 +335,6 @@
       "Value": "performance"
     },
     {
-      "PowerHint": "INTERACTION",
-      "Node": "CPUBigClusterMinFreq",
-      "Duration": 0,
-      "Value": "1248000"
-    },
-    {
       "PowerHint": "LAUNCH",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 3500,
