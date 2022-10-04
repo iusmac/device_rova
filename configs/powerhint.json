@@ -253,6 +253,15 @@
         "-novr"
       ],
       "Type": "Property"
+    },
+    {
+      "Name": "F2fsGcEnable",
+      "Path": "/dev/sys/fs/by-name/userdata/gc_urgent",
+      "Values": [
+        "2",
+        "0"
+      ],
+      "ResetOnInit": true
     }
   ],
   "Actions": [
@@ -530,6 +539,12 @@
       "PowerHint": "DISPLAY_INACTIVE",
       "Type": "EndHint",
       "Value": "LAUNCH"
+    },
+    {
+      "PowerHint": "DISPLAY_INACTIVE",
+      "Node": "F2fsGcEnable",
+      "Duration": 0,
+      "Value": "2"
     }
   ]
 }
