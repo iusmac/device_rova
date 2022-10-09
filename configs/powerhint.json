@@ -4,11 +4,8 @@
       "Name": "CPUBigClusterMaxFreq",
       "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq",
       "Values": [
-        "1497600",
         "1401000",
-        "1305600",
         "1248000",
-        "1209600",
         "1094400",
         "960000"
       ],
@@ -19,11 +16,8 @@
       "Name": "CPUBigClusterMinFreq",
       "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq",
       "Values": [
-        "1497600",
         "1401000",
-        "1305600",
         "1248000",
-        "1209600",
         "1094400",
         "960000"
       ],
@@ -34,23 +28,10 @@
       "Path": "/sys/class/kgsl/kgsl-3d0/devfreq/max_freq",
       "Values": [
         "598000000",
-        "550000000",
         "523200000",
-        "500000000",
         "484800000",
-        "465000000",
         "400000000",
-        "320000000",
-        "270000000",
-        "266670000",
-        "240000000",
-        "228570000",
-        "200000000",
-        "160000000",
-        "100000000",
-        "80000000",
-        "50000000",
-        "19200000"
+        "270000000"
       ],
       "DefaultIndex": 0,
       "ResetOnInit": true
@@ -60,23 +41,10 @@
       "Path": "/sys/class/kgsl/kgsl-3d0/devfreq/min_freq",
       "Values": [
         "598000000",
-        "550000000",
         "523200000",
-        "500000000",
         "484800000",
-        "465000000",
         "400000000",
-        "320000000",
-        "270000000",
-        "266670000",
-        "240000000",
-        "228570000",
-        "200000000",
-        "160000000",
-        "100000000",
-        "80000000",
-        "50000000",
-        "19200000"
+        "270000000"
       ],
       "ResetOnInit": true
     },
@@ -250,7 +218,7 @@
       "PowerHint": "SUSTAINED_PERFORMANCE",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 0,
-      "Value": "1497600"
+      "Value": "1401000"
     },
     {
       "PowerHint": "SUSTAINED_PERFORMANCE",
@@ -292,13 +260,13 @@
       "PowerHint": "VR",
       "Node": "GPUMaxFreq",
       "Duration": 0,
-      "Value": "465000000"
+      "Value": "484800000"
     },
     {
       "PowerHint": "VR",
       "Node": "GPUMinFreq",
       "Duration": 0,
-      "Value": "465000000"
+      "Value": "484800000"
     },
     {
       "PowerHint": "VR",
@@ -334,13 +302,13 @@
       "PowerHint": "VR_SUSTAINED_PERFORMANCE",
       "Node": "GPUMaxFreq",
       "Duration": 0,
-      "Value": "465000000"
+      "Value": "484800000"
     },
     {
       "PowerHint": "VR_SUSTAINED_PERFORMANCE",
       "Node": "GPUMinFreq",
       "Duration": 0,
-      "Value": "465000000"
+      "Value": "484800000"
     },
     {
       "PowerHint": "VR_SUSTAINED_PERFORMANCE",
@@ -352,13 +320,13 @@
       "PowerHint": "LAUNCH",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 3500,
-      "Value": "1497600"
+      "Value": "1401000"
     },
     {
       "PowerHint": "LAUNCH",
       "Node": "CPUBigClusterMinFreq",
       "Duration": 3500,
-      "Value": "1497600"
+      "Value": "1401000"
     },
     {
       "PowerHint": "LAUNCH",
@@ -436,13 +404,13 @@
       "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 1000,
-      "Value": "1497600"
+      "Value": "1401000"
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPUBigClusterMinFreq",
       "Duration": 1000,
-      "Value": "1497600"
+      "Value": "1401000"
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
