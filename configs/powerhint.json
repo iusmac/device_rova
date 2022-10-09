@@ -146,8 +146,7 @@
       "Values": [
         "0",
         "3"
-      ],
-      "ResetOnInit": true
+      ]
     },
     {
       "Name": "CPUBWHistMemory",
@@ -155,8 +154,7 @@
       "Values": [
         "0",
         "20"
-      ],
-      "ResetOnInit": true
+      ]
     },
     {
       "Name": "CPUBWHystLength",
@@ -164,24 +162,7 @@
       "Values": [
         "0",
         "10"
-      ],
-      "ResetOnInit": true
-    },
-    {
-      "Name": "CPUBWSampleMs",
-      "Path": "/sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/sample_ms",
-      "Values": [
-        "4"
-      ],
-      "ResetOnInit": true
-    },
-    {
-      "Name": "CPUBWIOPercent",
-      "Path": "/sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/io_percent",
-      "Values": [
-        "20"
-      ],
-      "ResetOnInit": true
+      ]
     },
     {
       "Name": "CPUBWMinFreq",

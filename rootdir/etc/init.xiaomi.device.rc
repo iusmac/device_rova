@@ -61,3 +61,10 @@ on property:ro.vendor.xiaomi.device=riva
 
 on property:sys.boot_completed=1
     restart time_daemon
+
+    # Defaults for power hints
+    write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/hyst_trigger_count 3
+    write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/hist_memory 20
+    write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/hyst_length 10
+    write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/sample_ms 4
+    write /sys/class/devfreq/soc:qcom,cpubw/bw_hwmon/io_percent 20
