@@ -19,6 +19,9 @@
 package org.lineageos.settings.smartcharging;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -27,19 +30,35 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
+import org.lineageos.settings.R;
+
 public class SmartChargingService extends Service {
     private static final String TAG = "SmartChargingService";
     private static final boolean DEBUG = false;
+
+    private String mTargetClassName = "org.lineageos.settings.smartcharging.SmartChargingActivity";
+    private static final int NOTIFICATION_ID = 1;
+    public static final String NOTIFICATION_CHANNEL = "smartcharging_notification_channel";
+    public static final String NOTIFICATION_DISMISS = "smartcharging.service.dismiss";
+    private NotificationManager mNotificationManager = null;
+    private NotificationChannel mNotificationChannel = null;
+
+    private WakeLock mWakeLock = null;
+
+    private boolean mBatteryMonitorRegistered = false;
     private static final String BATTERY_MONITOR_UPDATE_INTENT =
         "org.lineageos.settings.smartcharging.BatteryMonitorReceiver";
     public BatteryMonitorReceiver mBatteryMonitorReceiver = null;
     private SharedPreferences mSharedPrefs;
 
-    private enum stopChargingReason { OVERHEATED, OVERCHARGED, UNKNOWN }
+    private enum stopChargingReason { OVERHEATED, OVERCHARGED, NOTIF_DISMISS, UNKNOWN }
     private static stopChargingReason sLastStopChargingReason =
         stopChargingReason.UNKNOWN;
 
@@ -57,6 +76,7 @@ public class SmartChargingService extends Service {
         private Context mContext = null;
         private SharedPreferences mSharedPrefs;
         private SmartChargingService mService = null;
+        private Long mNextUpdateTime = 0L;
 
         public BatteryMonitorReceiver(SmartChargingService service, Context
                 context, SharedPreferences sharedPrefs) {
@@ -67,12 +87,14 @@ public class SmartChargingService extends Service {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            mIsActive = false;
             if (!SmartCharging.isPlugged()) {
                 if (DEBUG) Log.d(TAG, "Charger/USB Unplugged");
                 mService.stopBatteryMonitoring();
             } else {
-                mService.update(mSharedPrefs);
                 start();
+                mService.update(mSharedPrefs);
+                mService.showNotification();
             }
         }
 
@@ -101,9 +123,10 @@ public class SmartChargingService extends Service {
             }
 
             assert mAlarmManager != null;
+            mNextUpdateTime = (System.currentTimeMillis() / 1000L + intervalMin
+                    * 60) * 1000L;
             mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-                    (System.currentTimeMillis() / 1000L + intervalMin * 60) * 1000L,
-                    mPendingIntent);
+                    mNextUpdateTime, mPendingIntent);
             mIsActive = true;
         }
 
@@ -117,6 +140,10 @@ public class SmartChargingService extends Service {
         public boolean isActive() {
             return mIsActive;
         }
+
+        public Long getNextUpdateTime() {
+            return mNextUpdateTime;
+        }
     }
 
     public BroadcastReceiver mPowerMonitor = new BroadcastReceiver() {
@@ -127,8 +154,15 @@ public class SmartChargingService extends Service {
                 startBatteryMonitoring();
             } else if (intent.getAction() == Intent.ACTION_POWER_DISCONNECTED) {
                 if (DEBUG) Log.d(TAG, "Charger/USB Disconnected");
+                final boolean isPreviouslyOverheated =
+                    sLastStopChargingReason == stopChargingReason.OVERHEATED;
                 final boolean isPreviouslyOvercharged =
                     sLastStopChargingReason == stopChargingReason.OVERCHARGED;
+
+                // Stop now if there's no reason to monitor
+                if (!isPreviouslyOverheated && !isPreviouslyOvercharged) {
+                    stopBatteryMonitoring();
+                }
 
                 int battCap = SmartCharging.getBatteryCapacity();
                 final int chargingLimit = SmartCharging.getChargingLimit(mSharedPrefs);
@@ -204,25 +238,121 @@ public class SmartChargingService extends Service {
     }
 
     private void startBatteryMonitoring() {
-        if (!mBatteryMonitorReceiver.isActive()) {
+        if (!mBatteryMonitorRegistered) {
             if (DEBUG) Log.d(TAG, "Creating battery monitor service");
             IntentFilter batteryMonitor = new
                 IntentFilter(BATTERY_MONITOR_UPDATE_INTENT);
             getApplicationContext().registerReceiver(mBatteryMonitorReceiver,
                     batteryMonitor);
-            mBatteryMonitorReceiver.start();
-            update(mSharedPrefs);
+            mBatteryMonitorRegistered = true;
         }
+
+        if (!mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+        }
+
+        if (!mBatteryMonitorReceiver.isActive()) {
+            mBatteryMonitorReceiver.start();
+        }
+        update(mSharedPrefs);
+        showNotification();
     }
 
     private void stopBatteryMonitoring() {
-        if (mBatteryMonitorReceiver.isActive()) {
+        if (mBatteryMonitorRegistered) {
             if (DEBUG) Log.d(TAG, "Destroying battery monitor service");
             getApplicationContext().unregisterReceiver(mBatteryMonitorReceiver);
             mBatteryMonitorReceiver.stop();
+            mBatteryMonitorRegistered = false;
         }
+
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
+        removeNotification();
+
         SmartCharging.enableCharging();
         sLastStopChargingReason = stopChargingReason.UNKNOWN;
+    }
+
+    private void showNotification() {
+        Context ctx = getApplicationContext();
+        Intent aIntent = new Intent(Intent.ACTION_MAIN);
+        aIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        aIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        aIntent.setClassName(getPackageName(), mTargetClassName);
+        PendingIntent pAIntent = PendingIntent.getActivity(ctx, 0, aIntent,
+                PendingIntent.FLAG_IMMUTABLE |
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (mNotificationManager == null) {
+            mNotificationManager = (NotificationManager)
+                ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+
+        if (mNotificationChannel == null) {
+            mNotificationChannel =
+                new NotificationChannel(NOTIFICATION_CHANNEL,
+                        ctx.getString(R.string.smart_charging_title),
+                        NotificationManager.IMPORTANCE_LOW);
+
+            mNotificationManager.createNotificationChannel(mNotificationChannel);
+        }
+
+        Notification.Builder notificationBuilder;
+        notificationBuilder = new Notification.Builder(ctx,
+                NOTIFICATION_CHANNEL);
+        notificationBuilder
+            .setSmallIcon(R.drawable.ic_power)
+            .setShowWhen(false)
+            .setAutoCancel(true);
+
+        Intent intent = new Intent(NOTIFICATION_DISMISS);
+        intent.setClass(ctx, SmartChargingService.class);
+        PendingIntent pIntent = PendingIntent.getService(ctx, 0, intent,
+                PendingIntent.FLAG_IMMUTABLE |
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder.addAction(0,
+                ctx.getString(R.string.not_now),
+                pIntent);
+        notificationBuilder.setContentIntent(pAIntent);
+
+        notificationBuilder.setContentTitle(ctx.getString(R.string.smart_charging_title));
+
+        final int chargingLimit = SmartCharging.getChargingLimit(mSharedPrefs);
+        final int chargingResume = SmartCharging.getChargingResume(mSharedPrefs);
+        final int tempLimit = SmartCharging.getTempLimit(mSharedPrefs);
+        final float battTemp = SmartCharging.getBatteryTemp();
+
+        Notification.InboxStyle style = new Notification.InboxStyle();
+        style
+            .addLine(String.format("%s: %d%%",
+                    ctx.getString(R.string.smart_charging_level_title),
+                    chargingLimit))
+            .addLine(String.format("%s: %d%%",
+                    ctx.getString(R.string.smart_charging_resume_level_title),
+                    chargingResume))
+            .addLine(String.format("%s: %.1f°C (max. %d°C)",
+                    ctx.getString(R.string.smart_charging_battery_temperature),
+                    battTemp, tempLimit));
+
+        Long nextUpdateTime = mBatteryMonitorReceiver.getNextUpdateTime();
+        if (nextUpdateTime > 0) {
+            String timeString = DateUtils.formatDateTime(ctx, nextUpdateTime,
+                    DateUtils.FORMAT_SHOW_TIME);
+            style
+                .addLine(" ")
+                .addLine(ctx.getString(R.string.next_update_time, timeString));
+        }
+        notificationBuilder.setStyle(style);
+
+        Notification n = notificationBuilder.build();
+        n.flags &= ~Notification.FLAG_NO_CLEAR;
+        startForeground(NOTIFICATION_ID, n);
+    }
+
+    private void removeNotification() {
+        stopForeground(STOP_FOREGROUND_REMOVE);
     }
 
     @Override
@@ -241,9 +371,33 @@ public class SmartChargingService extends Service {
         mBatteryMonitorReceiver = new BatteryMonitorReceiver(this, ctx,
                 mSharedPrefs);
 
+        PowerManager powerManager = (PowerManager) getSystemService(ctx.POWER_SERVICE);
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+        mWakeLock.setReferenceCounted(false);
+
         if (SmartCharging.isPlugged()) {
             startBatteryMonitoring();
         }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String action = intent != null ? intent.getAction() : "";
+        if (action == null) {
+            action = "";
+        }
+
+        if (DEBUG) Log.d(TAG, "Receiving onStartCommand(); action = " + action);
+        super.onStartCommand(intent, flags, startId);
+
+        if (!"".equals(action)) {
+            if (NOTIFICATION_DISMISS.equals(action)) {
+                stopBatteryMonitoring();
+                sLastStopChargingReason = stopChargingReason.NOTIF_DISMISS;
+            }
+        }
+
+        return START_REDELIVER_INTENT;
     }
 
     @Override

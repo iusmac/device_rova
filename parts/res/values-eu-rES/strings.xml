@@ -56,4 +56,7 @@
     <string name="dirac_preset_country">Country</string>
     <string name="dirac_preset_dance">Dance</string>
     <string name="dirac_preset_metal">Metal</string>
+
+    <!-- Misc -->
+    <string name="next_update_time">Hurrengo eguneratzea: %1$s barru</string>
 </resources>
