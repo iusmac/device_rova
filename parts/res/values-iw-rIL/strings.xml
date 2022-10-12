@@ -61,4 +61,13 @@
     <!-- Misc -->
     <string name="not_now">"לא עכשיו"</string>
     <string name="next_update_time">עדכון הבא: ב־%1$s</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">זיהוי כיס</string>
+    <string name="pocket_judge_summary">חסום קלט מהמסך ומהלחצנים כאשר המכשיר נמצא בכיס</string>
+    <string name="pocket_judge_notif_title">מצב כיס מופעל</string>
+    <string name="pocket_judge_notif_msg">לחץ והחזק את כפתור ההפעלה לביטול הנעילה</string>
+    <string name="pocket_judge_demo_title_cancel">כדי להשתמש בטלפון שלך:</string>
+    <string name="pocket_judge_demo_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
+    <string name="pocket_judge_demo_tag_cancel2">לחיצה ארוכה על כפתור ההפעלה כדי לצאת ממצב כיס.</string>
 </resources>

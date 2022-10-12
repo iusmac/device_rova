@@ -26,6 +26,7 @@
     <uses-permission android:name="android.permission.INJECT_EVENTS"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <protected-broadcast android:name="org.lineageos.settings.smartcharging.BatteryMonitorReceiver" />
 
@@ -116,5 +117,34 @@
                 <action android:name="android.content.action.SEARCH_INDEXABLES_PROVIDER" />
             </intent-filter>
         </provider>
+
+        <service
+            android:name=".pocketjudge.PocketJudgeService"
+            android:exported="false">
+        </service>
+
+        <activity
+            android:name=".pocketjudge.PocketJudgeActivity"
+            android:exported="true"
+            android:label="@string/pocket_judge_title">
+            <intent-filter>
+                <action android:name="com.android.settings.action.IA_SETTINGS" />
+            </intent-filter>
+            <meta-data
+                android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.display" />
+            <meta-data
+                android:name="com.android.settings.summary"
+                android:resource="@string/pocket_judge_summary" />
+        </activity>
+
+        <receiver
+            android:name=".PhoneStateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

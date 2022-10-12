@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">Kantri</string>
     <string name="dirac_preset_dance">Rəqs</string>
     <string name="dirac_preset_metal">Metal</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_notif_title">Cib rejimi açıqdır</string>
+    <string name="pocket_judge_notif_msg">Kilidi açmaq üçün güc düyməsinə basıb saxlayın</string>
+    <string name="pocket_judge_demo_title_cancel">Telefonunu istifadə et:</string>
+    <string name="pocket_judge_demo_tag_cancel">Telefonun mavi hissəsində hər hansı tozun olub olmadığını yoxlayın və əgər varsa onları təmizləyin.</string>
+    <string name="pocket_judge_demo_tag_cancel2">Cib rejimindən çıxmağa məcbur etmək üçün güc düyməsinə uzun basın.</string>
 </resources>

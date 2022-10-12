@@ -78,4 +78,13 @@
     <!-- Misc -->
     <string name="not_now">"나중에"</string>
     <string name="next_update_time">다음 업데이트: %1$s</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">주머니 감지</string>
+    <string name="pocket_judge_summary">기기가 주머니에 있을 때 화면과 버튼 입력을 방지합니다.</string>
+    <string name="pocket_judge_notif_title">주머니 모드가 켜졌습니다</string>
+    <string name="pocket_judge_notif_msg">전원 버튼을 길게 눌러 잠금 해제</string>
+    <string name="pocket_judge_demo_title_cancel">기기를 사용하려면:</string>
+    <string name="pocket_judge_demo_tag_cancel">파란색으로 표시된 부분이 가려졌는지 확인하고 먼지를 닦아주세요.</string>
+    <string name="pocket_judge_demo_tag_cancel2">주머니 감지 모드를 강제 종료하려면 전원 버튼을 길게 누르세요.</string>
 </resources>

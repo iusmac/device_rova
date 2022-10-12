@@ -78,4 +78,13 @@
     <!-- Misc -->
     <string name="not_now">"Şimdi değil"</string>
     <string name="next_update_time">Sonraki güncelleme: %1$s içinde</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">Cep algılama</string>
+    <string name="pocket_judge_summary">Cihaz cebinizdeyken ekran ve tuş girişlerini engelleyin</string>
+    <string name="pocket_judge_notif_title">Cep modu açık</string>
+    <string name="pocket_judge_notif_msg">Kilidi açmak için güç tuşuna basılı tutun</string>
+    <string name="pocket_judge_demo_title_cancel">Telefonunuzu kullanmak için:</string>
+    <string name="pocket_judge_demo_tag_cancel">Telefonunuzun mavi alanında herhangi bir engel olup olmadığını kontrol edin ve herhangi bir kiri veya tozu temizleyin.</string>
+    <string name="pocket_judge_demo_tag_cancel2">Cep modundan çıkmak için güç tuşuna basılı tutun.</string>
 </resources>

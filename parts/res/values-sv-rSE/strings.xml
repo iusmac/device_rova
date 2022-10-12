@@ -77,4 +77,8 @@
 
     <!-- Misc -->
     <string name="not_now">"Inte nu"</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">Fickdetektion</string>
+    <string name="pocket_judge_summary">Blockera skärmen och knapptryckningar när enheten är i fickan</string>
 </resources>

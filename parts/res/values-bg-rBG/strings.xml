@@ -77,4 +77,13 @@
 
     <!-- Misc -->
     <string name="not_now">"Не сега"</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">Разпознаване при носене</string>
+    <string name="pocket_judge_summary">Изключване на екрана и бутоните, когато устройството е в джоба</string>
+    <string name="pocket_judge_notif_title">Джобен режим е включен</string>
+    <string name="pocket_judge_notif_msg">Натиснете и задръжте бутона за изключване, за да отключите</string>
+    <string name="pocket_judge_demo_title_cancel">За да използвате телефона:</string>
+    <string name="pocket_judge_demo_tag_cancel">Проверете дали синята зона на телефона ви е чиста</string>
+    <string name="pocket_judge_demo_tag_cancel2">Натиснете и задръжте бутона за изключване за да премахнете \"джобният режим\"</string>
 </resources>

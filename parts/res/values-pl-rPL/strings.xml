@@ -78,4 +78,13 @@
     <!-- Misc -->
     <string name="not_now">"Nie teraz"</string>
     <string name="next_update_time">Następna aktualizacja: w %1$s</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">Tryb kieszonkowy</string>
+    <string name="pocket_judge_summary">Zablokuj funkcję ekranu i przycisków, gdy urządzenie jest w kieszeni</string>
+    <string name="pocket_judge_notif_title">Tryb kieszeniowy jest włączony</string>
+    <string name="pocket_judge_notif_msg">Naciśnij i przytrzymaj przycisk zasilania aby odblokować</string>
+    <string name="pocket_judge_demo_title_cancel">Aby aktywować swój telefon:</string>
+    <string name="pocket_judge_demo_tag_cancel">Sprawdź, czy niebieska część telefonu jest czysta i nie jest przysłonięta.</string>
+    <string name="pocket_judge_demo_tag_cancel2">Przytrzymaj przycisk zasilania, aby wymusić wyjście z trybu kieszonkowego.</string>
 </resources>

@@ -37,4 +37,8 @@
     <!-- Misc -->
     <string name="not_now">"Ahora no"</string>
     <string name="next_update_time">Próxima actualización a las %1$s</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">Detección de bolsillo</string>
+    <string name="pocket_judge_summary">Bloquear pantalla y botones cuando el dispositivo esté en un bolsillo</string>
 </resources>

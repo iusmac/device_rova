@@ -78,4 +78,13 @@
     <!-- Misc -->
     <string name="not_now">"以后再说"</string>
     <string name="next_update_time">下次更新：在%1$s</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">口袋检测</string>
+    <string name="pocket_judge_summary">当设备在口袋中时屏蔽屏幕和按键操作</string>
+    <string name="pocket_judge_notif_title">口袋模式已开启</string>
+    <string name="pocket_judge_notif_msg">按住电源按钮解锁</string>
+    <string name="pocket_judge_demo_title_cancel">激活您的手机</string>
+    <string name="pocket_judge_demo_tag_cancel">确保你手机的蓝色区域清洁无杂物</string>
+    <string name="pocket_judge_demo_tag_cancel2">长按电源按钮强制退出口袋模式</string>
 </resources>

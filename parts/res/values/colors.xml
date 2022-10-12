@@ -18,4 +18,6 @@
     <color name="switchbar_background_color">@*android:color/material_grey_600</color>
     <color name="switchbar_switch_track_tint">#BFFFFFFF</color>
     <color name="switchbar_switch_thumb_tint">@android:color/white</color>
+
+    <color name="illustration_color">@android:color/white</color>
 </resources>

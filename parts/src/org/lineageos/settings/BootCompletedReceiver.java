@@ -26,6 +26,7 @@ import android.provider.Settings;
 import org.lineageos.settings.soundcontrol.SoundControlSettings;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.smartcharging.SmartCharging;
+import org.lineageos.settings.pocketjudge.PocketJudge;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     private static final boolean DEBUG = false;
@@ -54,5 +55,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         new DiracUtils(context).onBootCompleted();
         new SmartCharging(context).onBootCompleted();
         new DefaultSystemSettings(context).onBootCompleted();
+        new PocketJudge(context).onBootCompleted();
     }
 }

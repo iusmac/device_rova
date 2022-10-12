@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016-2021 crDroid Android Project
+     Copyright (C) 2017 crDroid Android Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-    <!-- Pocket Lock -->
-    <bool name="config_pocketModeSupported">false</bool>
-
-    <!-- Whether device supports sensor based doze customizations -->
-    <bool name="config_dozePulsePickup">true</bool>
-    <bool name="config_dozePulseTilt">true</bool>
-    <bool name="config_dozePulseProximity">true</bool>
-    <bool name="config_deviceHaveWakeUpProximity">true</bool>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24.0dp"
+        android:height="24.0dp"
+        android:viewportWidth="24.0"
+        android:viewportHeight="24.0">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12V4.5A2.5 2.5 0 0 1 4.5 2h15A2.5 2.5 0 0 1 22 4.5V12m-6.12-3.75L12 12.13 8.12 8.24a1.5 1.5 0 0 0-2.12 0 1.5 1.5 0 0 0 0 2.12l4.93 4.96c.57.58 1.54.58 2.13 0L18 10.37a1.5 1.5 0 0 0 0-2.12 1.5 1.5 0 0 0-2.12 0Z" />
+</vector>

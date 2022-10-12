@@ -77,4 +77,13 @@
 
     <!-- Misc -->
     <string name="not_now">"Nanti saja"</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">Deteksi Saku</string>
+    <string name="pocket_judge_summary">Blokir sentuh tombol dan layar saat perangkat berada dalam saku</string>
+    <string name="pocket_judge_notif_title">Mode saku aktif</string>
+    <string name="pocket_judge_notif_msg">Tekan dan tahan tombol daya untuk membuka kunci</string>
+    <string name="pocket_judge_demo_title_cancel">Untuk mengaktifkan perangkat Anda:</string>
+    <string name="pocket_judge_demo_tag_cancel">Jangan menutupi area biru ponsel Anda, dan bersihkan kotoran atau debu.</string>
+    <string name="pocket_judge_demo_tag_cancel2">Tekan lama tombol daya untuk memaksa keluar dari mode saku.</string>
 </resources>

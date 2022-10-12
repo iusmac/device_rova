@@ -61,4 +61,8 @@
     <!-- Misc -->
     <string name="not_now">"Ne zdaj"</string>
     <string name="next_update_time">Naslednja posodobitev ob %1$s</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">Zaznavanje žepa</string>
+    <string name="pocket_judge_summary">Blokiraj zaslon in vnose gumbov, ko je naprava v žepu</string>
 </resources>

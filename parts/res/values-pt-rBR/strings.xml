@@ -78,4 +78,13 @@
     <!-- Misc -->
     <string name="not_now">"Agora não"</string>
     <string name="next_update_time">Próxima atualização em %1$s</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">Detecção no bolso</string>
+    <string name="pocket_judge_summary">Bloquear a tela e os botões quando o dispositivo estiver no bolso</string>
+    <string name="pocket_judge_notif_title">Modo bolso está ativado</string>
+    <string name="pocket_judge_notif_msg">Pressione e segure o botão liga/desliga para desbloquear</string>
+    <string name="pocket_judge_demo_title_cancel">Para usar seu telefone:</string>
+    <string name="pocket_judge_demo_tag_cancel">Verifique se a área azul do seu telefone está livre de qualquer obstrução, e limpe qualquer sujeira ou pó.</string>
+    <string name="pocket_judge_demo_tag_cancel2">Pressionar e segurar o botão liga/desliga para forçar a saída do modo bolso</string>
 </resources>

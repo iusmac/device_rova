@@ -78,4 +78,13 @@
     <!-- Misc -->
     <string name="not_now">"暫時不要"</string>
     <string name="next_update_time">下次更新於 %1$s</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">口袋防誤觸偵測</string>
+    <string name="pocket_judge_summary">當裝置位於口袋中時防止螢幕和按鍵輸入</string>
+    <string name="pocket_judge_notif_title">防誤觸模式已開啟</string>
+    <string name="pocket_judge_notif_msg">長按電源鍵以解鎖</string>
+    <string name="pocket_judge_demo_title_cancel">若要使用您的手機：</string>
+    <string name="pocket_judge_demo_tag_cancel">請確保藍色區域上沒有任何遮蔽物，且已清除任何灰塵、粉塵</string>
+    <string name="pocket_judge_demo_tag_cancel2">長按電源鍵來強制退出防誤觸模式</string>
 </resources>

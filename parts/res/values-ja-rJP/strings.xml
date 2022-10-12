@@ -77,4 +77,13 @@
 
     <!-- Misc -->
     <string name="not_now">"後で行う"</string>
+
+    <!-- Pocket Judge -->
+    <string name="pocket_judge_title">ポケット検出</string>
+    <string name="pocket_judge_summary">ポケットに入っている時にタッチやボタン入力を無効化します</string>
+    <string name="pocket_judge_notif_title">ポケットモードが ON です</string>
+    <string name="pocket_judge_notif_msg">電源ボタンを押し続けてロック解除</string>
+    <string name="pocket_judge_demo_title_cancel">端末を使用するには</string>
+    <string name="pocket_judge_demo_tag_cancel">青い部分を覆っていないか確認して、汚れやほこりを落としてください。</string>
+    <string name="pocket_judge_demo_tag_cancel2">電源ボタンを長押しするとポケットモードを強制終了します</string>
 </resources>
