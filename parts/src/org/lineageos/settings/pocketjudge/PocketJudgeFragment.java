@@ -34,7 +34,7 @@ import org.lineageos.settings.R;
 public class PocketJudgeFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
     private final String TAG = getClass().getName();
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
 
     private final String KEY_POCKET_JUDGE_FOOTER = "footer_preference";
 
@@ -57,6 +57,7 @@ public class PocketJudgeFragment extends PreferenceFragment implements
         mPocketJudgePreference.setChecked(mSharedPrefs.getBoolean(
                     PocketJudge.KEY_POCKET_JUDGE_SWITCH, false));
         mPocketJudgePreference.setOnPreferenceChangeListener(this);
+        mPocketJudgePreference.setTitle(mPocketJudgePreference.getTitle() + " (Beta)");
 
         mFooterPref = findPreference(KEY_POCKET_JUDGE_FOOTER);
         final String title =

@@ -56,7 +56,7 @@ import org.lineageos.settings.R;
 
 public class PocketJudgeService extends Service {
     private static final String TAG = "PocketJudgeService";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private static final int EVENT_UNLOCK = 2;
     private static final int EVENT_TURN_ON_SCREEN = 1;
