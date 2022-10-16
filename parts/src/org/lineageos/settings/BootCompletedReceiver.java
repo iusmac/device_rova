@@ -51,10 +51,18 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                 0
             )
         );
-
-        new DiracUtils(context).onBootCompleted();
         new SmartCharging(context).onBootCompleted();
         new DefaultSystemSettings(context).onBootCompleted();
         new PocketJudge(context).onBootCompleted();
+
+        // === DELAYED TASKS === //
+
+        int millis = 1 * 60 * 1000;  // 1min
+        try {
+            Thread.sleep(millis);
+            new DiracUtils(context).onBootCompleted();
+        } catch( Exception e) {
+            e.printStackTrace();
+        }
     }
 }
