@@ -90,7 +90,7 @@ public class SmartChargingService extends Service {
             mIsActive = false;
             if (!SmartCharging.isPlugged()) {
                 if (DEBUG) Log.d(TAG, "Charger/USB Unplugged");
-                mService.stopBatteryMonitoring();
+                mService.stopBatteryMonitoring(stopChargingReason.UNKNOWN);
             } else {
                 start();
                 mService.update(mSharedPrefs);
@@ -151,7 +151,14 @@ public class SmartChargingService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() == Intent.ACTION_POWER_CONNECTED) {
                 if (DEBUG) Log.d(TAG, "Charger/USB Connected");
-                startBatteryMonitoring();
+                if (sLastStopChargingReason == stopChargingReason.NOTIF_DISMISS) {
+                    // User dismissed monitoring, but charging resumed. We need
+                    // to reset last stop reason here, so that the next charger
+                    // re-plug can start the monitoring as expected.
+                    sLastStopChargingReason = stopChargingReason.UNKNOWN;
+                } else {
+                    startBatteryMonitoring();
+                }
             } else if (intent.getAction() == Intent.ACTION_POWER_DISCONNECTED) {
                 if (DEBUG) Log.d(TAG, "Charger/USB Disconnected");
                 final boolean isPreviouslyOverheated =
@@ -161,7 +168,8 @@ public class SmartChargingService extends Service {
 
                 // Stop now if there's no reason to monitor
                 if (!isPreviouslyOverheated && !isPreviouslyOvercharged) {
-                    stopBatteryMonitoring();
+                    stopBatteryMonitoring(stopChargingReason.UNKNOWN);
+                    return;
                 }
 
                 int battCap = SmartCharging.getBatteryCapacity();
@@ -232,8 +240,8 @@ public class SmartChargingService extends Service {
         } else if ((isResumeable || isPreviouslyOverheated) &&
                 chargingLimit != chargingResume && !isOverheated) {
             if (DEBUG) Log.d(TAG, "Enabling charging");
-            SmartCharging.enableCharging();
             sLastStopChargingReason = stopChargingReason.UNKNOWN;
+            SmartCharging.enableCharging();
         }
     }
 
@@ -258,7 +266,7 @@ public class SmartChargingService extends Service {
         showNotification();
     }
 
-    private void stopBatteryMonitoring() {
+    private void stopBatteryMonitoring(stopChargingReason reason) {
         if (mBatteryMonitorRegistered) {
             if (DEBUG) Log.d(TAG, "Destroying battery monitor service");
             getApplicationContext().unregisterReceiver(mBatteryMonitorReceiver);
@@ -271,8 +279,8 @@ public class SmartChargingService extends Service {
         }
         removeNotification();
 
+        sLastStopChargingReason = reason;
         SmartCharging.enableCharging();
-        sLastStopChargingReason = stopChargingReason.UNKNOWN;
     }
 
     private void showNotification() {
@@ -392,8 +400,7 @@ public class SmartChargingService extends Service {
 
         if (!"".equals(action)) {
             if (NOTIFICATION_DISMISS.equals(action)) {
-                stopBatteryMonitoring();
-                sLastStopChargingReason = stopChargingReason.NOTIF_DISMISS;
+                stopBatteryMonitoring(stopChargingReason.NOTIF_DISMISS);
             }
         }
 
@@ -405,7 +412,7 @@ public class SmartChargingService extends Service {
         if (DEBUG) Log.d(TAG, "Destroying service");
         super.onDestroy();
         unregisterReceiver(mPowerMonitor);
-        stopBatteryMonitoring();
+        stopBatteryMonitoring(stopChargingReason.UNKNOWN);
     }
 
     @Override
