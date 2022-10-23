@@ -18,13 +18,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="advanced_settings">Amplificazione audio</string>
-    <string name="advanced_summary">Controlla il guadagno dell\'audio e del microfono</string>
-
-    <!-- Audio amplification -->
-    <string name="volume_gain">Guadagno altoparlanti e cuffie</string>
-    <string name="microphone_gain">Guadagno microfono</string>
-
     <!-- Dirac settings -->
     <string name="dirac_enable">Abilita Dirac</string>
     <string name="dirac_title">Ottimizzazione Mi Sound</string>
@@ -100,4 +93,10 @@
     <string name="pocket_judge_demo_title_cancel">Per utilizzare il telefono:</string>
     <string name="pocket_judge_demo_tag_cancel">Controlla se l\'area evidenziata in blu del telefono è libera da eventuali ostruzioni, e pulire sporco o polvere.</string>
     <string name="pocket_judge_demo_tag_cancel2">Tieni premuto il pulsante di accensione per forzare la chiusura della modalità tasca.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Guadagno volume</string>
+    <string name="volume_gain_summary">Guadagno altoparlanti / Guadagno suono cuffie / Guadagno microfono</string>
+    <string name="volume_gain_title">Guadagno altoparlanti / Guadagno suono cuffie</string>
+    <string name="microphone_gain_title">Guadagno microfono</string>
 </resources>

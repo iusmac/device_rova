@@ -63,4 +63,10 @@
     <string name="pocket_judge_demo_title_cancel">To use your phone:</string>
     <string name="pocket_judge_demo_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
     <string name="pocket_judge_demo_tag_cancel2">Long press the power button to force quit pocket mode.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Äänenvoimakkuuden lisäys</string>
+    <string name="volume_gain_summary">Kaiuttimen äänenvoimakkuuden lisäys / Kuulokkeiden äänenvoimakkuuden lisäys / Mikrofonin äänenvoimakkuuden lisäys</string>
+    <string name="volume_gain_title">Kaiuttimen äänenvoimakkuuden lisäys / Kuulokkeiden äänenvoimakkuuden lisäys</string>
+    <string name="microphone_gain_title">Mikrofonin äänenvoimakkuuden lisäys</string>
 </resources>

@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">若要使用您的手機：</string>
     <string name="pocket_judge_demo_tag_cancel">請確保藍色區域上沒有任何遮蔽物，且已清除任何灰塵、粉塵</string>
     <string name="pocket_judge_demo_tag_cancel2">長按電源鍵來強制退出防誤觸模式</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">音量增益</string>
+    <string name="volume_gain_summary">喇叭增益 / 耳機增益 / 麥克風增益</string>
+    <string name="volume_gain_title">喇叭增益 / 耳機增益</string>
+    <string name="microphone_gain_title">麥克風增益</string>
 </resources>

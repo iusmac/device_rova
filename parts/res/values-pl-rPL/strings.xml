@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">Aby aktywować swój telefon:</string>
     <string name="pocket_judge_demo_tag_cancel">Sprawdź, czy niebieska część telefonu jest czysta i nie jest przysłonięta.</string>
     <string name="pocket_judge_demo_tag_cancel2">Przytrzymaj przycisk zasilania, aby wymusić wyjście z trybu kieszonkowego.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Wzmocnienie głośności</string>
+    <string name="volume_gain_summary">Wzmocnienie głośnika / Wzmocnienie słuchawek / Wzmocnienie mikrofonu</string>
+    <string name="volume_gain_title">Wzmocnienie głośnika / Wzmocnienie słuchawek</string>
+    <string name="microphone_gain_title">Wzmocnienie mikrofonu</string>
 </resources>

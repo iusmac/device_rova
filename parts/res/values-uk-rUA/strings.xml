@@ -89,4 +89,10 @@
     <string name="pocket_judge_demo_title_cancel">Щоб скористатися вашим телефоном:</string>
     <string name="pocket_judge_demo_tag_cancel">Перевірте, чи синя зона на телефоні нічим не перекрита, а також очистіть її від будь-якого бруду.</string>
     <string name="pocket_judge_demo_tag_cancel2">Утримуйте кнопку живлення, щоб примусово вийти з кишенькового режиму.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Збільшення гучності</string>
+    <string name="volume_gain_summary">Підсилення динаміка / Підсилення навушників / Підсилення мікрофону</string>
+    <string name="volume_gain_title">Підсилення динаміка / Підсилення навушників</string>
+    <string name="microphone_gain_title">Підсилення мікрофону</string>
 </resources>

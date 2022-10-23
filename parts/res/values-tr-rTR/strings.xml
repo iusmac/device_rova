@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">Telefonunuzu kullanmak için:</string>
     <string name="pocket_judge_demo_tag_cancel">Telefonunuzun mavi alanında herhangi bir engel olup olmadığını kontrol edin ve herhangi bir kiri veya tozu temizleyin.</string>
     <string name="pocket_judge_demo_tag_cancel2">Cep modundan çıkmak için güç tuşuna basılı tutun.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Ses Arttırma</string>
+    <string name="volume_gain_summary">Hoparlör Yükseltmesi / Kulaklık Yükseltmesi / Mikrofon Yükseltme</string>
+    <string name="volume_gain_title">Hoparlör Yükseltmesi / Kulaklık Yükseltmesi</string>
+    <string name="microphone_gain_title">Mikrofon Yükseltme</string>
 </resources>

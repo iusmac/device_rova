@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">Pour utiliser votre téléphone :</string>
     <string name="pocket_judge_demo_tag_cancel">Vérifiez si la zone de détection du téléphone est propre.</string>
     <string name="pocket_judge_demo_tag_cancel2">Appuyez longuement sur le bouton d\'alimentation pour quitter le mode poche.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Amplification du volume</string>
+    <string name="volume_gain_summary">Gain du Haut-Parleur / Gain du Casque / Amplification microphone</string>
+    <string name="volume_gain_title">Gain du Haut-Parleur / Gain du Casque</string>
+    <string name="microphone_gain_title">Amplification microphone</string>
 </resources>

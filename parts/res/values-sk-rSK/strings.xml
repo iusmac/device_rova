@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">Ak chcete používať telefón:</string>
     <string name="pocket_judge_demo_tag_cancel">Skontrolujte, či sa v modrej oblasti telefónu nenachádzajú žiadne prekážky, a očistite ho od nečistôt a prachu.</string>
     <string name="pocket_judge_demo_tag_cancel2">Dlhým stlačením tlačidla napájania vynútite ukončenie vreckového režimu.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Zosilnenie hlasitosti</string>
+    <string name="volume_gain_summary">Zosilnenie reproduktoru / Zosilnenie slúchadiel / Zosilnenie mikrofónu</string>
+    <string name="volume_gain_title">Zosilnenie reproduktoru / Zosilnenie slúchadiel</string>
+    <string name="microphone_gain_title">Zosilnenie mikrofónu</string>
 </resources>

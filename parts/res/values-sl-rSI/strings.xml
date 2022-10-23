@@ -65,4 +65,10 @@
     <!-- Pocket Judge -->
     <string name="pocket_judge_title">Zaznavanje žepa</string>
     <string name="pocket_judge_summary">Blokiraj zaslon in vnose gumbov, ko je naprava v žepu</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Ojačanje glasnosti</string>
+    <string name="volume_gain_summary">Ojačanje zvočnika / Ojačanje slušalk / Ojačanje mikrofona</string>
+    <string name="volume_gain_title">Ojačanje zvočnika / Ojačanje slušalk</string>
+    <string name="microphone_gain_title">Ojačanje mikrofona</string>
 </resources>

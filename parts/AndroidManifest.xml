@@ -46,14 +46,14 @@
         <activity
             android:name=".soundcontrol.SoundControlSettingsActivity"
             android:exported="true"
-            android:label="@string/advanced_settings">
+            android:label="@string/volume_gain_label">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS" />
             </intent-filter>
             <meta-data android:name="com.android.settings.category"
                        android:value="com.android.settings.category.ia.sound" />
             <meta-data android:name="com.android.settings.summary"
-                       android:resource="@string/advanced_summary" />
+                       android:resource="@string/volume_gain_summary" />
         </activity>
 
         <activity

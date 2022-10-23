@@ -18,13 +18,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="advanced_settings">Усиление звука</string>
-    <string name="advanced_summary">Управление усилением звука</string>
-
-    <!-- Audio amplification -->
-    <string name="volume_gain">Усиление наушников и динамиков</string>
-    <string name="microphone_gain">Усиление микрофона</string>
-
     <!-- Dirac settings -->
     <string name="dirac_enable">Включить Dirac</string>
     <string name="dirac_title">Улучшение звука Mi</string>
@@ -102,4 +95,10 @@
     <string name="pocket_judge_demo_title_cancel">Чтобы использовать ваш телефон:</string>
     <string name="pocket_judge_demo_tag_cancel">Проверьте, чтобы синяя зона Вашего телефона была очищена от каких-либо предметов или протрите её.</string>
     <string name="pocket_judge_demo_tag_cancel2">Долгое нажатие на кнопку включения для принудительного выхода из режима \"В кармане\".</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Увеличение громкости</string>
+    <string name="volume_gain_summary">Усиление динамиков / Усиление наушников / Усиление микрофона</string>
+    <string name="volume_gain_title">Усиление динамиков / Усиление наушников</string>
+    <string name="microphone_gain_title">Усиление микрофона</string>
 </resources>

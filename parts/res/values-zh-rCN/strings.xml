@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">激活您的手机</string>
     <string name="pocket_judge_demo_tag_cancel">确保你手机的蓝色区域清洁无杂物</string>
     <string name="pocket_judge_demo_tag_cancel2">长按电源按钮强制退出口袋模式</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">音量增益</string>
+    <string name="volume_gain_summary">扬声器增益 / 耳机增益 / 麦克风增益</string>
+    <string name="volume_gain_title">扬声器增益 / 耳机增益</string>
+    <string name="microphone_gain_title">麦克风增益</string>
 </resources>

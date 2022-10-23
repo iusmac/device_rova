@@ -86,4 +86,10 @@
     <string name="pocket_judge_demo_title_cancel">端末を使用するには</string>
     <string name="pocket_judge_demo_tag_cancel">青い部分を覆っていないか確認して、汚れやほこりを落としてください。</string>
     <string name="pocket_judge_demo_tag_cancel2">電源ボタンを長押しするとポケットモードを強制終了します</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">ボリュームゲイン</string>
+    <string name="volume_gain_summary">スピーカーゲイン / ヘッドフォンゲイン / マイクゲイン</string>
+    <string name="volume_gain_title">スピーカーゲイン / ヘッドフォンゲイン</string>
+    <string name="microphone_gain_title">マイクゲイン</string>
 </resources>

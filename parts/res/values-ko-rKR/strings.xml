@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">기기를 사용하려면:</string>
     <string name="pocket_judge_demo_tag_cancel">파란색으로 표시된 부분이 가려졌는지 확인하고 먼지를 닦아주세요.</string>
     <string name="pocket_judge_demo_tag_cancel2">주머니 감지 모드를 강제 종료하려면 전원 버튼을 길게 누르세요.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">볼륨 증폭</string>
+    <string name="volume_gain_summary">스피커 소리 증폭 / 헤드폰 소리 증폭 / 마이크 증폭</string>
+    <string name="volume_gain_title">스피커 소리 증폭 / 헤드폰 소리 증폭</string>
+    <string name="microphone_gain_title">마이크 증폭</string>
 </resources>

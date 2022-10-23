@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">Um das Gerät zu verwenden:</string>
     <string name="pocket_judge_demo_tag_cancel">Vergewissere dich, dass die blau dargestellte Zone nicht blockiert ist und reinige sie gegebenenfalls.</string>
     <string name="pocket_judge_demo_tag_cancel2">Ein-/Aus-Taste gedrückt halten, um den Taschenmodus zu beenden.</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Lautstärke Verstärkung</string>
+    <string name="volume_gain_summary">Lautsprecher Verstärker / Kopfhörerverstärker / Mikrofon Verstärkung</string>
+    <string name="volume_gain_title">Lautsprecher Verstärker / Kopfhörerverstärker</string>
+    <string name="microphone_gain_title">Mikrofon Verstärkung</string>
 </resources>

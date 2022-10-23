@@ -87,4 +87,10 @@
     <string name="pocket_judge_demo_title_cancel">A telefon használatához</string>
     <string name="pocket_judge_demo_tag_cancel">Ellenőrizze, hogy a kék területen nincs-e valami, és távolítsa el a szennyeződéseket és a port.</string>
     <string name="pocket_judge_demo_tag_cancel2">A Bekapcsológomb hosszan nyomása azonnal kikapcsolja a zsebmódot</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">Hangerő erősítés</string>
+    <string name="volume_gain_summary">Hangszóró erősítés / Fejhallgató erősítés / Mikrofon erősítés</string>
+    <string name="volume_gain_title">Hangszóró erősítés / Fejhallgató erősítés</string>
+    <string name="microphone_gain_title">Mikrofon erősítés</string>
 </resources>

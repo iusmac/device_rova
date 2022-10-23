@@ -60,4 +60,10 @@
 
     <!-- Misc -->
     <string name="not_now">"अभी नहीं"</string>
+
+    <!-- Audio amplification -->
+    <string name="volume_gain_label">वॉल्यूम लाभ</string>
+    <string name="volume_gain_summary">वक्ता लाभ / हेड फोन्स लाभ / माइक्रोफोन लाभ</string>
+    <string name="volume_gain_title">वक्ता लाभ / हेड फोन्स लाभ</string>
+    <string name="microphone_gain_title">माइक्रोफोन लाभ</string>
 </resources>
