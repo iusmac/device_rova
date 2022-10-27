@@ -92,8 +92,7 @@ PRODUCT_PACKAGES += \
     android.frameworks.sensorservice@1.0.vendor \
     android.hardware.camera.provider@2.4-impl \
     android.hardware.camera.provider@2.4-service \
-    camera.msm8937 \
-    libmm-qcamera
+    camera.msm8937
 
 PRODUCT_PACKAGES += \
     android.hardware.camera.device@3.2 \
@@ -177,9 +176,7 @@ PRODUCT_PACKAGES += \
 include $(LOCAL_PATH)/gps/gps_vendor_product.mk
 
 PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.2.vendor \
-    android.hardware.gnss@2.1.vendor \
-    android.hardware.gnss@3.0.vendor
+    android.hardware.gnss@2.1.vendor
 
 # Health
 PRODUCT_PACKAGES += \
