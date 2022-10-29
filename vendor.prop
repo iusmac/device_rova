@@ -119,6 +119,7 @@ debug.enable.sglscale=1
 debug.hwui.renderer=skiagl
 debug.renderengine.backend=skiaglthreaded
 renderthread.skia.reduceopstasksplitting=true
+debug.hwui.skia_atrace_enabled=false
 debug.sf.enable_hwc_vds=1
 debug.sf.latch_unsignaled=1
 debug.sf.recomputecrop=0
