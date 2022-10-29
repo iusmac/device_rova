@@ -425,6 +425,9 @@ on property:sys.boot_completed=1
     # Setup scheduler tunables
     write /proc/sys/kernel/sched_child_runs_first 1
 
+    # Set I/O
+    write /sys/block/mmcblk0/queue/nr_requests 64
+
     # This initializes vendor.qti.hardware.perf service
     setprop vendor.post_boot.parsed 1
 
