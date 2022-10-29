@@ -326,7 +326,7 @@
       "PowerHint": "LAUNCH",
       "Node": "CPUBigClusterMinFreq",
       "Duration": 3500,
-      "Value": "1401000"
+      "Value": "1094400"
     },
     {
       "PowerHint": "LAUNCH",
@@ -356,13 +356,13 @@
       "PowerHint": "LAUNCH",
       "Node": "CPUBWMinFreq",
       "Duration": 3500,
-      "Value": "5645"
+      "Value": "4541"
     },
     {
       "PowerHint": "LAUNCH",
       "Node": "GPUBusMinFreq",
       "Duration": 3500,
-      "Value": "5639"
+      "Value": "4541"
     },
     {
       "PowerHint": "LAUNCH",
@@ -374,7 +374,7 @@
       "PowerHint": "LAUNCH",
       "Node": "GPUMinFreq",
       "Duration": 3500,
-      "Value": "598000000"
+      "Value": "484800000"
     },
     {
       "PowerHint": "LAUNCH",
