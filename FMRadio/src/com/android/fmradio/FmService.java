@@ -33,6 +33,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.AudioAttributes;
 import android.media.AudioDevicePort;
 import android.media.AudioDevicePortConfig;
 import android.media.AudioFormat;
@@ -46,6 +47,7 @@ import android.media.AudioPortConfig;
 import android.media.AudioRecord;
 import android.media.AudioSystem;
 import android.media.AudioTrack;
+import android.media.MediaMetadata;
 import android.media.MediaRecorder;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -171,6 +173,8 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
     private NotificationManager mNotificationManager = null;
     private NotificationChannel mNotificationChannel = null;
     private MediaSession mSession;
+    private String mCachedArtworkKey = null;
+    private Bitmap mCachedArtwork = null;
 
     public static int POWER_UP = 0;
     public static int DURING_POWER_UP = 1;
@@ -1902,19 +1906,31 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
             notificationBuilder.addAction(R.drawable.btn_fm_nextstation,
                     getString(R.string.accessibility_next) , pIntent);
             notificationBuilder.setContentIntent(pAIntent);
-            Bitmap largeIcon = FmUtils.createNotificationLargeIcon(mContext,
-                    FmUtils.formatStation(mCurrentStation));
-            notificationBuilder.setLargeIcon(largeIcon);
-            // Apply the media style template
-            notificationBuilder.setStyle(
-                    new Notification.MediaStyle()
-                    .setShowActionsInCompactView(0, 1, 2)
-                    .setMediaSession(mSession.getSessionToken()));
+
+            final String freq = FmUtils.formatStation(mCurrentStation);
+            if (!freq.equals(mCachedArtworkKey)) {
+                mCachedArtwork = FmUtils.createNotificationArtwork(mContext, freq);
+                mCachedArtworkKey = freq;
+            }
+            notificationBuilder.setColor(mContext.getResources()
+                    .getColor(R.color.notification_icon_bg_color));
+            notificationBuilder.setLargeIcon(mCachedArtwork);
 
             // Show FM Radio if empty
             if (TextUtils.isEmpty(stationName)) {
                 stationName = getString(R.string.app_name);
             }
+
+            mSession.setMetadata(new MediaMetadata.Builder()
+                    .putString(MediaMetadata.METADATA_KEY_ARTIST, radioText)
+                    .putString(MediaMetadata.METADATA_KEY_TITLE, stationName)
+                    .build());
+
+            // Apply the media style template
+            notificationBuilder.setStyle(
+                    new Notification.MediaStyle()
+                    .setShowActionsInCompactView(0, 1, 2)
+                    .setMediaSession(mSession.getSessionToken()));
             notificationBuilder.setContentTitle(stationName);
             // If radio text is "" or null, we also need to update notification.
             notificationBuilder.setContentText(radioText);
@@ -1929,6 +1945,10 @@ public class FmService extends Service implements FmRecorder.OnRecorderStateChan
     private void setUpMediaSession() {
         mSession = new MediaSession(this, TAG);
         mSession.setActive(true);
+        AudioAttributes attrs = new AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build();
+        mSession.setPlaybackToLocal(attrs);
         mSession.setCallback(new MediaSession.Callback() {
             @Override
             public void onPause() {
