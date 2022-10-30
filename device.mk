@@ -104,9 +104,6 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.6 \
     libstdc++.vendor
 
-PRODUCT_PACKAGES += \
-    GrapheneCamera
-
 # Cgroup Abstraction Layer
 PRODUCT_COPY_FILES += \
     system/core/libprocessgroup/profiles/cgroups_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
