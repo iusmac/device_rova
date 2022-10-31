@@ -266,12 +266,6 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
-# Remove MatLog on prod. builds
-ifeq ($(ENABLE_DEBUG_MODE),false)
-PRODUCT_PACKAGES += \
-    RemoveMatLogPackage
-endif
-
 # Perf
 PRODUCT_PACKAGES += \
     libqti-perfd-client
