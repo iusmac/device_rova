@@ -74,15 +74,21 @@ public class DiracSettingsFragment extends PreferenceFragment implements
             return false;
         }
 
-        switch (preference.getKey()) {
-            case PREF_HEADSET:
-                mDiracUtils.setHeadsetType(Integer.parseInt(newValue.toString()));
-                return true;
-            case PREF_PRESET:
-                mDiracUtils.setLevel(String.valueOf(newValue));
-                return true;
-            default:
-                return false;
+        try {
+            switch (preference.getKey()) {
+                case PREF_HEADSET:
+                    mDiracUtils.setHeadsetType(Integer.parseInt(newValue.toString()));
+                    return true;
+                case PREF_PRESET:
+                    mDiracUtils.setLevel(String.valueOf(newValue));
+                    return true;
+                default:
+                    return false;
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            getActivity().recreate();
+            return false;
         }
     }
 
@@ -93,7 +99,14 @@ public class DiracSettingsFragment extends PreferenceFragment implements
             return;
         }
 
-        mDiracUtils.setEnabled(isChecked);
+        try {
+            mDiracUtils.setEnabled(isChecked);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            getActivity().recreate();
+            return;
+        }
+
         if (isChecked) {
             mSwitchBar.setEnabled(false);
             mHandler.postDelayed(new Runnable() {
