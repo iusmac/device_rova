@@ -20,4 +20,6 @@
     <color name="switchbar_switch_thumb_tint">@android:color/white</color>
 
     <color name="illustration_color">@android:color/white</color>
+    <color name="launcher_background_color">#FFFF6A01</color>
+    <color name="launcher_foreground_color">@android:color/white</color>
 </resources>

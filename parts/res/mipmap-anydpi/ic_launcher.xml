@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <background android:drawable="@color/launcher_background_color"/>
+    <foreground>
+        <aapt:attr name="android:drawable">
+            <vector
+                android:width="108dp"
+                android:height="108dp"
+                android:viewportWidth="108"
+                android:viewportHeight="108">
+              <path
+                  android:pathData="M54,33c-6.97,0 -12.68,0.45 -16.64,4.4C33.4,41.36 33,47.06 33,54.02c0,6.97 0.4,12.66 4.36,16.62C41.33,74.6 47.03,75 54,75c6.97,0 12.68,-0.4 16.64,-4.36C74.59,66.68 75,60.98 75,54.02c0,-6.96 -0.41,-12.67 -4.38,-16.63C66.65,33.43 60.96,33 54,33Z"
+                  android:fillColor="@color/launcher_foreground_color"/>
+              <path
+                  android:pathData="M48.61,52.16h3.58c0.14,0 0.26,0.11 0.26,0.26v9.36c0,0.15 -0.12,0.26 -0.26,0.26h-3.58a0.26,0.26 0,0 1,-0.27 -0.26v-9.36c0,-0.15 0.13,-0.26 0.27,-0.26Z"
+                  android:fillColor="@color/launcher_background_color"/>
+              <path
+                  android:pathData="M62.81,45.96h3.41c0.15,0 0.27,0.12 0.27,0.26v15.56c-0.01,0.15 -0.13,0.26 -0.27,0.26h-3.4a0.26,0.26 0,0 1,-0.27 -0.26V46.22c0,-0.14 0.12,-0.26 0.27,-0.26Z"
+                  android:fillColor="@color/launcher_background_color"/>
+              <path
+                  android:pathData="M41.59,45.96h9.84c2.57,0 5.26,0.12 6.59,1.45 1.3,1.3 1.44,3.9 1.45,6.43v7.95c0,0.14 -0.12,0.25 -0.27,0.25h-3.4a0.26,0.26 0,0 1,-0.27 -0.26V53.7c0,-1.41 -0.08,-2.86 -0.81,-3.59 -0.63,-0.63 -1.8,-0.77 -3.01,-0.8h-6.18a0.26,0.26 0,0 0,-0.27 0.26v12.21c0,0.15 -0.12,0.26 -0.26,0.26h-3.41a0.26,0.26 0,0 1,-0.27 -0.26V46.22c0,-0.14 0.12,-0.26 0.27,-0.26Z"
+                  android:fillColor="@color/launcher_background_color"/>
+            </vector>
+        </aapt:attr>
+    </foreground>
+    <monochrome>
+        <aapt:attr name="android:drawable">
+            <vector
+                android:width="108dp"
+                android:height="108dp"
+                android:viewportWidth="108"
+                android:viewportHeight="108">
+              <path
+                  android:pathData="M54,33c-6.97,0 -12.68,0.45 -16.64,4.4C33.4,41.36 33,47.06 33,54.02c0,6.97 0.4,12.66 4.36,16.62C41.33,74.6 47.03,75 54,75c6.97,0 12.68,-0.4 16.64,-4.36C74.59,66.68 75,60.98 75,54.02c0,-6.96 -0.41,-12.67 -4.38,-16.63C66.65,33.43 60.96,33 54,33Z"
+                  android:fillColor="@android:color/white"/>
+              <path
+                  android:pathData="M48.61,52.16h3.58c0.14,0 0.26,0.11 0.26,0.26v9.36c0,0.15 -0.12,0.26 -0.26,0.26h-3.58a0.26,0.26 0,0 1,-0.27 -0.26v-9.36c0,-0.15 0.13,-0.26 0.27,-0.26Z"
+                  android:fillColor="@android:color/black"/>
+              <path
+                  android:pathData="M62.81,45.96h3.41c0.15,0 0.27,0.12 0.27,0.26v15.56c-0.01,0.15 -0.13,0.26 -0.27,0.26h-3.4a0.26,0.26 0,0 1,-0.27 -0.26V46.22c0,-0.14 0.12,-0.26 0.27,-0.26Z"
+                  android:fillColor="@android:color/black"/>
+              <path
+                  android:pathData="M41.59,45.96h9.84c2.57,0 5.26,0.12 6.59,1.45 1.3,1.3 1.44,3.9 1.45,6.43v7.95c0,0.14 -0.12,0.25 -0.27,0.25h-3.4a0.26,0.26 0,0 1,-0.27 -0.26V53.7c0,-1.41 -0.08,-2.86 -0.81,-3.59 -0.63,-0.63 -1.8,-0.77 -3.01,-0.8h-6.18a0.26,0.26 0,0 0,-0.27 0.26v12.21c0,0.15 -0.12,0.26 -0.26,0.26h-3.41a0.26,0.26 0,0 1,-0.27 -0.26V46.22c0,-0.14 0.12,-0.26 0.27,-0.26Z"
+                  android:fillColor="@android:color/black"/>
+            </vector>
+        </aapt:attr>
+    </monochrome>
+</adaptive-icon>
