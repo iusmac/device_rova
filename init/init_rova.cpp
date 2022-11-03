@@ -121,10 +121,15 @@ static void determine_device()
 {
     std::string proc_cmdline;
     android::base::ReadFileToString("/proc/cmdline", &proc_cmdline, true);
-    if (proc_cmdline.find("S88503") != proc_cmdline.npos)
+    if (proc_cmdline.find("S88503") != proc_cmdline.npos) {
         set_variant_props(rolex_info);
-    else if (proc_cmdline.find("S88505") != proc_cmdline.npos)
+        property_override("vendor.usb.product_string", "Xiaomi Redmi 4A");
+        property_override("bluetooth.device.default_name", "Xiaomi Redmi 4A");
+    } else if (proc_cmdline.find("S88505") != proc_cmdline.npos) {
         set_variant_props(riva_info);
+        property_override("vendor.usb.product_string", "Xiaomi Redmi 5A");
+        property_override("bluetooth.device.default_name", "Xiaomi Redmi 5A");
+    }
 }
 
 void vendor_load_properties() {
