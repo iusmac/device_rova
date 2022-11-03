@@ -43,6 +43,9 @@
 # Relabel it to QCOM's sysfs_mmc_host label to get rid of denials.
 /sys/devices(/platform)?/soc/[a-f0-9]+.sdhci/mmc_host/mmc[0-9]/mmc[0-9]:[a-f0-9]+/block/mmcblk[0-9]/queue/read_ahead_kb u:object_r:sysfs_mmc_host:s0
 
+# Label discard_max_bytes in /data partition
+/sys/devices(/platform)?/soc/[a-f0-9]+.sdhci/mmc_host/mmc[0-9]/mmc[0-9]:[a-f0-9]+/block/mmcblk[0-9]/queue/discard_max_bytes u:object_r:sysfs_mmc_host:s0
+
 # Rild
 /(vendor|system/vendor)/radio/qcril_database/qcril\.db			u:object_r:rild_file:s0
 
