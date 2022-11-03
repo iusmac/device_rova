@@ -36,14 +36,14 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
 
 PRODUCT_PACKAGES += \
-    android.hardware.audio@7.1-impl \
-    android.hardware.audio.effect@7.0-impl \
+    android.hardware.audio@7.1-impl:32 \
+    android.hardware.audio.effect@7.0-impl:32 \
     android.hardware.audio.service \
-    android.hardware.bluetooth.audio-impl
+    android.hardware.bluetooth.audio-impl:32
 
 PRODUCT_PACKAGES += \
     audio.bluetooth.default \
-    audio.primary.msm8937 \
+    audio.primary.msm8937:32 \
     audio.r_submix.default \
     audio.usb.default
 
@@ -65,16 +65,16 @@ PRODUCT_PACKAGES += \
     libcomprcapture \
     libexthwplugin \
     libhdmiedid \
-    libhfp \
-    libsndmonitor \
-    libspkrprot
+    libhfp:32 \
+    libsndmonitor:32 \
+    libspkrprot:32
 
 # Bluetooth
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0.vendor \
     vendor.qti.hardware.bluetooth_audio@2.0.vendor \
-    vendor.qti.hardware.btconfigstore@1.0.vendor \
-    vendor.qti.hardware.btconfigstore@2.0.vendor
+    vendor.qti.hardware.btconfigstore@1.0.vendor:64 \
+    vendor.qti.hardware.btconfigstore@2.0.vendor:64
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1280
@@ -87,18 +87,18 @@ PRODUCT_COPY_FILES += \
 # Camera
 PRODUCT_PACKAGES += \
     android.frameworks.sensorservice@1.0.vendor \
-    android.hardware.camera.provider@2.4-impl \
+    android.hardware.camera.provider@2.4-impl:32 \
     android.hardware.camera.provider@2.4-service \
     camera.msm8937
 
 PRODUCT_PACKAGES += \
-    android.hardware.camera.device@3.2 \
-    android.hardware.camera.device@3.3 \
-    android.hardware.camera.device@3.4 \
-    android.hardware.camera.device@3.5 \
-    android.hardware.camera.provider@2.4 \
-    android.hardware.camera.provider@2.5 \
-    android.hardware.camera.provider@2.6 \
+    android.hardware.camera.device@3.2:64 \
+    android.hardware.camera.device@3.3:64 \
+    android.hardware.camera.device@3.4:64 \
+    android.hardware.camera.device@3.5:64 \
+    android.hardware.camera.provider@2.4:64 \
+    android.hardware.camera.provider@2.5:64 \
+    android.hardware.camera.provider@2.6:64 \
     libstdc++.vendor
 
 # Cgroup Abstraction Layer
@@ -120,7 +120,7 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 # Display
 PRODUCT_PACKAGES += \
     android.frameworks.displayservice@1.0.vendor \
-    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.allocator@2.0-impl:64 \
     android.hardware.graphics.allocator@2.0-service \
     android.hardware.graphics.mapper@2.0-impl-2.1 \
     gralloc.msm8937
@@ -174,7 +174,7 @@ PRODUCT_PACKAGES += \
 
 # Health
 PRODUCT_PACKAGES += \
-    android.hardware.health@2.1-impl \
+    android.hardware.health@2.1-impl:64 \
     android.hardware.health@2.1-service
 
 # HIDL
@@ -377,7 +377,7 @@ PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/sensors/,$(TARGET_COPY_OUT_VENDOR)/etc/sensors/)
 
 PRODUCT_PACKAGES += \
-    android.hardware.sensors@1.0-impl \
+    android.hardware.sensors@1.0-impl:64 \
     android.hardware.sensors@1.0-service \
     libsensorndkbridge
 
