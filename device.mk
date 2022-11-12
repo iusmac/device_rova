@@ -157,7 +157,7 @@ PRODUCT_PACKAGES += \
 
 # FM
 PRODUCT_PACKAGES += \
-    FMRadio \
+    RevampedFMRadio \
     libfmjni:64
 
 # Gatekeeper HAL
