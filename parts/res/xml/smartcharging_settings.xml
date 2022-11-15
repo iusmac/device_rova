@@ -14,6 +14,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.android.settingslib.widget.IllustrationPreference
+            android:key="smartcharging_logo"
+            app:lottie_rawRes="@drawable/smartcharging_phone"/>
+
     <com.android.settingslib.widget.MainSwitchPreference
         android:defaultValue="false"
         android:key="smart_charging"
