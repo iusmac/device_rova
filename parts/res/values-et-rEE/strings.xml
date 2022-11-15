@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Nutika laadimise peatumise tase</string>
     <string name="smart_charging_resume_level_title">Nutika laadimise algtase</string>
     <string name="smart_charging_battery_temperature">Aku temperatuur</string>
+    <string name="smart_charging_current_max">Elektrivoolu tugevus</string>
+    <string name="smart_charging_current_max_entry_default">Vaikimisi</string>
     <string name="smart_charging_warning">Peatumise tase peaks alati olema suurem, kui algtase</string>
     <string name="smart_charging_reset_stats_title">Lähtesta aku statistika</string>
     <string name="smart_charging_reset_stats_summary">Lähtesta aku statistika pärast kasutaja määratletud laadimistaseme saavutamist</string>

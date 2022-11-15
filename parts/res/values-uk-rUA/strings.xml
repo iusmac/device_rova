@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Рівень зупинки «Розумне» заряджання</string>
     <string name="smart_charging_resume_level_title">Рівень початку роботи «Розумне» заряджання</string>
     <string name="smart_charging_battery_temperature">Температура батареї</string>
+    <string name="smart_charging_current_max">Сила струму</string>
+    <string name="smart_charging_current_max_entry_default">За замовчуванням</string>
     <string name="smart_charging_warning">Рівень зупинки повинен завжди бути більшим, ніж рівень повзунка початку роботи</string>
     <string name="smart_charging_reset_stats_title">Скинути статистику акумулятора</string>
     <string name="smart_charging_reset_stats_summary">Скинути статистику акумулятора після досягнення визначеного користувачем рівня зарядки</string>

@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Úroveň ukončení</string>
     <string name="smart_charging_resume_level_title">Úroveň spuštění</string>
     <string name="smart_charging_battery_temperature">Teplota baterie</string>
+    <string name="smart_charging_current_max">Intenzita proudu</string>
+    <string name="smart_charging_current_max_entry_default">Výchozí</string>
     <string name="smart_charging_warning">Úroveň ukončení by měla být vždy vyšší než Úroveň spuštění</string>
     <string name="smart_charging_reset_stats_title">Obnovit statistiky baterie</string>
     <string name="smart_charging_reset_stats_summary">Obnoví statistiky baterie po dosažení úrovně nabití definované uživatelem</string>

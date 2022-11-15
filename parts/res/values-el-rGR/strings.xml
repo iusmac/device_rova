@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Σταμάτημα φόρτισης</string>
     <string name="smart_charging_resume_level_title">Έναρξη φόρτισης</string>
     <string name="smart_charging_battery_temperature">Θερμοκρασία μπαταρίας</string>
+    <string name="smart_charging_current_max">Ένταση ρεύματος</string>
+    <string name="smart_charging_current_max_entry_default">Προεπιλογή</string>
     <string name="smart_charging_warning">Το \'\'Σταμάτημα φόρτισης\'\' πρέπει πάντα να είναι μεγαλύτερο από το \'\' Έναρξη φόρτισης\'\'</string>
     <string name="smart_charging_reset_stats_title">Επαναφορά στατιστικών μπαταρίας</string>
     <string name="smart_charging_reset_stats_summary">Επαναφέρετε τα στατιστικά στοιχεία της μπαταρίας αφού φτάσετε στο επίπεδο φόρτισης που καθορίζεται από το χρήστη</string>

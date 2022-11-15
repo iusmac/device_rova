@@ -35,9 +35,11 @@ public class SmartCharging {
     public static final String KEY_CHARGING_LIMIT = "seek_bar_limit";
     public static final String KEY_CHARGING_RESUME = "seek_bar_resume";
     public static final String KEY_CHARGING_TEMP = "seek_bar_temp";
+    public static final String KEY_CHARGING_CURRENT_MAX = "current_max_pref";
     public static final String KEY_RESET_STATS = "reset_stats";
 
     public static final String CHARGING_ENABLED_PATH = "/sys/class/power_supply/battery/charging_enabled";
+    public static final String CHARGING_CURRENT_MAX_PATH = "/sys/class/power_supply/usb/current_max";
     public static final String CHARGER_PRESENT_PATH = "/sys/class/power_supply/usb/present";
     public static final String BATTERY_CAPACITY_PATH = "/sys/class/power_supply/battery/capacity";
     public static final String BATTERY_TEMPERATURE_PATH = "/sys/class/power_supply/battery/temp";
@@ -51,6 +53,8 @@ public class SmartCharging {
     public static final int CHARGING_TEMP_DEFAULT = 35;
     public static final int CHARGING_TEMP_MAX_DEFAULT = 50;
     public static final int CHARGING_TEMP_MIN_DEFAULT = 10;
+    // NOTE: negative current is handled at kernel driver level
+    public static final String CHARGING_CURRENT_MAX_DEFAULT = "-1";
 
     private Context mContext;
 
@@ -84,6 +88,10 @@ public class SmartCharging {
         PartsUtils.writeValue(CHARGING_ENABLED_PATH, "0");
     }
 
+    public static void setCurrentMax(final String mA) {
+        PartsUtils.writeValue(CHARGING_CURRENT_MAX_PATH, mA);
+    }
+
     public static float getBatteryTemp() {
         String raw = PartsUtils.readLine(BATTERY_TEMPERATURE_PATH);
         return ((float) Integer.parseInt(raw == null ? "0" : raw)) / 10;
@@ -114,6 +122,10 @@ public class SmartCharging {
 
     public static int getTempLimit(final SharedPreferences sharedPrefs) {
         return sharedPrefs.getInt(KEY_CHARGING_TEMP, CHARGING_TEMP_DEFAULT);
+    }
+
+    public static String getCurrentMax(final SharedPreferences sharedPrefs) {
+        return sharedPrefs.getString(KEY_CHARGING_CURRENT_MAX, CHARGING_CURRENT_MAX_DEFAULT);
     }
 
     public static boolean isResetStatsNeeded(final SharedPreferences sharedPrefs) {

@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Leállítás</string>
     <string name="smart_charging_resume_level_title">Indítás</string>
     <string name="smart_charging_battery_temperature">Akkuhőmérséklet</string>
+    <string name="smart_charging_current_max">Elektromos áramerősség</string>
+    <string name="smart_charging_current_max_entry_default">Alapértelmezett</string>
     <string name="smart_charging_warning">A Leállítási szintnek mindig nagyobbnak kell lennie az Indítási szintnél</string>
     <string name="smart_charging_reset_stats_title">Akkustatisztikák alaphelyzetbe állítása</string>
     <string name="smart_charging_reset_stats_summary">Amikor elérte a felhasználó által beállított töltési szintet, alaphelyzetbe állítja az akkusatisztikákat</string>

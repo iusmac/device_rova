@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Stoppnivå</string>
     <string name="smart_charging_resume_level_title">Startnivå</string>
     <string name="smart_charging_battery_temperature">Batteritemperatur</string>
+    <string name="smart_charging_current_max">Elektrisk strömintensitet</string>
+    <string name="smart_charging_current_max_entry_default">Standard</string>
     <string name="smart_charging_warning">Stoppnivå bör alltid vara större än startnivå</string>
     <string name="smart_charging_reset_stats_title">Nollställ batteristatistik</string>
     <string name="smart_charging_reset_stats_summary">Nollställ batteristatistik när vald laddnivå nåtts</string>

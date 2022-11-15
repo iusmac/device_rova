@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Durdurma tetikleyici seviyesi</string>
     <string name="smart_charging_resume_level_title">Başlatma tetikleyici seviyesi</string>
     <string name="smart_charging_battery_temperature">Pil sıcaklığı</string>
+    <string name="smart_charging_current_max">Akım şiddeti</string>
+    <string name="smart_charging_current_max_entry_default">Varsayılan</string>
     <string name="smart_charging_warning">Durma noktası her zaman başlama noktasından büyük olmalıdır</string>
     <string name="smart_charging_reset_stats_title">Pil istatistiklerini sıfırla</string>
     <string name="smart_charging_reset_stats_summary">Kullanıcı tanımladığı şarj değerine ulaşınca pil istatistiklerini sıfırlayın</string>

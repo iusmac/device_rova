@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">정지 트리거 레벨</string>
     <string name="smart_charging_resume_level_title">시작 트리거 레벨</string>
     <string name="smart_charging_battery_temperature">배터리 온도</string>
+    <string name="smart_charging_current_max">현재 강도</string>
+    <string name="smart_charging_current_max_entry_default">기본</string>
     <string name="smart_charging_warning">정지 트리거 레벨은 항상 기동 트리거 레벨보다 커야합니다</string>
     <string name="smart_charging_reset_stats_title">배터리 통계 재설정</string>
     <string name="smart_charging_reset_stats_summary">사용자 정의 충전 수준에 도달 한 후 배터리 통계 재설정</string>

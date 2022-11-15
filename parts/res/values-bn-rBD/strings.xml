@@ -69,6 +69,8 @@
     <string name="smart_charging_level_title">ট্রিগার লেভেল বন্ধ করুন</string>
     <string name="smart_charging_resume_level_title">ট্রিগার লেভেল চালু করুন</string>
     <string name="smart_charging_battery_temperature">Battery temperature</string>
+    <string name="smart_charging_current_max">বর্তমান তীব্রতা</string>
+    <string name="smart_charging_current_max_entry_default">ডিফল্ট</string>
     <string name="smart_charging_warning">স্টপ ট্রিগার লেভেল সবসময় স্টার্ট ট্রিগার লেভেলের চেয়ে বড় হওয়া উচিত।</string>
     <string name="smart_charging_reset_stats_title">ব্যাটারির পরিসংখ্যান রিসেট করুন</string>
     <string name="smart_charging_reset_stats_summary">ব্যবহারকারীর নির্ধারিত চার্জিং সীমা পৌঁছানোর পরে ব্যাটারি পরিসংখ্যান পুনরায় চালু</string>

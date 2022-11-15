@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Switch;
 
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceManager;
@@ -49,6 +50,7 @@ public class SmartChargingFragment extends PreferenceFragment implements
     private SeekBarPreference mSeekBarChargingLimitPreference;
     private SeekBarPreference mSeekBarChargingResumePreference;
     private SeekBarPreference mSeekBarChargingTempPreference;
+    private ListPreference mChargingCurrentMaxListPref;
     private TwoStatePreference mResetStatsPreference;
 
     @Override
@@ -83,9 +85,15 @@ public class SmartChargingFragment extends PreferenceFragment implements
         mSeekBarChargingTempPreference.setEnabled(mSmartChargingSwitch.isChecked());
         mSeekBarChargingTempPreference.setMax(SmartCharging.CHARGING_TEMP_MAX_DEFAULT);
         mSeekBarChargingTempPreference.setMin(SmartCharging.CHARGING_TEMP_MIN_DEFAULT);
-        mSeekBarChargingTempPreference.setDefaultValue(SmartCharging.CHARGING_TEMP_DEFAULT, false);
+        mSeekBarChargingTempPreference.setDefaultValue(SmartCharging.CHARGING_TEMP_DEFAULT, false /* update */);
         mSeekBarChargingTempPreference.setValue(SmartCharging.getTempLimit(mSharedPrefs), false /* update */);
         mSeekBarChargingTempPreference.setOnPreferenceChangeListener(this);
+
+        mChargingCurrentMaxListPref = findPreference(SmartCharging.KEY_CHARGING_CURRENT_MAX);
+        mChargingCurrentMaxListPref.setEnabled(mSmartChargingSwitch.isChecked());
+        mChargingCurrentMaxListPref.setDefaultValue(SmartCharging.CHARGING_CURRENT_MAX_DEFAULT);
+        mChargingCurrentMaxListPref.setValue(SmartCharging.getCurrentMax(mSharedPrefs) + "");
+        mChargingCurrentMaxListPref.setOnPreferenceChangeListener(this);
 
         mResetStatsPreference = findPreference(SmartCharging.KEY_RESET_STATS);
         mResetStatsPreference.setChecked(SmartCharging.isResetStatsNeeded(mSharedPrefs));
@@ -100,11 +108,14 @@ public class SmartChargingFragment extends PreferenceFragment implements
         } else {
             SmartCharging.stopService(mContext);
             SmartCharging.enableCharging();
+            SmartCharging.setCurrentMax(
+                    SmartCharging.CHARGING_CURRENT_MAX_DEFAULT);
         }
 
         mSeekBarChargingLimitPreference.setEnabled(isChecked);
         mSeekBarChargingResumePreference.setEnabled(isChecked);
         mSeekBarChargingTempPreference.setEnabled(isChecked);
+        mChargingCurrentMaxListPref.setEnabled(isChecked);
         mResetStatsPreference.setEnabled(isChecked);
     }
 
@@ -123,6 +134,9 @@ public class SmartChargingFragment extends PreferenceFragment implements
                 break;
             case SmartCharging.KEY_CHARGING_TEMP:
                 mSharedPrefs.edit().putInt(key, (int) newValue).apply();
+                break;
+            case SmartCharging.KEY_CHARGING_CURRENT_MAX:
+                mSharedPrefs.edit().putString(key, String.valueOf(newValue)).apply();
                 break;
             case SmartCharging.KEY_RESET_STATS:
                 mSharedPrefs.edit().putBoolean(key, (Boolean) newValue).apply();

@@ -109,4 +109,30 @@
         <item>"3,3,1,-3,-3,0,0"</item>
         <item>"0,0,-1,-4,-4,5,4"</item>
     </string-array>
+
+    <!-- Smart charging -->
+    <string-array name="smartcharging_current_entries" translatable="false">
+        <item>@string/smart_charging_current_max_entry_default</item>
+        <item>@string/smart_charging_current_max_entry_2000</item>
+        <item>@string/smart_charging_current_max_entry_1800</item>
+        <item>@string/smart_charging_current_max_entry_1500</item>
+        <item>@string/smart_charging_current_max_entry_1200</item>
+        <item>@string/smart_charging_current_max_entry_1000</item>
+        <item>@string/smart_charging_current_max_entry_700</item>
+        <item>@string/smart_charging_current_max_entry_500</item>
+    </string-array>
+
+    <string-array name="smartcharging_current_values">
+        <!-- Since we're supporting different devices, it was easier to default
+             current now value by passing a negative value and handle it at kernel
+             level for each driver at the moment of writing to sysfs node -->
+        <item>"-1"</item>
+        <item>"2000000"</item>
+        <item>"1800000"</item>
+        <item>"1500000"</item>
+        <item>"1200000"</item>
+        <item>"1000000"</item>
+        <item>"700000"</item>
+        <item>"500000"</item>
+    </string-array>
 </resources>

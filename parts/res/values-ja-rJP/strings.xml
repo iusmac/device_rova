@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">充電停止レベル</string>
     <string name="smart_charging_resume_level_title">充電開始レベル</string>
     <string name="smart_charging_battery_temperature">バッテリー温度</string>
+    <string name="smart_charging_current_max">現在の強度</string>
+    <string name="smart_charging_current_max_entry_default">デフォルト</string>
     <string name="smart_charging_warning">充電を停止する閾値は充電を開始する閾値より大きく設定してください。</string>
     <string name="smart_charging_reset_stats_title">バッテリー統計情報をリセット</string>
     <string name="smart_charging_reset_stats_summary">ユーザーが設定した充電レベルに到達後、バッテリー統計情報をリセットする</string>

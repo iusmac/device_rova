@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Poziom zatrzymania</string>
     <string name="smart_charging_resume_level_title">Poziom startowy</string>
     <string name="smart_charging_battery_temperature">Temperatura baterii</string>
+    <string name="smart_charging_current_max">Natężenie prądu elektrycznego</string>
+    <string name="smart_charging_current_max_entry_default">Domyślny</string>
     <string name="smart_charging_warning">Poziom zatrzymania powinien być zawsze większy niż poziom startowy</string>
     <string name="smart_charging_reset_stats_title">Resetuj statystyki baterii</string>
     <string name="smart_charging_reset_stats_summary">Zresetuj statystyki baterii po osiągnięciu określonego przez użytkownika poziomu ładowania</string>

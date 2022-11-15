@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Niveau déclenchement d\'arrêt</string>
     <string name="smart_charging_resume_level_title">Niveau déclenchement charge</string>
     <string name="smart_charging_battery_temperature">Température de la batterie</string>
+    <string name="smart_charging_current_max">Intensité du courant</string>
+    <string name="smart_charging_current_max_entry_default">Par défaut</string>
     <string name="smart_charging_warning">Le niveau Stop doit toujours être supérieur au niveau de démarrage</string>
     <string name="smart_charging_reset_stats_title">Réinitialiser les stats. batterie</string>
     <string name="smart_charging_reset_stats_summary">Réinitialise les stats. de la batterie si niveau de charge défini atteint</string>

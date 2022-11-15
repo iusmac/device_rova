@@ -76,6 +76,8 @@
     <string name="smart_charging_level_title">Livello massimo</string>
     <string name="smart_charging_resume_level_title">Livello minimo</string>
     <string name="smart_charging_battery_temperature">Temperatura della batteria</string>
+    <string name="smart_charging_current_max">Intensità di corrente</string>
+    <string name="smart_charging_current_max_entry_default">Predefinito</string>
     <string name="smart_charging_warning">Il livello massimo deve essere sempre maggiore del livello minimo</string>
     <string name="smart_charging_reset_stats_title">Ripristina statistiche batteria</string>
     <string name="smart_charging_reset_stats_summary">Ripristina statistiche batteria dopo aver raggiunto il livello stabilito dall\'utente</string>

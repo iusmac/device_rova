@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Úroveň zastavenia</string>
     <string name="smart_charging_resume_level_title">Úroveň spustenia</string>
     <string name="smart_charging_battery_temperature">Teplota batérie</string>
+    <string name="smart_charging_current_max">Elektrický prúd</string>
+    <string name="smart_charging_current_max_entry_default">Predvolené</string>
     <string name="smart_charging_warning">Úroveň zastavenia by mala byť vždy vyššia ako úroveň spustenia</string>
     <string name="smart_charging_reset_stats_title">Resetovať štatistiky batérie</string>
     <string name="smart_charging_reset_stats_summary">Resetovať štatistiky batérie po dosiahnutí definovanej úrovne nabíjania</string>

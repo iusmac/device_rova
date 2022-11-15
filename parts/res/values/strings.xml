@@ -91,6 +91,15 @@
     <string name="smart_charging_level_title">Stop trigger level</string>
     <string name="smart_charging_resume_level_title">Start trigger level</string>
     <string name="smart_charging_battery_temperature">Battery temperature</string>
+    <string name="smart_charging_current_max">Current intensity</string>
+    <string name="smart_charging_current_max_entry_default">Default</string>
+    <string name="smart_charging_current_max_entry_2000">2000 mA</string>
+    <string name="smart_charging_current_max_entry_1800">1800 mA</string>
+    <string name="smart_charging_current_max_entry_1500">1500 mA</string>
+    <string name="smart_charging_current_max_entry_1200">1200 mA</string>
+    <string name="smart_charging_current_max_entry_1000">1000 mA</string>
+    <string name="smart_charging_current_max_entry_700">700 mA</string>
+    <string name="smart_charging_current_max_entry_500">500 mA</string>
     <string name="smart_charging_reset_stats_title">Reset battery stats</string>
     <string name="smart_charging_reset_stats_summary">Reset battery statistics after reaching user defined charging level</string>
     <string name="smart_charging_warning">Stop trigger level should be always greater than Start trigger level</string>

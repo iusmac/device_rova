@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">مستوى إيقاف الشحن</string>
     <string name="smart_charging_resume_level_title">مستوى بدء الشحن</string>
     <string name="smart_charging_battery_temperature">درجة حرارة البطارية</string>
+    <string name="smart_charging_current_max">شدة التيار الكهربائي</string>
+    <string name="smart_charging_current_max_entry_default">الافتراضي</string>
     <string name="smart_charging_warning">يجب أن يكون مستوى إيقاف التشغيل دائمًا أكبر من مستوى بدء التشغيل</string>
     <string name="smart_charging_reset_stats_title">إعادة تعيين إحصائيات البطارية</string>
     <string name="smart_charging_reset_stats_summary">إعادة تعيين إحصائيات البطارية بعد الوصول إلى مستوى الشحن المحدد من قبل المستخدم</string>

@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">停止触发级别</string>
     <string name="smart_charging_resume_level_title">开始触发级别</string>
     <string name="smart_charging_battery_temperature">电池温度</string>
+    <string name="smart_charging_current_max">当前强度</string>
+    <string name="smart_charging_current_max_entry_default">默认</string>
     <string name="smart_charging_warning">停止触发级别应该总是大于起始触发级别</string>
     <string name="smart_charging_reset_stats_title">重置电池统计信息</string>
     <string name="smart_charging_reset_stats_summary">达到用户定义的充电级别后重置电池统计</string>

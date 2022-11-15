@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Triggerniveau stoppen</string>
     <string name="smart_charging_resume_level_title">Triggerniveau starten</string>
     <string name="smart_charging_battery_temperature">Batterijtemperatuur</string>
+    <string name="smart_charging_current_max">Nåværende intensitet</string>
+    <string name="smart_charging_current_max_entry_default">Standaard</string>
     <string name="smart_charging_warning">Start triggerniveau moet altijd groter zijn dan stop triggerniveau</string>
     <string name="smart_charging_reset_stats_title">Accustatistieken resetten</string>
     <string name="smart_charging_reset_stats_summary">Accustatistieken resetten na bereiken door gebruiker ingesteld laadniveau</string>

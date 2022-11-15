@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Узровень выключэння зарадкі</string>
     <string name="smart_charging_resume_level_title">Узровень выключэння зарадкі</string>
     <string name="smart_charging_battery_temperature">Тэмпература батарэі</string>
+    <string name="smart_charging_current_max">Сіла току</string>
+    <string name="smart_charging_current_max_entry_default">Па змаўчанні</string>
     <string name="smart_charging_warning">Максімальны ўзровень зарада заўсёды павінен быць вышэй за ўзровень аднаўлення зарадкі</string>
     <string name="smart_charging_reset_stats_title">Скінуць статыстыку батарэі</string>
     <string name="smart_charging_reset_stats_summary">Скідаць статыстыку батарэі пасля дасягнення зададзенага ўзроўню зараду</string>

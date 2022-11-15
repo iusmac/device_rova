@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Batas akhir picu</string>
     <string name="smart_charging_resume_level_title">Titik mulai picu</string>
     <string name="smart_charging_battery_temperature">Temperatur baterai</string>
+    <string name="smart_charging_current_max">Intensitas arus</string>
+    <string name="smart_charging_current_max_entry_default">Па змаўчанні</string>
     <string name="smart_charging_warning">Batas maksimal picu harus diatas titik mulai</string>
     <string name="smart_charging_reset_stats_title">Set ulang statistik baterai</string>
     <string name="smart_charging_reset_stats_summary">Pulihkan statistik baterai saat mencapai batas pengisian</string>

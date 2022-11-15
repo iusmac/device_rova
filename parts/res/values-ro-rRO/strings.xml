@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Nivel declanșare oprit</string>
     <string name="smart_charging_resume_level_title">Nivel declanșare pornit</string>
     <string name="smart_charging_battery_temperature">Temperatura bateriei</string>
+    <string name="smart_charging_current_max">Intensitatea curentului electric</string>
+    <string name="smart_charging_current_max_entry_default">Prestabilit</string>
     <string name="smart_charging_warning">Nivelul de declanșare trebuie să fie întotdeauna mai mare decât nivelul de declanșare Start</string>
     <string name="smart_charging_reset_stats_title">Resetare statistici baterie</string>
     <string name="smart_charging_reset_stats_summary">Resetați statisticile bateriei după atingerea nivelului de încărcare definit de utilizator</string>

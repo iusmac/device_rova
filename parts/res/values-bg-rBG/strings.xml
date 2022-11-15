@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Ниво за изключване на зареждането</string>
     <string name="smart_charging_resume_level_title">Ниво за възстановяване на зареждането</string>
     <string name="smart_charging_battery_temperature">Температура на батерията</string>
+    <string name="smart_charging_current_max">Интензивност на тока</string>
+    <string name="smart_charging_current_max_entry_default">По подразбиране</string>
     <string name="smart_charging_warning">Ниво за изключване на зареждането трябва да бъде винаги по-голямо от ниво за възстановяване на зареждането</string>
     <string name="smart_charging_reset_stats_title">Нулиране на статистиката на батерията</string>
     <string name="smart_charging_reset_stats_summary">Нулирай статистиката за батерията след достигане на нивото на зареждане, посочено от потребителя</string>

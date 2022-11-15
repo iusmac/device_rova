@@ -69,6 +69,8 @@
     <string name="smart_charging_level_title">ٹرگر لیول کو روکیں۔</string>
     <string name="smart_charging_resume_level_title">ٹرگر لیول شروع کریں۔</string>
     <string name="smart_charging_battery_temperature">بیٹری کا درجہ حرارت</string>
+    <string name="smart_charging_current_max">موجودہ شدت</string>
+    <string name="smart_charging_current_max_entry_default">ڈیفالٹ</string>
     <string name="smart_charging_warning">اسٹاپ ٹرگر لیول ہمیشہ اسٹارٹ ٹرگر لیول سے بڑا ہونا چاہیے۔</string>
     <string name="smart_charging_reset_stats_title">بیٹری کے اعدادوشمار کو دوبارہ ترتیب دیں۔</string>
     <string name="smart_charging_reset_stats_summary">صارف کی طے شدہ چارجنگ لیول تک پہنچنے کے بعد بیٹری کے اعدادوشمار کو دوبارہ ترتیب دیں۔</string>

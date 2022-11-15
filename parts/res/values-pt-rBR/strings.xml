@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Parar nível de acionamento</string>
     <string name="smart_charging_resume_level_title">Iniciar nível de acionamento</string>
     <string name="smart_charging_battery_temperature">Temperatura da bateria</string>
+    <string name="smart_charging_current_max">Intensidade da corrente elétrica</string>
+    <string name="smart_charging_current_max_entry_default">Padrão</string>
     <string name="smart_charging_warning">O nível de parada deve ser sempre maior que o nível de Início</string>
     <string name="smart_charging_reset_stats_title">Redefinir estatísticas da bateria</string>
     <string name="smart_charging_reset_stats_summary">Redefinir as estatísticas da bateria depois de atingir o nível de carga definido pelo usuário</string>

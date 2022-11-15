@@ -6,6 +6,8 @@ on boot
    chmod 0666 /sys/class/power_supply/battery/capacity
    chown system system /sys/class/power_supply/battery/temp
    chmod 0666 /sys/class/power_supply/battery/temp
+   chown system system /sys/class/power_supply/usb/current_max
+   chmod 0666 /sys/class/power_supply/usb/current_max
 
     # FPS Node
     chown system graphics /sys/class/graphics/fb0/measured_fps

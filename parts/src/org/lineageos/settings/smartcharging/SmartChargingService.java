@@ -201,6 +201,7 @@ public class SmartChargingService extends Service {
         final int chargingLimit = SmartCharging.getChargingLimit(sharedPrefs);
         final int chargingResume = SmartCharging.getChargingResume(sharedPrefs);
         int tempLimit = SmartCharging.getTempLimit(sharedPrefs);
+        final String currentMax = SmartCharging.getCurrentMax(sharedPrefs);
 
         if (DEBUG) {
             String msg1 = String.format("Kernel Charging Enabled: %s",
@@ -209,9 +210,11 @@ public class SmartChargingService extends Service {
                     battCap, chargingLimit, chargingResume);
             String msg3 = String.format("Battery Temperature: %.2f°C (Limit: %d°C)",
                     battTemp, tempLimit);
-            String msg4 = String.format("Last charging stop reason: %s",
+            String msg4 = String.format("Current intensity (max.): %s",
+                    currentMax);
+            String msg5 = String.format("Last charging stop reason: %s",
                     sLastStopChargingReason);
-            Log.d(TAG, msg1 + ", " + msg2 + ", " + msg3+ ", " + msg4);
+            Log.d(TAG, msg1 + ", " + msg2 + ", " + msg3 + ", " + msg4 + ", " + msg5);
         }
 
         final boolean isPreviouslyOverheated =
@@ -226,6 +229,8 @@ public class SmartChargingService extends Service {
         final boolean isOvercharged = chargingLimit <= battCap;
         final boolean isOverheated = tempLimit <= battTemp;
         final boolean isResumeable = chargingResume >= battCap;
+
+        SmartCharging.setCurrentMax(currentMax);
 
         if (chargingEnabled) {
             if (isOvercharged) {
@@ -281,6 +286,8 @@ public class SmartChargingService extends Service {
 
         sLastStopChargingReason = reason;
         SmartCharging.enableCharging();
+        SmartCharging.setCurrentMax(
+                SmartCharging.CHARGING_CURRENT_MAX_DEFAULT);
     }
 
     private void showNotification() {

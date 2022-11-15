@@ -76,6 +76,8 @@
     <string name="smart_charging_level_title">Уровень выключения зарядки</string>
     <string name="smart_charging_resume_level_title">Уровень возобновления зарядки</string>
     <string name="smart_charging_battery_temperature">Температура батареи</string>
+    <string name="smart_charging_current_max">Сила тока</string>
+    <string name="smart_charging_current_max_entry_default">По умолчанию</string>
     <string name="smart_charging_warning">Максимальный уровень заряда всегда должен быть выше уровня возобновления зарядки</string>
     <string name="smart_charging_reset_stats_title">Сбросить статистику батареи</string>
     <string name="smart_charging_reset_stats_summary">Сбрасывать статистику батареи после достижения заданного уровня заряда</string>

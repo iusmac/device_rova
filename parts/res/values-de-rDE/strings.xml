@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Stop-Level</string>
     <string name="smart_charging_resume_level_title">Start-Level</string>
     <string name="smart_charging_battery_temperature">Akku-Temperatur</string>
+    <string name="smart_charging_current_max">Elektrische Stromstärke</string>
+    <string name="smart_charging_current_max_entry_default">Standard</string>
     <string name="smart_charging_warning">Das Stop-Level muss höher sein als das Start-Level</string>
     <string name="smart_charging_reset_stats_title">Akku-Statistik zurücksetzen</string>
     <string name="smart_charging_reset_stats_summary">Akkustatistik nach Erreichen des benutzerdefinierten Ladeniveaus zurücksetzen</string>

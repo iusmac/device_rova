@@ -47,6 +47,13 @@
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"/>
 
+    <ListPreference
+        android:key="current_max_pref"
+        android:entries="@array/smartcharging_current_entries"
+        android:entryValues="@array/smartcharging_current_values"
+        android:title="@string/smart_charging_current_max"
+        android:summary="%s" />
+
     <SwitchPreference
         android:key="reset_stats"
         android:title="@string/smart_charging_reset_stats_title"

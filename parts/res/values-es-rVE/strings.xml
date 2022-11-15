@@ -29,6 +29,8 @@
     <string name="smart_charging_level_title">Detener al nivel</string>
     <string name="smart_charging_resume_level_title">Iniciar al nivel</string>
     <string name="smart_charging_battery_temperature">Temperatura de la batería</string>
+    <string name="smart_charging_current_max">Intensidad de corriente</string>
+    <string name="smart_charging_current_max_entry_default">Predeterminado</string>
     <string name="smart_charging_warning">El nivel de disparo de parada debe ser siempre mayor que el nivel de disparo inicial</string>
     <string name="smart_charging_reset_stats_title">Reiniciar las estadísticas de la batería</string>
     <string name="smart_charging_reset_stats_summary">Restablecer estadísticas de batería después de alcanzar el nivel de carga definido por el usuario</string>

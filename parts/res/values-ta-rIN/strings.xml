@@ -69,6 +69,8 @@
     <string name="smart_charging_level_title">Stop trigger level</string>
     <string name="smart_charging_resume_level_title">Start trigger level</string>
     <string name="smart_charging_battery_temperature">மின்கல வெப்பநிலை</string>
+    <string name="smart_charging_current_max">மின்னோட்டத்தின் தீவிரம்</string>
+    <string name="smart_charging_current_max_entry_default">இயல்புநிலை</string>
     <string name="smart_charging_warning">Stop trigger level should be always greater than Start trigger level</string>
     <string name="smart_charging_reset_stats_title">Reset battery statistics</string>
     <string name="smart_charging_reset_stats_summary">Reset battery statistics after reaching user defined charging level</string>

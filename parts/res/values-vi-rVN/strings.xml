@@ -70,6 +70,8 @@
     <string name="smart_charging_level_title">Dừng mức kích hoạt</string>
     <string name="smart_charging_resume_level_title">Bắt đầu mức kích hoạt</string>
     <string name="smart_charging_battery_temperature">Nhiệt độ pin</string>
+    <string name="smart_charging_current_max">Cường độ dòng điện</string>
+    <string name="smart_charging_current_max_entry_default">Theo mặc định</string>
     <string name="smart_charging_warning">Mức Dừng phải luôn luôn lớn hơn mức Bắt đầu</string>
     <string name="smart_charging_reset_stats_title">Đặt lại thống kê pin</string>
     <string name="smart_charging_reset_stats_summary">Đặt lại thống kê pin sau khi đạt mức sạc do người dùng xác định</string>
