@@ -44,9 +44,11 @@ public class SmartChargingService extends Service {
     private String mTargetClassName = "org.lineageos.settings.smartcharging.SmartChargingActivity";
     private static final int NOTIFICATION_ID = 1;
     public static final String NOTIFICATION_CHANNEL = "smartcharging_notification_channel";
+    public static final String NOTIFICATION_NOT_NOW = "smartcharging.service.not_now";
     public static final String NOTIFICATION_DISMISS = "smartcharging.service.dismiss";
     private NotificationManager mNotificationManager = null;
     private NotificationChannel mNotificationChannel = null;
+    private boolean mNotificationDismissed = false;
 
     private boolean mBatteryMonitorRegistered = false;
     private static final String BATTERY_MONITOR_UPDATE_INTENT =
@@ -54,7 +56,7 @@ public class SmartChargingService extends Service {
     public BatteryMonitorReceiver mBatteryMonitorReceiver = null;
     private SharedPreferences mSharedPrefs;
 
-    private enum stopChargingReason { OVERHEATED, OVERCHARGED, NOTIF_DISMISS, UNKNOWN }
+    private enum stopChargingReason { OVERHEATED, OVERCHARGED, NOTIF_NOT_NOW, UNKNOWN }
     private static stopChargingReason sLastStopChargingReason =
         stopChargingReason.UNKNOWN;
 
@@ -147,7 +149,7 @@ public class SmartChargingService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction() == Intent.ACTION_POWER_CONNECTED) {
                 if (DEBUG) Log.d(TAG, "Charger/USB Connected");
-                if (sLastStopChargingReason == stopChargingReason.NOTIF_DISMISS) {
+                if (sLastStopChargingReason == stopChargingReason.NOTIF_NOT_NOW) {
                     // User dismissed monitoring, but charging resumed. We need
                     // to reset last stop reason here, so that the next charger
                     // re-plug can start the monitoring as expected.
@@ -166,6 +168,14 @@ public class SmartChargingService extends Service {
                 if (!isPreviouslyOverheated && !isPreviouslyOvercharged) {
                     stopBatteryMonitoring(stopChargingReason.UNKNOWN);
                     return;
+                }
+
+                // Ignore dismissed state and show notification again to ensure
+                // the user doesn't get confused when he discover the device
+                // isn't charging even after re-plugging the power cable
+                if (mNotificationDismissed) {
+                    mNotificationDismissed = false;
+                    showNotification();
                 }
 
                 int battCap = SmartCharging.getBatteryCapacity();
@@ -272,6 +282,7 @@ public class SmartChargingService extends Service {
         }
 
         removeNotification();
+        mNotificationDismissed = false;
 
         sLastStopChargingReason = reason;
         SmartCharging.enableCharging();
@@ -280,12 +291,22 @@ public class SmartChargingService extends Service {
     }
 
     private void showNotification() {
+        if (mNotificationDismissed) {
+            return;
+        }
+
         Context ctx = getApplicationContext();
         Intent aIntent = new Intent(Intent.ACTION_MAIN);
         aIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         aIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         aIntent.setClassName(getPackageName(), mTargetClassName);
         PendingIntent pAIntent = PendingIntent.getActivity(ctx, 0, aIntent,
+                PendingIntent.FLAG_IMMUTABLE |
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent dIntent = new Intent(NOTIFICATION_DISMISS);
+        dIntent.setClass(ctx, SmartChargingService.class);
+        PendingIntent pDIntent = PendingIntent.getService(ctx, 0, dIntent,
                 PendingIntent.FLAG_IMMUTABLE |
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -311,7 +332,7 @@ public class SmartChargingService extends Service {
             .setShowWhen(false)
             .setAutoCancel(true);
 
-        Intent intent = new Intent(NOTIFICATION_DISMISS);
+        Intent intent = new Intent(NOTIFICATION_NOT_NOW);
         intent.setClass(ctx, SmartChargingService.class);
         PendingIntent pIntent = PendingIntent.getService(ctx, 0, intent,
                 PendingIntent.FLAG_IMMUTABLE |
@@ -320,6 +341,7 @@ public class SmartChargingService extends Service {
                 ctx.getString(R.string.not_now),
                 pIntent);
         notificationBuilder.setContentIntent(pAIntent);
+        notificationBuilder.setDeleteIntent(pDIntent);
 
         notificationBuilder.setContentTitle(ctx.getString(R.string.smart_charging_title));
 
@@ -391,8 +413,10 @@ public class SmartChargingService extends Service {
         super.onStartCommand(intent, flags, startId);
 
         if (!"".equals(action)) {
-            if (NOTIFICATION_DISMISS.equals(action)) {
-                stopBatteryMonitoring(stopChargingReason.NOTIF_DISMISS);
+            if (NOTIFICATION_NOT_NOW.equals(action)) {
+                stopBatteryMonitoring(stopChargingReason.NOTIF_NOT_NOW);
+            } else if (NOTIFICATION_DISMISS.equals(action)) {
+                mNotificationDismissed = true;
             }
         }
 
