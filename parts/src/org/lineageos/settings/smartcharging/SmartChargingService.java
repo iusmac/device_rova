@@ -30,8 +30,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -49,8 +47,6 @@ public class SmartChargingService extends Service {
     public static final String NOTIFICATION_DISMISS = "smartcharging.service.dismiss";
     private NotificationManager mNotificationManager = null;
     private NotificationChannel mNotificationChannel = null;
-
-    private WakeLock mWakeLock = null;
 
     private boolean mBatteryMonitorRegistered = false;
     private static final String BATTERY_MONITOR_UPDATE_INTENT =
@@ -260,10 +256,6 @@ public class SmartChargingService extends Service {
             mBatteryMonitorRegistered = true;
         }
 
-        if (!mWakeLock.isHeld()) {
-            mWakeLock.acquire();
-        }
-
         if (!mBatteryMonitorReceiver.isActive()) {
             mBatteryMonitorReceiver.start();
         }
@@ -279,9 +271,6 @@ public class SmartChargingService extends Service {
             mBatteryMonitorRegistered = false;
         }
 
-        if (mWakeLock.isHeld()) {
-            mWakeLock.release();
-        }
         removeNotification();
 
         sLastStopChargingReason = reason;
@@ -385,10 +374,6 @@ public class SmartChargingService extends Service {
 
         mBatteryMonitorReceiver = new BatteryMonitorReceiver(this, ctx,
                 mSharedPrefs);
-
-        PowerManager powerManager = (PowerManager) getSystemService(ctx.POWER_SERVICE);
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
-        mWakeLock.setReferenceCounted(false);
 
         if (SmartCharging.isPlugged()) {
             startBatteryMonitoring();
