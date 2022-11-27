@@ -63,6 +63,10 @@ public class DefaultSystemSettings {
         if (isFirstRun("enable-dt2w")) {
             writeDt2wOption(true);
         }
+
+        if (isFirstRun("enable-auto-brightness")) {
+            writeAutoBrightnessOption(true);
+        }
     }
 
     private void writeDisableNavkeysOption(final boolean enabled) {
@@ -94,6 +98,21 @@ public class DefaultSystemSettings {
         if (enabled != isDt2wEnabled) {
             Settings.Secure.putIntForUser(mContext.getContentResolver(),
                     Settings.Secure.DOUBLE_TAP_TO_WAKE, enabled ? 1 : 0,
+                    UserHandle.USER_CURRENT);
+        }
+    }
+
+    private void writeAutoBrightnessOption(final boolean enabled) {
+        final int manualValue = Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
+        final boolean isAutoBrightnessEnabled = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.SCREEN_BRIGHTNESS_MODE, manualValue,
+                UserHandle.USER_CURRENT) != manualValue;
+        if (enabled != isAutoBrightnessEnabled) {
+            final int autoValue = Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    enabled ? autoValue : manualValue,
                     UserHandle.USER_CURRENT);
         }
     }
