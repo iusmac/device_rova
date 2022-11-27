@@ -141,7 +141,7 @@ function 8917_sched_dcvs_eas()
         #default value for hispeed_load is 90, for 8917 it should be 85
         echo 85 > /sys/devices/system/cpu/cpufreq/schedutil/hispeed_load
 
-        echo 960000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+        echo 400000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     fi
 
     if [ $KernelVersionA -ge 4 ] && [ $KernelVersionB -ge 19 ]; then
