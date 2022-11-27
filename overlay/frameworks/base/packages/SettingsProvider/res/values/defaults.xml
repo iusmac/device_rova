@@ -26,9 +26,6 @@
     <fraction name="def_window_animation_scale">50%</fraction>
     <fraction name="def_window_transition_scale">50%</fraction>
 
-    <!-- Disable tap to wake by default-->
-    <bool name="def_double_tap_to_wake">false</bool>
-
     <!-- Disable UI touch sounds by default -->
     <bool name="def_sound_effects_enabled">false</bool>
 
