@@ -67,6 +67,6 @@
             android:layout_toEndOf="@+id/selected_value"
             android:gravity="center"
             android:paddingStart="8dp"
-            android:paddingEnd="0dp" />
+            android:paddingEnd="8dp" />
     </RelativeLayout>
 </FrameLayout>
