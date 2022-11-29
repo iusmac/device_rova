@@ -77,9 +77,6 @@ BOARD_QTI_CAMERA_32BIT_ONLY := true
 TARGET_TS_MAKEUP := true
 TARGET_SUPPORT_HAL1 := false
 
-# Charger
-TARGET_INCLUDE_PIXEL_CHARGER := true
-
 # Debug mode
 ENABLE_DEBUG_MODE := false
 

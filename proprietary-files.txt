@@ -538,6 +538,10 @@ vendor/lib/libseemore.so
 
 # Charger - from daisy
 vendor/bin/hvdcp_opti
+product/etc/res/values/charger/animation.txt
+product/etc/res/images/charger/battery_fail.png
+product/etc/res/images/charger/battery_scale.png
+product/etc/res/images/charger/main_font.png
 
 # CNE
 -system_ext/app/DynamicDDSService/DynamicDDSService.apk
