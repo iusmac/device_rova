@@ -82,7 +82,7 @@
         <device name="SND_DEVICE_IN_HANDSET_MIC" acdb_id="0"/>
         <device name="SND_DEVICE_IN_HANDSET_MIC_EXTERNAL" acdb_id="0"/>
         <device name="SND_DEVICE_IN_CAMCORDER_MIC" acdb_id="0"/>
-        <device name="SND_DEVICE_IN_HANDSET_STEREO_DMIC" acdb_id="0"/>
+        <device name="SND_DEVICE_IN_HANDSET_DMIC_STEREO" acdb_id="0"/>
 
         <!-- New -->
         <!--
