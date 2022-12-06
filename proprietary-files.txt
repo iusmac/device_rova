@@ -694,6 +694,11 @@ vendor/lib64/libssd.so
 # Gatekeeper - from olive
 vendor/lib64/hw/gatekeeper.msm8937.so
 
+# Google Settings Intelligence prebuilt
+-product/etc/default-permissions/default-permissions_com.google.android.settings.intelligence.xml
+-product/etc/permissions/privapp_whitelist_com.google.android.settings.intelligence.xml
+-product/priv-app/SettingsIntelligenceGooglePrebuilt/SettingsIntelligenceGooglePrebuilt.apk
+
 # GNSS
 vendor/bin/loc_launcher
 
