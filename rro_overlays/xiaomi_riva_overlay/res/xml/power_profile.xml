@@ -4,12 +4,18 @@
     <item name="screen.full.display0">205</item>
     <item name="cpu.clusters.cores">4</item>
     <array name="cpu.core_speeds.cluster0">
+        <value>400000</value>
+        <value>533000</value>
+        <value>800000</value>
         <value>960000</value>
         <value>1094400</value>
         <value>1248000</value>
         <value>1401000</value>
     </array>
     <array name="cpu.core_power.cluster0">
+        <value>185</value>
+        <value>195</value>
+        <value>235</value>
         <value>255</value>
         <value>310</value>
         <value>480</value>
