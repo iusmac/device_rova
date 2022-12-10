@@ -21,7 +21,7 @@ package org.lineageos.settings.smartcharging;
 import android.os.Bundle;
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
-import com.android.settingslib.collapsingtoolbar.R;
+import com.android.settingslib.widget.R;
 
 public class SmartChargingActivity extends CollapsingToolbarBaseActivity {
     private final String TAG = getClass().getName();

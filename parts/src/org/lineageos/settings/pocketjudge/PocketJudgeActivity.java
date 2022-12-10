@@ -23,7 +23,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
-import com.android.settingslib.collapsingtoolbar.R;
+import com.android.settingslib.widget.R;
 
 public class PocketJudgeActivity extends CollapsingToolbarBaseActivity {
     private final String TAG = getClass().getName();
