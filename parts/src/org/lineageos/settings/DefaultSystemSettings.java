@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -67,6 +68,8 @@ public class DefaultSystemSettings {
         if (isFirstRun("enable-auto-brightness")) {
             writeAutoBrightnessOption(true);
         }
+
+        tweakActivityManagerSettings();
     }
 
     private void writeDisableNavkeysOption(final boolean enabled) {
@@ -115,5 +118,24 @@ public class DefaultSystemSettings {
                     enabled ? autoValue : manualValue,
                     UserHandle.USER_CURRENT);
         }
+    }
+
+    private void runCmd(String cmd) {
+        try {
+            Runtime.getRuntime().exec(cmd);
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
+    }
+
+    private void tweakActivityManagerSettings() {
+        runCmd("device_config put activity_manager max_cached_processes 96");
+        runCmd("device_config put activity_manager max_phantom_processes 2147483647");
+        runCmd("device_config put activity_manager use_compaction true");
+        runCmd("device_config put activity_manager compact_action_1 2");
+        runCmd("device_config put activity_manager compact_action_2 2");
+        runCmd("device_config put activity_manager use_oom_re_ranking true");
+        runCmd("device_config put activity_manager imperceptible_kill_exempt_proc_states 0,1,2,4,12,14");
     }
 }
