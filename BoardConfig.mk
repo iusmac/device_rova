@@ -9,6 +9,12 @@ DEVICE_PATH := device/xiaomi/rova
 # ANT
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
+# ART
+ART_BUILD_TARGET_NDEBUG := true
+ART_BUILD_TARGET_DEBUG := false
+ART_BUILD_HOST_NDEBUG := true
+ART_BUILD_HOST_DEBUG := false
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
