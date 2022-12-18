@@ -32,6 +32,7 @@ import static android.provider.SearchIndexablesContract.COLUMN_INDEX_XML_RES_RES
 import static android.provider.SearchIndexablesContract.INDEXABLES_RAW_COLUMNS;
 import static android.provider.SearchIndexablesContract.INDEXABLES_XML_RES_COLUMNS;
 import static android.provider.SearchIndexablesContract.NON_INDEXABLES_KEYS_COLUMNS;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_NON_INDEXABLE_KEYS_KEY_VALUE;
 
 import org.lineageos.settings.dirac.DiracActivity;
 import org.lineageos.settings.speaker.ClearSpeakerActivity;
@@ -96,6 +97,13 @@ public class PartsSearchIndexablesProvider extends SearchIndexablesProvider {
     @Override
     public Cursor queryNonIndexableKeys(String[] projection) {
         MatrixCursor cursor = new MatrixCursor(NON_INDEXABLES_KEYS_COLUMNS);
+        cursor.addRow(getNonIndexableRow("footer_preference"));
         return cursor;
+    }
+
+    private Object[] getNonIndexableRow(String key) {
+        final Object[] ref = new Object[NON_INDEXABLES_KEYS_COLUMNS.length];
+        ref[COLUMN_INDEX_NON_INDEXABLE_KEYS_KEY_VALUE] = key;
+        return ref;
     }
 }
