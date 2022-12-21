@@ -1,4 +1,5 @@
-# All unpinned blobs below are extracted from Nokia/Panther_00WW/PAN_sprout:11/RKQ1.200928.002/00WW_3_240:user/release-keys
+# All unpinned blobs below are extracted from LA.UM.9.6.3.r1-06200-89xx.0 (4.9)
+# PAN Package version: Nokia/Panther_00WW/PAN_sprout:11/RKQ1.200928.002/00WW_3_240:user/release-keys
 # olive Package version: Xiaomi/olive/olive:10/QKQ1.191014.001/V12.5.1.0.QCNCNXM:user/release-keys
 # olive Pie Package version: olive-user 9 PKQ1.190319.001 V11.0.11.0.PCNMIXM release-keys
 # riva Oreo Package version: Xiaomi/riva/riva:8.1.0/OPM1.171019.026/V11.0.2.0.OCKMIXM:user/release-keys
@@ -23,7 +24,7 @@ vendor/etc/acdbdata/QRD/QRD_workspaceFile.qwsp
 # ADSP
 vendor/bin/adsprpcd
 vendor/bin/dspservice
-vendor/etc/init/vendor.qti.adsprpc-guestos-service.rc
+vendor/etc/init/vendor.qti.adsprpc-guestos-sensorspd-service.rc
 vendor/etc/init/vendor.qti.hardware.dsp@1.0-service.rc
 vendor/etc/seccomp_policy/vendor.qti.hardware.dsp.policy
 vendor/lib/libadsprpc.so
@@ -37,6 +38,8 @@ vendor/lib64/libsysmon_cdsp_skel.so
 vendor/lib64/vendor.qti.hardware.dsp@1.0.so
 
 # ADSP Modules
+vendor/lib/rfsa/adsp/libFastRPC_AUE_Forward_skel.so
+vendor/lib/rfsa/adsp/libFastRPC_UTF_Forward_Qtc2_skel.so
 vendor/lib/rfsa/adsp/libapps_mem_heap.so
 vendor/lib/rfsa/adsp/libdspCV_skel.so
 vendor/lib/rfsa/adsp/libfastcvadsp.so
@@ -106,7 +109,9 @@ system_ext/lib64/libaptXHD_encoder.so|e13fa70c97caaa24d061678bdee608eb8850a69e
 # Bluetooth Audio
 vendor/lib64/hw/audio.bluetooth_qti.default.so
 vendor/lib64/hw/vendor.qti.hardware.bluetooth_audio@2.0-impl.so
+vendor/lib64/hw/vendor.qti.hardware.bluetooth_audio@2.1-impl.so
 vendor/lib64/libbluetooth_audio_session_qti.so
+vendor/lib64/libbluetooth_audio_session_qti_2_1.so
 
 # Camera config - merged manually from rolex and riva
 vendor/etc/camera/camera_config.xml
@@ -557,6 +562,9 @@ system_ext/framework/com.quicinc.cne.constants-V2.1-java.jar
 system_ext/framework/vendor.qti.data.factory-V1.0-java.jar
 system_ext/framework/vendor.qti.data.factory-V2.0-java.jar
 system_ext/framework/vendor.qti.data.factory-V2.1-java.jar
+system_ext/framework/vendor.qti.data.factory-V2.2-java.jar
+system_ext/framework/vendor.qti.data.factory-V2.3-java.jar
+system_ext/framework/vendor.qti.data.mwqem-V1.0-java.jar
 system_ext/framework/vendor.qti.data.slm-V1.0-java.jar
 system_ext/framework/vendor.qti.hardware.data.cne.internal.api-V1.0-java.jar
 system_ext/framework/vendor.qti.hardware.data.cne.internal.constants-V1.0-java.jar
@@ -567,8 +575,10 @@ system_ext/framework/vendor.qti.hardware.data.dynamicdds-V1.0-java.jar
 system_ext/framework/vendor.qti.hardware.data.iwlan-V1.0-java.jar
 system_ext/framework/vendor.qti.hardware.data.latency-V1.0-java.jar
 system_ext/framework/vendor.qti.hardware.data.qmi-V1.0-java.jar
+system_ext/framework/vendor.qti.hardware.mwqemadapter-V1.0-java.jar
 system_ext/framework/vendor.qti.hardware.slmadapter-V1.0-java.jar
 system_ext/framework/vendor.qti.latency-V2.0-java.jar
+system_ext/framework/vendor.qti.latency-V2.1-java.jar
 system_ext/lib64/com.quicinc.cne.api@1.0.so
 system_ext/lib64/com.quicinc.cne.api@1.1.so
 system_ext/lib64/com.quicinc.cne.constants@1.0.so
@@ -577,6 +587,9 @@ system_ext/lib64/com.quicinc.cne.constants@2.1.so
 system_ext/lib64/vendor.qti.data.factory@1.0.so
 system_ext/lib64/vendor.qti.data.factory@2.0.so
 system_ext/lib64/vendor.qti.data.factory@2.1.so
+system_ext/lib64/vendor.qti.data.factory@2.2.so
+system_ext/lib64/vendor.qti.data.factory@2.3.so
+system_ext/lib64/vendor.qti.data.mwqem@1.0.so
 system_ext/lib64/vendor.qti.data.slm@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.cne.internal.api@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.cne.internal.constants@1.0.so
@@ -586,9 +599,12 @@ system_ext/lib64/vendor.qti.hardware.data.connection@1.1.so
 system_ext/lib64/vendor.qti.hardware.data.dynamicdds@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.iwlan@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.latency@1.0.so
+system_ext/lib64/vendor.qti.hardware.data.lce@1.0.so
 system_ext/lib64/vendor.qti.hardware.data.qmi@1.0.so
+system_ext/lib64/vendor.qti.hardware.mwqemadapter@1.0.so
 system_ext/lib64/vendor.qti.hardware.slmadapter@1.0.so
 system_ext/lib64/vendor.qti.latency@2.0.so
+system_ext/lib64/vendor.qti.latency@2.1.so
 vendor/bin/cnd
 vendor/etc/init/cnd.rc
 vendor/lib64/libcne.so
@@ -598,19 +614,25 @@ vendor/lib64/libwms.so
 vendor/lib64/libwqe.so
 vendor/lib64/vendor.qti.data.factory@2.0.so
 vendor/lib64/vendor.qti.data.factory@2.1.so
+vendor/lib64/vendor.qti.data.factory@2.2.so
+vendor/lib64/vendor.qti.data.factory@2.3.so
+vendor/lib64/vendor.qti.data.mwqem@1.0.so
 vendor/lib64/vendor.qti.data.slm@1.0.so
 vendor/lib64/vendor.qti.hardware.data.cne.internal.api@1.0.so
 vendor/lib64/vendor.qti.hardware.data.cne.internal.constants@1.0.so
 vendor/lib64/vendor.qti.hardware.data.cne.internal.server@1.0.so
 vendor/lib64/vendor.qti.hardware.data.dynamicdds@1.0.so
 vendor/lib64/vendor.qti.hardware.data.latency@1.0.so
+vendor/lib64/vendor.qti.hardware.data.lce@1.0.so
 vendor/lib64/vendor.qti.hardware.data.qmi@1.0.so
+vendor/lib64/vendor.qti.hardware.mwqemadapter@1.0.so
 vendor/lib64/vendor.qti.hardware.slmadapter@1.0.so
 vendor/lib64/vendor.qti.latency@2.0.so
+vendor/lib64/vendor.qti.latency@2.1.so
 
 # CNE configs
-vendor/etc/cne/profileSlm.xml
-vendor/etc/cne/slm.conf
+vendor/etc/cne/mwqem.conf
+vendor/etc/cne/profileMwqem.xml
 vendor/etc/cne/wqeclient/ATT/ATT_profile1.xml
 vendor/etc/cne/wqeclient/ATT/ATT_profile2.xml
 vendor/etc/cne/wqeclient/ATT/ATT_profile3.xml
@@ -670,7 +692,7 @@ system_ext/lib64/libdpmctmgr.so
 system_ext/lib64/libdpmfdmgr.so
 system_ext/lib64/libdpmframework.so
 system_ext/lib64/libdpmtcm.so
-system_ext/lib64/libslmiptablemgr.so
+system_ext/lib64/libmwqemiptablemgr.so
 vendor/bin/dpmQmiMgr
 vendor/etc/init/dpmQmiMgr.rc
 vendor/lib64/com.qualcomm.qti.dpm.api@1.0.so
@@ -691,7 +713,7 @@ vendor/lib64/libsecureui.so
 vendor/lib64/libsecureui_svcsock.so
 vendor/lib64/libssd.so
 
-# Gatekeeper - from olive
+# Gatekeeper
 vendor/lib64/hw/gatekeeper.msm8937.so
 
 # Google Settings Intelligence prebuilt
@@ -714,7 +736,7 @@ vendor/bin/mlid
 vendor/lib64/liblowi_client.so
 vendor/lib64/libminksocket.so
 
-# GNSS (HIDL) - from LA.UM.9.6.3.r1-06200-89xx.0
+# GNSS (HIDL)
 -vendor/etc/vintf/manifest/vendor.qti.gnss@4.1-service.xml
 vendor/lib64/libloc_socket.so
 vendor/lib64/vendor.qti.gnss@1.0.so
@@ -727,7 +749,7 @@ vendor/lib64/vendor.qti.gnss@4.0.so
 vendor/lib64/vendor.qti.gnss@4.1-service.so
 vendor/lib64/vendor.qti.gnss@4.1.so
 
-# GNSS (IMPL) - from LA.UM.9.6.3.r1-06200-89xx.0
+# GNSS (IMPL)
 vendor/lib64/hw/vendor.qti.gnss@4.1-impl.so
 vendor/lib64/libcdfw.so
 vendor/lib64/libdataitems.so
@@ -741,7 +763,7 @@ vendor/lib64/libpdmapper.so
 vendor/lib64/libsynergy_loc_api.so
 vendor/lib64/libxtadapter.so
 
-# Graphics
+# Graphics - from PAN
 vendor/lib/egl/eglSubDriverAndroid.so
 vendor/lib/egl/libEGL_adreno.so
 vendor/lib/egl/libGLESv1_CM_adreno.so
@@ -801,7 +823,7 @@ vendor/lib64/libsdm-diag.so
 vendor/lib64/libsdmextension.so
 vendor/lib64/libtinyxml2_1.so
 
-# Graphics firmware - from olive
+# Graphics firmware
 vendor/firmware/a300_pfp.fw
 vendor/firmware/a300_pm4.fw
 
@@ -878,6 +900,7 @@ vendor/lib64/com.qualcomm.qti.imscmservice@2.2.so
 vendor/lib64/com.qualcomm.qti.uceservice@2.0.so
 vendor/lib64/com.qualcomm.qti.uceservice@2.1.so
 vendor/lib64/com.qualcomm.qti.uceservice@2.2.so
+vendor/lib64/com.qualcomm.qti.uceservice@2.3.so
 vendor/lib64/lib-imsSDP.so
 vendor/lib64/lib-imscmservice.so
 vendor/lib64/lib-imsdpl.so
@@ -892,9 +915,11 @@ vendor/lib64/lib-uceservice.so
 vendor/lib64/vendor.qti.ims.callcapability@1.0.so
 vendor/lib64/vendor.qti.ims.callinfo@1.0.so
 vendor/lib64/vendor.qti.ims.factory@1.0.so
+vendor/lib64/vendor.qti.ims.factory@1.1.so
 vendor/lib64/vendor.qti.ims.rcsconfig@1.0.so
 vendor/lib64/vendor.qti.ims.rcsconfig@1.1.so
 vendor/lib64/vendor.qti.ims.rcsconfig@2.0.so
+vendor/lib64/vendor.qti.ims.rcsconfig@2.1.so
 
 # IMS - ims_rtp_daemon
 vendor/bin/ims_rtp_daemon
@@ -907,7 +932,7 @@ vendor/lib64/librcc.so
 vendor/lib64/vendor.qti.imsrtpservice@3.0-service-Impl.so
 vendor/lib64/vendor.qti.imsrtpservice@3.0.so
 
-# Keystore - from olive
+# Keystore
 vendor/lib64/hw/keystore.msm8937.so
 
 # Media
@@ -960,6 +985,7 @@ system/etc/public.libraries-qti.txt
 system_ext/etc/permissions/qti_libpermissions.xml
 system_ext/etc/permissions/qti_permissions.xml
 vendor/etc/public.libraries.txt
+vendor/lib64/libsoc_helper.so
 system_ext/etc/cdma_call_conf.xml
 system_ext/etc/spn-conf.xml
 
@@ -1040,12 +1066,14 @@ vendor/lib64/libqcmaputils.so
 # RIL (Data) - Netmgrd
 vendor/bin/netmgrd
 vendor/etc/data/netmgr_config.xml
-vendor/etc/data/netmgr_config.xml:vendor/etc/data/netmgr_config_override.xml|cc780730f939411b463d2c9cb660e46385e65e8b|4620dcab8486eb0e1317771bbc077092ee5a32de
 vendor/etc/init/netmgrd.rc
 vendor/lib64/libnetmgr_common.so
 vendor/lib64/libnetmgr_nr_fusion.so
 vendor/lib64/libnetmgr_rmnet_ext.so
 vendor/lib64/libnlnetmgr.so
+
+# RIL (Data) - Netmgrd
+vendor/etc/data/netmgr_config.xml:vendor/etc/data/netmgr_config_override.xml|d8b0fc8ed7902f687d460bc776971a1642ba9d88|4620dcab8486eb0e1317771bbc077092ee5a32de
 
 # RIL (Database)
 vendor/radio/qcril_database/qcril.db
@@ -1059,6 +1087,7 @@ vendor/radio/qcril_database/upgrade/6_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/7_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/8_version_update_ecc_table.sql
 vendor/radio/qcril_database/upgrade/9_version_update_ecc_table.sql
+vendor/radio/qcril_database/upgrade/10_version_update_ecc_table.sql
 
 # RIL (RemoteFS)
 vendor/bin/rmt_storage
@@ -1076,6 +1105,7 @@ vendor/lib64/liblqe.so
 vendor/lib64/libqcrilFramework.so
 vendor/lib64/libqcrildatactl.so
 vendor/lib64/libqdp.so
+vendor/lib64/libril-qc-hal-qmi.so
 vendor/lib64/libril-qc-logger.so
 vendor/lib64/librilqmiservices.so
 vendor/lib64/libsystem_health_mon.so
@@ -1093,9 +1123,11 @@ vendor/lib64/vendor.qti.hardware.radio.ims@1.3.so
 vendor/lib64/vendor.qti.hardware.radio.ims@1.4.so
 vendor/lib64/vendor.qti.hardware.radio.ims@1.5.so
 vendor/lib64/vendor.qti.hardware.radio.ims@1.6.so
+vendor/lib64/vendor.qti.hardware.radio.ims@1.7.so
 vendor/lib64/vendor.qti.hardware.radio.internal.deviceinfo@1.0.so
 vendor/lib64/vendor.qti.hardware.radio.lpa@1.0.so
-vendor/lib64/vendor.qti.hardware.radio.qcriNvOpt@1.0.so
+vendor/lib64/vendor.qti.hardware.radio.lpa@1.1.so
+vendor/lib64/vendor.qti.hardware.radio.lpa@1.2.so
 vendor/lib64/vendor.qti.hardware.radio.qcrilhook@1.0.so
 vendor/lib64/vendor.qti.hardware.radio.qtiradio@1.0.so
 vendor/lib64/vendor.qti.hardware.radio.qtiradio@2.0.so
@@ -1110,13 +1142,6 @@ vendor/lib64/vendor.qti.hardware.radio.uim_remote_client@1.0.so
 vendor/lib64/vendor.qti.hardware.radio.uim_remote_client@1.1.so
 vendor/lib64/vendor.qti.hardware.radio.uim_remote_client@1.2.so
 vendor/lib64/vendor.qti.hardware.radio.uim_remote_server@1.0.so
-
-# RIL (QCRILD) - from LA.UM.9.6.3.r1-06200-89xx.0
-vendor/lib64/libqmiservices.so:vendor/lib64/libQmiservices.so
-vendor/lib64/libril-qc-hal-qmi.so
-vendor/lib64/vendor.qti.hardware.radio.ims@1.7.so
-vendor/lib64/vendor.qti.hardware.radio.lpa@1.1.so
-vendor/lib64/vendor.qti.hardware.radio.lpa@1.2.so
 
 # Telephony (ATFWD)
 -system_ext/app/atfwd/atfwd.apk
@@ -1194,7 +1219,7 @@ vendor/bin/hw/vendor.qti.hardware.tui_comm@1.0-service-qti
 vendor/etc/init/vendor.qti.hardware.tui_comm@1.0-service-qti.rc
 vendor/lib64/vendor.qti.hardware.tui_comm@1.0.so
 
-# Widevine
+# Widevine - from PAN
 vendor/bin/hw/android.hardware.drm@1.3-service.widevine
 vendor/etc/init/android.hardware.drm@1.3-service.widevine.rc
 -vendor/etc/vintf/manifest/manifest_android.hardware.drm@1.3-service.widevine.xml

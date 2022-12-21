@@ -76,9 +76,6 @@ function blob_fixup() {
                 "${PATCHELF}" --add-needed "libshim_imscamera.so" "${2}"
             done
             ;;
-        vendor/lib64/libQmiservices.so | vendor/lib64/libril-qc-hal-qmi.so )
-            sed -i 's|libqmiservices.so|libQmiservices.so|g' "${2}"
-            ;;
         vendor/lib/libmmsw_platform.so|vendor/lib/libmmsw_detail_enhancement.so)
             "${PATCHELF}" --remove-needed "libbinder.so" "${2}"
             sed -i 's|libgui.so|libwui.so|g' "${2}"
