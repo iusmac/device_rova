@@ -21,6 +21,8 @@ package org.lineageos.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.UserHandle;
+import android.provider.DeviceConfig;
+import android.provider.DeviceConfig.Properties;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -130,12 +132,20 @@ public class DefaultSystemSettings {
     }
 
     private void tweakActivityManagerSettings() {
-        runCmd("device_config put activity_manager max_cached_processes 96");
-        runCmd("device_config put activity_manager max_phantom_processes 2147483647");
-        runCmd("device_config put activity_manager use_compaction true");
-        runCmd("device_config put activity_manager compact_action_1 2");
-        runCmd("device_config put activity_manager compact_action_2 2");
-        runCmd("device_config put activity_manager use_oom_re_ranking true");
-        runCmd("device_config put activity_manager imperceptible_kill_exempt_proc_states 0,1,2,4,12,14");
+        final Properties properties = new Properties.Builder("activity_manager")
+                .setInt("max_cached_processes", 96)
+                .setInt("max_phantom_processes", 2147483647)
+                .setBoolean("use_compaction", true)
+                .setInt("compact_action_1", 2)
+                .setInt("compact_action_2", 2)
+                .setBoolean("use_oom_re_ranking", true)
+                .setString("imperceptible_kill_exempt_proc_states", "0,1,2,4,12,14")
+                .build();
+
+        try {
+            DeviceConfig.setProperties(properties);
+        } catch( Exception e) {
+            e.printStackTrace();
+        }
     }
 }
