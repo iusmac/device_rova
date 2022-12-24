@@ -20,10 +20,6 @@
     <!-- Disable bluetooth by default -->
     <bool name="def_bluetooth_on">false</bool>
 
-    <!-- Speed up the animations -->
-    <fraction name="def_window_animation_scale">50%</fraction>
-    <fraction name="def_window_transition_scale">50%</fraction>
-
     <!-- Disable UI touch sounds by default -->
     <bool name="def_sound_effects_enabled">false</bool>
 

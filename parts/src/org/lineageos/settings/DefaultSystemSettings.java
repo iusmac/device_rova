@@ -72,6 +72,7 @@ public class DefaultSystemSettings {
         }
 
         tweakActivityManagerSettings();
+        writeAnimationSettings();
     }
 
     private void writeDisableNavkeysOption(final boolean enabled) {
@@ -147,5 +148,14 @@ public class DefaultSystemSettings {
         } catch( Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void writeAnimationSettings() {
+        Settings.Global.putString(mContext.getContentResolver(),
+                Settings.Global.WINDOW_ANIMATION_SCALE, "0.7");
+        Settings.Global.putString(mContext.getContentResolver(),
+                Settings.Global.TRANSITION_ANIMATION_SCALE, "0.7");
+        Settings.Global.putString(mContext.getContentResolver(),
+                Settings.Global.ANIMATOR_DURATION_SCALE, "0.7");
     }
 }
