@@ -26,4 +26,6 @@
     <!-- the padding on the end of the statusbar -->
     <dimen name="status_bar_padding_end">4dp</dimen>
 
+    <!-- Padding for the lock icon on the keyguard. In pixels - should not scale with display size. -->
+    <dimen name="lock_icon_padding">30px</dimen>
 </resources>
