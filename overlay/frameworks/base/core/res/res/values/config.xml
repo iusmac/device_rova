@@ -527,7 +527,7 @@
     <bool name="config_adaptive_sleep_available">true</bool>
 
     <!-- Disable rounded corners on windows to improve graphics performance -->
-    <bool name="config_supportsRoundedCornersOnWindows">false</bool>
+    <bool name="config_supportsRoundedCornersOnWindows">true</bool>
 
     <!-- Remote server that can provide NTP responses. -->
     <string translatable="false" name="config_ntpServer">pool.ntp.org</string>
