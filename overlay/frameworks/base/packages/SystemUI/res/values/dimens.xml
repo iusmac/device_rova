@@ -20,8 +20,10 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
+    <!-- the padding on the start of the statusbar -->
+    <dimen name="status_bar_padding_start">2dp</dimen>
 
     <!-- the padding on the end of the statusbar -->
-    <dimen name="status_bar_padding_end">5dp</dimen>
+    <dimen name="status_bar_padding_end">4dp</dimen>
 
 </resources>
