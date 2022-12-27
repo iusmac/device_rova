@@ -88,4 +88,9 @@
     <string name="pocket_judge_demo_title_cancel">Untuk mengaktifkan perangkat Anda:</string>
     <string name="pocket_judge_demo_tag_cancel">Jangan menutupi area biru ponsel Anda, dan bersihkan kotoran atau debu.</string>
     <string name="pocket_judge_demo_tag_cancel2">Tekan lama tombol daya untuk memaksa keluar dari mode saku.</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBench</string>
+    <string name="jitter_test_title">Jitter</string>
+    <string name="jitter_test_summary">Hitung rendering jitter</string>
 </resources>

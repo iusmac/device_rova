@@ -95,4 +95,6 @@
     <string name="volume_gain_summary">Zosilnenie reproduktoru / Zosilnenie slúchadiel / Zosilnenie mikrofónu</string>
     <string name="volume_gain_title">Zosilnenie reproduktoru / Zosilnenie slúchadiel</string>
     <string name="microphone_gain_title">Zosilnenie mikrofónu</string>
+
+    <!-- UiBench -->
 </resources>

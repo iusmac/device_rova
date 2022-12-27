@@ -94,4 +94,9 @@
     <string name="volume_gain_summary">Zesílení reproduktoru / Zesílení sluchátek / Zesílení mikrofonu</string>
     <string name="volume_gain_title">Zesílení reproduktoru / Zesílení sluchátek</string>
     <string name="microphone_gain_title">Zesílení mikrofonu</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBench</string>
+    <string name="jitter_test_title">Jitter</string>
+    <string name="jitter_test_summary">Výpočet vykreslování Jitter</string>
 </resources>

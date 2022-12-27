@@ -17,10 +17,27 @@
 
 package org.lineageos.settings;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.provider.SearchIndexableResource;
 import android.provider.SearchIndexablesProvider;
+import android.provider.Settings;
+
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_RANK;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_TITLE;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_SUMMARY_ON;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_SUMMARY_OFF;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_ENTRIES;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_KEYWORDS;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_SCREEN_TITLE;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_CLASS_NAME;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_ICON_RESID;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_INTENT_ACTION;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_INTENT_TARGET_PACKAGE;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_INTENT_TARGET_CLASS;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_KEY;
+import static android.provider.SearchIndexablesContract.COLUMN_INDEX_RAW_USER_ID;
 
 import static android.provider.SearchIndexablesContract.COLUMN_INDEX_XML_RES_CLASS_NAME;
 import static android.provider.SearchIndexablesContract.COLUMN_INDEX_XML_RES_ICON_RESID;
@@ -39,6 +56,7 @@ import org.lineageos.settings.speaker.ClearSpeakerActivity;
 import org.lineageos.settings.smartcharging.SmartChargingActivity;
 import org.lineageos.settings.soundcontrol.SoundControlSettingsActivity;
 import org.lineageos.settings.pocketjudge.PocketJudgeActivity;
+import org.lineageos.settings.uibench.JitterTestActivity;
 
 import java.util.HashSet;
 
@@ -95,9 +113,44 @@ public class PartsSearchIndexablesProvider extends SearchIndexablesProvider {
     }
 
     @Override
+    public Cursor queryDynamicRawData(String[] projection) {
+        MatrixCursor cursor = new MatrixCursor(INDEXABLES_RAW_COLUMNS);
+        final Context ctx = getContext();
+
+        final String screenTitle = ctx.getString(R.string.uibench_title);
+        final String title = ctx.getString(R.string.jitter_test_title);
+        final String summary = ctx.getString(R.string.jitter_test_summary);
+
+        Object[] raw = new Object[INDEXABLES_RAW_COLUMNS.length];
+        raw[COLUMN_INDEX_RAW_TITLE] = title;
+        raw[COLUMN_INDEX_RAW_SUMMARY_ON] = summary;
+        raw[COLUMN_INDEX_RAW_KEYWORDS] = title + " " + summary + " " + screenTitle;
+        raw[COLUMN_INDEX_RAW_SCREEN_TITLE] = screenTitle;
+        raw[COLUMN_INDEX_RAW_KEY] = title;
+        raw[COLUMN_INDEX_RAW_INTENT_ACTION] = "com.android.settings.action.EXTRA_SETTINGS";
+        raw[COLUMN_INDEX_RAW_INTENT_TARGET_PACKAGE] = "org.lineageos.settings";
+        raw[COLUMN_INDEX_RAW_INTENT_TARGET_CLASS] = JitterTestActivity.class.getName();
+
+        cursor.addRow(raw);
+        return cursor;
+    }
+
+    @Override
     public Cursor queryNonIndexableKeys(String[] projection) {
         MatrixCursor cursor = new MatrixCursor(NON_INDEXABLES_KEYS_COLUMNS);
+        final Context ctx = getContext();
+
         cursor.addRow(getNonIndexableRow("footer_preference"));
+
+        final boolean developerOptionsIsEnabled =
+            Settings.Global.getInt(ctx.getContentResolver(),
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) != 0;
+
+        if (!developerOptionsIsEnabled) {
+            // If developer options is not enabled, UIBench shouldn't be searchable.
+            cursor.addRow(getNonIndexableRow(ctx.getString(R.string.jitter_test_title)));
+        }
+
         return cursor;
     }
 

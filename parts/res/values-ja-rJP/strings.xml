@@ -94,4 +94,9 @@
     <string name="volume_gain_summary">スピーカーゲイン / ヘッドフォンゲイン / マイクゲイン</string>
     <string name="volume_gain_title">スピーカーゲイン / ヘッドフォンゲイン</string>
     <string name="microphone_gain_title">マイクゲイン</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UIBench</string>
+    <string name="jitter_test_title">ジッター</string>
+    <string name="jitter_test_summary">レンダリングジッターを計算する</string>
 </resources>

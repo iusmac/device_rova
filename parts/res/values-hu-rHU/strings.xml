@@ -95,4 +95,9 @@
     <string name="volume_gain_summary">Hangszóró erősítés / Fejhallgató erősítés / Mikrofon erősítés</string>
     <string name="volume_gain_title">Hangszóró erősítés / Fejhallgató erősítés</string>
     <string name="microphone_gain_title">Mikrofon erősítés</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBench</string>
+    <string name="jitter_test_title">Jitter</string>
+    <string name="jitter_test_summary">A renderelési jitter kiszámítása</string>
 </resources>

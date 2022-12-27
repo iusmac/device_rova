@@ -88,4 +88,9 @@
     <string name="pocket_judge_demo_title_cancel">Για να χρησιμοποιήσετε το τηλέφωνό σας:</string>
     <string name="pocket_judge_demo_tag_cancel">Ελέγξτε εάν η μπλε περιοχή του τηλεφώνου σας είναι καθαρή από τυχόν εμπόδια, και καθαρίστε τη βρωμιά ή τη σκόνη.</string>
     <string name="pocket_judge_demo_tag_cancel2">Πατήστε παρατεταμένα το κουμπί λειτουργίας για αναγκαστική έξοδο από τη λειτουργία τσέπης.</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBench</string>
+    <string name="jitter_test_title">Jitter</string>
+    <string name="jitter_test_summary">Υπολογισμός απόδοσης jitter</string>
 </resources>

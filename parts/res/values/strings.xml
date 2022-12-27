@@ -119,4 +119,9 @@
     <string name="pocket_judge_demo_tag_cancel2">Long press the power button to force quit pocket mode</string>
     <string name="pocket_judge_demo_tag_number1">1.\u0020</string>
     <string name="pocket_judge_demo_tag_number2">2.\u0020</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBench</string>
+    <string name="jitter_test_title">Jitter</string>
+    <string name="jitter_test_summary">Calculate rendering jitter</string>
 </resources>

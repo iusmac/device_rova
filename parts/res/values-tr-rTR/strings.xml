@@ -95,4 +95,9 @@
     <string name="volume_gain_summary">Hoparlör Yükseltmesi / Kulaklık Yükseltmesi / Mikrofon Yükseltme</string>
     <string name="volume_gain_title">Hoparlör Yükseltmesi / Kulaklık Yükseltmesi</string>
     <string name="microphone_gain_title">Mikrofon Yükseltme</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">Kullanıcı arabirimi sıralaması</string>
+    <string name="jitter_test_title">Seğirme</string>
+    <string name="jitter_test_summary">Seyirme oluşumunu ölç</string>
 </resources>

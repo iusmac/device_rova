@@ -89,4 +89,9 @@
     <string name="pocket_judge_demo_title_cancel">لاستخدام هاتفك:</string>
     <string name="pocket_judge_demo_tag_cancel">تحقق مما إذا كانت المنطقة الزرقاء في هاتفك خالية من أي عرقلة، وقم بتنظيف أي تراب أو غبار.</string>
     <string name="pocket_judge_demo_tag_cancel2">اضغط مطولاً على زر الطاقة لفرض الخروج عن وضع الجيب.</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBench</string>
+    <string name="jitter_test_title">Jitter</string>
+    <string name="jitter_test_summary">حساب عملية التقديم</string>
 </resources>

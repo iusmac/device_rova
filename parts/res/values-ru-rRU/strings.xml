@@ -101,4 +101,9 @@
     <string name="volume_gain_summary">Усиление динамиков / Усиление наушников / Усиление микрофона</string>
     <string name="volume_gain_title">Усиление динамиков / Усиление наушников</string>
     <string name="microphone_gain_title">Усиление микрофона</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">Тест пользовательского интерфейса</string>
+    <string name="jitter_test_title">Искажение</string>
+    <string name="jitter_test_summary">Рассчёт искажения отрисовки</string>
 </resources>

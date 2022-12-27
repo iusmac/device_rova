@@ -95,4 +95,9 @@
     <string name="volume_gain_summary">扬声器增益 / 耳机增益 / 麦克风增益</string>
     <string name="volume_gain_title">扬声器增益 / 耳机增益</string>
     <string name="microphone_gain_title">麦克风增益</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBech</string>
+    <string name="jitter_test_title">抖动</string>
+    <string name="jitter_test_summary">计算渲染抖动</string>
 </resources>

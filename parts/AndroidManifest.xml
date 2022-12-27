@@ -182,5 +182,29 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".uibench.JitterTestActivity"
+            android:exported="true"
+            android:label="@string/jitter_test_title">
+            <intent-filter>
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Mark this activity as a dynamic setting in the development category. -->
+            <intent-filter>
+                <action android:name="com.android.settings.action.IA_SETTINGS" />
+            </intent-filter>
+            <meta-data
+                android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.development" />
+            <meta-data
+                android:name="com.android.settings.summary"
+                android:value="@string/jitter_test_summary" />
+            <meta-data
+                android:name="com.android.settings.order"
+                android:value="1" />
+        </activity>
     </application>
 </manifest>

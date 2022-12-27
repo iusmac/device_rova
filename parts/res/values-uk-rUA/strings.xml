@@ -95,4 +95,9 @@
     <string name="volume_gain_summary">Підсилення динаміка / Підсилення навушників / Підсилення мікрофону</string>
     <string name="volume_gain_title">Підсилення динаміка / Підсилення навушників</string>
     <string name="microphone_gain_title">Підсилення мікрофону</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBench</string>
+    <string name="jitter_test_title">Тремтіння</string>
+    <string name="jitter_test_summary">Розрахувати тремтіння візуалізації</string>
 </resources>

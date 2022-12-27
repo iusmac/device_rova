@@ -95,4 +95,9 @@
     <string name="volume_gain_summary">Ganho de Altifalante / Ganho nos Phones de ouvido / Ganho do microfone</string>
     <string name="volume_gain_title">Ganho de Altifalante / Ganho nos Phones de ouvido</string>
     <string name="microphone_gain_title">Ganho do microfone</string>
+
+    <!-- UiBench -->
+    <string name="uibench_title">UiBench</string>
+    <string name="jitter_test_title">Jitter</string>
+    <string name="jitter_test_summary">Calcular jitter de renderização</string>
 </resources>
