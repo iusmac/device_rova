@@ -167,20 +167,10 @@ int HWCSession::Init() {
 
   StartServices();
 
-  DisplayError error = buffer_allocator_.Init();
-  if (error != kErrorNone) {
-    ALOGE("%s::%s: Buffer allocaor initialization failed. Error = %d",
-          __CLASS__, __FUNCTION__, error);
-    return -EINVAL;
-  }
+  DisplayError error = kErrorNone;
 
   error = CoreInterface::CreateCore(HWCDebugHandler::Get(), &buffer_allocator_,
                                     &buffer_sync_handler_, &socket_handler_, &core_intf_);
-  if (error != kErrorNone) {
-    buffer_allocator_.Deinit();
-    ALOGE("%s::%s: Display core initialization failed. Error = %d", __CLASS__, __FUNCTION__, error);
-    return -EINVAL;
-  }
 
   g_hwc_uevent_.Register(this);
 
@@ -190,7 +180,6 @@ int HWCSession::Init() {
   if (error != kErrorNone) {
     g_hwc_uevent_.Register(nullptr);
     CoreInterface::DestroyCore();
-    buffer_allocator_.Deinit();
     DLOGE("Primary display type not recognized. Error = %d", error);
     return -EINVAL;
   }
@@ -219,7 +208,6 @@ int HWCSession::Init() {
   if (status) {
     g_hwc_uevent_.Register(nullptr);
     CoreInterface::DestroyCore();
-    buffer_allocator_.Deinit();
     return status;
   }
 
@@ -1709,13 +1697,18 @@ android::status_t HWCSession::SetStandByMode(const android::Parcel *input_parcel
   SCOPE_LOCK(locker_[HWC_DISPLAY_PRIMARY]);
 
   bool enable = (input_parcel->readInt32() > 0);
+  bool is_twm = (input_parcel->readInt32() > 0);
 
   if (!hwc_display_[HWC_DISPLAY_PRIMARY]) {
     DLOGI("Primary display is not initialized");
     return -EINVAL;
   }
 
-  hwc_display_[HWC_DISPLAY_PRIMARY]->SetStandByMode(enable);
+  DisplayError error = hwc_display_[HWC_DISPLAY_PRIMARY]->SetStandByMode(enable, is_twm);
+  if (error != kErrorNone) {
+    DLOGE("SetStandByMode failed. Error = %d", error);
+    return -EINVAL;
+  }
 
   return android::NO_ERROR;
 }

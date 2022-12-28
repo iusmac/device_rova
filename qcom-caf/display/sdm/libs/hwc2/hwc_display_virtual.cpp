@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2014-2018, The Linux Foundation. All rights reserved.
+* Copyright (c) 2014-2018, 2021 The Linux Foundation. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -31,9 +31,6 @@
 #include <utils/debug.h>
 #include <sync/sync.h>
 #include <stdarg.h>
-#ifndef USE_GRALLOC1
-#include <gr.h>
-#endif
 
 #include "hwc_display_virtual.h"
 #include "hwc_debugger.h"
@@ -268,7 +265,7 @@ HWC2::Error HWCDisplayVirtual::SetOutputBuffer(buffer_handle_t buf, int32_t rele
     output_buffer_->planes[0].offset = output_handle->offset;
     output_buffer_->planes[0].stride = UINT32(output_handle->width);
   }
-
+  validated_.reset(type_);
   return HWC2::Error::None;
 }
 
