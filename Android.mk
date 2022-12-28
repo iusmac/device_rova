@@ -83,6 +83,44 @@ $(WCNSS_INI_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(WCNSS_INI_SYMLINK)
 
+EGL_32_SYMLINK := $(TARGET_OUT_VENDOR)/lib/libEGL_adreno.so
+$(EGL_32_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "Creating 32-bit EGL symlink: $@"
+	@mkdir -p $(dir $@)
+	$(hide) ln -sf egl/$(notdir $@) $@
+
+GLESv2_32_SYMLINK := $(TARGET_OUT_VENDOR)/lib/libGLESv2_adreno.so
+$(GLESv2_32_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "Creating 32-bit GLESv2 symlink: $@"
+	@mkdir -p $(dir $@)
+	$(hide) ln -sf egl/$(notdir $@) $@
+
+Q3DTOOLS_32_SYMLINK := $(TARGET_OUT_VENDOR)/lib/libq3dtools_adreno.so
+$(Q3DTOOLS_32_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "Creating 32-bit Q3D Tools symlink: $@"
+	@mkdir -p $(dir $@)
+	$(hide) ln -sf egl/$(notdir $@) $@
+
+EGL_64_SYMLINK := $(TARGET_OUT_VENDOR)/lib64/libEGL_adreno.so
+$(EGL_64_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "Creating 64-bit EGL symlink: $@"
+	@mkdir -p $(dir $@)
+	$(hide) ln -sf egl/$(notdir $@) $@
+
+GLESv2_64_SYMLINK := $(TARGET_OUT_VENDOR)/lib64/libGLESv2_adreno.so
+$(GLESv2_64_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "Creating 64-bit GLESv2 symlink: $@"
+	@mkdir -p $(dir $@)
+	$(hide) ln -sf egl/$(notdir $@) $@
+
+Q3DTOOLS_64_SYMLINK := $(TARGET_OUT_VENDOR)/lib64/libq3dtools_adreno.so
+$(Q3DTOOLS_64_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "Creating 64-bit Q3DTools symlink: $@"
+	@mkdir -p $(dir $@)
+	$(hide) ln -sf egl/$(notdir $@) $@
+
+ALL_DEFAULT_INSTALLED_MODULES += $(EGL_32_SYMLINK) $(GLESv2_32_SYMLINK) $(Q3DTOOLS_32_SYMLINK) $(EGL_64_SYMLINK) $(GLESv2_64_SYMLINK) $(Q3DTOOLS_64_SYMLINK)
+
 WCNSS_BIN_SYMLINK := $(TARGET_OUT_VENDOR)/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 $(WCNSS_BIN_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 	@echo "WCNSS bin link: $@"
