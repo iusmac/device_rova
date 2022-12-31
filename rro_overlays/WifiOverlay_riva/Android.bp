@@ -1,0 +1,6 @@
+runtime_resource_overlay {
+    name: "WifiOverlay_riva",
+    theme: "WifiOverlay_riva",
+    sdk_version: "current",
+    vendor: true
+}

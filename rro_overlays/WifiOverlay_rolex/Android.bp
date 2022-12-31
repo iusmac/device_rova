@@ -1,0 +1,6 @@
+runtime_resource_overlay {
+    name: "WifiOverlay_rolex",
+    theme: "WifiOverlay_rolex",
+    sdk_version: "current",
+    vendor: true
+}
