@@ -132,6 +132,7 @@ ro.qcom.svi.sensortype=2
 config.svi.xml=1
 config.svi.path=/vendor/data/sviconfig.xml
 vendor.display.disable_metadata_dynamic_fps=1
+vendor.display.disable_partial_split=1
 vendor.display.disable_rotator_downscale=1
 vendor.display.disable_skip_validate=1
 vendor.display.perf_hint_window=50
