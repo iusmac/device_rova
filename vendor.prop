@@ -131,6 +131,7 @@ ro.hardware.vulkan=adreno
 ro.qcom.svi.sensortype=2
 config.svi.xml=1
 config.svi.path=/vendor/data/sviconfig.xml
+vendor.display.disable_metadata_dynamic_fps=1
 vendor.display.disable_rotator_downscale=1
 vendor.display.disable_skip_validate=1
 vendor.display.enable_default_color_mode=1
