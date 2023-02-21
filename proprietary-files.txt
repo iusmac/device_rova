@@ -544,6 +544,10 @@ product/etc/res/images/charger/battery_fail.png
 product/etc/res/images/charger/battery_scale.png
 product/etc/res/images/charger/main_font.png
 
+# CACert
+vendor/lib64/libcacertclient.so
+vendor/lib64/vendor.qti.hardware.cacert@1.0.so
+
 # CNE
 -system_ext/app/DynamicDDSService/DynamicDDSService.apk
 -vendor/app/CneApp/CneApp.apk
@@ -720,13 +724,30 @@ vendor/lib64/hw/gatekeeper.msm8937.so
 -product/priv-app/SettingsIntelligenceGooglePrebuilt/SettingsIntelligenceGooglePrebuilt.apk
 
 # GNSS
+vendor/bin/edgnss-daemon
 vendor/bin/loc_launcher
+vendor/bin/lowi-server
+vendor/bin/slim_daemon
+vendor/bin/xtra-daemon
+vendor/bin/xtwifi-client
+vendor/bin/xtwifi-inet-agent
+vendor/lib64/libasn1cper.so
+vendor/lib64/libasn1crt.so
+vendor/lib64/libasn1crtx.so
+vendor/lib64/libcdfw_remote_api.so
+vendor/lib64/libgdtap.so
+vendor/lib64/libpal_net_if.so
+vendor/lib64/libsys_info_cache.so
+vendor/lib64/libxtwifi_server_protocol.so
+vendor/lib64/libxtwifi_server_protocol_uri_v3.so
 
 # GNSS (configs)
 vendor/etc/apdr.conf
+vendor/etc/cacert_location.pem
 vendor/etc/izat.conf
 vendor/etc/lowi.conf
 vendor/etc/sap.conf
+vendor/etc/xtra_root_cert.pem
 vendor/etc/xtwifi.conf
 
 # GNSS (mlid)
@@ -997,6 +1018,10 @@ vendor/etc/init/vendor.qti.hardware.alarm@1.0-service.rc
 vendor/lib64/hw/vendor.qti.hardware.alarm@1.0-impl.so
 vendor/lib64/vendor.qti.hardware.alarm@1.0.so
 
+# QDMA
+vendor/lib64/libqcc_file_agent.so
+vendor/lib64/vendor.qti.hardware.qccsyshal@1.0.so
+
 # QMI
 system_ext/lib64/libdiag_system.so
 system_ext/lib64/vendor.qti.diaghal@1.0.so
@@ -1218,6 +1243,9 @@ vendor/lib64/libcpion.so
 vendor/lib64/libhdcpsrm.so
 vendor/lib64/liboemcrypto.so
 vendor/lib64/libwvhidl.so
+
+# WiGig
+vendor/lib64/libaoa.so
 
 # WLAN
 vendor/bin/ptt_socket_app
