@@ -1019,6 +1019,11 @@ vendor/lib64/hw/vendor.qti.hardware.alarm@1.0-impl.so
 vendor/lib64/vendor.qti.hardware.alarm@1.0.so
 
 # QDMA
+system_ext/bin/qccsyshalservice
+system_ext/etc/init/vendor.qti.hardware.qccsyshal@1.0-service.rc
+system_ext/lib64/libqcc_file_agent_sys.so
+system_ext/lib64/vendor.qti.hardware.qccsyshal@1.0-halimpl.so
+system_ext/lib64/vendor.qti.hardware.qccsyshal@1.0.so
 vendor/lib64/libqcc_file_agent.so
 vendor/lib64/vendor.qti.hardware.qccsyshal@1.0.so
 
