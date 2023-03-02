@@ -1,6 +1,10 @@
-on boot
-    enable vendor.qcrild
-    enable vendor.qcrild2
+on property:vendor.subsys_state_notifier.modem.state=OFFLINE
+    stop vendor.qcrild
+    stop vendor.qcrild2
+
+on property:vendor.subsys_state_notifier.modem.state=ONLINE
+    start vendor.qcrild
+    start vendor.qcrild2
 
 on init
     chown wifi wifi /sys/module/wlan/parameters/fwpath

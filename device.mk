@@ -404,6 +404,10 @@ PRODUCT_SOONG_NAMESPACES += \
 QCOM_SOONG_NAMESPACE := \
     $(LOCAL_PATH)/qcom-caf
 
+# Subsystem state notifier
+PRODUCT_PACKAGES += \
+    subsystem_state_notifier
+
 # Speed profile services and wifi-service to reduce RAM and storage
 PRODUCT_SYSTEM_SERVER_COMPILER_FILTER := speed-profile
 PRODUCT_USE_PROFILE_FOR_BOOT_IMAGE := true

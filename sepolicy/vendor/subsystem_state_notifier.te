@@ -1,0 +1,11 @@
+type subsystem_state_notifier, domain;
+type subsystem_state_notifier_exec, exec_type, vendor_file_type, file_type;
+
+# Allow for transition from init domain to subsystem_state_notifier
+init_daemon_domain(subsystem_state_notifier)
+
+# Allow to read sysfs_modem_subsys
+allow subsystem_state_notifier sysfs_modem_subsys:file r_file_perms;
+
+# Allow to access subsys state notifier props
+set_prop(subsystem_state_notifier, vendor_subsys_state_notifier_prop)

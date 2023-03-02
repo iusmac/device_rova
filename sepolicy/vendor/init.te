@@ -25,6 +25,7 @@ allow init iorapd_data_file:file getattr;
 allow init sysfs_leds:lnk_file r_file_perms;
 
 # Prop
+get_prop(init, vendor_subsys_state_notifier_prop)
 get_prop(init, vendor_xiaomi_prop)
 
 # zRAM Writeback

@@ -49,6 +49,9 @@ vendor.powerhal.               u:object_r:vendor_power_prop:s0
 # Thermal Engine
 sys.thermal.                   u:object_r:vendor_thermal_engine_prop:s0
 
+# Subsystem state notifier
+vendor.subsys_state_notifier.  u:object_r:vendor_subsys_state_notifier_prop:s0
+
 # WiFi
 vendor.wlan.driver.ath         u:object_r:vendor_wifi_version:s0
 vendor.wlan.                   u:object_r:vendor_wifi_prop:s0

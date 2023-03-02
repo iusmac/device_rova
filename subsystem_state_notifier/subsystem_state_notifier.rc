@@ -1,0 +1,4 @@
+service vendor.subsystem_state_notifier.modem /vendor/bin/subsystem_state_notifier modem
+    class main
+    user system
+    group system
