@@ -17,6 +17,7 @@
 /dev/stune(/.*)?	                                          u:object_r:cgroup:s0
 
 # Executables
+/(vendor|system/vendor)/bin/charger_led                       u:object_r:charger_led_exec:s0
 /(vendor|system/vendor)/bin/edgnss-daemon                     u:object_r:location_exec:s0
 /(vendor|system/vendor)/bin/subsystem_state_notifier		  u:object_r:subsystem_state_notifier_exec:s0
 

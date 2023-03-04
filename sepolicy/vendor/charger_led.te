@@ -1,0 +1,24 @@
+type charger_led, domain;
+type charger_led_exec, exec_type, vendor_file_type, file_type;
+
+# Allow for transition from init domain to charger_led
+init_daemon_domain(charger_led)
+
+recovery_only(`
+    domain_trans(init, rootfs, charger_led)
+')
+
+# Allow to output logs to /dev/kmsg_debug
+allow charger_led kmsg_debug_device:chr_file rw_file_perms;
+
+# Allow to read sysfs power_supply
+allow charger_led sysfs_battery_supply:dir r_dir_perms;
+allow charger_led sysfs_battery_supply:file r_file_perms;
+allow charger_led sysfs_usb_supply:dir r_dir_perms;
+allow charger_led sysfs_usb_supply:file r_file_perms;
+
+# Allow to write sysfs leds
+allow charger_led sysfs_graphics:dir r_dir_perms;
+allow charger_led sysfs_graphics:file rw_file_perms;
+allow charger_led sysfs_leds:dir r_dir_perms;
+allow charger_led sysfs_leds:file rw_file_perms;

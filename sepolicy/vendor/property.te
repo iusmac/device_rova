@@ -17,7 +17,7 @@ vendor_internal_prop(vendor_thermal_engine_prop)
 vendor_internal_prop(vendor_wifi_prop)
 
 # Subsystem state notifier
-type vendor_subsys_state_notifier_prop, property_type;
+vendor_internal_prop(vendor_subsys_state_notifier_prop);
 
 # Xiaomi
 vendor_public_prop(vendor_xiaomi_prop)
