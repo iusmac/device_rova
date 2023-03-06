@@ -545,7 +545,9 @@ product/etc/res/images/charger/battery_scale.png
 product/etc/res/images/charger/main_font.png
 
 # CACert
+-vendor/app/CACertService/CACertService.apk
 vendor/lib64/libcacertclient.so
+vendor/lib64/libjnihelper.so
 vendor/lib64/vendor.qti.hardware.cacert@1.0.so
 
 # CNE
