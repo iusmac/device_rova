@@ -27,6 +27,7 @@ sdm.debug.disable_skip_validate=1
 
 # Audio
 ro.bluetooth.a2dp_offload.supported=false
+bluetooth.sco.disable_enhanced_connection=1
 
 # fastbootd
 ro.fastbootd.available=true
