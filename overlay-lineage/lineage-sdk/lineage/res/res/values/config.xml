@@ -63,6 +63,7 @@
         <item>restart_recovery</item>
         <item>restart_bootloader</item>
         <item>restart_fastboot</item>
+        <item>restart_systemui</item>
      </string-array>
 
     <!-- The list of components which should be automatically disabled for a specific device.
