@@ -97,6 +97,8 @@ persist.vendor.qcom.bluetooth.enable.splita2dp=false
 persist.vendor.qcom.bluetooth.soc=pronto
 vendor.qcom.bluetooth.soc=pronto
 ro.vendor.bluetooth.wipower=false
+persist.vendor.bt.a2dp_offload_cap=sbc-aac-aptx-aptxhd-ldac
+persist.vendor.qcom.bluetooth.a2dp_offload_cap=sbc-aac-aptx-aptxhd-ldac
 
 # Camera
 camera.display.lmax=1280x720
