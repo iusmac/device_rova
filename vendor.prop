@@ -179,9 +179,6 @@ persist.vendor.data.iwlan.enable=true
 
 # Radio
 persist.backup.ntpServer=0.pool.ntp.org
-persist.dbg.volte_avail_ovr=1
-persist.dbg.vt_avail_ovr=1
-persist.dbg.wfc_avail_ovr=1
 persist.function_for_sar=1
 persist.function_for_sar_log_trigger=0
 persist.radio.multisim.config=dsds
