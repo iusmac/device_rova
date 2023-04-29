@@ -23,7 +23,7 @@
             android:defaultValue="0"
             android:key="volume_gain"
             android:max="20"
-            app:min="-10"
+            app:min="-84"
             android:icon="@drawable/ic_speaker"
             android:title="@string/volume_gain_title" />
 
