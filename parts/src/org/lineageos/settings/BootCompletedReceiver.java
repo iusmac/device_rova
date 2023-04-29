@@ -36,7 +36,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         int gain = Settings.Secure.getInt(
             context.getContentResolver(),
-            SoundControlSettings.PREF_VOLUME_GAIN, 0
+            SoundControlSettings.PREF_VOLUME_GAIN, -10
         );
         PartsUtils.setValue(
             SoundControlSettings.VOLUME_GAIN_PATH,
