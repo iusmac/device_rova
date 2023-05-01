@@ -24,6 +24,7 @@ persist.hwc.enable_vds=1
 persist.hwc.mdpcomp.enable=true
 ro.sf.blurs_are_expensive=1
 sdm.debug.disable_skip_validate=1
+renderthread.skia.reduceopstasksplitting=false
 
 # Audio
 ro.bluetooth.a2dp_offload.supported=false
