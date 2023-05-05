@@ -44,6 +44,10 @@ on property:ro.vendor.xiaomi.device=riva
     setprop ro.hardware.consumerir spidev
     restart vendor.ir-hal-1-0
 
+# GPS
+on property:persist.sys.xtra-daemon.enabled=*
+    restart loc_launcher
+
 # Netmgrd
 on post-fs
     mount none /vendor/etc/data/netmgr_config_override.xml /vendor/etc/data/netmgr_config.xml bind
