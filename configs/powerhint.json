@@ -323,90 +323,6 @@
       "Value": "4248"
     },
     {
-      "PowerHint": "LAUNCH",
-      "Node": "CPUBigClusterMaxFreq",
-      "Duration": 3500,
-      "Value": "1401000"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "CPUBigClusterMinFreq",
-      "Duration": 3500,
-      "Value": "1094400"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "PMQoSCpuDmaLatency",
-      "Duration": 3500,
-      "Value": "67"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "CPUBWHystTriggerCount",
-      "Duration": 3500,
-      "Value": "0"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "CPUBWHystLength",
-      "Duration": 3500,
-      "Value": "0"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "CPUBWHistMemory",
-      "Duration": 3500,
-      "Value": "0"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "CPUBWMinFreq",
-      "Duration": 3500,
-      "Value": "4541"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "GPUBusMinFreq",
-      "Duration": 3500,
-      "Value": "4541"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "GPUBusMaxFreq",
-      "Duration": 3500,
-      "Value": "5639"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "GPUMinFreq",
-      "Duration": 3500,
-      "Value": "484800000"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "GPUMaxFreq",
-      "Duration": 3500,
-      "Value": "598000000"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "GPUForceClkOn",
-      "Duration": 3500,
-      "Value": "1"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "GPUForceRailOn",
-      "Duration": 3500,
-      "Value": "1"
-    },
-    {
-      "PowerHint": "LAUNCH",
-      "Node": "GPUIdleTimer",
-      "Duration": 3500,
-      "Value": "10000"
-    },
-    {
       "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 1000,
@@ -495,11 +411,6 @@
       "Node": "CPUBigClusterMaxFreq",
       "Duration": 0,
       "Value": "1248000"
-    },
-    {
-      "PowerHint": "DISPLAY_INACTIVE",
-      "Type": "EndHint",
-      "Value": "LAUNCH"
     },
     {
       "PowerHint": "DISPLAY_INACTIVE",
