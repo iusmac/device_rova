@@ -217,6 +217,15 @@
         "0"
       ],
       "ResetOnInit": true
+    },
+    {
+      "Name": "CPUUpRateLimit",
+      "Path": "/sys/devices/system/cpu/cpufreq/schedutil/up_rate_limit_us",
+      "Values": [
+        "2500",
+        "25000"
+      ],
+      "ResetOnInit": true
     }
   ],
   "Actions": [
@@ -417,6 +426,12 @@
       "Node": "F2fsGcEnable",
       "Duration": 0,
       "Value": "2"
+    },
+    {
+      "PowerHint": "INTERACTIVE",
+      "Node": "CPUUpRateLimit",
+      "Duration": 0,
+      "Value": "2500"
     }
   ]
 }
