@@ -71,6 +71,21 @@ public class DefaultSystemSettings {
             writeAutoBrightnessOption(true);
         }
 
+        if (isFirstRun("set-kg-custom-clock-top-margin-to-130")) {
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    "kg_custom_clock_top_margin", 130, UserHandle.USER_CURRENT);
+        }
+
+        if (isFirstRun("set-kg-small-clock-text-size-to-68")) {
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    "kg_small_clock_text_size", 68, UserHandle.USER_CURRENT);
+        }
+
+        if (isFirstRun("set-kg-large-clock-text-size-to-120")) {
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    "kg_large_clock_text_size", 120, UserHandle.USER_CURRENT);
+        }
+
         tweakActivityManagerSettings();
         writeAnimationSettings();
     }
