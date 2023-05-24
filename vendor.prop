@@ -120,6 +120,7 @@ debug.sf.disable_backpressure=1
 debug.enable.sglscale=1
 debug.hwui.renderer=skiagl
 debug.renderengine.backend=skiaglthreaded
+renderthread.skia.reduceopstasksplitting=true
 debug.hwui.skia_atrace_enabled=false
 debug.sdm.support_writeback=0
 debug.sf.enable_hwc_vds=1
