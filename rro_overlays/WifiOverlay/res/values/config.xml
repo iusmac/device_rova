@@ -34,7 +34,7 @@
     <bool translatable="false" name="config_wifi_diagnostics_bugreport_enabled">true</bool>
 
     <!-- Integer indicating maximum hardware supported client number of soft ap -->
-    <integer translatable="false" name="config_wifiHardwareSoftapMaxClientCount">32</integer>
+    <integer translatable="false" name="config_wifiHardwareSoftapMaxClientCount">16</integer>
 
     <!-- Enable WPA2 to WPA3 auto-upgrade -->
     <bool translatable="false" name="config_wifiSaeUpgradeEnabled">false</bool>
