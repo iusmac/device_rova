@@ -30,8 +30,4 @@ TARGET_BOOT_ANIMATION_RES := 720
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
 
-PRODUCT_PACKAGES += \
-    xiaomi_riva_overlay_lineage \
-    xiaomi_rolex_overlay_lineage
-
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
