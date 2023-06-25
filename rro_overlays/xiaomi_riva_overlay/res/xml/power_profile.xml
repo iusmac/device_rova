@@ -11,6 +11,7 @@
         <value>1094400</value>
         <value>1248000</value>
         <value>1401000</value>
+        <value>1497600</value>
     </array>
     <array name="cpu.core_power.cluster0">
         <value>185</value>
@@ -20,6 +21,7 @@
         <value>310</value>
         <value>480</value>
         <value>550</value>
+        <value>594</value>
     </array>
     <item name="cpu.suspend">2.8</item>
     <item name="cpu.idle">4</item>
