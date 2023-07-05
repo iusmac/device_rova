@@ -100,4 +100,9 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Тремтіння</string>
     <string name="jitter_test_summary">Розрахувати тремтіння візуалізації</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Помірне</string>
+    <string name="ramplus_mode_slight">Слабке</string>
+    <string name="ramplus_mode_extreme">Надмірне</string>
 </resources>

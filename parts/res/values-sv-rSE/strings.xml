@@ -83,4 +83,9 @@
     <!-- Pocket Judge -->
     <string name="pocket_judge_title">Fickdetektion</string>
     <string name="pocket_judge_summary">Blockera skärmen och knapptryckningar när enheten är i fickan</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Måttlig</string>
+    <string name="ramplus_mode_slight">Lätt</string>
+    <string name="ramplus_mode_extreme">Extrem</string>
 </resources>

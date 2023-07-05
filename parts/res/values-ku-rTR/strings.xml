@@ -39,4 +39,9 @@
     <string name="pocket_judge_demo_title_cancel">Ji bo ku têlefona xwe bikar bînin:</string>
     <string name="pocket_judge_demo_tag_cancel">Kontrol bikin ka devera şîn a têlefona we ji astengiyan paqij e, û her axê an tozê paqij bikin.</string>
     <string name="pocket_judge_demo_tag_cancel2">Bişkoja hêzê dirêj bikirtînin da ku bi zorê dev ji moda pocketê berdin.</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">مامناوەند</string>
+    <string name="ramplus_mode_slight">کەم</string>
+    <string name="ramplus_mode_extreme">زۆر</string>
 </resources>

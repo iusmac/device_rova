@@ -60,4 +60,9 @@
 
     <!-- Misc -->
     <string name="not_now">"Ne dabar"</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Vidutinis</string>
+    <string name="ramplus_mode_slight">Silpnas</string>
+    <string name="ramplus_mode_extreme">Stiprus</string>
 </resources>

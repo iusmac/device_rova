@@ -60,4 +60,9 @@
 
     <!-- Misc -->
     <string name="not_now">"Не сада"</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Уређено</string>
+    <string name="ramplus_mode_slight">Благо</string>
+    <string name="ramplus_mode_extreme">Екстремно</string>
 </resources>

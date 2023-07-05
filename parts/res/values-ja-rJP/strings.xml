@@ -99,4 +99,9 @@
     <string name="uibench_title">UIBench</string>
     <string name="jitter_test_title">ジッター</string>
     <string name="jitter_test_summary">レンダリングジッターを計算する</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">標準</string>
+    <string name="ramplus_mode_slight">弱い</string>
+    <string name="ramplus_mode_extreme">強い</string>
 </resources>

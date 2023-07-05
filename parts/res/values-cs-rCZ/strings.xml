@@ -99,4 +99,9 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>
     <string name="jitter_test_summary">Výpočet vykreslování Jitter</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Střední</string>
+    <string name="ramplus_mode_slight">Mírný</string>
+    <string name="ramplus_mode_extreme">Největší</string>
 </resources>

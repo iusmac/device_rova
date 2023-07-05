@@ -95,4 +95,9 @@
     <string name="volume_gain_summary">스피커 소리 증폭 / 헤드폰 소리 증폭 / 마이크 증폭</string>
     <string name="volume_gain_title">스피커 소리 증폭 / 헤드폰 소리 증폭</string>
     <string name="microphone_gain_title">마이크 증폭</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">보통</string>
+    <string name="ramplus_mode_slight">조금</string>
+    <string name="ramplus_mode_extreme">최대</string>
 </resources>

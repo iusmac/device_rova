@@ -59,4 +59,9 @@
 
     <!-- Misc -->
     <string name="next_update_time">Hurrengo eguneratzea: %1$s barru</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Neurritsua</string>
+    <string name="ramplus_mode_slight">Arina</string>
+    <string name="ramplus_mode_extreme">Sendoa</string>
 </resources>

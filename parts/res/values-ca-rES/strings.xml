@@ -69,4 +69,9 @@
     <string name="pocket_judge_demo_title_cancel">Per a utilitzar el teu telèfon:</string>
     <string name="pocket_judge_demo_tag_cancel">Comprova si l\'àrea blava del teu telèfon està lliure d\'obstruccions i neteja tota la pols i brutícia.</string>
     <string name="pocket_judge_demo_tag_cancel2">Deixa premut el botó d\'encesa per a treure el mode butzaca de forma forçada.</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Moderat</string>
+    <string name="ramplus_mode_slight">Lleuger</string>
+    <string name="ramplus_mode_extreme">Extrem</string>
 </resources>

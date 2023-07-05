@@ -93,4 +93,9 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>
     <string name="jitter_test_summary">Hitung rendering jitter</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Sedang</string>
+    <string name="ramplus_mode_slight">Sedikit</string>
+    <string name="ramplus_mode_extreme">Ekstrim</string>
 </resources>

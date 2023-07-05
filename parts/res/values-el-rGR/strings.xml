@@ -93,4 +93,9 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>
     <string name="jitter_test_summary">Υπολογισμός απόδοσης jitter</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Μεσαία</string>
+    <string name="ramplus_mode_slight">Μικρή</string>
+    <string name="ramplus_mode_extreme">Μεγάλη</string>
 </resources>

@@ -100,4 +100,9 @@
     <string name="uibench_title">UiBech</string>
     <string name="jitter_test_title">抖动</string>
     <string name="jitter_test_summary">计算渲染抖动</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">中等</string>
+    <string name="ramplus_mode_slight">轻微</string>
+    <string name="ramplus_mode_extreme">极致</string>
 </resources>

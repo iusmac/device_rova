@@ -56,4 +56,9 @@
     <string name="dirac_preset_country">鄉村</string>
     <string name="dirac_preset_dance">舞曲</string>
     <string name="dirac_preset_metal">金屬</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">中等</string>
+    <string name="ramplus_mode_slight">輕微</string>
+    <string name="ramplus_mode_extreme">極端</string>
 </resources>

@@ -88,4 +88,9 @@
     <string name="pocket_judge_demo_title_cancel">Telefoni kasutamiseks:</string>
     <string name="pocket_judge_demo_tag_cancel">Kontrolli, et sinu telefoni sinine ala on takistustest vaba ning eemalda mistahes tolm või mustus.</string>
     <string name="pocket_judge_demo_tag_cancel2">Taskurežiimist sundväljumiseks vajuta pikalt toitenuppu.</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Mõõdukas</string>
+    <string name="ramplus_mode_slight">Kerge</string>
+    <string name="ramplus_mode_extreme">Ekstreemne</string>
 </resources>

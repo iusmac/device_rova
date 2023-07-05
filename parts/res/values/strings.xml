@@ -124,4 +124,10 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>
     <string name="jitter_test_summary">Calculate rendering jitter</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_qs_title">RAM+</string>
+    <string name="ramplus_mode_moderate">Moderate</string>
+    <string name="ramplus_mode_slight">Slight</string>
+    <string name="ramplus_mode_extreme">Extreme</string>
 </resources>

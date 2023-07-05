@@ -89,4 +89,9 @@
     <string name="pocket_judge_demo_title_cancel">Pentru a folosi telefonul:</string>
     <string name="pocket_judge_demo_tag_cancel">Verificaţi dacă zona albastră a telefonului dumneavoastră nu are nici un fel de obstrucţii şi ştergeţi orice noroi sau praf.</string>
     <string name="pocket_judge_demo_tag_cancel2">Apăsați lung butonul de pornire pentru a forța ieșirea din modul buzunar.</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Moderat</string>
+    <string name="ramplus_mode_slight">Slab</string>
+    <string name="ramplus_mode_extreme">Extrem</string>
 </resources>

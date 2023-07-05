@@ -100,4 +100,9 @@
     <string name="uibench_title">Kullanıcı arabirimi sıralaması</string>
     <string name="jitter_test_title">Seğirme</string>
     <string name="jitter_test_summary">Seyirme oluşumunu ölç</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Orta</string>
+    <string name="ramplus_mode_slight">Az</string>
+    <string name="ramplus_mode_extreme">Çok Yüksek</string>
 </resources>

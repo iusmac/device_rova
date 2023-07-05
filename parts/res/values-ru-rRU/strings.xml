@@ -106,4 +106,9 @@
     <string name="uibench_title">Тест пользовательского интерфейса</string>
     <string name="jitter_test_title">Искажение</string>
     <string name="jitter_test_summary">Рассчёт искажения отрисовки</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Умеренный</string>
+    <string name="ramplus_mode_slight">Слабый</string>
+    <string name="ramplus_mode_extreme">Экстремальный</string>
 </resources>

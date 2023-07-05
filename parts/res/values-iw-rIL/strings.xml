@@ -70,4 +70,9 @@
     <string name="pocket_judge_demo_title_cancel">כדי להשתמש בטלפון שלך:</string>
     <string name="pocket_judge_demo_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
     <string name="pocket_judge_demo_tag_cancel2">לחיצה ארוכה על כפתור ההפעלה כדי לצאת ממצב כיס.</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">בינוני</string>
+    <string name="ramplus_mode_slight">חלש</string>
+    <string name="ramplus_mode_extreme">חזק מאוד</string>
 </resources>

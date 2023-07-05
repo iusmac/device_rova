@@ -106,4 +106,9 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Tremolio</string>
     <string name="jitter_test_summary">Calcola il tremolio di rendering</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Moderato</string>
+    <string name="ramplus_mode_slight">Lieve</string>
+    <string name="ramplus_mode_extreme">Estremo</string>
 </resources>

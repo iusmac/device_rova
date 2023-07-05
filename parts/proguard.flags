@@ -17,3 +17,7 @@
 -keep class org.lineageos.settings.pocketjudge.* {
   *;
 }
+
+-keep class org.lineageos.settings.ramplus.* {
+  *;
+}

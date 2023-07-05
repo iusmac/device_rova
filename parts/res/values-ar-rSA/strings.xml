@@ -94,4 +94,9 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>
     <string name="jitter_test_summary">حساب عملية التقديم</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">معتدل</string>
+    <string name="ramplus_mode_slight">طفيف</string>
+    <string name="ramplus_mode_extreme">المتطرفة</string>
 </resources>

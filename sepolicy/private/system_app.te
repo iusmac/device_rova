@@ -3,3 +3,6 @@ get_prop(system_app, vendor_persist_camera_prop)
 # Pocket judge
 allow system_app pocket_judge_sysfs:file rw_file_perms;
 allow system_app pocket_judge_sysfs:dir { search };
+
+# RAM+
+set_prop(system_app, device_config_lmkd_native_swap_free_low_percentage_prop)

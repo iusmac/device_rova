@@ -97,4 +97,9 @@
     <string name="microphone_gain_title">Zosilnenie mikrofónu</string>
 
     <!-- UiBench -->
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Stredná</string>
+    <string name="ramplus_mode_slight">Nepatrná</string>
+    <string name="ramplus_mode_extreme">Extrémna</string>
 </resources>

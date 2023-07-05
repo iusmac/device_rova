@@ -60,4 +60,9 @@
 
     <!-- Misc -->
     <string name="not_now">"Vēlāk"</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Mērens</string>
+    <string name="ramplus_mode_slight">Vājš</string>
+    <string name="ramplus_mode_extreme">Ekstremāls</string>
 </resources>

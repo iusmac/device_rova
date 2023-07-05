@@ -95,4 +95,9 @@
     <string name="volume_gain_summary">Wzmocnienie głośnika / Wzmocnienie słuchawek / Wzmocnienie mikrofonu</string>
     <string name="volume_gain_title">Wzmocnienie głośnika / Wzmocnienie słuchawek</string>
     <string name="microphone_gain_title">Wzmocnienie mikrofonu</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Umiarkowany</string>
+    <string name="ramplus_mode_slight">Niewielki</string>
+    <string name="ramplus_mode_extreme">Ekstremalny</string>
 </resources>

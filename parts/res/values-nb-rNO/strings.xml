@@ -61,4 +61,9 @@
     <!-- Misc -->
     <string name="not_now">"Ikke nå"</string>
     <string name="next_update_time">Neste oppdatering om %1$s</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Moderat</string>
+    <string name="ramplus_mode_slight">Liten</string>
+    <string name="ramplus_mode_extreme">Ekstrem</string>
 </resources>

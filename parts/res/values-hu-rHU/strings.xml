@@ -100,4 +100,9 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>
     <string name="jitter_test_summary">A renderelési jitter kiszámítása</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Mérsékelt</string>
+    <string name="ramplus_mode_slight">Enyhe</string>
+    <string name="ramplus_mode_extreme">Extrém</string>
 </resources>

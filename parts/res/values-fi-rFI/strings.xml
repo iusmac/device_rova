@@ -69,4 +69,9 @@
     <string name="volume_gain_summary">Kaiuttimen äänenvoimakkuuden lisäys / Kuulokkeiden äänenvoimakkuuden lisäys / Mikrofonin äänenvoimakkuuden lisäys</string>
     <string name="volume_gain_title">Kaiuttimen äänenvoimakkuuden lisäys / Kuulokkeiden äänenvoimakkuuden lisäys</string>
     <string name="microphone_gain_title">Mikrofonin äänenvoimakkuuden lisäys</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Keskitaso</string>
+    <string name="ramplus_mode_slight">Kevyt</string>
+    <string name="ramplus_mode_extreme">Vahva</string>
 </resources>

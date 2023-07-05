@@ -135,4 +135,23 @@
         <item>"700000"</item>
         <item>"500000"</item>
     </string-array>
+
+    <!-- RAM+ -->
+    <integer-array name="ramplus_swap_free_low_percentages">
+        <item>8</item> <!-- MODERATE -->
+        <item>1</item> <!-- SLIGHT -->
+        <item>12</item> <!-- EXTREME -->
+    </integer-array>
+
+    <integer-array name="ramplus_mode_icons">
+        <item>@drawable/ic_ramplus_mode_moderate</item> <!-- MODERATE -->
+        <item>@drawable/ic_ramplus_mode_slight</item> <!-- SLIGHT -->
+        <item>@drawable/ic_ramplus_mode_extreme</item> <!-- EXTREME -->
+    </integer-array>
+
+    <string-array name="ramplus_mode_names" translatable="false">
+        <item>@string/ramplus_mode_moderate</item> <!-- MODERATE -->
+        <item>@string/ramplus_mode_slight</item> <!-- SLIGHT -->
+        <item>@string/ramplus_mode_extreme</item> <!-- EXTREME -->
+    </string-array>
 </resources>

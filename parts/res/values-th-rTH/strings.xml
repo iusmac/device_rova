@@ -60,4 +60,9 @@
 
     <!-- Misc -->
     <string name="not_now">"ข้ามไปก่อน"</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">ปานกลาง</string>
+    <string name="ramplus_mode_slight">เงียบ</string>
+    <string name="ramplus_mode_extreme">สุดขีด</string>
 </resources>

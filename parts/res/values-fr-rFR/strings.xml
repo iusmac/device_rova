@@ -95,4 +95,9 @@
     <string name="volume_gain_summary">Gain du Haut-Parleur / Gain du Casque / Amplification microphone</string>
     <string name="volume_gain_title">Gain du Haut-Parleur / Gain du Casque</string>
     <string name="microphone_gain_title">Amplification microphone</string>
+
+    <!-- RAM+ -->
+    <string name="ramplus_mode_moderate">Moyen</string>
+    <string name="ramplus_mode_slight">Léger</string>
+    <string name="ramplus_mode_extreme">Extrême</string>
 </resources>
