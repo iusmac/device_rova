@@ -1,0 +1,1 @@
+get_prop(lmkd, device_config_lmkd_native_swap_free_low_percentage_prop)
