@@ -15,19 +15,12 @@
 
 cc_library_shared {
     name: "libshims_binder",
-    proprietary: true,
-    defaults: ["hidl_defaults"],
+    shared_libs: ["libbinder", "libutils"],
     srcs: [
-        "libshims_binder.cpp",
+        "libbinder/IServiceManager.cpp",
+        "libbinder/PermissionCache.cpp",
     ],
-    cflags: [
-        "-Werror",
-        "-Wextra",
-        "-Wall",
-    ],
-    shared_libs: [
-        "libutils",
-    ],
+    vendor: true
 }
 
 // libandroid
