@@ -7,7 +7,6 @@ allow ueventd wifi_vendor_data_file:file r_file_perms;
 allow ueventd self:capability kill;
 
 allow ueventd debugfs:dir { r_dir_perms relabelfrom };
-allow ueventd qti_debugfs:dir { relabelto };
 
 allow ueventd {
     debugfs
