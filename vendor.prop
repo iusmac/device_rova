@@ -85,9 +85,9 @@ persist.vendor.audio.calfile7=/vendor/etc/acdbdata/QRD/QRD_workspaceFile.qwsp
 
 # Audio Fluence
 vendor.audio.feature.fluence.enable=true
-persist.vendor.audio.fluence.speaker=true
+persist.vendor.audio.fluence.speaker=false
 persist.vendor.audio.fluence.voicecall=true
-persist.vendor.audio.fluence.voicecomm=true
+persist.vendor.audio.fluence.voicecomm=false
 persist.vendor.audio.fluence.voicerec=false
 ro.vendor.audio.sdk.fluencetype=fluence
 
