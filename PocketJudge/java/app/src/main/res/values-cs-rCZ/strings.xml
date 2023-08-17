@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+      <string name="pocket_judge_title">Detekce uložení vu00a0kapse</string>
+      <string name="pocket_judge_summary">Blokovat obrazovku au00a0hardwarová tlačítka, když je zařízení vu00a0kapse</string>
+      <string name="pocket_judge_notif_title">Režim vu00a0kapse je zapnutý</string>
+      <string name="pocket_judge_notif_msg">Stisknutím au00a0podržením tlačítka napájení zapnout obrazovku</string>
+      <string name="pocket_judge_demo_title_cancel">Pro použití telefonu:</string>
+      <string name="pocket_judge_demo_tag_cancel">Zkontrolujte, zda je modrá oblast zařízení bez jakýchkoliv překážek a\u00a0vyčistěte případné nečistoty nebo prach.</string>
+      <string name="pocket_judge_demo_tag_cancel2">Dlouhým stiskem tlačítka Napájení vynutíte ukončení režimu v\u00a0kapse.</string>
+</resources>

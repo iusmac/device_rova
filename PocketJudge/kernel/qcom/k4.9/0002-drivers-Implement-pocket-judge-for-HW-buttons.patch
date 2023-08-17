@@ -1,0 +1,225 @@
+From cef4146f7fd9743e10cca06a13055944c09ec267 Mon Sep 17 00:00:00 2001
+From: iusmac <iusico.maxim@libero.it>
+Date: Sat, 8 Oct 2022 14:59:35 +0200
+Subject: [PATCH 2/2] drivers: Implement pocket judge for HW buttons
+
+* ignore reporting of all HW buttons (power, vol+/vol- etc.) in-pocket.
+* also implement "safe door" to force exit pocket lock within 2sec.
+  press on power button.
+
+Signed-off-by: iusmac <iusico.maxim@libero.it>
+---
+ drivers/input/keyboard/gpio_keys.c | 10 +++++++
+ drivers/input/misc/qpnp-power-on.c | 32 ++++++++++++++++++++
+ drivers/input/pocket-judge.c       | 48 +++++++++++++++++++++++-------
+ drivers/input/pocket-judge.h       | 19 ++++++++++++
+ 4 files changed, 99 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/input/pocket-judge.h
+
+diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
+index 9b8079ca0fb4..f67fb323aa26 100644
+--- a/drivers/input/keyboard/gpio_keys.c
++++ b/drivers/input/keyboard/gpio_keys.c
+@@ -33,6 +33,10 @@
+ #include <linux/of_irq.h>
+ #include <linux/spinlock.h>
+ 
++#ifdef CONFIG_POCKET_JUDGE
++#include "../pocket-judge.h"
++#endif
++
+ struct gpio_button_data {
+ 	const struct gpio_keys_button *button;
+ 	struct input_dev *input;
+@@ -369,6 +373,12 @@ static void gpio_keys_gpio_report_event(struct gpio_button_data *bdata)
+ 		return;
+ 	}
+ 
++#ifdef CONFIG_POCKET_JUDGE
++	if (pocket_judge_isInPocket()) {
++		return;
++	}
++#endif /* CONFIG_POCKET_JUDGE */
++
+ 	if (type == EV_ABS) {
+ 		if (state)
+ 			input_event(input, type, button->code, button->value);
+diff --git a/drivers/input/misc/qpnp-power-on.c b/drivers/input/misc/qpnp-power-on.c
+index 65379ed8ed35..f854cb05832f 100644
+--- a/drivers/input/misc/qpnp-power-on.c
++++ b/drivers/input/misc/qpnp-power-on.c
+@@ -35,6 +35,10 @@
+ #include <linux/qpnp/qpnp-misc.h>
+ #include <linux/power_supply.h>
+ 
++#ifdef CONFIG_POCKET_JUDGE
++#include "../pocket-judge.h"
++#endif
++
+ #define PMIC_VER_8941           0x01
+ #define PMIC_VERSION_REG        0x0105
+ #define PMIC_VERSION_REV4_REG   0x0103
+@@ -157,6 +161,11 @@
+ 
+ #define QPNP_POFF_REASON_UVLO			13
+ 
++#ifdef CONFIG_POCKET_JUDGE
++static bool pwrkey_pressed = false;
++static ktime_t pwrkey_duration;
++#endif /* CONFIG_POCKET_JUDGE */
++
+ enum qpnp_pon_version {
+ 	QPNP_PON_GEN1_V1,
+ 	QPNP_PON_GEN1_V2,
+@@ -936,6 +945,7 @@ qpnp_pon_input_dispatch(struct qpnp_pon *pon, u32 pon_type)
+ 	u32 key_status;
+ 	uint pon_rt_sts;
+ 	u64 elapsed_us;
++	bool skip_report = false;
+ 
+ 	cfg = qpnp_get_cfg(pon, pon_type);
+ 	if (!cfg)
+@@ -987,6 +997,28 @@ qpnp_pon_input_dispatch(struct qpnp_pon *pon, u32 pon_type)
+ 			pon->kpdpwr_last_release_time = ktime_get();
+ 	}
+ 
++#ifdef CONFIG_POCKET_JUDGE
++	if (cfg->key_code == KEY_POWER) {
++		if (!pwrkey_pressed) { // pressed
++			pwrkey_duration = ktime_get();
++		} else { // released
++			elapsed_us = ktime_us_delta(ktime_get(), pwrkey_duration);
++			// Open safe door to exit pocket lock if held for at least 2s
++			if (pocket_judge_isInPocket() &&
++					elapsed_us >= (2 * 1000 * 1000)) {
++				pocket_judge_forceDisable();
++				// Skip key release reporting to avoid unwanted actions from OS
++				// due to long press
++				skip_report = true;
++			}
++		}
++		pwrkey_pressed ^= 1;
++	}
++	if (skip_report || pocket_judge_isInPocket()) {
++		return 0;
++	}
++#endif /* CONFIG_POCKET_JUDGE */
++
+ 	/*
+ 	 * simulate press event in case release event occurred
+ 	 * without a press event
+diff --git a/drivers/input/pocket-judge.c b/drivers/input/pocket-judge.c
+index cafefd4b426c..c5fb974f36cc 100644
+--- a/drivers/input/pocket-judge.c
++++ b/drivers/input/pocket-judge.c
+@@ -1,5 +1,6 @@
+ /*
+  * Copyright 2017 Paranoid Android
++ *			 2022 iusmac <iusico.maxim@libero.it>
+  *
+  * The code contained herein is licensed under the GNU General Public
+  * License. You may obtain a copy of the GNU General Public License
+@@ -14,6 +15,8 @@
+ #include <linux/init.h>
+ #include <linux/string.h>
+ 
++#include "pocket-judge.h"
++
+ /**
+  * This driver maintains a sysfs interface used by the pocket bridge system
+  * service. It enables and disables interrupts based on pocket state to
+@@ -23,31 +26,56 @@
+  * @hide
+  */
+ 
++static char pocket_judge_inpocket_state = '0';
+ static bool pocket_judge_inpocket = false;
+-EXPORT_SYMBOL(pocket_judge_inpocket);
+ 
+ static void pocket_judge_update(void)
+ {
+ }
+ 
++bool pocket_judge_isInPocket(void) {
++	return pocket_judge_inpocket;
++}
++
++void pocket_judge_forceDisable(void) {
++	pocket_judge_inpocket = false;
++	// SPECIAL STATE: can only be set internally (ex. by power button driver)
++	// to notify clients that "safe door" to exit pocket lock was triggered.
++	pocket_judge_inpocket_state = '2';
++	pocket_judge_update();
++}
++
+ static ssize_t inpocket_show(struct device *dev, struct device_attribute *attr,
+ 			     char *buf)
+ {
+-	return sprintf(buf, "%u\n", pocket_judge_inpocket);
++	return sprintf(buf, "%c\n", pocket_judge_inpocket_state);
+ }
+ 
+ static ssize_t inpocket_store(struct device *dev, struct device_attribute *attr,
+-			      const char *buf, size_t size)
++			      const char *val, size_t size)
+ {
+-	bool state;
+-	ssize_t ret;
+-
+-	ret = strtobool(buf, &state);
+-	if (ret)
++    if (!val)
+ 		return size;
+ 
+-	if (pocket_judge_inpocket != state) {
+-		pocket_judge_inpocket = state;
++	switch (val[0]) {
++		case '0': // disable in-pocket
++			// Save disabled (neutral) state and return here as we're in
++			// special state.
++			if (pocket_judge_inpocket_state == '2') {
++				pocket_judge_inpocket_state = val[0];
++				return size;
++			}
++			pocket_judge_inpocket = false;
++			break;
++		case '1': // enable in-pocket
++			pocket_judge_inpocket = true;
++			break;
++		default:
++			return size;
++	}
++
++	if (pocket_judge_inpocket_state != val[0]) {
++		pocket_judge_inpocket_state = val[0];
+ 		pocket_judge_update();
+ 	}
+ 
+diff --git a/drivers/input/pocket-judge.h b/drivers/input/pocket-judge.h
+new file mode 100644
+index 000000000000..f7411331e7fb
+--- /dev/null
++++ b/drivers/input/pocket-judge.h
+@@ -0,0 +1,19 @@
++/*
++ * Copyright 2017 Paranoid Android
++ *           2022 iusmac <iusico.maxim@libero.it>
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++
++#ifndef _POCKET_JUDGE_H_
++#define _POCKET_JUDGE_H_
++
++bool pocket_judge_isInPocket(void);
++void pocket_judge_forceDisable(void);
++
++#endif /* _POCKET_JUDGE_H_ */
+-- 
+2.32.0
+
