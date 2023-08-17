@@ -80,15 +80,6 @@
     <!-- Misc -->
     <string name="not_now">"Để sau"</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Phát hiện khi trong túi</string>
-    <string name="pocket_judge_summary">Chặn màn hình và các nút bấm khi thiết bị ở trong túi</string>
-    <string name="pocket_judge_notif_title">Chế độ bỏ túi đang bật</string>
-    <string name="pocket_judge_notif_msg">Bấm và giữ nút nguồn để mở khoá</string>
-    <string name="pocket_judge_demo_title_cancel">Để sử dụng điện thoại của bạn:</string>
-    <string name="pocket_judge_demo_tag_cancel">Đảm bảo không có vật cản nào trên vùng màu xanh của điện thoại và làm sạch bụi bẩn.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Nhấn giữ nút nguồn để buộc thoát khỏi chế độ bỏ túi.</string>
-
     <!-- UiBench -->
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>

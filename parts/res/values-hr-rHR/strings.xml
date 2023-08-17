@@ -61,10 +61,6 @@
     <!-- Misc -->
     <string name="not_now">"Ne sada"</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Otkrivanje uređaja u džepu</string>
-    <string name="pocket_judge_summary">Blokirajte unose zaslona i tipki kad je uređaj u džepu</string>
-
     <!-- Audio amplification -->
     <string name="volume_gain_title">Glasnoća zvučnika / Glasnoća slušalica</string>
 </resources>

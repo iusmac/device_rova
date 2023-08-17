@@ -61,15 +61,6 @@
     <!-- Misc -->
     <string name="not_now">"Ara no"</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Detecció de butxaca</string>
-    <string name="pocket_judge_summary">Bloqueja les entrades de pantalla i de botó quan el dispositiu es troba a la butxaca</string>
-    <string name="pocket_judge_notif_title">El mode butxaca està activat</string>
-    <string name="pocket_judge_notif_msg">Prem i mantén el botó d’encesa per desbloquejar</string>
-    <string name="pocket_judge_demo_title_cancel">Per a utilitzar el teu telèfon:</string>
-    <string name="pocket_judge_demo_tag_cancel">Comprova si l\'àrea blava del teu telèfon està lliure d\'obstruccions i neteja tota la pols i brutícia.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Deixa premut el botó d\'encesa per a treure el mode butzaca de forma forçada.</string>
-
     <!-- RAM+ -->
     <string name="ramplus_mode_moderate">Moderat</string>
     <string name="ramplus_mode_slight">Lleuger</string>

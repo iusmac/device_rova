@@ -81,15 +81,6 @@
     <string name="not_now">"Teraz nie"</string>
     <string name="next_update_time">Nasledujúca aktualizácia: o %1$s</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Detekcia uloženia vo vrecku</string>
-    <string name="pocket_judge_summary">Blokovať obrazovku a hardvérové tlačidlá, keď je zariadenie vo vrecku</string>
-    <string name="pocket_judge_notif_title">Vreckový režim je zapnutý</string>
-    <string name="pocket_judge_notif_msg">Stlačte a podržte tlačidlo napájania pre odomknutie</string>
-    <string name="pocket_judge_demo_title_cancel">Ak chcete používať telefón:</string>
-    <string name="pocket_judge_demo_tag_cancel">Skontrolujte, či sa v modrej oblasti telefónu nenachádzajú žiadne prekážky, a očistite ho od nečistôt a prachu.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Dlhým stlačením tlačidla napájania vynútite ukončenie vreckového režimu.</string>
-
     <!-- Audio amplification -->
     <string name="volume_gain_label">Zosilnenie hlasitosti</string>
     <string name="volume_gain_summary">Zosilnenie reproduktoru / Zosilnenie slúchadiel / Zosilnenie mikrofónu</string>

@@ -27,7 +27,6 @@ import android.service.quicksettings.TileService;
 import org.lineageos.settings.soundcontrol.SoundControlSettings;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.smartcharging.SmartCharging;
-import org.lineageos.settings.pocketjudge.PocketJudge;
 import org.lineageos.settings.ramplus.RamPlusService;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
@@ -55,7 +54,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         );
         new SmartCharging(context).onBootCompleted();
         new DefaultSystemSettings(context).onBootCompleted();
-        new PocketJudge(context).onBootCompleted();
         TileService.requestListeningState(context, new ComponentName(context,
                     RamPlusService.class));
 

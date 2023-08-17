@@ -80,15 +80,6 @@
     <!-- Misc -->
     <string name="not_now">"Teď ne"</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Detekce uložení vu00a0kapse</string>
-    <string name="pocket_judge_summary">Blokovat obrazovku au00a0hardwarová tlačítka, když je zařízení vu00a0kapse</string>
-    <string name="pocket_judge_notif_title">Režim vu00a0kapse je zapnutý</string>
-    <string name="pocket_judge_notif_msg">Stisknutím au00a0podržením tlačítka napájení zapnout obrazovku</string>
-    <string name="pocket_judge_demo_title_cancel">Pro použití telefonu:</string>
-    <string name="pocket_judge_demo_tag_cancel">Zkontrolujte, zda je modrá oblast zařízení bez jakýchkoliv překážek a\u00a0vyčistěte případné nečistoty nebo prach.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Dlouhým stiskem tlačítka Napájení vynutíte ukončení režimu v\u00a0kapse.</string>
-
     <!-- Audio amplification -->
     <string name="volume_gain_label">Zesílení hlasitosti</string>
     <string name="volume_gain_summary">Zesílení reproduktoru / Zesílení sluchátek / Zesílení mikrofonu</string>

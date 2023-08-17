@@ -60,9 +60,6 @@
 
     <!-- Misc -->
     <string name="not_now">"Ei nyt"</string>
-    <string name="pocket_judge_demo_title_cancel">To use your phone:</string>
-    <string name="pocket_judge_demo_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Long press the power button to force quit pocket mode.</string>
 
     <!-- Audio amplification -->
     <string name="volume_gain_label">Äänenvoimakkuuden lisäys</string>

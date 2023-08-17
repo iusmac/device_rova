@@ -80,15 +80,6 @@
     <!-- Misc -->
     <string name="not_now">"Όχι τώρα"</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Ανίχνευση τσέπης</string>
-    <string name="pocket_judge_summary">Μπλοκάρισμα οθόνης και πλήκτρων όταν η συσκευή είναι στην τσέπη</string>
-    <string name="pocket_judge_notif_title">Η λειτουργία τσέπης είναι ενεργοποιημένη</string>
-    <string name="pocket_judge_notif_msg">Πατήστε παρατεταμένα το κουμπί λειτουργίας για ξεκλείδωμα</string>
-    <string name="pocket_judge_demo_title_cancel">Για να χρησιμοποιήσετε το τηλέφωνό σας:</string>
-    <string name="pocket_judge_demo_tag_cancel">Ελέγξτε εάν η μπλε περιοχή του τηλεφώνου σας είναι καθαρή από τυχόν εμπόδια, και καθαρίστε τη βρωμιά ή τη σκόνη.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Πατήστε παρατεταμένα το κουμπί λειτουργίας για αναγκαστική έξοδο από τη λειτουργία τσέπης.</string>
-
     <!-- UiBench -->
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>

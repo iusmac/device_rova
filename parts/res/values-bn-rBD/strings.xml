@@ -75,7 +75,4 @@
     <string name="smart_charging_reset_stats_title">ব্যাটারির পরিসংখ্যান রিসেট করুন</string>
     <string name="smart_charging_reset_stats_summary">ব্যবহারকারীর নির্ধারিত চার্জিং সীমা পৌঁছানোর পরে ব্যাটারি পরিসংখ্যান পুনরায় চালু</string>
     <string name="smart_charging_footer">স্মার্ট চার্জিং আপনাকে ব্যাটারির আয়ু বাড়ানোর জন্য সর্বোচ্চ চার্জিং লেভেল সেট করতে দেয়। সক্রিয় করা হলে, ব্যাটারি স্টপ ট্রিগার লেভেলে চার্জ করা বন্ধ করে এবং স্টার্ট ট্রিগার লেভেলে চার্জিং আবার শুরু করে। স্টপ ট্রিগার লেভেল সবসময় স্টার্ট ট্রিগার লেভেলের চেয়ে বড় হওয়া উচিত।.</string>
-    <string name="pocket_judge_demo_title_cancel">To use your phone:</string>
-    <string name="pocket_judge_demo_tag_cancel">Check if the blue area of your phone is clear of any obstructions, and clean off any dirt or dust.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Long press the power button to force quit pocket mode.</string>
 </resources>

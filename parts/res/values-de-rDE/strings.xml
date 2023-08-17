@@ -81,15 +81,6 @@
     <string name="not_now">"Später"</string>
     <string name="next_update_time">Nächste Aktualisierung um %1$s Uhr</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Taschenerkennung</string>
-    <string name="pocket_judge_summary">Bildschirm- und Tasteneingaben blockieren, wenn das Gerät in der Tasche steckt</string>
-    <string name="pocket_judge_notif_title">Taschenmodus aktiviert</string>
-    <string name="pocket_judge_notif_msg">Zum Entsperren Ein-/Aus-Taste gedrückt halten</string>
-    <string name="pocket_judge_demo_title_cancel">Um das Gerät zu verwenden:</string>
-    <string name="pocket_judge_demo_tag_cancel">Vergewissere dich, dass die blau dargestellte Zone nicht blockiert ist und reinige sie gegebenenfalls.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Ein-/Aus-Taste gedrückt halten, um den Taschenmodus zu beenden.</string>
-
     <!-- Audio amplification -->
     <string name="volume_gain_label">Lautstärke Verstärkung</string>
     <string name="volume_gain_summary">Lautsprecher Verstärker / Kopfhörerverstärker / Mikrofon Verstärkung</string>

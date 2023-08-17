@@ -80,15 +80,6 @@
     <!-- Misc -->
     <string name="not_now">"Mitte kohe"</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Taskutuvastus</string>
-    <string name="pocket_judge_summary">Blokeeri ekraan ja nupusisendid, kui seade on taskus</string>
-    <string name="pocket_judge_notif_title">Taskurežiim on sees</string>
-    <string name="pocket_judge_notif_msg">Avamiseks vajuta ja hoia all toitenuppu</string>
-    <string name="pocket_judge_demo_title_cancel">Telefoni kasutamiseks:</string>
-    <string name="pocket_judge_demo_tag_cancel">Kontrolli, et sinu telefoni sinine ala on takistustest vaba ning eemalda mistahes tolm või mustus.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Taskurežiimist sundväljumiseks vajuta pikalt toitenuppu.</string>
-
     <!-- RAM+ -->
     <string name="ramplus_mode_moderate">Mõõdukas</string>
     <string name="ramplus_mode_slight">Kerge</string>

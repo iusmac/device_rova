@@ -87,15 +87,6 @@
     <string name="not_now">"Не сейчас"</string>
     <string name="next_update_time">Следующее обновление: в %1$s</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Режим "В кармане"</string>
-    <string name="pocket_judge_summary">Блокировать экран и кнопки, когда устройство находится в кармане</string>
-    <string name="pocket_judge_notif_title">Режим "В кармане" включен</string>
-    <string name="pocket_judge_notif_msg">Нажмите и удерживайте кнопку питания, чтобы разблокировать</string>
-    <string name="pocket_judge_demo_title_cancel">Чтобы использовать ваш телефон:</string>
-    <string name="pocket_judge_demo_tag_cancel">Проверьте, чтобы синяя зона Вашего телефона была очищена от каких-либо предметов или протрите её.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Долгое нажатие на кнопку включения для принудительного выхода из режима \"В кармане\".</string>
-
     <!-- Audio amplification -->
     <string name="volume_gain_label">Увеличение громкости</string>
     <string name="volume_gain_summary">Усиление динамиков / Усиление наушников / Усиление микрофона</string>

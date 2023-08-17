@@ -62,10 +62,6 @@
     <string name="not_now">"Ne zdaj"</string>
     <string name="next_update_time">Naslednja posodobitev ob %1$s</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Zaznavanje žepa</string>
-    <string name="pocket_judge_summary">Blokiraj zaslon in vnose gumbov, ko je naprava v žepu</string>
-
     <!-- Audio amplification -->
     <string name="volume_gain_label">Ojačanje glasnosti</string>
     <string name="volume_gain_summary">Ojačanje zvočnika / Ojačanje slušalk / Ojačanje mikrofona</string>

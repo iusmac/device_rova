@@ -81,15 +81,6 @@
     <string name="not_now">"Nu acum"</string>
     <string name="next_update_time">Următoarea actualizare: în %1$s</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Detectare buzunar</string>
-    <string name="pocket_judge_summary">Blocare ecran și butoane atunci când dispozitivul este în buzunar</string>
-    <string name="pocket_judge_notif_title">Modul buzunar este pornit</string>
-    <string name="pocket_judge_notif_msg">Apăsați și țineți apăsat butonul de alimentare pentru a debloca</string>
-    <string name="pocket_judge_demo_title_cancel">Pentru a folosi telefonul:</string>
-    <string name="pocket_judge_demo_tag_cancel">Verificaţi dacă zona albastră a telefonului dumneavoastră nu are nici un fel de obstrucţii şi ştergeţi orice noroi sau praf.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Apăsați lung butonul de pornire pentru a forța ieșirea din modul buzunar.</string>
-
     <!-- RAM+ -->
     <string name="ramplus_mode_moderate">Moderat</string>
     <string name="ramplus_mode_slight">Slab</string>

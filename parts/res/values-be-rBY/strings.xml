@@ -80,13 +80,4 @@
     <!-- Misc -->
     <string name="not_now">"Не цяпер"</string>
     <string name="next_update_time">Наступнае абнаўленне: а %1$s</string>
-
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Рэжым "У кішэні"</string>
-    <string name="pocket_judge_summary">Блакаваць экран і кнопкі, калі прылада знаходзіцца ў кішэні</string>
-    <string name="pocket_judge_notif_title">Рэжым "У кішэні" уключаны</string>
-    <string name="pocket_judge_notif_msg">Націсніце і ўтрымлівайце кнопку сілкавання, каб разблакаваць</string>
-    <string name="pocket_judge_demo_title_cancel">Для выкарыстання тэлефона:</string>
-    <string name="pocket_judge_demo_tag_cancel">Праверце, ці не закрыта сіняя вобласць вашага тэлефона якімі-небудзь прадметамі, і ачысціце ад бруду або пылу.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Доўгі націск кнопкі сілкавання для прымусовага выхаду з рэжыму \"У кішэні\".</string>
 </resources>

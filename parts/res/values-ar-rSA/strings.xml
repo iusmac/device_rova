@@ -81,15 +81,6 @@
     <string name="not_now">"ليس الآن"</string>
     <string name="next_update_time">التحديث التالي: في %1$s</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">إستشعار الجيب</string>
-    <string name="pocket_judge_summary">الغاء تفعيل الشاشة و أزرار الإدخال عندما يكون الجهاز في الجيب</string>
-    <string name="pocket_judge_notif_title">وضع الجيب قيد التشغيل</string>
-    <string name="pocket_judge_notif_msg">اضغط مع الاستمرار على زر الطاقة ﻹلغاء القفل</string>
-    <string name="pocket_judge_demo_title_cancel">لاستخدام هاتفك:</string>
-    <string name="pocket_judge_demo_tag_cancel">تحقق مما إذا كانت المنطقة الزرقاء في هاتفك خالية من أي عرقلة، وقم بتنظيف أي تراب أو غبار.</string>
-    <string name="pocket_judge_demo_tag_cancel2">اضغط مطولاً على زر الطاقة لفرض الخروج عن وضع الجيب.</string>
-
     <!-- UiBench -->
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>

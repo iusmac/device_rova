@@ -87,15 +87,6 @@
     <string name="not_now">"Non ora"</string>
     <string name="next_update_time">Prossimo aggiornamento alle %1$s</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Rilevamento in tasca</string>
-    <string name="pocket_judge_summary">Blocca lo schermo e gli input dei pulsanti quando il dispositivo è nella tasca</string>
-    <string name="pocket_judge_notif_title">La modalità tasca è attiva</string>
-    <string name="pocket_judge_notif_msg">Tieni premuto il tasto di accensione per sbloccare</string>
-    <string name="pocket_judge_demo_title_cancel">Per utilizzare il telefono:</string>
-    <string name="pocket_judge_demo_tag_cancel">Controlla se l\'area evidenziata in blu del telefono è libera da eventuali ostruzioni, e pulire sporco o polvere.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Tieni premuto il pulsante di accensione per forzare la chiusura della modalità tasca.</string>
-
     <!-- Audio amplification -->
     <string name="volume_gain_label">Guadagno volume</string>
     <string name="volume_gain_summary">Guadagno altoparlanti / Guadagno suono cuffie / Guadagno microfono</string>

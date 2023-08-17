@@ -81,15 +81,6 @@
     <string name="not_now">"Ahora no"</string>
     <string name="next_update_time">Próxima actualización a las %1$s</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Detección de bolsillo</string>
-    <string name="pocket_judge_summary">Bloquear pantalla y botones cuando el dispositivo esté en un bolsillo</string>
-    <string name="pocket_judge_notif_title">Modo bolsillo activado</string>
-    <string name="pocket_judge_notif_msg">Mantén pulsado el botón de encendido para desbloquear</string>
-    <string name="pocket_judge_demo_title_cancel">Para usar su teléfono:</string>
-    <string name="pocket_judge_demo_tag_cancel">Compruebe si la zona azul de su teléfono está libre de cualquier obstrucción, y limpie cualquier suciedad o polvo.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Mantén pulsado el botón encendido para forzar el apagado del modo bolsillo.</string>
-
     <!-- Audio amplification -->
     <string name="volume_gain_label">Ganancia de Volumen</string>
     <string name="volume_gain_summary">Ganancia del Altavoz / Ganancia de auriculares / Ganancia del Micrófono</string>

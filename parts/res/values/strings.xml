@@ -109,17 +109,6 @@
     <string name="not_now">Not now</string>
     <string name="next_update_time">Next update at %1$s</string>
 
-    <!-- Pocket Judge -->
-    <string name="pocket_judge_title">Pocket detection</string>
-    <string name="pocket_judge_summary">Block screen and button inputs when device is in pocket</string>
-    <string name="pocket_judge_notif_title">Pocket mode is on</string>
-    <string name="pocket_judge_notif_msg">Press and hold power button to unlock</string>
-    <string name="pocket_judge_demo_title_cancel">To activate your phone:</string>
-    <string name="pocket_judge_demo_tag_cancel">Do not cover the blue area of your phone, and clean any dirt or dust off.</string>
-    <string name="pocket_judge_demo_tag_cancel2">Long press the power button to force quit pocket mode</string>
-    <string name="pocket_judge_demo_tag_number1">1.\u0020</string>
-    <string name="pocket_judge_demo_tag_number2">2.\u0020</string>
-
     <!-- UiBench -->
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>
