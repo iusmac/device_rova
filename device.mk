@@ -321,6 +321,10 @@ PRODUCT_COPY_FILES += \
 TARGET_BOARD_PLATFORM := msm8937
 TARGET_BOARD_SUFFIX := _64
 
+# PocketJudge
+PRODUCT_PACKAGES += \
+    PocketJudge
+
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power-service.xiaomi_rova-libperfmgr \
