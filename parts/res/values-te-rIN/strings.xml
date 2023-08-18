@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">ఆధునిక సెట్టింగులు</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi శబ్ద మెరుగుదల సాధనం</string>
     <string name="dirac_summary">ఆడియో నాణ్యతను అనుకూలపరచండి</string>

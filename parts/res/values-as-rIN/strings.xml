@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">এডভান্স ছেটিংসমূহ</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi ধ্বনি পৰিবৰ্ধক</string>
     <string name="dirac_summary">অডিঅ\' গুণমান অনুকূলিত কৰক</string>

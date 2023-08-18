@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">ବିକଶିତ ସେଟିଙ୍ଗ୍ସ</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi ଧ୍ୱନୀ ବର୍ଦ୍ଧକ</string>
     <string name="dirac_summary">ଅଡିଓ ଗୁଣବତ୍ତା ଅପ୍ଟିମାଇଜ୍‌ କରନ୍ତୁ</string>

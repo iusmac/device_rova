@@ -18,6 +18,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">Speciális beállítások</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi Hangjavítás</string>
     <string name="dirac_summary">Hangminőség optimalizálása</string>

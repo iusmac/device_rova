@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -308,5 +309,11 @@ public class PartsUtils {
             }
         });
         sToast.show();
+    }
+
+    public static boolean isDevelopmentSettingsEnabled(Context context) {
+        return Settings.Global.getInt(context.getContentResolver(),
+                Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
+                Build.TYPE.equals("eng") ? 1 : 0) != 0;
     }
 }

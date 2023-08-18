@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">ಸುಧಾರಿತ ಸೆಟ್ಟಿಂಗ್ಸ್</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi ಧ್ವನಿ ಎನ್‌ಹ್ಯಾನ್ಸರ್‌‌</string>
     <string name="dirac_summary">ಆಡಿಯೊ ಗುಣಮಟ್ಟ ಆಪ್ಟಿಮೈಸ್ ಮಾಡಿ</string>

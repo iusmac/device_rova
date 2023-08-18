@@ -17,7 +17,10 @@ android_app {
 
     static_libs: [
         "androidx.core_core",
-        "org.lineageos.settings.resources",
+        "SettingsLibCollapsingToolbarBaseActivity",
+        "SettingsLibIllustrationPreference",
+        "SettingsLibMainSwitchPreference",
+        "SettingsLibFooterPreference",
         "org.lineageos.platform.internal",
     ],
 

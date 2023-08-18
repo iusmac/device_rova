@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">વિગતવાર સેટિંગ્સ</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi સાઉન્ડ એન્હાંસર</string>
     <string name="dirac_summary">ઑડિયો ગુણવત્તા ઑપ્ટિમાઇઝ કરો</string>

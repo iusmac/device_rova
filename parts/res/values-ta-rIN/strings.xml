@@ -17,6 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">மேம்பட்ட அமைப்புகள்</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi சவுண்ட் என்ஹேன்சர்</string>
     <string name="dirac_summary">ஆடியோ தரத்தை மேம்படுத்து</string>

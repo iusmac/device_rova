@@ -18,6 +18,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">Cài đặt nâng cao</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Tăng cường Mi Sound</string>
     <string name="dirac_summary">Tối ưu chất lượng âm thanh</string>

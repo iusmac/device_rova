@@ -17,6 +17,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">تنظیمات پیشرفته</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">تقویت‌کننده صدای Mi</string>
     <string name="dirac_summary">بهینه‌سازی کیفیت صدا</string>

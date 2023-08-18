@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">Parametra të përparuar</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Përmirësues zëri Mi</string>
     <string name="dirac_summary">Optimizo kualitetin e zërit</string>

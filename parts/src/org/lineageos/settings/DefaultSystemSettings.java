@@ -28,8 +28,6 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
-import com.android.settingslib.development.DevelopmentSettingsEnabler;
-
 import lineageos.providers.LineageSettings;
 
 public class DefaultSystemSettings {
@@ -191,8 +189,7 @@ public class DefaultSystemSettings {
         // Respect "Accessibility -> Remove animations" option
         canSetAnimationValues &= !allAnimationsDisabled;
         // Respect "Developer options" preference
-        canSetAnimationValues &= !DevelopmentSettingsEnabler
-            .isDevelopmentSettingsEnabled(mContext);
+        canSetAnimationValues &= !PartsUtils.isDevelopmentSettingsEnabled(mContext);
 
         if (canSetAnimationValues) {
             for (String animationSetting : toggleAnimationTargets) {

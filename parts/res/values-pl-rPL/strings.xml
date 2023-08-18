@@ -18,6 +18,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">Ustawienia zaawansowane</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Ulepszanie dźwięku Mi</string>
     <string name="dirac_summary">Optymalizuj jakość dźwięku</string>

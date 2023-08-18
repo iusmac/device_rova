@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">सुधारीत सेटिंग्स</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi ध्वनी वर्धक</string>
     <string name="dirac_summary">अॉडिओ गुणवत्ता अनुकूल करा</string>

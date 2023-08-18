@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">നൂതനമായ ക്രമീകരണം</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi ശബ്ദ എൻഹാൻസർ</string>
     <string name="dirac_summary">ഓഡിയോ ഗുണനിലവാരം ഒപ്റ്റിമൈസുചെയ്യുക</string>

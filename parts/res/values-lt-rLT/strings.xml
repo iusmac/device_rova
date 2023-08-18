@@ -17,6 +17,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">Papildomi nustatymai</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">„Mi garso pagerinimas“</string>
     <string name="dirac_summary">Optimizuoti garso kokybę</string>

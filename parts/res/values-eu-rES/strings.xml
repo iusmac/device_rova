@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">Ezarpen aurreratuak</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi Soinu indartzailea</string>
     <string name="dirac_summary">Audio kalitatea optimizatu</string>

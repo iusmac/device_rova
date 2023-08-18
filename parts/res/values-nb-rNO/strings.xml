@@ -17,6 +17,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">Avanserte innstillinger</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Mi Lydforbedrer</string>
     <string name="dirac_summary">Optimaliser lydkvaliteten</string>

@@ -16,6 +16,9 @@
      limitations under the License.
 -->
 <resources>
+    <!-- Device specific settings -->
+    <string name="device_settings_app_name">Axustes avanzados</string>
+
     <!-- Dirac settings -->
     <string name="dirac_title">Potenciador Mi Sound</string>
     <string name="dirac_summary">Optimizar a calidade do son</string>
