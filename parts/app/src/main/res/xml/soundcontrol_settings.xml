@@ -13,8 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:key="audio">
@@ -23,7 +22,7 @@
             android:defaultValue="-10"
             android:key="volume_gain"
             android:max="20"
-            app:min="-84"
+            android:min="-84"
             android:icon="@drawable/ic_speaker"
             android:title="@string/volume_gain_title" />
 
@@ -31,7 +30,7 @@
             android:defaultValue="0"
             android:key="microphone_gain"
             android:max="20"
-            app:min="-10"
+            android:min="-10"
             android:icon="@drawable/ic_mic"
             android:title="@string/microphone_gain_title" />
     </PreferenceCategory>

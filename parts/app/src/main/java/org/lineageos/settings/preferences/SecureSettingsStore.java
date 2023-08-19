@@ -18,12 +18,9 @@
 package org.lineageos.settings.preferences;
 
 import android.content.ContentResolver;
-import android.preference.PreferenceDataStore;
 import android.provider.Settings;
 
-public class SecureSettingsStore extends androidx.preference.PreferenceDataStore
-        implements PreferenceDataStore {
-
+public class SecureSettingsStore extends androidx.preference.PreferenceDataStore {
     private final ContentResolver mContentResolver;
 
     public SecureSettingsStore(ContentResolver contentResolver) {

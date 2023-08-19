@@ -19,6 +19,7 @@ package org.lineageos.settings.dirac;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.UserHandle;
 import android.os.SystemClock;
 import android.view.KeyEvent;
@@ -33,7 +34,7 @@ public final class DiracUtils {
     protected DiracSound mDiracSound;
     private static DiracUtils mInstance;
     private MediaSessionManager mMediaSessionManager;
-    private Handler mHandler = new Handler();
+    private Handler mHandler = new Handler(Looper.myLooper());
     private Context mContext;
 
     public static DiracUtils getInstance() {

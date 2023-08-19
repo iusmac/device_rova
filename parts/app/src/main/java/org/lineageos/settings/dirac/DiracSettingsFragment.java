@@ -18,12 +18,13 @@ package org.lineageos.settings.dirac;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.Switch;
 
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.android.settingslib.widget.MainSwitchPreference;
@@ -31,7 +32,7 @@ import com.android.settingslib.widget.OnMainSwitchChangeListener;
 
 import org.lineageos.settings.R;
 
-public class DiracSettingsFragment extends PreferenceFragment implements
+public class DiracSettingsFragment extends PreferenceFragmentCompat implements
         Preference.OnPreferenceChangeListener, OnMainSwitchChangeListener {
 
     private static final String PREF_ENABLE = "dirac_enable";
@@ -44,7 +45,7 @@ public class DiracSettingsFragment extends PreferenceFragment implements
     private ListPreference mPreset;
 
     private DiracUtils mDiracUtils;
-    private Handler mHandler = new Handler();
+    private Handler mHandler = new Handler(Looper.myLooper());
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

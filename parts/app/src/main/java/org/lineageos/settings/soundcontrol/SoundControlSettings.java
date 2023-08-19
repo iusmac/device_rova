@@ -19,16 +19,16 @@ package org.lineageos.settings.soundcontrol;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.preference.PreferenceFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceFragmentCompat;
 
 import org.lineageos.settings.preferences.CustomSeekBarPreference;
 
 import org.lineageos.settings.PartsUtils;
 import org.lineageos.settings.R;
 
-public class SoundControlSettings extends PreferenceFragment implements
+public class SoundControlSettings extends PreferenceFragmentCompat implements
         Preference.OnPreferenceChangeListener {
 
     // NOTE: the kernel techpack audio driver implements speaker & headphone

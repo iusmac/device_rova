@@ -77,6 +77,6 @@ public class DiracSound extends AudioEffect {
         param[0] = DIRACSOUND_PARAM_EQ_LEVEL;
         param[1] = band;
         checkStatus(getParameter(param, value));
-        return new Float(new String(value)).floatValue();
+        return Float.valueOf(new String(value));
     }
 }

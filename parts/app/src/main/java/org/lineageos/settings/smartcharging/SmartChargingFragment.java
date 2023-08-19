@@ -26,7 +26,7 @@ import android.widget.Switch;
 
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.TwoStatePreference;
 
@@ -39,7 +39,7 @@ import org.lineageos.settings.PartsUtils;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
-public class SmartChargingFragment extends PreferenceFragment implements
+public class SmartChargingFragment extends PreferenceFragmentCompat implements
         Preference.OnPreferenceChangeListener, OnMainSwitchChangeListener {
     private final String TAG = getClass().getName();
 

@@ -52,7 +52,7 @@ public final class TileHandler extends Activity {
             // Detect QS long press action
             if (TileService.ACTION_QS_TILE_PREFERENCES.equals(intent.getAction())) {
                 final ComponentName qsTile =
-                    intent.getParcelableExtra(Intent.EXTRA_COMPONENT_NAME);
+                    intent.getParcelableExtra(Intent.EXTRA_COMPONENT_NAME, ComponentName.class);
                 final String qsName = qsTile.getClassName();
                 final Intent aIntent = new Intent();
 
