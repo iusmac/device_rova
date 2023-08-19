@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+      <string name="pocket_judge_title">تشخیص قرارگیری گوشی در جیب</string>
+      <string name="pocket_judge_summary">قطع عملکرد صفحه نمایش و دکمه‌های ورودی هنگامی که دستگاه در جیب است</string>
+      <string name="pocket_judge_notif_title">حالت جیب روشن است</string>
+      <string name="pocket_judge_notif_msg">کلید پاور را برای بازکردن فشار داده و نگه دارید</string>
+      <string name="pocket_judge_demo_title_cancel">برای استفاده از تلفن‌تان:</string>
+      <string name="pocket_judge_demo_tag_cancel">بررسی کنید که آیا قسمت آبی گوشی شما خالی از هرگونه مانع است یا خیر، و هرگونه کثیفی یا گرد و غبار را تمیز کنید.</string>
+      <string name="pocket_judge_demo_tag_cancel2">برای خروج اجباری از حالت جیبی، دکمه پاور را به مدت طولانی فشار دهید.</string>
+</resources>

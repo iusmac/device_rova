@@ -1,0 +1,154 @@
+From f2c397a473b2f68273fca26ea3ea6f493bfb4fec Mon Sep 17 00:00:00 2001
+From: Chris Lahaye <dev@chrislahaye.com>
+Date: Sun, 11 Jun 2017 03:34:00 +0300
+Subject: [PATCH 1/2] drivers: touchscreen: Introduce pocket judge
+
+This driver maintains a sysfs interface used by the pocket bridge system
+service. It enables and disables interrupts based on pocket state to
+optimize battery consumption in-pocket.
+
+Ticket: NOUGAT-49
+
+Change-Id: I75e8cbb38d780c77767e21667092a94c70df5cbf
+Signed-off-by: Chris Lahaye <dev@chrislahaye.com>
+idkhoiam322: add a separate config
+Signed-off-by: idkwhoiam322 <idkwhoiam322@raphielgang.org>
+Signed-off-by: iusmac <iusico.maxim@libero.it>
+---
+ drivers/input/Kconfig        |  8 ++++
+ drivers/input/Makefile       |  1 +
+ drivers/input/pocket-judge.c | 91 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 100 insertions(+)
+ create mode 100644 drivers/input/pocket-judge.c
+
+diff --git a/drivers/input/Kconfig b/drivers/input/Kconfig
+index 086ab8e91744..da7eb28d6524 100644
+--- a/drivers/input/Kconfig
++++ b/drivers/input/Kconfig
+@@ -200,6 +200,14 @@ config INPUT_KEYCOMBO
+ 	---help---
+ 	  Say Y here if you want to take action when some keys are pressed;
+ 
++config POCKET_JUDGE
++	bool "Pocket Judge"
++	depends on INPUT
++	default n
++	help
++	  Enables and disables interrupts based on pocket state to optimize
++	  battery consumption in-pocket.
++
+ comment "Input Device Drivers"
+ 
+ source "drivers/input/keyboard/Kconfig"
+diff --git a/drivers/input/Makefile b/drivers/input/Makefile
+index 334e3f34af5c..944708940685 100644
+--- a/drivers/input/Makefile
++++ b/drivers/input/Makefile
+@@ -5,6 +5,7 @@
+ # Each configuration option enables a list of files.
+ 
+ obj-$(CONFIG_INPUT)		+= input-core.o
++obj-$(CONFIG_POCKET_JUDGE)	+= pocket-judge.o
+ input-core-y := input.o input-compat.o input-mt.o ff-core.o
+ 
+ obj-$(CONFIG_INPUT_FF_MEMLESS)	+= ff-memless.o
+diff --git a/drivers/input/pocket-judge.c b/drivers/input/pocket-judge.c
+new file mode 100644
+index 000000000000..cafefd4b426c
+--- /dev/null
++++ b/drivers/input/pocket-judge.c
+@@ -0,0 +1,91 @@
++/*
++ * Copyright 2017 Paranoid Android
++ *
++ * The code contained herein is licensed under the GNU General Public
++ * License. You may obtain a copy of the GNU General Public License
++ * Version 2 or later at the following locations:
++ *
++ * http://www.opensource.org/licenses/gpl-license.html
++ * http://www.gnu.org/copyleft/gpl.html
++ */
++#include <linux/module.h>
++#include <linux/device.h>
++#include <linux/sysfs.h>
++#include <linux/init.h>
++#include <linux/string.h>
++
++/**
++ * This driver maintains a sysfs interface used by the pocket bridge system
++ * service. It enables and disables interrupts based on pocket state to
++ * optimize battery consumption in-pocket.
++ *
++ * @author Chris Lahaye
++ * @hide
++ */
++
++static bool pocket_judge_inpocket = false;
++EXPORT_SYMBOL(pocket_judge_inpocket);
++
++static void pocket_judge_update(void)
++{
++}
++
++static ssize_t inpocket_show(struct device *dev, struct device_attribute *attr,
++			     char *buf)
++{
++	return sprintf(buf, "%u\n", pocket_judge_inpocket);
++}
++
++static ssize_t inpocket_store(struct device *dev, struct device_attribute *attr,
++			      const char *buf, size_t size)
++{
++	bool state;
++	ssize_t ret;
++
++	ret = strtobool(buf, &state);
++	if (ret)
++		return size;
++
++	if (pocket_judge_inpocket != state) {
++		pocket_judge_inpocket = state;
++		pocket_judge_update();
++	}
++
++	return size;
++}
++
++static DEVICE_ATTR_RW(inpocket);
++
++static struct attribute *pocket_judge_class_attrs[] = {
++	&dev_attr_inpocket.attr,
++	NULL,
++};
++
++static const struct attribute_group pocket_judge_attr_group = {
++	.attrs = pocket_judge_class_attrs,
++};
++
++static struct kobject *pocket_judge_kobj;
++
++static int __init pocket_judge_init(void)
++{
++	ssize_t ret;
++
++	pocket_judge_kobj = kobject_create_and_add("pocket_judge", kernel_kobj);
++	if (!pocket_judge_kobj)
++		return -ENOMEM;
++
++	ret = sysfs_create_group(pocket_judge_kobj, &pocket_judge_attr_group);
++	if (ret)
++		kobject_put(pocket_judge_kobj);
++
++	return ret;
++}
++
++static void __exit pocket_judge_exit (void)
++{
++	kobject_put(pocket_judge_kobj);
++}
++
++module_init(pocket_judge_init);
++module_exit(pocket_judge_exit);
+-- 
+2.32.0
+

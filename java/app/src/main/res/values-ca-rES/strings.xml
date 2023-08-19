@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+      <string name="pocket_judge_title">Detecció de butxaca</string>
+      <string name="pocket_judge_summary">Bloqueja les entrades de pantalla i de botó quan el dispositiu es troba a la butxaca</string>
+      <string name="pocket_judge_notif_title">El mode butxaca està activat</string>
+      <string name="pocket_judge_notif_msg">Prem i mantén el botó d’encesa per desbloquejar</string>
+      <string name="pocket_judge_demo_title_cancel">Per a utilitzar el teu telèfon:</string>
+      <string name="pocket_judge_demo_tag_cancel">Comprova si l\'àrea blava del teu telèfon està lliure d\'obstruccions i neteja tota la pols i brutícia.</string>
+      <string name="pocket_judge_demo_tag_cancel2">Deixa premut el botó d\'encesa per a treure el mode butzaca de forma forçada.</string>
+</resources>

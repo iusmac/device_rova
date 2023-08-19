@@ -1,0 +1,95 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.github.iusmac.pocketjudge'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId 'com.github.iusmac.pocketjudge'
+        minSdk 31
+        targetSdk 33
+        versionCode 2
+        versionName '1.1'
+    }
+
+    signingConfigs {
+        platform {
+            storeFile file('platform.jks')
+            storePassword 'android'
+            keyAlias 'platform'
+            keyPassword 'android'
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            signingConfig signingConfigs.platform
+        }
+        release {
+            debuggable true
+            signingConfig signingConfigs.platform
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'src/main/proguard.flags'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_9
+        targetCompatibility JavaVersion.VERSION_1_9
+    }
+
+    tasks.withType(KotlinCompile).configureEach {
+        compilerOptions.jvmTarget = JvmTarget.JVM_9
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java/']
+        }
+    }
+
+    lintOptions {
+        disable 'ProtectedPermissions'
+    }
+}
+
+dependencies {
+    implementation libs.core
+    implementation libs.preference
+
+    implementation libs.hilt_android
+    kapt libs.hilt_compiler
+
+    implementation project(path: ':SettingsLib:CollapsingToolbarBaseActivity')
+    implementation project(path: ':SettingsLib:FooterPreference')
+    implementation project(path: ':SettingsLib:LayoutPreference')
+
+    constraints {
+        // This fixes the following error when compiling androidx libs, which
+        // explicitly depend on kotlin-stdlib-jdk7/8:
+        //
+        //     Duplicate class kotlin.collections.jdk8.CollectionsJDK8Kt found
+        //     in modules jetified-kotlin-stdlib-1.8.0
+        //
+        // This is because they are now part of kotlin-stdlib.
+        // See https://kotlinlang.org/docs/whatsnew18.html#updated-jvm-compilation-target
+        implementation('org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0') {
+            because('kotlin-stdlib-jdk7 is now a part of kotlin-stdlib')
+        }
+        implementation('org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0') {
+            because('kotlin-stdlib-jdk8 is now a part of kotlin-stdlib')
+        }
+    }
+}
+
+kapt {
+    correctErrorTypes true
+}

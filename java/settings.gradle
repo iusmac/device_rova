@@ -1,0 +1,24 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'PocketJudge'
+
+include ':app'
+include ':SettingsLib:CollapsingToolbarBaseActivity'
+include ':SettingsLib:FooterPreference'
+include ':SettingsLib:LayoutPreference'
+include ':SettingsLib:SettingsTheme'
+include ':SettingsLib:Utils'

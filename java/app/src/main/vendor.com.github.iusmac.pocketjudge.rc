@@ -1,0 +1,4 @@
+on post-fs
+    # Pocket Judge
+    chown system system /sys/kernel/pocket_judge/inpocket
+    chmod 664 /sys/kernel/pocket_judge/inpocket

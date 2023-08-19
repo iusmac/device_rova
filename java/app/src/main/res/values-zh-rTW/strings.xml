@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016-2022 crDroid Android Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+      <string name="pocket_judge_title">口袋防誤觸偵測</string>
+      <string name="pocket_judge_summary">當裝置位於口袋中時防止螢幕和按鍵輸入</string>
+      <string name="pocket_judge_notif_title">防誤觸模式已開啟</string>
+      <string name="pocket_judge_notif_msg">長按電源鍵以解鎖</string>
+      <string name="pocket_judge_demo_title_cancel">若要使用您的手機：</string>
+      <string name="pocket_judge_demo_tag_cancel">請確保藍色區域上沒有任何遮蔽物，且已清除任何灰塵、粉塵</string>
+      <string name="pocket_judge_demo_tag_cancel2">長按電源鍵來強制退出防誤觸模式</string>
+</resources>
