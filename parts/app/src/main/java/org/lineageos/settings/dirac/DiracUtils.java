@@ -16,6 +16,8 @@
 
 package org.lineageos.settings.dirac;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -26,6 +28,9 @@ import android.view.KeyEvent;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+
+import androidx.core.content.ContextCompat;
+
 import java.lang.IllegalArgumentException;
 import java.util.List;
 
@@ -54,11 +59,21 @@ public final class DiracUtils {
     }
 
     public void onBootCompleted() {
-        setEnabled(mDiracSound.getMusic() == 1);
-        mDiracSound.setHeadsetType(mDiracSound.getHeadsetType());
-        setLevel(getLevel());
+        postAlarmTask(/*minutes=*/ 1);
         mInstance = this;
     }
+
+    private void postAlarmTask(final int minutes) {
+        final AlarmManager am = ContextCompat.getSystemService(mContext, AlarmManager.class);
+
+        final Intent i = new Intent(mContext, DiracInitializer.class);
+        final PendingIntent pi = PendingIntent.getBroadcast(mContext, /*requestCode=*/ 0, i,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final long millis = (System.currentTimeMillis() / 1000L + minutes * 60) * 1000L;
+        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pi);
+    }
+
 
     protected void refreshPlaybackIfNecessary(){
         if (mMediaSessionManager == null) {
@@ -149,5 +164,9 @@ public final class DiracUtils {
 
     protected void setHeadsetType(int paramInt) {
          mDiracSound.setHeadsetType(paramInt);
+    }
+
+    protected int getHeadsetType() {
+        return mDiracSound.getHeadsetType();
     }
 }

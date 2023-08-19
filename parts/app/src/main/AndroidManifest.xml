@@ -89,6 +89,11 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name=".dirac.DiracInitializer"
+            android:exported="false">
+        </receiver>
+
         <activity
             android:name=".speaker.ClearSpeakerActivity"
             android:exported="true"
