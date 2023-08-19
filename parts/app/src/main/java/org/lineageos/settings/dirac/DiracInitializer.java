@@ -21,6 +21,7 @@ package org.lineageos.settings.dirac;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.service.quicksettings.TileService;
 import android.util.Log;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
@@ -39,5 +40,7 @@ public final class DiracInitializer extends BroadcastReceiver {
         mDiracUtils.setEnabled(mDiracUtils.isDiracEnabled());
         mDiracUtils.setHeadsetType(mDiracUtils.getHeadsetType());
         mDiracUtils.setLevel(mDiracUtils.getLevel());
+
+        DiracTileService.sync(context);
     }
 }
