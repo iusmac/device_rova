@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Asus-SDM660 Project
+ * Copyright (C) 2018,2023 The Asus-SDM660 Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,11 @@ public class SoundControlSettingsActivity extends CollapsingToolbarBaseActivity 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportFragmentManager().beginTransaction()
-            .replace(R.id.content_frame,  new SoundControlSettings())
-            .commit();
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.content_frame,
+                    new SoundControlSettings()).commit();
+        }
     }
 
     @Override
