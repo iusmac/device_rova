@@ -67,7 +67,9 @@ public class ClearSpeakerFragment extends PreferenceFragmentCompat implements
                 if (startPlaying()) {
                     mHandler.removeCallbacksAndMessages(null);
                     mHandler.postDelayed(() -> {
-                        stopPlaying();
+                        try {
+                            stopPlaying();
+                        } catch (IllegalStateException ignored) {}
                     }, 30000);
                     return true;
                 }
@@ -78,7 +80,9 @@ public class ClearSpeakerFragment extends PreferenceFragmentCompat implements
 
     @Override
     public void onStop() {
-        stopPlaying();
+        try {
+            stopPlaying();
+        } catch (IllegalStateException ignored) {}
         super.onStop();
     }
 
