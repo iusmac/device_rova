@@ -1,4 +1,5 @@
 # All unpinned blobs below are extracted from LA.UM.9.6.3.r1-06200-89xx.0 (4.9)
+# FP3 Package version: FP3-REL-6.A.018.0-gms-1f4b2a90-user
 # PAN Package version: Nokia/Panther_00WW/PAN_sprout:11/RKQ1.200928.002/00WW_3_240:user/release-keys
 # olive Package version: Xiaomi/olive/olive:10/QKQ1.191014.001/V12.5.1.0.QCNCNXM:user/release-keys
 # olive Pie Package version: olive-user 9 PKQ1.190319.001 V11.0.11.0.PCNMIXM release-keys
@@ -1159,7 +1160,7 @@ vendor/lib64/vendor.qti.hardware.radio.uim_remote_server@1.0.so
 # Telephony (ATFWD)
 -system_ext/app/atfwd/atfwd.apk
 
-# Telephony (datastatusnotification)
+# Telephony (datastatusnotification) - from FP3
 -system_ext/app/datastatusnotification/datastatusnotification.apk
 
 # Telephony (DeviceInfo)
