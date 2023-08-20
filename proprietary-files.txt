@@ -1159,6 +1159,9 @@ vendor/lib64/vendor.qti.hardware.radio.uim_remote_server@1.0.so
 # Telephony (ATFWD)
 -system_ext/app/atfwd/atfwd.apk
 
+# Telephony (datastatusnotification)
+-system_ext/app/datastatusnotification/datastatusnotification.apk
+
 # Telephony (DeviceInfo)
 -system_ext/app/DeviceInfo/DeviceInfo.apk
 
