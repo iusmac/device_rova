@@ -28,6 +28,10 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
+import javax.inject.Inject;
+
 import lineageos.providers.LineageSettings;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
@@ -35,12 +39,15 @@ import static org.lineageos.settings.BuildConfig.DEBUG;
 public class DefaultSystemSettings {
     private static final String TAG = "DefaultSystemSettings";
 
-    private Context mContext;
-    private SharedPreferences mSharedPrefs;
+    private final Context mContext;
+    private final SharedPreferences mSharedPrefs;
 
-    public DefaultSystemSettings(final Context context) {
+    @Inject
+    public DefaultSystemSettings(final @ApplicationContext Context context,
+            final SharedPreferences sharedPrfs) {
+
         mContext = context;
-        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        mSharedPrefs = sharedPrfs;
     }
 
     private boolean isFirstRun(String key) {

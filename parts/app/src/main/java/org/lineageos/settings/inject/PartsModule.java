@@ -16,12 +16,23 @@
 
 package org.lineageos.settings.inject;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
+
 import dagger.Module;
+import dagger.Provides;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
 /** Application level module */
 @InstallIn(SingletonComponent.class)
 @Module
 public final class PartsModule {
+    @Provides
+    static SharedPreferences provideSharedPreferences(final @ApplicationContext Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
 }

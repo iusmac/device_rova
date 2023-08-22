@@ -39,6 +39,9 @@ import static org.lineageos.settings.BuildConfig.DEBUG;
 public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
     private static final String TAG = "XiaomiParts";
 
+    @Inject
+    DefaultSystemSettings mDefaultSystemSettings;
+
     @Override
     public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -62,7 +65,7 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
         );
         new DiracUtils(context).onBootCompleted();
         new SmartCharging(context).onBootCompleted();
-        new DefaultSystemSettings(context).onBootCompleted();
+        mDefaultSystemSettings.onBootCompleted();
         TileService.requestListeningState(context, new ComponentName(context,
                     RamPlusService.class));
     }
