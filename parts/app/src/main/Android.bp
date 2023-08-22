@@ -25,6 +25,7 @@ android_app {
         "SettingsLibIllustrationPreference",
         "SettingsLibMainSwitchPreference",
         "SettingsLibFooterPreference",
+        "hilt_android",
     ],
 
     optimize: {

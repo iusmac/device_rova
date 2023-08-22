@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id 'com.android.application'
+    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
 }
 
@@ -70,6 +71,9 @@ dependencies {
     implementation project(path: ':SettingsLib:IllustrationPreference')
     implementation project(path: ':SettingsLib:MainSwitchPreference')
 
+    implementation libs.hilt_android
+    kapt libs.hilt_compiler
+
     constraints {
         // This fixes the following error when compiling androidx libs, which
         // explicitly depend on kotlin-stdlib-jdk7/8:
@@ -86,4 +90,8 @@ dependencies {
             because('kotlin-stdlib-jdk8 is now a part of kotlin-stdlib')
         }
     }
+}
+
+kapt {
+    correctErrorTypes true
 }

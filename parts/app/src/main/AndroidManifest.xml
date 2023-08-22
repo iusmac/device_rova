@@ -31,6 +31,7 @@
     <protected-broadcast android:name="org.lineageos.settings.smartcharging.BatteryMonitorReceiver" />
 
     <application
+        android:name=".PartsApplication"
         android:label="@string/device_settings_app_name"
         android:icon="@mipmap/ic_launcher"
         android:persistent="true"

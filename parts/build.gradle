@@ -1,5 +1,8 @@
 buildscript {
     ext {
+        // https://mvnrepository.com/artifact/com.google.dagger/hilt-android
+        // https://mvnrepository.com/artifact/com.google.dagger/hilt-compiler
+        def hilt_version = '2.45'
         libs = [
             // https://mvnrepository.com/artifact/androidx.annotation/annotation
             annotation           :  'androidx.annotation:annotation:1.6.0',
@@ -9,6 +12,8 @@ buildscript {
             coordinatorlayout    :  'androidx.coordinatorlayout:coordinatorlayout:1.2.0',
             // https://mvnrepository.com/artifact/androidx.core/core
             core                 :  'androidx.core:core:1.10.0',
+            hilt_android         :  "com.google.dagger:hilt-android:$hilt_version",
+            hilt_compiler        :  "com.google.dagger:hilt-compiler:$hilt_version",
             // https://mvnrepository.com/artifact/com.airbnb.android/lottie
             lottie               :  'com.airbnb.android:lottie:5.2.0',
             // https://mvnrepository.com/artifact/com.google.android.material/material
