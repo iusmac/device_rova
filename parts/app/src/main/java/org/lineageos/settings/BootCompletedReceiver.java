@@ -24,6 +24,10 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.service.quicksettings.TileService;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+import javax.inject.Inject;
+
 import org.lineageos.settings.soundcontrol.SoundControlSettings;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.smartcharging.SmartCharging;
@@ -31,11 +35,14 @@ import org.lineageos.settings.ramplus.RamPlusService;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
-public class BootCompletedReceiver extends BroadcastReceiver {
+@AndroidEntryPoint(BroadcastReceiver.class)
+public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
     private static final String TAG = "XiaomiParts";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+        super.onReceive(context, intent);
+
         int gain = Settings.Secure.getInt(
             context.getContentResolver(),
             SoundControlSettings.PREF_VOLUME_GAIN, -10
