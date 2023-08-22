@@ -18,11 +18,9 @@
 package org.lineageos.settings;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
-import android.service.quicksettings.TileService;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -69,7 +67,6 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
         mDiracUtils.onBootCompleted();
         new SmartCharging(context).onBootCompleted();
         mDefaultSystemSettings.onBootCompleted();
-        TileService.requestListeningState(context, new ComponentName(context,
-                    RamPlusService.class));
+        RamPlusService.sync(context);
     }
 }

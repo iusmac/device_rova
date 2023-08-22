@@ -18,6 +18,8 @@
 
 package org.lineageos.settings.ramplus;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -26,14 +28,17 @@ import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.util.Log;
 
-import androidx.preference.PreferenceManager;
+import dagger.hilt.android.AndroidEntryPoint;
+
+import javax.inject.Inject;
 
 import org.lineageos.settings.PartsUtils;
 import org.lineageos.settings.R;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
-public final class RamPlusService extends TileService {
+@AndroidEntryPoint(TileService.class)
+public final class RamPlusService extends Hilt_RamPlusService {
     private static final String TAG = "RamPlus";
 
     private static final String KEY_MODE = "key_ram_plus_mode";
@@ -41,6 +46,9 @@ public final class RamPlusService extends TileService {
         "persist.device_config.lmkd_native.swap_free_low_percentage";
 
     private enum Mode { MODERATE, SLIGHT, EXTREME }
+
+    @Inject
+    SharedPreferences mSharedPrefs;
 
     @Override
     public void onTileAdded() {
@@ -77,7 +85,7 @@ public final class RamPlusService extends TileService {
     }
 
     private Mode getMode() {
-        final String mode = getSharedPrefs().getString(KEY_MODE, null);
+        final String mode = mSharedPrefs.getString(KEY_MODE, null);
         return mode != null ? Mode.valueOf(mode) : Mode.MODERATE;
     }
 
@@ -91,7 +99,7 @@ public final class RamPlusService extends TileService {
         if (oldPercentage != newPercentage) {
             PartsUtils.setintProp(SWAP_FREE_LOW_PERCENTAGE_PROP, newPercentage);
         }
-        getSharedPrefs().edit().putString(KEY_MODE, mode.name()).apply();
+        mSharedPrefs.edit().putString(KEY_MODE, mode.name()).apply();
     }
 
     private void updateTile(final Mode mode) {
@@ -113,7 +121,8 @@ public final class RamPlusService extends TileService {
         setMode(mode);
     }
 
-    private SharedPreferences getSharedPrefs() {
-        return PreferenceManager.getDefaultSharedPreferences(this);
+    public static void sync(final Context context) {
+        TileService.requestListeningState(context, new ComponentName(context,
+                    RamPlusService.class));
     }
 }
