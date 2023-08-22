@@ -29,30 +29,33 @@ import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 
-import androidx.core.content.ContextCompat;
+import dagger.Lazy;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 import java.lang.IllegalArgumentException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public final class DiracUtils {
+    private final Context mContext;
+    private final Lazy<MediaSessionManager> mMediaSessionManagerLazy;
+    private final Lazy<AlarmManager> mAlarmManagerLazy;
+    private final DiracSound mDiracSound;
 
-    protected DiracSound mDiracSound;
-    private static DiracUtils mInstance;
-    private MediaSessionManager mMediaSessionManager;
-    private Handler mHandler;
-    private Context mContext;
+    private final Handler mHandler;
 
-    public static DiracUtils getInstance() {
-        if (mInstance == null) {
-            throw new IllegalArgumentException("Trying to get instance without initializing!");
-        }
-        return mInstance;
-    }
+    @Inject
+    public DiracUtils(final @ApplicationContext Context context,
+            final Lazy<MediaSessionManager> mediaSessionManagerLazy,
+            final Lazy<AlarmManager> alarmManagerLazy,
+            final DiracSound diracSound) {
 
-    public DiracUtils(final Context context) {
         mContext = context;
-        mMediaSessionManager = (MediaSessionManager) context.getSystemService(Context.MEDIA_SESSION_SERVICE);
-        mDiracSound = new DiracSound(0, 0);
+        mMediaSessionManagerLazy = mediaSessionManagerLazy;
+        mAlarmManagerLazy = alarmManagerLazy;
+        mDiracSound = diracSound;
+
         final HandlerThread handlerThread = new HandlerThread("DiracUtilsThread");
         handlerThread.start();
         mHandler = new Handler(handlerThread.getLooper());
@@ -60,28 +63,21 @@ public final class DiracUtils {
 
     public void onBootCompleted() {
         postAlarmTask(/*minutes=*/ 1);
-        mInstance = this;
     }
 
     private void postAlarmTask(final int minutes) {
-        final AlarmManager am = ContextCompat.getSystemService(mContext, AlarmManager.class);
-
         final Intent i = new Intent(mContext, DiracInitializer.class);
         final PendingIntent pi = PendingIntent.getBroadcast(mContext, /*requestCode=*/ 0, i,
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         final long millis = (System.currentTimeMillis() / 1000L + minutes * 60) * 1000L;
-        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pi);
+        mAlarmManagerLazy.get().setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pi);
     }
 
 
     protected void refreshPlaybackIfNecessary(){
-        if (mMediaSessionManager == null) {
-            mMediaSessionManager = (MediaSessionManager) mContext.getSystemService(Context.MEDIA_SESSION_SERVICE);
-        }
         final List<MediaController> sessions
-                = mMediaSessionManager.getActiveSessionsForUser(
-                null, UserHandle.ALL);
+                = mMediaSessionManagerLazy.get().getActiveSessionsForUser(null, UserHandle.ALL);
         for (MediaController aController : sessions) {
             if (PlaybackState.STATE_PLAYING ==
                     getMediaControllerPlaybackState(aController)) {

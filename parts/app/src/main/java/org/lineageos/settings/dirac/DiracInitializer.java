@@ -24,18 +24,24 @@ import android.content.Intent;
 import android.service.quicksettings.TileService;
 import android.util.Log;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+import javax.inject.Inject;
+
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
-public final class DiracInitializer extends BroadcastReceiver {
+@AndroidEntryPoint(BroadcastReceiver.class)
+public final class DiracInitializer extends Hilt_DiracInitializer {
     private static final String TAG = "DiracInitializer";
 
-    private DiracUtils mDiracUtils;
+    @Inject
+    DiracUtils mDiracUtils;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        if (DEBUG) Log.d(TAG, "onReceive().");
+        super.onReceive(context, intent);
 
-        mDiracUtils = new DiracUtils(context);
+        if (DEBUG) Log.d(TAG, "onReceive().");
 
         mDiracUtils.setEnabled(mDiracUtils.isDiracEnabled());
         mDiracUtils.setHeadsetType(mDiracUtils.getHeadsetType());

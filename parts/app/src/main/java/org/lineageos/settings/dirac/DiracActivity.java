@@ -21,7 +21,10 @@ import android.os.Bundle;
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
 import com.android.settingslib.widget.R;
 
-public class DiracActivity extends CollapsingToolbarBaseActivity {
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint(CollapsingToolbarBaseActivity.class)
+public class DiracActivity extends Hilt_DiracActivity {
 
     private static final String TAG_DIRAC = "dirac";
 

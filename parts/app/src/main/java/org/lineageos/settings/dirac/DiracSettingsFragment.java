@@ -30,9 +30,14 @@ import androidx.preference.SwitchPreference;
 import com.android.settingslib.widget.MainSwitchPreference;
 import com.android.settingslib.widget.OnMainSwitchChangeListener;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+import javax.inject.Inject;
+
 import org.lineageos.settings.R;
 
-public class DiracSettingsFragment extends PreferenceFragmentCompat implements
+@AndroidEntryPoint(PreferenceFragmentCompat.class)
+public class DiracSettingsFragment extends Hilt_DiracSettingsFragment implements
         Preference.OnPreferenceChangeListener, OnMainSwitchChangeListener {
 
     private static final String PREF_ENABLE = "dirac_enable";
@@ -44,14 +49,14 @@ public class DiracSettingsFragment extends PreferenceFragmentCompat implements
     private ListPreference mHeadsetType;
     private ListPreference mPreset;
 
-    private DiracUtils mDiracUtils;
     private Handler mHandler = new Handler(Looper.myLooper());
+
+    @Inject
+    DiracUtils mDiracUtils;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.dirac_settings);
-
-        mDiracUtils = new DiracUtils(getContext());
 
         boolean enhancerEnabled = mDiracUtils.isDiracEnabled();
 

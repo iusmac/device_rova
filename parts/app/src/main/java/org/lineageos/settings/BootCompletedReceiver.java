@@ -40,6 +40,9 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
     private static final String TAG = "XiaomiParts";
 
     @Inject
+    DiracUtils mDiracUtils;
+
+    @Inject
     DefaultSystemSettings mDefaultSystemSettings;
 
     @Override
@@ -63,7 +66,7 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
                 0
             )
         );
-        new DiracUtils(context).onBootCompleted();
+        mDiracUtils.onBootCompleted();
         new SmartCharging(context).onBootCompleted();
         mDefaultSystemSettings.onBootCompleted();
         TileService.requestListeningState(context, new ComponentName(context,

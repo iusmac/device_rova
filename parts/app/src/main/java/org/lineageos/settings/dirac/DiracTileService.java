@@ -22,20 +22,25 @@ import android.content.res.Resources;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.lineageos.settings.R;
 
-public class DiracTileService extends TileService {
-    private DiracUtils mDiracUtils;
+@AndroidEntryPoint(TileService.class)
+public class DiracTileService extends Hilt_DiracTileService {
     private Map<String, String> mPresetMap = new HashMap<>();
     private String mPresetDefault;
 
+    @Inject
+    DiracUtils mDiracUtils;
+
     @Override
     public void onStartListening() {
-        mDiracUtils = new DiracUtils(getApplicationContext());
-
         final boolean enhancerEnabled = mDiracUtils.isDiracEnabled();
 
         final Tile tile = getQsTile();
