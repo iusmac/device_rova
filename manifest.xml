@@ -103,6 +103,7 @@
         <transport>hwbinder</transport>
         <fqname>@2.0::IColorEnhancement/default</fqname>
         <fqname>@2.0::IPictureAdjustment/default</fqname>
+        <fqname>@2.0::IReadingEnhancement/default</fqname>
     </hal>
     <hal format="hidl">
         <name>vendor.qti.data.factory</name>
