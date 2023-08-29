@@ -138,6 +138,18 @@ public final class SmartChargingManager {
     void onPreferenceUpdate(final String which) {
         if (DEBUG) Log.d(TAG, String.format("onPreferenceUpdate(which=%s).", which));
 
+        switch (which) {
+            case SmartCharging.KEY_CHARGING_TEMP:
+                // If the battery was previously overheated, but the user wants a different max
+                // battery temperature threshold, then we must reset the last stop charging reason
+                // to ensure that the new value is picked up when reaching the battery cooling
+                // control logic
+                if (mSmartCharging.getLastStopChargingReason() ==
+                        SmartChargingStopReason.OVERHEATED) {
+                    setLastStopChargingReason(SmartChargingStopReason.UNKNOWN);
+                }
+        }
+
         if (mSmartCharging.isPlugged()) {
             startBatteryMonitoring();
         }
