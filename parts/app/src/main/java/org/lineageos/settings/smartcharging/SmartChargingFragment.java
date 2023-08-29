@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The LineageOS Project
+ * Copyright (C) 2023 The LineageOS Project
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,19 +33,29 @@ import androidx.preference.TwoStatePreference;
 import com.android.settingslib.widget.MainSwitchPreference;
 import com.android.settingslib.widget.OnMainSwitchChangeListener;
 
+import dagger.Lazy;
+import dagger.hilt.android.AndroidEntryPoint;
+
+import javax.inject.Inject;
+
 import org.lineageos.settings.R;
 import org.lineageos.settings.preferences.SeekBarPreference;
 import org.lineageos.settings.PartsUtils;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
-public class SmartChargingFragment extends PreferenceFragmentCompat implements
-        Preference.OnPreferenceChangeListener, OnMainSwitchChangeListener {
+@AndroidEntryPoint(PreferenceFragmentCompat.class)
+public class SmartChargingFragment extends Hilt_SmartChargingFragment implements
+        Preference.OnPreferenceChangeListener, OnMainSwitchChangeListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
+
     private final String TAG = getClass().getName();
 
-    private Context mContext;
+    @Inject
+    Lazy<SmartCharging> mSmartChargingLazy;
 
-    private SharedPreferences mSharedPrefs;
+    @Inject
+    Lazy<SmartChargingManager> mSmartChargingManagerLazy;
 
     private MainSwitchPreference mSmartChargingSwitch;
     private SeekBarPreference mSeekBarChargingLimitPreference;
@@ -56,14 +66,9 @@ public class SmartChargingFragment extends PreferenceFragmentCompat implements
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        mContext = getContext();
-        mSharedPrefs =
-            PreferenceManager.getDefaultSharedPreferences(mContext);
-
         addPreferencesFromResource(R.xml.smartcharging_settings);
 
         mSmartChargingSwitch = (MainSwitchPreference) findPreference(SmartCharging.KEY_CHARGING_SWITCH);
-        mSmartChargingSwitch.setChecked(mSharedPrefs.getBoolean(SmartCharging.KEY_CHARGING_SWITCH, false));
         mSmartChargingSwitch.addOnSwitchChangeListener(this);
 
         mSeekBarChargingLimitPreference = findPreference(SmartCharging.KEY_CHARGING_LIMIT);
@@ -71,7 +76,6 @@ public class SmartChargingFragment extends PreferenceFragmentCompat implements
         mSeekBarChargingLimitPreference.setMax(SmartCharging.CHARGING_LIMIT_MAX_DEFAULT);
         mSeekBarChargingLimitPreference.setMin(SmartCharging.CHARGING_LIMIT_MIN_DEFAULT);
         mSeekBarChargingLimitPreference.setDefaultValue(SmartCharging.CHARGING_LIMIT_DEFAULT, false /* update */);
-        mSeekBarChargingLimitPreference.setValue(SmartCharging.getChargingLimit(mSharedPrefs), false /* update */);
         mSeekBarChargingLimitPreference.setOnPreferenceChangeListener(this);
 
         mSeekBarChargingResumePreference = findPreference(SmartCharging.KEY_CHARGING_RESUME);
@@ -79,7 +83,6 @@ public class SmartChargingFragment extends PreferenceFragmentCompat implements
         mSeekBarChargingResumePreference.setMax(SmartCharging.CHARGING_RESUME_MAX_DEFAULT);
         mSeekBarChargingResumePreference.setMin(SmartCharging.CHARGING_RESUME_MIN_DEFAULT);
         mSeekBarChargingResumePreference.setDefaultValue(SmartCharging.CHARGING_RESUME_DEFAULT, false /* update */);
-        mSeekBarChargingResumePreference.setValue(SmartCharging.getChargingResume(mSharedPrefs), false /* update */);
         mSeekBarChargingResumePreference.setOnPreferenceChangeListener(this);
 
         mSeekBarChargingTempPreference = findPreference(SmartCharging.KEY_CHARGING_TEMP);
@@ -87,17 +90,14 @@ public class SmartChargingFragment extends PreferenceFragmentCompat implements
         mSeekBarChargingTempPreference.setMax(SmartCharging.CHARGING_TEMP_MAX_DEFAULT);
         mSeekBarChargingTempPreference.setMin(SmartCharging.CHARGING_TEMP_MIN_DEFAULT);
         mSeekBarChargingTempPreference.setDefaultValue(SmartCharging.CHARGING_TEMP_DEFAULT, false /* update */);
-        mSeekBarChargingTempPreference.setValue(SmartCharging.getTempLimit(mSharedPrefs), false /* update */);
         mSeekBarChargingTempPreference.setOnPreferenceChangeListener(this);
 
         mChargingCurrentMaxListPref = findPreference(SmartCharging.KEY_CHARGING_CURRENT_MAX);
         mChargingCurrentMaxListPref.setEnabled(mSmartChargingSwitch.isChecked());
         mChargingCurrentMaxListPref.setDefaultValue(SmartCharging.CHARGING_CURRENT_MAX_DEFAULT);
-        mChargingCurrentMaxListPref.setValue(SmartCharging.getCurrentMax(mSharedPrefs) + "");
         mChargingCurrentMaxListPref.setOnPreferenceChangeListener(this);
 
         mResetStatsPreference = findPreference(SmartCharging.KEY_RESET_STATS);
-        mResetStatsPreference.setChecked(SmartCharging.isResetStatsNeeded(mSharedPrefs));
         mResetStatsPreference.setEnabled(mSmartChargingSwitch.isChecked());
         mResetStatsPreference.setOnPreferenceChangeListener(this);
     }
@@ -105,12 +105,9 @@ public class SmartChargingFragment extends PreferenceFragmentCompat implements
     @Override
     public void onSwitchChanged(Switch switchView, boolean isChecked) {
         if (isChecked) {
-            SmartCharging.startService(mContext);
+            mSmartChargingManagerLazy.get().enable();
         } else {
-            SmartCharging.stopService(mContext);
-            SmartCharging.enableCharging();
-            SmartCharging.setCurrentMax(
-                    SmartCharging.CHARGING_CURRENT_MAX_DEFAULT);
+            mSmartChargingManagerLazy.get().disable();
         }
 
         mSeekBarChargingLimitPreference.setEnabled(isChecked);
@@ -126,30 +123,49 @@ public class SmartChargingFragment extends PreferenceFragmentCompat implements
         switch (key) {
             case SmartCharging.KEY_CHARGING_LIMIT:
             case SmartCharging.KEY_CHARGING_RESUME:
-                mSharedPrefs.edit().putInt(key, (int) newValue).apply();
-                if (SmartCharging.getChargingLimit(mSharedPrefs) <=
-                        SmartCharging.getChargingResume(mSharedPrefs)) {
-                    String message = mContext.getString(R.string.smart_charging_warning);
-                    PartsUtils.createToast(mContext, message);
+                int chargingLimit = mSmartChargingLazy.get().getChargingLimit();
+                int chargingResume = mSmartChargingLazy.get().getChargingResume();
+
+                if (key.equals(SmartCharging.KEY_CHARGING_LIMIT)) {
+                    chargingLimit = (int) newValue;
+                } else {
+                    chargingResume = (int) newValue;
                 }
-                break;
-            case SmartCharging.KEY_CHARGING_TEMP:
-                mSharedPrefs.edit().putInt(key, (int) newValue).apply();
-                break;
-            case SmartCharging.KEY_CHARGING_CURRENT_MAX:
-                mSharedPrefs.edit().putString(key, String.valueOf(newValue)).apply();
-                break;
-            case SmartCharging.KEY_RESET_STATS:
-                mSharedPrefs.edit().putBoolean(key, (Boolean) newValue).apply();
-                break;
-            default:
-                throw new RuntimeException("Cannot store undefined preference: " + key);
-        }
 
-        if (SmartCharging.isPlugged()) {
-            SmartChargingService.update(mSharedPrefs);
+                if (chargingLimit <= chargingResume) {
+                    PartsUtils.createToast(getActivity(),
+                            getString(R.string.smart_charging_warning));
+                    return false;
+                }
         }
-
         return true;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPrefs, final String key) {
+        switch (key) {
+            case SmartCharging.KEY_CHARGING_LIMIT:
+            case SmartCharging.KEY_CHARGING_RESUME:
+            case SmartCharging.KEY_CHARGING_TEMP:
+            case SmartCharging.KEY_CHARGING_CURRENT_MAX:
+            case SmartCharging.KEY_RESET_STATS:
+                mSmartChargingManagerLazy.get().onPreferenceUpdate(key);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getPreferenceScreen().getSharedPreferences()
+            .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getPreferenceScreen().getSharedPreferences()
+            .unregisterOnSharedPreferenceChangeListener(this);
     }
 }

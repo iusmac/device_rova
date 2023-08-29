@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.session.MediaSessionManager;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
@@ -59,5 +60,12 @@ public final class PartsModule {
     @Provides
     static AlarmManager provideAlarmManger(final @ApplicationContext Context context) {
         return ContextCompat.getSystemService(context, AlarmManager.class);
+    }
+
+    @Provides
+    static NotificationManagerCompat provideNotificationManager(
+            final @ApplicationContext Context context) {
+
+        return NotificationManagerCompat.from(context);
     }
 }

@@ -23,7 +23,10 @@ import android.os.Bundle;
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
 import com.android.settingslib.widget.R;
 
-public class SmartChargingActivity extends CollapsingToolbarBaseActivity {
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint(CollapsingToolbarBaseActivity.class)
+public class SmartChargingActivity extends Hilt_SmartChargingActivity {
     private final String TAG = getClass().getName();
 
     @Override

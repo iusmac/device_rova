@@ -28,7 +28,7 @@ import javax.inject.Inject;
 
 import org.lineageos.settings.soundcontrol.SoundControlSettings;
 import org.lineageos.settings.dirac.DiracUtils;
-import org.lineageos.settings.smartcharging.SmartCharging;
+import org.lineageos.settings.smartcharging.SmartChargingManager;
 import org.lineageos.settings.ramplus.RamPlusService;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
@@ -39,6 +39,9 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
 
     @Inject
     DiracUtils mDiracUtils;
+
+    @Inject
+    SmartChargingManager mSmartChargingManager;
 
     @Inject
     DefaultSystemSettings mDefaultSystemSettings;
@@ -65,7 +68,7 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
             )
         );
         mDiracUtils.onBootCompleted();
-        new SmartCharging(context).onBootCompleted();
+        mSmartChargingManager.onBootCompleted();
         mDefaultSystemSettings.onBootCompleted();
         RamPlusService.sync(context);
     }

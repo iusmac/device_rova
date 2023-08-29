@@ -27,8 +27,7 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.READ_DEVICE_CONFIG" />
     <uses-permission android:name="android.permission.WRITE_DEVICE_CONFIG" />
-
-    <protected-broadcast android:name="org.lineageos.settings.smartcharging.BatteryMonitorReceiver" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".PartsApplication"
@@ -140,6 +139,11 @@
         <service android:name=".smartcharging.SmartChargingService"
                 android:exported="false">
         </service>
+
+        <receiver
+            android:name=".smartcharging.SmartChargingReceiver"
+            android:exported="false">
+        </receiver>
 
         <provider
             android:name=".PartsSearchIndexablesProvider"

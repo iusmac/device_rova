@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The LineageOS Project
+ * Copyright (C) 2023 The LineageOS Project
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,118 +18,109 @@
 
 package org.lineageos.settings.smartcharging;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.os.SystemProperties;
 
-import androidx.preference.PreferenceManager;
-import java.lang.IllegalArgumentException;
+import javax.inject.Inject;
 
 import org.lineageos.settings.PartsUtils;
-
-import static org.lineageos.settings.BuildConfig.DEBUG;
 
 public class SmartCharging {
     private static final String TAG = "SmartCharging";
 
-    public static final String KEY_CHARGING_SWITCH = "smart_charging";
-    public static final String KEY_CHARGING_LIMIT = "seek_bar_limit";
-    public static final String KEY_CHARGING_RESUME = "seek_bar_resume";
-    public static final String KEY_CHARGING_TEMP = "seek_bar_temp";
-    public static final String KEY_CHARGING_CURRENT_MAX = "current_max_pref";
-    public static final String KEY_RESET_STATS = "reset_stats";
+    static final String PROP_LAST_STOP_CHARGING_REASON =
+        "service.smartcharging.last_stop_charging_reason";
 
-    public static final String CHARGING_ENABLED_PATH = "/sys/class/power_supply/battery/charging_enabled";
-    public static final String CHARGING_CURRENT_MAX_PATH = "/sys/class/power_supply/usb/current_max";
-    public static final String CHARGER_PRESENT_PATH = "/sys/class/power_supply/usb/present";
-    public static final String BATTERY_CAPACITY_PATH = "/sys/class/power_supply/battery/capacity";
-    public static final String BATTERY_TEMPERATURE_PATH = "/sys/class/power_supply/battery/temp";
+    static final String PROP_NEXT_BATTERY_MONITOR_TRIGGER_TIME =
+        "service.smartcharging.next_battery_monitor_trigger_time";
 
-    public static final int CHARGING_LIMIT_DEFAULT = 80;
-    public static final int CHARGING_LIMIT_MAX_DEFAULT = 100;
-    public static final int CHARGING_LIMIT_MIN_DEFAULT = 65;
-    public static final int CHARGING_RESUME_DEFAULT = 60;
-    public static final int CHARGING_RESUME_MAX_DEFAULT = 99;
-    public static final int CHARGING_RESUME_MIN_DEFAULT = 15;
-    public static final int CHARGING_TEMP_DEFAULT = 35;
-    public static final int CHARGING_TEMP_MAX_DEFAULT = 50;
-    public static final int CHARGING_TEMP_MIN_DEFAULT = 10;
+    static final String BATTERY_MONITOR_UPDATE_INTENT = "smartcharging.BatteryMonitorUpdateIntent";
+
+    // Prefs
+    static final String KEY_CHARGING_SWITCH = "smart_charging";
+    static final String KEY_CHARGING_LIMIT = "seek_bar_limit";
+    static final String KEY_CHARGING_RESUME = "seek_bar_resume";
+    static final String KEY_CHARGING_TEMP = "seek_bar_temp";
+    static final String KEY_CHARGING_CURRENT_MAX = "current_max_pref";
+    static final String KEY_RESET_STATS = "reset_stats";
+
+    // Sysfs nodes
+    static final String CHARGING_ENABLED_PATH = "/sys/class/power_supply/battery/charging_enabled";
+    static final String CHARGING_CURRENT_MAX_PATH = "/sys/class/power_supply/usb/current_max";
+    static final String CHARGER_PRESENT_PATH = "/sys/class/power_supply/usb/present";
+    static final String BATTERY_CAPACITY_PATH = "/sys/class/power_supply/battery/capacity";
+    static final String BATTERY_TEMPERATURE_PATH = "/sys/class/power_supply/battery/temp";
+
+    // Charging defaults
+    static final int CHARGING_LIMIT_DEFAULT = 80;
+    static final int CHARGING_LIMIT_MAX_DEFAULT = 100;
+    static final int CHARGING_LIMIT_MIN_DEFAULT = 65;
+    static final int CHARGING_RESUME_DEFAULT = 60;
+    static final int CHARGING_RESUME_MAX_DEFAULT = 99;
+    static final int CHARGING_RESUME_MIN_DEFAULT = 15;
+    static final int CHARGING_TEMP_DEFAULT = 35;
+    static final int CHARGING_TEMP_MAX_DEFAULT = 50;
+    static final int CHARGING_TEMP_MIN_DEFAULT = 10;
     // NOTE: negative current is handled at kernel driver level
-    public static final String CHARGING_CURRENT_MAX_DEFAULT = "-1";
+    static final String CHARGING_CURRENT_MAX_DEFAULT = "-1";
 
-    private Context mContext;
+    private final SharedPreferences mSharedPrefs;
 
-    public SmartCharging(final Context context) {
-        mContext = context;
+    @Inject
+    public SmartCharging(final SharedPreferences sharedPrefs) {
+        mSharedPrefs = sharedPrefs;
     }
 
-    public void onBootCompleted() {
-        SharedPreferences sharedPrefs =
-            PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean enabled = sharedPrefs.getBoolean(KEY_CHARGING_SWITCH, false);
-        if (enabled) {
-            startService(mContext);
-        }
-        if (DEBUG) Log.d(TAG, "Started. Service is enabled: " + Boolean.valueOf(enabled).toString());
+    boolean isEnabled() {
+        return mSharedPrefs.getBoolean(KEY_CHARGING_SWITCH, false);
     }
 
-    public static void startService(final Context context) {
-        PartsUtils.startService(context, SmartChargingService.class);
+    @SmartChargingStopReason int getLastStopChargingReason() {
+        return SystemProperties.getInt(PROP_LAST_STOP_CHARGING_REASON,
+                SmartChargingStopReason.UNKNOWN);
     }
 
-    public static void stopService(final Context context) {
-        PartsUtils.stopService(context, SmartChargingService.class);
+    boolean isBatteryResetStatsNeeded() {
+        return mSharedPrefs.getBoolean(KEY_RESET_STATS, false);
     }
 
-    public static void enableCharging() {
-        PartsUtils.writeValue(CHARGING_ENABLED_PATH, "1");
+    long getBatteryMonitorNextUpdateTime() {
+        return SystemProperties.getLong(PROP_NEXT_BATTERY_MONITOR_TRIGGER_TIME, 0);
     }
 
-    public static void disableCharging() {
-        PartsUtils.writeValue(CHARGING_ENABLED_PATH, "0");
-    }
-
-    public static void setCurrentMax(final String mA) {
-        PartsUtils.writeValue(CHARGING_CURRENT_MAX_PATH, mA);
-    }
-
-    public static float getBatteryTemp() {
-        String raw = PartsUtils.readLine(BATTERY_TEMPERATURE_PATH);
+    float getBatteryTemp() {
+        final String raw = PartsUtils.readLine(BATTERY_TEMPERATURE_PATH);
         return ((float) Integer.parseInt(raw == null ? "0" : raw)) / 10;
     }
 
-    public static int getBatteryCapacity() {
-        String raw = PartsUtils.readLine(BATTERY_CAPACITY_PATH);
+    int getBatteryCapacity() {
+        final String raw = PartsUtils.readLine(BATTERY_CAPACITY_PATH);
         return Integer.parseInt(raw == null ? "0" : raw);
     }
 
-    public static boolean isChargingEnabled() {
-        String raw = PartsUtils.readLine(CHARGING_ENABLED_PATH);
+    boolean isPlugged() {
+        final String raw = PartsUtils.readLine(CHARGER_PRESENT_PATH);
         return raw.equals("1");
     }
 
-    public static boolean isPlugged() {
-        String raw = PartsUtils.readLine(CHARGER_PRESENT_PATH);
+    int getChargingLimit() {
+        return mSharedPrefs.getInt(KEY_CHARGING_LIMIT, CHARGING_LIMIT_DEFAULT);
+    }
+
+    int getChargingResume() {
+        return mSharedPrefs.getInt(KEY_CHARGING_RESUME, CHARGING_RESUME_DEFAULT);
+    }
+
+    int getTempLimit() {
+        return mSharedPrefs.getInt(KEY_CHARGING_TEMP, CHARGING_TEMP_DEFAULT);
+    }
+
+    boolean isChargingEnabled() {
+        final String raw = PartsUtils.readLine(CHARGING_ENABLED_PATH);
         return raw.equals("1");
     }
 
-    public static int getChargingLimit(final SharedPreferences sharedPrefs) {
-        return sharedPrefs.getInt(KEY_CHARGING_LIMIT, CHARGING_LIMIT_DEFAULT);
-    }
-
-    public static int getChargingResume(final SharedPreferences sharedPrefs) {
-        return sharedPrefs.getInt(KEY_CHARGING_RESUME, CHARGING_RESUME_DEFAULT);
-    }
-
-    public static int getTempLimit(final SharedPreferences sharedPrefs) {
-        return sharedPrefs.getInt(KEY_CHARGING_TEMP, CHARGING_TEMP_DEFAULT);
-    }
-
-    public static String getCurrentMax(final SharedPreferences sharedPrefs) {
-        return sharedPrefs.getString(KEY_CHARGING_CURRENT_MAX, CHARGING_CURRENT_MAX_DEFAULT);
-    }
-
-    public static boolean isResetStatsNeeded(final SharedPreferences sharedPrefs) {
-        return sharedPrefs.getBoolean(KEY_RESET_STATS, false);
+    String getCurrentMax() {
+        return mSharedPrefs.getString(KEY_CHARGING_CURRENT_MAX, CHARGING_CURRENT_MAX_DEFAULT);
     }
 }
