@@ -23,6 +23,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.Icon;
 import android.os.SystemProperties;
 import android.text.format.DateUtils;
@@ -43,15 +44,13 @@ public final class SmartChargingNotificationManager {
     private static final String TAG = "SmartChargingNotification";
 
     private static final int NOTIFICATION_ID = 1;
-    private static final String PROP_NOTIFICATION_DISMISSED =
-        "service.smartcharging.notification_dismissed";
     private static final String NOTIFICATION_CHANNEL = "smartcharging.notificationChannel";
-    static final String NOTIFICATION_NOT_NOW_INTENT = "smartcharging.NotificationNotNowIntent";
-    static final String NOTIFICATION_DISMISS_INTENT = "smartcharging.NotificationDismissIntent";
 
     private final Context mContext;
     private final NotificationManagerCompat mNotificationManager;
     private final SmartCharging mSmartCharging;
+
+    private final Resources mResources;
 
     @Inject
     public SmartChargingNotificationManager(final @ApplicationContext Context context,
@@ -61,6 +60,8 @@ public final class SmartChargingNotificationManager {
         mContext = context;
         mNotificationManager = notificationManager;
         mSmartCharging = smartCharging;
+
+        mResources = context.getResources();
     }
 
     @SuppressLint("MissingPermission")
@@ -78,12 +79,15 @@ public final class SmartChargingNotificationManager {
     }
 
     boolean isNotificationDismissed() {
-        return SystemProperties.getBoolean(PROP_NOTIFICATION_DISMISSED, false);
+        return SystemProperties.getBoolean(mResources.getString(
+                    R.string.smart_charging_prop_notification_dismissed), false);
     }
 
     void setNotificationDismissed(final boolean dismised) {
         if (DEBUG) Log.d(TAG, String.format("setNotificationDismissed(dismissed=%s).", dismised));
-        SystemProperties.set(PROP_NOTIFICATION_DISMISSED, String.valueOf(dismised));
+        SystemProperties.set(mResources.getString(
+                    R.string.smart_charging_prop_notification_dismissed),
+                String.valueOf(dismised));
     }
 
     private PendingIntent createPendingIntent(final Intent intent) {
@@ -119,9 +123,11 @@ public final class SmartChargingNotificationManager {
         notificationBuilder.addAction(new Notification.Action.Builder(
                     Icon.createWithResource("", 0),
                     mContext.getString(R.string.not_now),
-                    createPendingIntent(new Intent(NOTIFICATION_NOT_NOW_INTENT))).build());
+                    createPendingIntent(new Intent(mResources.getString(
+                                R.string.smart_charging_intent_notification_not_now)))).build());
         notificationBuilder.setContentIntent(createPendingIntent(new Intent(Intent.ACTION_MAIN)));
-        notificationBuilder.setDeleteIntent(createPendingIntent(new Intent(NOTIFICATION_DISMISS_INTENT)));
+        notificationBuilder.setDeleteIntent(createPendingIntent(new Intent(mResources.getString(
+                            R.string.smart_charging_intent_notification_dismiss))));
         notificationBuilder.setContentTitle(mContext.getString(R.string.smart_charging_title));
 
         final Notification.InboxStyle style = new Notification.InboxStyle();

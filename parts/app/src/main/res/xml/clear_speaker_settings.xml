@@ -4,7 +4,7 @@
     android:title="@string/clear_speaker_title">
 
     <SwitchPreference
-        android:key="clear_speaker_pref"
+        android:key="@string/clear_speaker_key_switch"
         android:title="@string/clear_speaker_title"
         android:icon="@drawable/ic_speaker_cleaner_icon"
         android:summary="@string/clear_speaker_summary"/>

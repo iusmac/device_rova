@@ -26,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import javax.inject.Inject;
 
+import org.lineageos.settings.R;
 import org.lineageos.settings.soundcontrol.SoundControlSettings;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.smartcharging.SmartChargingManager;
@@ -52,20 +53,17 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
 
         int gain = Settings.Secure.getInt(
             context.getContentResolver(),
-            SoundControlSettings.PREF_VOLUME_GAIN, -10
-        );
-        PartsUtils.setValue(
-            SoundControlSettings.VOLUME_GAIN_PATH,
-            gain + " " + gain
-        );
+            context.getString(R.string.sound_control_key_volume_gain),
+            context.getResources().getInteger(R.integer.sound_control_volume_gain_default_value));
+        PartsUtils.setValue(context.getString(R.string.sound_control_sysfs_volume_gain_path),
+            gain + " " + gain);
 
-        PartsUtils.setValue(
-            SoundControlSettings.MICROPHONE_GAIN_PATH,
+        PartsUtils.setValue(context.getString(R.string.sound_control_sysfs_microphone_gain_path),
             Settings.Secure.getInt(
                 context.getContentResolver(),
-                SoundControlSettings.PREF_MICROPHONE_GAIN,
-                0
-            )
+                context.getString(R.string.sound_control_key_microphone_gain),
+                context.getResources().getInteger(
+                    R.integer.sound_control_microphone_gain_default_value))
         );
         mDiracUtils.onBootCompleted();
         mSmartChargingManager.onBootCompleted();

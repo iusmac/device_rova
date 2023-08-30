@@ -40,10 +40,6 @@ import org.lineageos.settings.R;
 public class DiracSettingsFragment extends Hilt_DiracSettingsFragment implements
         Preference.OnPreferenceChangeListener, OnMainSwitchChangeListener {
 
-    private static final String PREF_ENABLE = "dirac_enable";
-    private static final String PREF_HEADSET = "dirac_headset_pref";
-    private static final String PREF_PRESET = "dirac_preset_pref";
-
     private MainSwitchPreference mSwitchBar;
 
     private ListPreference mHeadsetType;
@@ -60,15 +56,16 @@ public class DiracSettingsFragment extends Hilt_DiracSettingsFragment implements
 
         boolean enhancerEnabled = mDiracUtils.isDiracEnabled();
 
-        mSwitchBar = (MainSwitchPreference) findPreference(PREF_ENABLE);
+        mSwitchBar = (MainSwitchPreference) findPreference(getString(
+                    R.string.dirac_key_main_switch));
         mSwitchBar.addOnSwitchChangeListener(this);
         mSwitchBar.setChecked(enhancerEnabled);
 
-        mHeadsetType = (ListPreference) findPreference(PREF_HEADSET);
+        mHeadsetType = (ListPreference) findPreference(getString(R.string.dirac_key_headset));
         mHeadsetType.setOnPreferenceChangeListener(this);
         mHeadsetType.setEnabled(enhancerEnabled);
 
-        mPreset = (ListPreference) findPreference(PREF_PRESET);
+        mPreset = (ListPreference) findPreference(getString(R.string.dirac_key_preset));
         mPreset.setOnPreferenceChangeListener(this);
         mPreset.setEnabled(enhancerEnabled);
     }
@@ -81,18 +78,17 @@ public class DiracSettingsFragment extends Hilt_DiracSettingsFragment implements
         }
 
         try {
-            switch (preference.getKey()) {
-                case PREF_HEADSET:
-                    mDiracUtils.setHeadsetType(Integer.parseInt(newValue.toString()));
-                    DiracTileService.sync(getActivity());
-                    return true;
-                case PREF_PRESET:
-                    mDiracUtils.setLevel(String.valueOf(newValue));
-                    DiracTileService.sync(getActivity());
-                    return true;
-                default:
-                    return false;
+            final String key = preference.getKey();
+            if (key.equals(getString(R.string.dirac_key_headset))) {
+                mDiracUtils.setHeadsetType(Integer.parseInt(newValue.toString()));
+                DiracTileService.sync(getActivity());
+                return true;
+            } else if (key.equals(getString(R.string.dirac_key_preset))) {
+                mDiracUtils.setLevel(String.valueOf(newValue));
+                DiracTileService.sync(getActivity());
+                return true;
             }
+            return false;
         } catch (RuntimeException e) {
             e.printStackTrace();
             getActivity().recreate();

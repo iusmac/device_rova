@@ -41,8 +41,6 @@ public class ClearSpeakerFragment extends PreferenceFragmentCompat implements
 
     private static final String TAG = ClearSpeakerFragment.class.getSimpleName();
 
-    private static final String PREF_CLEAR_SPEAKER = "clear_speaker_pref";
-
     private AudioManager mAudioManager;
     private Handler mHandler;
     private MediaPlayer mMediaPlayer;
@@ -52,7 +50,8 @@ public class ClearSpeakerFragment extends PreferenceFragmentCompat implements
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.clear_speaker_settings);
 
-        mClearSpeakerPref = (SwitchPreference) findPreference(PREF_CLEAR_SPEAKER);
+        mClearSpeakerPref = (SwitchPreference) findPreference(getString(
+                    R.string.clear_speaker_key_switch));
         mClearSpeakerPref.setOnPreferenceChangeListener(this);
 
         mHandler = new Handler(Looper.myLooper());

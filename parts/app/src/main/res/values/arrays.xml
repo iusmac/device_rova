@@ -123,10 +123,7 @@
     </string-array>
 
     <string-array name="smartcharging_current_values">
-        <!-- Since we're supporting different devices, it was easier to default
-             current now value by passing a negative value and handle it at kernel
-             level for each driver at the moment of writing to sysfs node -->
-        <item>"-1"</item>
+        <item>@string/smart_charging_current_default_value</item>
         <item>"2000000"</item>
         <item>"1800000"</item>
         <item>"1500000"</item>

@@ -23,6 +23,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.SystemProperties;
 import android.util.Log;
 
@@ -33,6 +34,7 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.lineageos.settings.PartsUtils;
+import org.lineageos.settings.R;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
@@ -44,6 +46,8 @@ public final class SmartChargingManager {
     private final Provider<AlarmManager> mAlarmManagerProvider;
     private final SmartChargingNotificationManager mSmartChargingNotificationManager;
     private final SmartCharging mSmartCharging;
+
+    private final Resources mResources;
 
     @Inject
     public SmartChargingManager(final @ApplicationContext Context context,
@@ -57,6 +61,8 @@ public final class SmartChargingManager {
         mAlarmManagerProvider = alarmManagerProvider;
         mSmartChargingNotificationManager = smartChargingNotificationManager;
         mSmartCharging = smartCharging;
+
+        mResources = context.getResources();
     }
 
     public void onBootCompleted() {
@@ -138,16 +144,15 @@ public final class SmartChargingManager {
     void onPreferenceUpdate(final String which) {
         if (DEBUG) Log.d(TAG, String.format("onPreferenceUpdate(which=%s).", which));
 
-        switch (which) {
-            case SmartCharging.KEY_CHARGING_TEMP:
-                // If the battery was previously overheated, but the user wants a different max
-                // battery temperature threshold, then we must reset the last stop charging reason
-                // to ensure that the new value is picked up when reaching the battery cooling
-                // control logic
-                if (mSmartCharging.getLastStopChargingReason() ==
-                        SmartChargingStopReason.OVERHEATED) {
-                    setLastStopChargingReason(SmartChargingStopReason.UNKNOWN);
-                }
+        if (which.equals(mResources.getString(R.string.smart_charging_key_charging_temp))) {
+            // If the battery was previously overheated, but the user wants a different max
+            // battery temperature threshold, then we must reset the last stop charging reason
+            // to ensure that the new value is picked up when reaching the battery cooling
+            // control logic
+            if (mSmartCharging.getLastStopChargingReason() ==
+                    SmartChargingStopReason.OVERHEATED) {
+                setLastStopChargingReason(SmartChargingStopReason.UNKNOWN);
+            }
         }
 
         if (mSmartCharging.isPlugged()) {
@@ -178,7 +183,8 @@ public final class SmartChargingManager {
         final long nextTriggerTime = getNextBatteryMonitoringTriggerTime();
         mAlarmManagerProvider.get().setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
                 nextTriggerTime, getAlarmPendingIntent());
-        SystemProperties.set(SmartCharging.PROP_NEXT_BATTERY_MONITOR_TRIGGER_TIME,
+        SystemProperties.set(mResources.getString(
+                    R.string.smart_charging_prop_next_battery_monitor_trigger_time),
                 String.valueOf(nextTriggerTime));
 
         reevaluate();
@@ -194,8 +200,8 @@ public final class SmartChargingManager {
         mAlarmManagerProvider.get().cancel(getAlarmPendingIntent());
         mSmartChargingNotificationManager.removeNotification();
         setLastStopChargingReason(reason);
-        enableCharging();
-        setMaxChargingCurrent(SmartCharging.CHARGING_CURRENT_MAX_DEFAULT);
+        setChargingEnabled(true);
+        setMaxChargingCurrent(mResources.getString(R.string.smart_charging_current_default_value));
     }
 
     private void reevaluate() {
@@ -245,11 +251,11 @@ public final class SmartChargingManager {
             } else {
                 return;
             }
-            disableCharging();
+            setChargingEnabled(false);
         } else if ((isResumeable || isPreviouslyOverheated) && chargingLimit != chargingResume
                 && !isOverheated) {
             setLastStopChargingReason(SmartChargingStopReason.UNKNOWN);
-            enableCharging();
+            setChargingEnabled(true);
         }
     }
 
@@ -265,22 +271,21 @@ public final class SmartChargingManager {
 
     private void setLastStopChargingReason(final @SmartChargingStopReason int reason) {
         if (DEBUG) Log.d(TAG, String.format("setLastStopChargingReason(reason=%s).", reason));
-        SystemProperties.set(SmartCharging.PROP_LAST_STOP_CHARGING_REASON, String.valueOf(reason));
+        SystemProperties.set(mResources.getString(
+                    R.string.smart_charging_prop_last_stop_charging_reason),
+                String.valueOf(reason));
     }
 
-    private void enableCharging() {
-        if (DEBUG) Log.d(TAG, "enableCharging().");
-        PartsUtils.writeValue(SmartCharging.CHARGING_ENABLED_PATH, "1");
-    }
-
-    private void disableCharging() {
-        if (DEBUG) Log.d(TAG, "disableCharging().");
-        PartsUtils.writeValue(SmartCharging.CHARGING_ENABLED_PATH, "0");
+    private void setChargingEnabled(final boolean enabled) {
+        if (DEBUG) Log.d(TAG, String.format("setChargingEnabled(enabled=%s).", enabled));
+        PartsUtils.writeValue(mResources.getString(
+                    R.string.smart_charging_sysfs_charging_enabled_path), enabled ? "1" : "0");
     }
 
     private void setMaxChargingCurrent(final String mA) {
         if (DEBUG) Log.d(TAG, String.format("setMaxChargingCurrent(mA=%s).", mA));
-        PartsUtils.writeValue(SmartCharging.CHARGING_CURRENT_MAX_PATH, mA);
+        PartsUtils.writeValue(mResources.getString(
+                    R.string.smart_charging_sysfs_charging_current_max_path), mA);
     }
 
     private long getNextBatteryMonitoringTriggerTime() {
@@ -301,7 +306,8 @@ public final class SmartChargingManager {
 
     private PendingIntent getAlarmPendingIntent() {
         final Intent intent = new Intent(mContext, SmartChargingReceiver.class);
-        intent.setAction(SmartCharging.BATTERY_MONITOR_UPDATE_INTENT);
+        intent.setAction(mResources.getString(
+                    R.string.smart_charging_intent_battery_monitor_update));
         return PendingIntent.getBroadcast(mContext, /*requestCode=*/ 0, intent,
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }

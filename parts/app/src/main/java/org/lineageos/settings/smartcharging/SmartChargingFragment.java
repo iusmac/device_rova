@@ -68,36 +68,31 @@ public class SmartChargingFragment extends Hilt_SmartChargingFragment implements
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.smartcharging_settings);
 
-        mSmartChargingSwitch = (MainSwitchPreference) findPreference(SmartCharging.KEY_CHARGING_SWITCH);
+        mSmartChargingSwitch = (MainSwitchPreference)
+            findPreference(getString(R.string.smart_charging_key_main_switch));
         mSmartChargingSwitch.addOnSwitchChangeListener(this);
 
-        mSeekBarChargingLimitPreference = findPreference(SmartCharging.KEY_CHARGING_LIMIT);
+        mSeekBarChargingLimitPreference =
+            findPreference(getString(R.string.smart_charging_key_charging_limit));
         mSeekBarChargingLimitPreference.setEnabled(mSmartChargingSwitch.isChecked());
-        mSeekBarChargingLimitPreference.setMax(SmartCharging.CHARGING_LIMIT_MAX_DEFAULT);
-        mSeekBarChargingLimitPreference.setMin(SmartCharging.CHARGING_LIMIT_MIN_DEFAULT);
-        mSeekBarChargingLimitPreference.setDefaultValue(SmartCharging.CHARGING_LIMIT_DEFAULT, false /* update */);
         mSeekBarChargingLimitPreference.setOnPreferenceChangeListener(this);
 
-        mSeekBarChargingResumePreference = findPreference(SmartCharging.KEY_CHARGING_RESUME);
+        mSeekBarChargingResumePreference =
+            findPreference(getString(R.string.smart_charging_key_charging_resume));
         mSeekBarChargingResumePreference.setEnabled(mSmartChargingSwitch.isChecked());
-        mSeekBarChargingResumePreference.setMax(SmartCharging.CHARGING_RESUME_MAX_DEFAULT);
-        mSeekBarChargingResumePreference.setMin(SmartCharging.CHARGING_RESUME_MIN_DEFAULT);
-        mSeekBarChargingResumePreference.setDefaultValue(SmartCharging.CHARGING_RESUME_DEFAULT, false /* update */);
         mSeekBarChargingResumePreference.setOnPreferenceChangeListener(this);
 
-        mSeekBarChargingTempPreference = findPreference(SmartCharging.KEY_CHARGING_TEMP);
+        mSeekBarChargingTempPreference =
+            findPreference(getString(R.string.smart_charging_key_charging_temp));
         mSeekBarChargingTempPreference.setEnabled(mSmartChargingSwitch.isChecked());
-        mSeekBarChargingTempPreference.setMax(SmartCharging.CHARGING_TEMP_MAX_DEFAULT);
-        mSeekBarChargingTempPreference.setMin(SmartCharging.CHARGING_TEMP_MIN_DEFAULT);
-        mSeekBarChargingTempPreference.setDefaultValue(SmartCharging.CHARGING_TEMP_DEFAULT, false /* update */);
         mSeekBarChargingTempPreference.setOnPreferenceChangeListener(this);
 
-        mChargingCurrentMaxListPref = findPreference(SmartCharging.KEY_CHARGING_CURRENT_MAX);
+        mChargingCurrentMaxListPref =
+            findPreference(getString(R.string.smart_charging_key_charging_current_max));
         mChargingCurrentMaxListPref.setEnabled(mSmartChargingSwitch.isChecked());
-        mChargingCurrentMaxListPref.setDefaultValue(SmartCharging.CHARGING_CURRENT_MAX_DEFAULT);
         mChargingCurrentMaxListPref.setOnPreferenceChangeListener(this);
 
-        mResetStatsPreference = findPreference(SmartCharging.KEY_RESET_STATS);
+        mResetStatsPreference = findPreference(getString(R.string.smart_charging_key_reset_stats));
         mResetStatsPreference.setEnabled(mSmartChargingSwitch.isChecked());
         mResetStatsPreference.setOnPreferenceChangeListener(this);
     }
@@ -119,37 +114,42 @@ public class SmartChargingFragment extends Hilt_SmartChargingFragment implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        final String key = preference.getKey();
-        switch (key) {
-            case SmartCharging.KEY_CHARGING_LIMIT:
-            case SmartCharging.KEY_CHARGING_RESUME:
-                int chargingLimit = mSmartChargingLazy.get().getChargingLimit();
-                int chargingResume = mSmartChargingLazy.get().getChargingResume();
+        final boolean isChargingLimitPref =
+            preference.getKey().equals(getString(R.string.smart_charging_key_charging_limit));
+        final boolean isChargingResumePref =
+            preference.getKey().equals(getString(R.string.smart_charging_key_charging_resume));
 
-                if (key.equals(SmartCharging.KEY_CHARGING_LIMIT)) {
-                    chargingLimit = (int) newValue;
-                } else {
-                    chargingResume = (int) newValue;
-                }
+        if (isChargingResumePref || isChargingLimitPref) {
+            int chargingLimit = mSmartChargingLazy.get().getChargingLimit();
+            int chargingResume = mSmartChargingLazy.get().getChargingResume();
 
-                if (chargingLimit <= chargingResume) {
-                    PartsUtils.createToast(getActivity(),
-                            getString(R.string.smart_charging_warning));
-                    return false;
-                }
+            if (isChargingLimitPref) {
+                chargingLimit = (int) newValue;
+            } else {
+                chargingResume = (int) newValue;
+            }
+
+            if (chargingLimit <= chargingResume) {
+                PartsUtils.createToast(getActivity(), getString(R.string.smart_charging_warning));
+                return false;
+            }
         }
         return true;
     }
 
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPrefs, final String key) {
-        switch (key) {
-            case SmartCharging.KEY_CHARGING_LIMIT:
-            case SmartCharging.KEY_CHARGING_RESUME:
-            case SmartCharging.KEY_CHARGING_TEMP:
-            case SmartCharging.KEY_CHARGING_CURRENT_MAX:
-            case SmartCharging.KEY_RESET_STATS:
+        final int[] keyIds = new int[] { R.string.smart_charging_key_charging_limit,
+            R.string.smart_charging_key_charging_resume,
+            R.string.smart_charging_key_charging_temp,
+            R.string.smart_charging_key_charging_current_max,
+            R.string.smart_charging_key_reset_stats };
+
+        for (int keyId : keyIds) {
+            if (key.equals(getString(keyId))) {
                 mSmartChargingManagerLazy.get().onPreferenceUpdate(key);
+                break;
+            }
         }
     }
 

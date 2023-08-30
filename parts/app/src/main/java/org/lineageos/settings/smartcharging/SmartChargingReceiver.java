@@ -27,6 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.lineageos.settings.R;
+
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
 @AndroidEntryPoint(BroadcastReceiver.class)
@@ -42,21 +44,21 @@ public final class SmartChargingReceiver extends Hilt_SmartChargingReceiver {
 
         if (DEBUG) Log.d(TAG, "Intent = " + intent);
 
-        switch (intent.getAction()) {
-            case Intent.ACTION_POWER_CONNECTED:
-                mSmartChargingManagerProvider.get().onPowerConnected();
-                break;
-            case Intent.ACTION_POWER_DISCONNECTED:
-                mSmartChargingManagerProvider.get().onPowerDisconnected();
-                break;
-            case SmartCharging.BATTERY_MONITOR_UPDATE_INTENT:
-                mSmartChargingManagerProvider.get().onBatteryUpdate();
-                break;
-            case SmartChargingNotificationManager.NOTIFICATION_DISMISS_INTENT:
-                mSmartChargingManagerProvider.get().onNotificationDismiss();
-                break;
-            case SmartChargingNotificationManager.NOTIFICATION_NOT_NOW_INTENT:
-                mSmartChargingManagerProvider.get().onNotificationNotNowAction();
+        final String action = intent.getAction();
+
+        if (action.equals(Intent.ACTION_POWER_CONNECTED)) {
+            mSmartChargingManagerProvider.get().onPowerConnected();
+        } else if (action.equals(Intent.ACTION_POWER_DISCONNECTED)) {
+            mSmartChargingManagerProvider.get().onPowerDisconnected();
+        } else if (action.equals(context.getString(
+                        R.string.smart_charging_intent_battery_monitor_update))) {
+            mSmartChargingManagerProvider.get().onBatteryUpdate();
+        } else if (action.equals(context.getString(
+                        R.string.smart_charging_intent_notification_dismiss))) {
+            mSmartChargingManagerProvider.get().onNotificationDismiss();
+        } else if (action.equals(context.getString(
+                        R.string.smart_charging_intent_notification_not_now))) {
+            mSmartChargingManagerProvider.get().onNotificationNotNowAction();
         }
     }
 }

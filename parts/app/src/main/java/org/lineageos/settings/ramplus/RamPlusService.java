@@ -41,10 +41,6 @@ import static org.lineageos.settings.BuildConfig.DEBUG;
 public final class RamPlusService extends Hilt_RamPlusService {
     private static final String TAG = "RamPlus";
 
-    private static final String KEY_MODE = "key_ram_plus_mode";
-    private static final String SWAP_FREE_LOW_PERCENTAGE_PROP =
-        "persist.device_config.lmkd_native.swap_free_low_percentage";
-
     private enum Mode { MODERATE, SLIGHT, EXTREME }
 
     @Inject
@@ -85,21 +81,22 @@ public final class RamPlusService extends Hilt_RamPlusService {
     }
 
     private Mode getMode() {
-        final String mode = mSharedPrefs.getString(KEY_MODE, null);
+        final String mode = mSharedPrefs.getString(getString(R.string.ramplus_key_mode), null);
         return mode != null ? Mode.valueOf(mode) : Mode.MODERATE;
     }
 
     private void setMode(final Mode mode) {
-        final int oldPercentage = PartsUtils.getintProp(SWAP_FREE_LOW_PERCENTAGE_PROP, -1);
+        final String prop = getString(R.string.ramplus_prop_swap_free_low_percentage);
+        final int oldPercentage = PartsUtils.getintProp(prop, -1);
         final int newPercentage = getResources().getIntArray(
                 R.array.ramplus_swap_free_low_percentages)[mode.ordinal()];
 
         // Set value only if it differs from the current one, otherwise we will
         // pointlessly trigger LMK reinit
         if (oldPercentage != newPercentage) {
-            PartsUtils.setintProp(SWAP_FREE_LOW_PERCENTAGE_PROP, newPercentage);
+            PartsUtils.setintProp(prop, newPercentage);
         }
-        mSharedPrefs.edit().putString(KEY_MODE, mode.name()).apply();
+        mSharedPrefs.edit().putString(getString(R.string.ramplus_key_mode), mode.name()).apply();
     }
 
     private void updateTile(final Mode mode) {

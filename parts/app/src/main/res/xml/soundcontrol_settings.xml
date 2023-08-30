@@ -19,18 +19,18 @@
         android:key="audio">
 
         <org.lineageos.settings.preferences.SecureSettingCustomSeekBarPreference
-            android:defaultValue="-10"
-            android:key="volume_gain"
-            android:max="20"
-            android:min="-84"
+            android:defaultValue="@integer/sound_control_volume_gain_default_value"
+            android:key="@string/sound_control_key_volume_gain"
+            android:max="@integer/sound_control_volume_gain_max_default_value"
+            android:min="@integer/sound_control_volume_gain_min_default_value"
             android:icon="@drawable/ic_speaker"
             android:title="@string/volume_gain_title" />
 
         <org.lineageos.settings.preferences.SecureSettingCustomSeekBarPreference
-            android:defaultValue="0"
-            android:key="microphone_gain"
-            android:max="20"
-            android:min="-10"
+            android:defaultValue="@integer/sound_control_microphone_gain_default_value"
+            android:key="@string/sound_control_key_microphone_gain"
+            android:max="@integer/sound_control_microphone_gain_max_default_value"
+            android:min="@integer/sound_control_microphone_gain_min_default_value"
             android:icon="@drawable/ic_mic"
             android:title="@string/microphone_gain_title" />
     </PreferenceCategory>

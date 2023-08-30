@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2023 The LineageOS Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dirac_key_main_switch" translatable="false">"dirac_enable"</string>
+    <string name="dirac_key_headset" translatable="false">"dirac_headset_pref"</string>
+    <string name="dirac_key_preset" translatable="false">"dirac_preset_pref"</string>
+
+    <string name="ramplus_key_mode" translatable="false">"key_ram_plus_mode"</string>
+    <string name="ramplus_prop_swap_free_low_percentage" translatable="false">"persist.device_config.lmkd_native.swap_free_low_percentage"</string>
+
+    <string name="smart_charging_prop_last_stop_charging_reason" translatable="false">"service.smartcharging.last_stop_charging_reason"</string>
+    <string name="smart_charging_prop_next_battery_monitor_trigger_time" translatable="false">"service.smartcharging.next_battery_monitor_trigger_time"</string>
+    <string name="smart_charging_prop_notification_dismissed" translatable="false">"service.smartcharging.notification_dismissed"</string>
+    <string name="smart_charging_intent_battery_monitor_update" translatable="false">"smartcharging.BatteryMonitorUpdateIntent"</string>
+    <string name="smart_charging_intent_notification_not_now" translatable="false">"smartcharging.NotificationNotNowIntent"</string>
+    <string name="smart_charging_intent_notification_dismiss" translatable="false">"smartcharging.NotificationDismissIntent"</string>
+    <string name="smart_charging_key_main_switch" translatable="false">"smart_charging"</string>
+    <string name="smart_charging_key_charging_limit" translatable="false">"seek_bar_limit"</string>
+    <string name="smart_charging_key_charging_resume" translatable="false">"seek_bar_resume"</string>
+    <string name="smart_charging_key_charging_temp" translatable="false">"seek_bar_temp"</string>
+    <string name="smart_charging_key_charging_current_max" translatable="false">"current_max_pref"</string>
+    <string name="smart_charging_key_reset_stats" translatable="false">"reset_stats"</string>
+    <string name="smart_charging_sysfs_charging_enabled_path" translatable="false">"/sys/class/power_supply/battery/charging_enabled"</string>
+    <string name="smart_charging_sysfs_charging_current_max_path" translatable="false">"/sys/class/power_supply/usb/current_max"</string>
+    <string name="smart_charging_sysfs_charger_present_path" translatable="false">"/sys/class/power_supply/usb/present"</string>
+    <string name="smart_charging_sysfs_battery_capacity_path" translatable="false">"/sys/class/power_supply/battery/capacity"</string>
+    <string name="smart_charging_sysfs_battery_temperature_path" translatable="false">"/sys/class/power_supply/battery/temp"</string>
+    <integer name="smart_charging_charging_limit_default_value">80</integer>
+    <integer name="smart_charging_charging_limit_max_default_value">100</integer>
+    <integer name="smart_charging_charging_limit_min_default_value">65</integer>
+    <integer name="smart_charging_charging_resume_default_value">60</integer>
+    <integer name="smart_charging_charging_resume_max_default_value">99</integer>
+    <integer name="smart_charging_charging_resume_min_default_value">15</integer>
+    <integer name="smart_charging_charging_temp_default_value">35</integer>
+    <integer name="smart_charging_charging_temp_max_default_value">50</integer>
+    <integer name="smart_charging_charging_temp_min_default_value">10</integer>
+    <!-- Since we're supporting different devices, it was easier to default
+        "current now" value by passing a negative value and handle it at kernel
+        level for each device driver at the moment of writing to sysfs node. -->
+    <string name="smart_charging_current_default_value" translatable="false">"-1"</string>
+
+    <string name="sound_control_key_volume_gain" translatable="false">"volume_gain"</string>
+    <string name="sound_control_key_microphone_gain" translatable="false">"microphone_gain"</string>
+    <!-- NOTE: the kernel techpack audio driver implements speaker & headphone gain to "headphone_gain" file -->
+    <string name="sound_control_sysfs_volume_gain_path" translatable="false">"/sys/kernel/sound_control/headphone_gain"</string>
+    <string name="sound_control_sysfs_microphone_gain_path" translatable="false">"/sys/kernel/sound_control/mic_gain"</string>
+    <integer name="sound_control_volume_gain_default_value">-10</integer>
+    <integer name="sound_control_volume_gain_max_default_value">20</integer>
+    <integer name="sound_control_volume_gain_min_default_value">-84</integer>
+    <integer name="sound_control_microphone_gain_default_value">0</integer>
+    <integer name="sound_control_microphone_gain_max_default_value">20</integer>
+    <integer name="sound_control_microphone_gain_min_default_value">-10</integer>
+
+    <string name="clear_speaker_key_switch" translatable="false">"clear_speaker_pref"</string>
+</resources>

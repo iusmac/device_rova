@@ -31,14 +31,6 @@ import org.lineageos.settings.R;
 public class SoundControlSettings extends PreferenceFragmentCompat implements
         Preference.OnPreferenceChangeListener {
 
-    // NOTE: the kernel techpack audio driver implements speaker & headphone
-    // gain to 'headphone_gain' file
-    public static final String PREF_VOLUME_GAIN = "volume_gain";
-    public static final String VOLUME_GAIN_PATH = "/sys/kernel/sound_control/headphone_gain";
-
-    public static final String PREF_MICROPHONE_GAIN = "microphone_gain";
-    public static final String MICROPHONE_GAIN_PATH = "/sys/kernel/sound_control/mic_gain";
-
     private CustomSeekBarPreference mVolumeGain;
     private CustomSeekBarPreference mMicrophoneGain;
 
@@ -46,27 +38,22 @@ public class SoundControlSettings extends PreferenceFragmentCompat implements
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.soundcontrol_settings, rootKey);
 
-        mVolumeGain = (CustomSeekBarPreference) findPreference(PREF_VOLUME_GAIN);
+        mVolumeGain = (CustomSeekBarPreference)
+            findPreference(getString(R.string.sound_control_key_volume_gain));
         mVolumeGain.setOnPreferenceChangeListener(this);
 
-        mMicrophoneGain = (CustomSeekBarPreference) findPreference(PREF_MICROPHONE_GAIN);
+        mMicrophoneGain = (CustomSeekBarPreference)
+            findPreference(getString(R.string.sound_control_key_microphone_gain));
         mMicrophoneGain.setOnPreferenceChangeListener(this);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         final String key = preference.getKey();
-        switch (key) {
-            case PREF_VOLUME_GAIN:
-                PartsUtils.setValue(VOLUME_GAIN_PATH, value + " " + value);
-                break;
-
-            case PREF_MICROPHONE_GAIN:
-                PartsUtils.setValue(MICROPHONE_GAIN_PATH, (int) value);
-                break;
-
-            default:
-                break;
+        if (key.equals(getString(R.string.sound_control_key_volume_gain))) {
+            PartsUtils.setValue(getString(R.string.sound_control_sysfs_volume_gain_path), value + " " + value);
+        } else if (key.equals(getString(R.string.sound_control_key_microphone_gain))) {
+            PartsUtils.setValue(getString(R.string.sound_control_sysfs_microphone_gain_path), (int) value);
         }
         return true;
     }
