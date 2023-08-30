@@ -23,18 +23,19 @@ vendor/etc/acdbdata/QRD/QRD_Speaker_cal.acdb
 vendor/etc/acdbdata/QRD/QRD_workspaceFile.qwsp
 
 # ADSP
+-vendor/lib/libadsprpc.so
+-vendor/lib/libfastcvopt.so
+-vendor/lib64/libadsprpc.so
+-vendor/lib64/libadsprpc.so
 vendor/bin/adsprpcd
 vendor/bin/dspservice
 vendor/etc/init/vendor.qti.adsprpc-guestos-sensorspd-service.rc
 vendor/etc/init/vendor.qti.hardware.dsp@1.0-service.rc
 vendor/etc/seccomp_policy/vendor.qti.hardware.dsp.policy
-vendor/lib/libadsprpc.so
 vendor/lib/libfastcvadsp_stub.so
-vendor/lib/libfastcvopt.so
 vendor/lib/libsysmon_cdsp_skel.so
 vendor/lib/vendor.qti.hardware.dsp@1.0.so
 vendor/lib64/libadsp_default_listener.so
-vendor/lib64/libadsprpc.so
 vendor/lib64/libsysmon_cdsp_skel.so
 vendor/lib64/vendor.qti.hardware.dsp@1.0.so
 
