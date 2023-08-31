@@ -20,14 +20,12 @@ package org.lineageos.settings;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.Settings;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 import javax.inject.Inject;
 
-import org.lineageos.settings.R;
-import org.lineageos.settings.soundcontrol.SoundControlSettings;
+import org.lineageos.settings.soundcontrol.SoundControl;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.smartcharging.SmartChargingManager;
 import org.lineageos.settings.ramplus.RamPlusService;
@@ -37,6 +35,9 @@ import static org.lineageos.settings.BuildConfig.DEBUG;
 @AndroidEntryPoint(BroadcastReceiver.class)
 public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
     private static final String TAG = "XiaomiParts";
+
+    @Inject
+    SoundControl mSoundControl;
 
     @Inject
     DiracUtils mDiracUtils;
@@ -51,20 +52,7 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
     public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        int gain = Settings.Secure.getInt(
-            context.getContentResolver(),
-            context.getString(R.string.sound_control_key_volume_gain),
-            context.getResources().getInteger(R.integer.sound_control_volume_gain_default_value));
-        PartsUtils.setValue(context.getString(R.string.sound_control_sysfs_volume_gain_path),
-            gain + " " + gain);
-
-        PartsUtils.setValue(context.getString(R.string.sound_control_sysfs_microphone_gain_path),
-            Settings.Secure.getInt(
-                context.getContentResolver(),
-                context.getString(R.string.sound_control_key_microphone_gain),
-                context.getResources().getInteger(
-                    R.integer.sound_control_microphone_gain_default_value))
-        );
+        mSoundControl.onBootCompleted();
         mDiracUtils.onBootCompleted();
         mSmartChargingManager.onBootCompleted();
         mDefaultSystemSettings.onBootCompleted();

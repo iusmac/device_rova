@@ -16,23 +16,27 @@
 
 package org.lineageos.settings.soundcontrol;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
-import org.lineageos.settings.preferences.CustomSeekBarPreference;
+import dagger.hilt.android.AndroidEntryPoint;
 
-import org.lineageos.settings.PartsUtils;
+import javax.inject.Inject;
+
+import org.lineageos.settings.preferences.CustomSeekBarPreference;
 import org.lineageos.settings.R;
 
-public class SoundControlSettings extends PreferenceFragmentCompat implements
+@AndroidEntryPoint(PreferenceFragmentCompat.class)
+public class SoundControlSettingsFragment extends Hilt_SoundControlSettingsFragment implements
         Preference.OnPreferenceChangeListener {
 
     private CustomSeekBarPreference mVolumeGain;
     private CustomSeekBarPreference mMicrophoneGain;
+
+    @Inject
+    SoundControl mSoundControl;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -49,12 +53,7 @@ public class SoundControlSettings extends PreferenceFragmentCompat implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
-        final String key = preference.getKey();
-        if (key.equals(getString(R.string.sound_control_key_volume_gain))) {
-            PartsUtils.setValue(getString(R.string.sound_control_sysfs_volume_gain_path), value + " " + value);
-        } else if (key.equals(getString(R.string.sound_control_key_microphone_gain))) {
-            PartsUtils.setValue(getString(R.string.sound_control_sysfs_microphone_gain_path), (int) value);
-        }
+        mSoundControl.onPreferenceUpdate(preference.getKey(), (int) value);
         return true;
     }
 }
