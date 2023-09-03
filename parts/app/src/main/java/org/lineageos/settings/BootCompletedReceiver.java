@@ -28,7 +28,7 @@ import javax.inject.Inject;
 import org.lineageos.settings.soundcontrol.SoundControl;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.smartcharging.SmartChargingManager;
-import org.lineageos.settings.ramplus.RamPlusService;
+import org.lineageos.settings.ramplus.RamPlusManager;
 
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
@@ -48,6 +48,9 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
     @Inject
     DefaultSystemSettings mDefaultSystemSettings;
 
+    @Inject
+    RamPlusManager mRamPlusManager;
+
     @Override
     public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -56,6 +59,6 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
         mDiracUtils.onBootCompleted();
         mSmartChargingManager.onBootCompleted();
         mDefaultSystemSettings.onBootCompleted();
-        RamPlusService.sync(context);
+        mRamPlusManager.onBootCompleted();
     }
 }
