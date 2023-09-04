@@ -3,3 +3,5 @@ allow hal_wifi_default mnt_vendor_file:file r_file_perms;
 allow hal_wifi_default wifi_vendor_data_file:dir r_dir_perms;
 
 set_prop(hal_wifi_default, vendor_wifi_prop)
+
+allow hal_wifi_default vendor_tombstone_data_file:dir r_dir_perms;
