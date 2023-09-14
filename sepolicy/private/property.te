@@ -1,2 +1,3 @@
 # RAM+
 system_internal_prop(device_config_lmkd_native_swap_free_low_percentage_prop)
+system_internal_prop(device_config_lmkd_native_thrashing_limit_critical_prop)
