@@ -8,9 +8,6 @@ dalvik.vm.image-dex2oat-threads=4
 dalvik.vm.image-dex2oat-cpu-set=0,1,2,3
 dalvik.vm.boot-dex2oat-threads=4
 
-# Charger
-ro.charger.disable_init_blank=true
-
 # CoreSight
 persist.debug.coresight.config=stm-events
 
