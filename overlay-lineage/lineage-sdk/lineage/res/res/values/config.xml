@@ -71,6 +71,7 @@
     <string-array name="config_deviceDisabledComponents" translatable="false">
         <item>com.google.android.gms/com.google.android.gms.nearby.messages.service.NearbyMessagesService</item>
         <item>com.google.android.gms/com.google.android.gms.nearby.discovery.service.DiscoveryService</item>
+        <item>com.android.dynsystem/.BootCompletedReceiver</item>
     </string-array>
 
     <!-- All the capabilities of the LEDs on this device, stored as a bit field.
