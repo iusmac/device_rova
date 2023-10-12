@@ -1,11 +1,14 @@
+// #define DEBUG
+
+#ifndef DEBUG
+#include <cutils/klog.h>
+#endif
 #include <fcntl.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
-// #define DEBUG
 
 #if defined(DEBUG)
 #define UPDATE_INTERVAL_SEC 1
@@ -21,9 +24,15 @@
 
 #define LED_PATH(led, file) "/sys/class/leds/" led "/" file
 
+#ifdef DEBUG
 #define LOG_TAG "charger_led: "
 #define LOG_ERROR(...) fprintf(stderr, LOG_TAG __VA_ARGS__)
 #define LOG_INFO(...) fprintf(stdout, LOG_TAG __VA_ARGS__)
+#else
+#define LOG_TAG "charger_led"
+#define LOG_ERROR(x...) KLOG_ERROR(LOG_TAG, x)
+#define LOG_INFO(x...) KLOG_INFO(LOG_TAG, x)
+#endif
 
 /* Definitions */
 enum led_types {

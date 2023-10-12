@@ -1,7 +1,7 @@
 service vendor.charger_led /vendor/bin/charger_led
     user system
     group system
-    stdio_to_kmsg
+    file /dev/kmsg w
     oneshot
     disabled
 

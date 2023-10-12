@@ -1,8 +1,8 @@
 service charger_led /system/bin/charger_led
     user system
     group system
+    file /dev/kmsg w
     seclabel u:r:charger_led:s0
-    stdio_to_kmsg
     oneshot
 
 on early-init

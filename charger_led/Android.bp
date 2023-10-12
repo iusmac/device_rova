@@ -6,6 +6,7 @@ cc_defaults {
         "-Werror",
         "-Wunused",
     ],
+    shared_libs: ["libcutils"],
     srcs: ["main.c"],
 }
 
