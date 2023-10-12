@@ -108,7 +108,7 @@ PRODUCT_COPY_FILES += \
 # Charger
 PRODUCT_PACKAGES += \
     charger_led \
-    charger_led.recovery
+    charger_led_recovery
 
 # Consumer IR
 PRODUCT_PACKAGES += \

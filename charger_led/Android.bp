@@ -1,15 +1,25 @@
-cc_binary {
-    name: "charger_led",
+cc_defaults {
+    name: "charger_led_defaults",
     cflags: [
         "-Wall",
         "-Wextra",
         "-Werror",
         "-Wunused",
     ],
-    srcs: [
-        "main.c",
-    ],
+    srcs: ["main.c"],
+}
+
+cc_binary {
+    name: "charger_led",
+    defaults: ["charger_led_defaults"],
+    vendor: true,
     init_rc: ["charger_led.rc"],
-    recovery_available: true,
-    vendor: true
+}
+
+cc_binary {
+    name: "charger_led_recovery",
+    stem: "charger_led",
+    defaults: ["charger_led_defaults"],
+    recovery: true,
+    init_rc: ["charger_led.recovery.rc"],
 }
