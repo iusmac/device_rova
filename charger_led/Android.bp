@@ -9,11 +9,6 @@ cc_binary {
     srcs: [
         "main.c",
     ],
-    target: {
-        recovery: {
-            cflags: ["-DRECOVERY"],
-        },
-    },
     init_rc: ["charger_led.rc"],
     recovery_available: true,
     vendor: true

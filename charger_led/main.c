@@ -9,7 +9,7 @@
 
 #if defined(DEBUG)
 #define UPDATE_INTERVAL_SEC 1
-#elif defined(RECOVERY)
+#elif defined(__ANDROID_RECOVERY__)
 #define UPDATE_INTERVAL_SEC 5
 #else
 #define UPDATE_INTERVAL_SEC 60
@@ -252,7 +252,7 @@ void handle_battery_capacity_update_rgb(void) {
         update_led(RED, LED_STATE_BRIGHTNESS);
     else if (bat_capacity <= 80)  // 31 ~ 80
         update_led(BLUE, LED_STATE_BRIGHTNESS);
-#ifdef RECOVERY
+#ifdef __ANDROID_RECOVERY__
     else if (bat_capacity <= 100)  // 81 ~ 100
         update_led(GREEN, LED_STATE_BRIGHTNESS);
 #else
@@ -264,7 +264,7 @@ void handle_battery_capacity_update_rgb(void) {
 }
 
 void handle_battery_capacity_update_white(void) {
-#ifdef RECOVERY
+#ifdef __ANDROID_RECOVERY__
     if (bat_capacity <= 30)  // 0 ~ 30
         update_led(active_led.id, LED_STATE_BLINK);
     else if (bat_capacity <= 100)  // 31 ~ 100
