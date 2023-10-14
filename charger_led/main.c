@@ -24,53 +24,64 @@
 #define LOG_ERROR(...) fprintf(stderr, LOG_TAG __VA_ARGS__)
 #define LOG_INFO(...) fprintf(stdout, LOG_TAG __VA_ARGS__)
 
-// Definitions
-enum led_types { LED_UNKNOWN = 0, WHITE, RED, GREEN, BLUE, LED_TYPES_MAX };
+/* Definitions */
+enum led_types {
+    LED_UNKNOWN = 0,
+    WHITE,
+    RED,
+    GREEN,
+    BLUE,
+    LED_STANDARD_TYPES_MAX,
+    CYAN,    // blue+green
+    PINK,    // blue+red
+    YELLOW,  // green+red
+    LED_ALL_TYPES_MAX
+};
 
-enum led_states { LED_STATE_OFF = 0, LED_STATE_BLINK, LED_STATE_BRIGHTNESS };
+enum led_states { LED_STATE_OFF = 0, LED_STATE_BREATH, LED_STATE_BRIGHTNESS };
 
-const char led_blink_paths[LED_TYPES_MAX][64] = {
+const char led_blink_paths[LED_STANDARD_TYPES_MAX][64] = {
         [WHITE] = LED_PATH("white", "blink"),
         [RED] = LED_PATH("red", "blink"),
         [GREEN] = LED_PATH("green", "blink"),
         [BLUE] = LED_PATH("blue", "blink"),
 };
 
-const char led_breath_paths[LED_TYPES_MAX][64] = {
+const char led_breath_paths[LED_STANDARD_TYPES_MAX][64] = {
         [WHITE] = LED_PATH("white", "breath"),
         [RED] = LED_PATH("red", "breath"),
         [GREEN] = LED_PATH("green", "breath"),
         [BLUE] = LED_PATH("blue", "breath"),
 };
 
-const char led_brightness_paths[LED_TYPES_MAX][64] = {
+const char led_brightness_paths[LED_STANDARD_TYPES_MAX][64] = {
         [WHITE] = LED_PATH("white", "brightness"),
         [RED] = LED_PATH("red", "brightness"),
         [GREEN] = LED_PATH("green", "brightness"),
         [BLUE] = LED_PATH("blue", "brightness"),
 };
 
-const char led_max_brightness_paths[LED_TYPES_MAX][64] = {
+const char led_max_brightness_paths[LED_STANDARD_TYPES_MAX][64] = {
         [WHITE] = LED_PATH("white", "max_brightness"),
         [RED] = LED_PATH("red", "max_brightness"),
         [GREEN] = LED_PATH("green", "max_brightness"),
         [BLUE] = LED_PATH("blue", "max_brightness"),
 };
 
-// Variables
-bool use_blink_node = false;
+/* Variables */
+// Settings
+bool use_blink_node_for_breath = false;
 float led_brightness_multiplier = 1.0;
+// Charge state
 int bat_capacity = 0;
 int usb_current_max = 0;
-
+// LED state
 struct led {
-    int id;
-    int state;
-    int brightness;
-    int max_brightness;
-} active_led = {LED_UNKNOWN, LED_STATE_OFF, 0, 0};
+    enum led_types id;
+    enum led_states state;
+} active_led = {LED_UNKNOWN, LED_STATE_OFF};
 
-// Helper functions
+/* Helper functions */
 bool file_is_writeable(const char* path) {
     int fd = open(path, O_WRONLY);
 
@@ -133,18 +144,18 @@ bool write_int(const char* path, int val) {
     }
 }
 
-bool write_led_breath(int led_id, bool led_enable) {
-    if (use_blink_node)
+bool write_led_breath(enum led_types led_id, bool led_enable) {
+    if (use_blink_node_for_breath)
         return write_int(led_blink_paths[led_id], led_enable);
     else
         return write_int(led_breath_paths[led_id], led_enable);
 }
 
-bool write_led_brightness(int led_id, int led_brightness) {
+bool write_led_brightness(enum led_types led_id, int led_brightness) {
     return write_int(led_brightness_paths[led_id], led_brightness);
 }
 
-const char* led_id_to_str(int led_id) {
+const char* led_id_to_str(enum led_types led_id) {
     switch (led_id) {
         case WHITE:
             return "White";
@@ -154,8 +165,27 @@ const char* led_id_to_str(int led_id) {
             return "Green";
         case BLUE:
             return "Blue";
+        case CYAN:
+            return "Cyan";
+        case PINK:
+            return "Pink";
+        case YELLOW:
+            return "Yellow";
         default:
             return "Unknown";
+    }
+}
+
+const char* led_state_to_str(enum led_states led_state) {
+    switch (led_state) {
+        case LED_STATE_BREATH:
+            return "breath";
+        case LED_STATE_BRIGHTNESS:
+            return "brightness";
+        case LED_STATE_OFF:
+            return "off";
+        default:
+            return "unknown";
     }
 }
 
@@ -163,13 +193,16 @@ int calc_brightness(int max_brightness) {
     return max_brightness * led_brightness_multiplier;
 }
 
-// Main functions
+/* Main functions */
+
+// These functions don't change any variable
+
 void reset_all_leds(void) {
     int i;
 
     LOG_INFO("Reset all LEDs - Begin\n");
-    for (i = 1; i < LED_TYPES_MAX; ++i) {
-        if (use_blink_node)
+    for (i = 1; i < LED_STANDARD_TYPES_MAX; ++i) {
+        if (use_blink_node_for_breath)
             write_int(led_blink_paths[i], 0);
         else
             write_int(led_breath_paths[i], 0);
@@ -179,103 +212,152 @@ void reset_all_leds(void) {
     LOG_INFO("Reset all LEDs - End\n");
 }
 
-bool stop_active_led(void) {
-    bool succeed = false;
+bool set_led_brightness(enum led_types led_id, bool enable) {
+    enum led_types max_brightness_led_id = LED_UNKNOWN;
+    int max_brightness_val = 0;
+    int new_brightness = 0;
 
-    switch (active_led.state) {
-        case LED_STATE_BLINK:
-            succeed = write_led_breath(active_led.id, false);
-            break;
-        case LED_STATE_BRIGHTNESS:
-            active_led.brightness = 0;
-            succeed = write_led_brightness(active_led.id, 0);
-            break;
-        case LED_STATE_OFF:
-            succeed = true;
-            break;
-    }
+    // Just write 0 for disable
+    if (!enable) return write_led_brightness(led_id, 0);
 
-    if (succeed) active_led.state = LED_STATE_OFF;
+    // Decide where to read max brightness
+    if (led_id > LED_UNKNOWN && led_id < LED_STANDARD_TYPES_MAX)
+        max_brightness_led_id = led_id;
+    else
+        max_brightness_led_id = RED;
 
-    return succeed;
-}
+    // Read max brightness
+    if (!read_file_to_int(led_max_brightness_paths[max_brightness_led_id], &max_brightness_val))
+        LOG_ERROR("Failed to read max_brightness of %s LED\n",
+                  led_id_to_str(max_brightness_led_id));
 
-bool update_led_brightness(int led_id) {
-    int new_brightness = calc_brightness(active_led.max_brightness);
-
-    if (active_led.state != LED_STATE_BRIGHTNESS || active_led.brightness == new_brightness)
-        return true;
-
-    active_led.brightness = new_brightness;
+    // Calculate and set brightness
+    new_brightness = calc_brightness(max_brightness_val);
     return write_led_brightness(led_id, new_brightness);
 }
 
-bool update_led(int led_id, int led_state) {
+bool set_led_state_standard_color(enum led_types led_id, enum led_states led_state) {
     bool succeed = false;
-    int max_brightness_val = 0;
-
-    // Exit if LED is not getting changed
-    if (active_led.id == led_id && active_led.state == led_state) {
-        return true;
-    }
-
-    // Stop currently active LED first
-    if (active_led.id != led_id || active_led.state != led_state) stop_active_led();
-
-    if (!read_file_to_int(led_max_brightness_paths[led_id], &max_brightness_val))
-        LOG_ERROR("Failed to read max_brightness of %s LED\n", led_id_to_str(led_id));
-
-    active_led.id = led_id;
-    active_led.state = led_state;
-    active_led.brightness = 0;
-    active_led.max_brightness = max_brightness_val;
-
     switch (led_state) {
-        case LED_STATE_BLINK:
+        case LED_STATE_BREATH:
             succeed = write_led_breath(led_id, true);
             break;
         case LED_STATE_BRIGHTNESS:
-            succeed = update_led_brightness(led_id);
+            succeed = set_led_brightness(led_id, true);
             break;
         case LED_STATE_OFF:
-            succeed = true;
+            succeed = set_led_brightness(led_id, false);
             break;
     }
+    return succeed;
+}
+
+bool set_led_state(enum led_types led_id, enum led_states led_state) {
+    bool succeed = false;
+    switch (led_id) {
+        // Standard colors
+        case WHITE:
+        case RED:
+        case GREEN:
+        case BLUE:
+            succeed = set_led_state_standard_color(led_id, led_state);
+            break;
+        // Mixed colors
+        case CYAN:
+            succeed = set_led_state_standard_color(BLUE, led_state);
+            succeed &= set_led_state_standard_color(GREEN, led_state);
+            break;
+        case PINK:
+            succeed = set_led_state_standard_color(BLUE, led_state);
+            succeed &= set_led_state_standard_color(RED, led_state);
+            break;
+        case YELLOW:
+            succeed = set_led_state_standard_color(GREEN, led_state);
+            succeed &= set_led_state_standard_color(RED, led_state);
+            break;
+        default:
+            succeed = false;
+            break;
+    }
+    if (!succeed) {
+        LOG_ERROR("Failed to set %s LED state to %s\n", led_id_to_str(led_id),
+                  led_state_to_str(led_state));
+    }
+    return succeed;
+}
+
+void update_active_led_brightness(void) {
+    if (active_led.id == LED_UNKNOWN) return;
+    if (active_led.state != LED_STATE_BRIGHTNESS) return;
+    set_led_state(active_led.id, LED_STATE_BRIGHTNESS);
+}
+
+// These functions should update `struct active_led`
+
+bool stop_active_led(void) {
+    bool succeed = false;
+    if (active_led.id == LED_UNKNOWN) return false;
+    succeed = set_led_state(active_led.id, LED_STATE_OFF);
+    if (succeed) active_led.state = LED_STATE_OFF;
+    return succeed;
+}
+
+bool update_led(enum led_types led_id, enum led_states led_state) {
+    bool succeed = false;
+
+    // Exit if LED is not getting changed
+    if (active_led.id == led_id && active_led.state == led_state) return true;
+
+    succeed = stop_active_led();
+    succeed &= set_led_state(led_id, led_state);
+
+    active_led.id = led_id;
+    active_led.state = led_state;
 
     return succeed;
 }
 
+/* Handle value updates */
+
 void handle_battery_capacity_update_rgb(void) {
     if (bat_capacity <= 10)  // 0 ~ 10
-        update_led(RED, LED_STATE_BLINK);
-    else if (bat_capacity <= 30)  // 11 ~ 30
+        update_led(RED, LED_STATE_BREATH);
+    else if (bat_capacity <= 20)  // 11 ~ 20
         update_led(RED, LED_STATE_BRIGHTNESS);
-    else if (bat_capacity <= 80)  // 31 ~ 80
-        update_led(BLUE, LED_STATE_BRIGHTNESS);
 #ifdef __ANDROID_RECOVERY__
-    else if (bat_capacity <= 100)  // 81 ~ 100
+    else if (bat_capacity <= 60)  // 21 ~ 60
+        update_led(CYAN, LED_STATE_BRIGHTNESS);
+    else if (bat_capacity <= 100)  // 61 ~ 100
         update_led(GREEN, LED_STATE_BRIGHTNESS);
 #else
+    else if (bat_capacity <= 30)  // 21 ~ 30
+        update_led(PINK, LED_STATE_BRIGHTNESS);
+    else if (bat_capacity <= 50)  // 31 ~ 50
+        update_led(YELLOW, LED_STATE_BRIGHTNESS);
+    else if (bat_capacity <= 70)  // 51 ~ 70
+        update_led(BLUE, LED_STATE_BRIGHTNESS);
+    else if (bat_capacity <= 80)  // 71 ~ 80
+        update_led(CYAN, LED_STATE_BRIGHTNESS);
     else if (bat_capacity <= 99)  // 81 ~ 99
         update_led(GREEN, LED_STATE_BRIGHTNESS);
     else if (bat_capacity == 100)  // 100
-        update_led(GREEN, LED_STATE_BLINK);
+        update_led(GREEN, LED_STATE_BREATH);
 #endif
 }
 
 void handle_battery_capacity_update_white(void) {
 #ifdef __ANDROID_RECOVERY__
-    if (bat_capacity <= 30)  // 0 ~ 30
-        update_led(active_led.id, LED_STATE_BLINK);
-    else if (bat_capacity <= 100)  // 31 ~ 100
+    if (bat_capacity <= 20)  // 0 ~ 20
+        update_led(active_led.id, LED_STATE_BREATH);
+    else if (bat_capacity <= 100)  // 21 ~ 100
         update_led(active_led.id, LED_STATE_BRIGHTNESS);
 #else
     if (bat_capacity <= 10)  // 0 ~ 10
-        update_led(active_led.id, LED_STATE_BLINK);
+        update_led(active_led.id, LED_STATE_BREATH);
     else if (bat_capacity <= 99)  // 11 ~ 99
         update_led(active_led.id, LED_STATE_BRIGHTNESS);
     else if (bat_capacity == 100)  // 100
-        update_led(active_led.id, LED_STATE_BLINK);
+        update_led(active_led.id, LED_STATE_BREATH);
 #endif
 }
 
@@ -287,7 +369,7 @@ void handle_usb_current_max_update(void) {
     else
         led_brightness_multiplier = 0.8;
 
-    update_led_brightness(active_led.id);
+    update_active_led_brightness();
 }
 
 int main(void) {
@@ -320,12 +402,12 @@ int main(void) {
     // Use blink node?
     if (active_led.id == LED_UNKNOWN) {
         // RGB LED
-        if (file_is_writeable(led_blink_paths[RED])) use_blink_node = true;
+        if (file_is_writeable(led_blink_paths[RED])) use_blink_node_for_breath = true;
     } else {
         // White LED
-        if (file_is_writeable(led_blink_paths[active_led.id])) use_blink_node = true;
+        if (file_is_writeable(led_blink_paths[active_led.id])) use_blink_node_for_breath = true;
     }
-    if (use_blink_node) LOG_INFO("Use blink node for breath\n");
+    if (use_blink_node_for_breath) LOG_INFO("Use blink node for breath\n");
 
     // Reset all LEDs
     reset_all_leds();
