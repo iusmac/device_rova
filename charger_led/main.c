@@ -428,7 +428,7 @@ bool detect_led_type(void) {
 };
 
 int main(void) {
-    bool must_execute_handle_battery_capacity_update = false;
+    bool must_execute_handle_battery_capacity_update = true;
     int bat_capacity_new, bat_capacity_fd;
     int usb_current_max_new, usb_current_max_fd;
 #ifndef __ANDROID_RECOVERY__
