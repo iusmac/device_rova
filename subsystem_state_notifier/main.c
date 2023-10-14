@@ -1,16 +1,16 @@
 #define LOG_TAG "SubsystemStateNotifier"
 #include <log/log.h>
 
+#include <cutils/properties.h>
 #include <poll.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <cutils/properties.h>
 
 #define PROP_SUBSYS_STATE "vendor.subsys_state_notifier.%s.state"
 #define SUBSYS_STATE_PATH "/sys/class/subsys/subsys_%s/device/subsys%d/state"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     char prop_subsys_state_key[64];
     char subsystem[10];
     char subsystem_state[11];
@@ -27,8 +27,9 @@ int main(int argc, char **argv) {
     ALOGI("Subsystem to monitor: %s\n", subsystem);
 
     // Open fd
-    for (i=0; i<=9; ++i) {
-        snprintf(subsystem_state_path, sizeof(subsystem_state_path), SUBSYS_STATE_PATH, subsystem, i);
+    for (i = 0; i <= 9; ++i) {
+        snprintf(subsystem_state_path, sizeof(subsystem_state_path), SUBSYS_STATE_PATH, subsystem,
+                 i);
         fd = open(subsystem_state_path, O_RDONLY);
         if (fd >= 0) {
             ALOGI("Opened %s subsystem state path %s\n", subsystem, subsystem_state_path);
@@ -54,11 +55,11 @@ int main(int argc, char **argv) {
             goto error_fd;
         }
 
-        subsystem_state[strlen(subsystem_state)-1] = '\0';
+        subsystem_state[strlen(subsystem_state) - 1] = '\0';
         ALOGI("%s subsystem state: %s\n", subsystem, subsystem_state);
         property_set(prop_subsys_state_key, subsystem_state);
 
-        if (!poll(pollfds, 1 , -1)) {
+        if (!poll(pollfds, 1, -1)) {
             ALOGE("Error in polling\n");
             goto error_fd;
         }
