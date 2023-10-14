@@ -376,6 +376,48 @@ void handle_usb_current_max_update(void) {
     update_active_led_brightness();
 }
 
+// Returns false if LED is not found or invalid
+bool detect_led_type(void) {
+    enum led_types check_led_node = LED_UNKNOWN;
+
+    if (file_is_writeable(led_brightness_paths[RED]) &&
+        file_is_writeable(led_brightness_paths[GREEN]) &&
+        file_is_writeable(led_brightness_paths[BLUE])) {
+        // RGB LED
+        LOG_INFO("RGB LED is found\n");
+        handle_battery_capacity_update_callback = handle_battery_capacity_update_rgb;
+        check_led_node = GREEN;
+    } else {
+        // Either White color only LED, or nothing
+        handle_battery_capacity_update_callback = handle_battery_capacity_update_white;
+        if (file_is_writeable(led_brightness_paths[WHITE])) {
+            LOG_INFO("White LED is found, using white node\n");
+            active_led.id = WHITE;
+            check_led_node = WHITE;
+        } else if (file_is_writeable(led_brightness_paths[RED])) {
+            LOG_INFO("White LED is found, using red node\n");
+            active_led.id = RED;
+            check_led_node = RED;
+        } else {
+            LOG_ERROR("Could not find any LED\n");
+            return false;
+        }
+    }
+
+    if (file_is_writeable(led_blink_paths[check_led_node])) {
+        LOG_INFO("LED Breath is supported, using blink node\n");
+        use_blink_node_for_breath = true;
+    } else if (file_is_writeable(led_breath_paths[check_led_node])) {
+        LOG_INFO("LED Breath is supported, using breath node\n");
+        use_blink_node_for_breath = false;
+    } else {
+        LOG_ERROR("LED Breath is unsupported\n");
+        return false;
+    }
+
+    return true;
+};
+
 int main(void) {
     bool must_execute_handle_battery_capacity_update = false;
     int bat_capacity_new, bat_capacity_fd;
@@ -384,38 +426,8 @@ int main(void) {
     int usb_online_new, usb_online_fd;
 #endif
 
-    // Determine LED support
-    if (!file_is_writeable(led_brightness_paths[BLUE])) {
-        LOG_INFO("RGB LED node does not exist, use White LED\n");
-        handle_battery_capacity_update_callback = handle_battery_capacity_update_white;
-        active_led.id = WHITE;
-        if (!file_is_writeable(led_brightness_paths[WHITE])) {
-            LOG_INFO("White LED node does not exist, use Red LED node for White LED\n");
-            active_led.id = RED;
-            if (!file_is_writeable(led_brightness_paths[RED])) {
-                LOG_ERROR("Red LED node does not exist, No available LED\n");
-                goto error;
-            }
-        }
-    } else {
-        if (!file_is_writeable(led_brightness_paths[GREEN]) ||
-            !file_is_writeable(led_brightness_paths[RED])) {
-            LOG_ERROR("RGB LED is missing some nodes\n");
-            goto error;
-        }
-        LOG_INFO("RGB LED exists, use RGB LED\n");
-        handle_battery_capacity_update_callback = handle_battery_capacity_update_rgb;
-    }
-
-    // Use blink node?
-    if (active_led.id == LED_UNKNOWN) {
-        // RGB LED
-        if (file_is_writeable(led_blink_paths[RED])) use_blink_node_for_breath = true;
-    } else {
-        // White LED
-        if (file_is_writeable(led_blink_paths[active_led.id])) use_blink_node_for_breath = true;
-    }
-    if (use_blink_node_for_breath) LOG_INFO("Use blink node for breath\n");
+    // Detect LED type
+    if (!detect_led_type()) goto error;
 
     // Reset all LEDs
     reset_all_leds();
