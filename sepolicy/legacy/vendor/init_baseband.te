@@ -8,8 +8,8 @@ init_daemon_domain(init_baseband)
 allow init_baseband vendor_shell_exec:file { rx_file_perms entrypoint };
 allow init_baseband vendor_toolbox_exec:file rx_file_perms;
 
-# Allow reading modem firmware
-r_dir_file(init_baseband, firmware_file)
+# Allow reading firmware version info
+r_dir_file(init_baseband, sysfs_socinfo)
 
 # Allow setting gsm. property
 set_prop(init_baseband, baseband_prop)
