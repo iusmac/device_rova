@@ -36,13 +36,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdio.h>
 #ifdef USE_ION
 #include <linux/msm_ion.h>
-#ifdef _TARGET_KERNEL_VERSION_49_
-#define _UAPI_LINUX_ION_H
-#endif
-#include <ion/ion.h>
-#ifndef _TARGET_KERNEL_VERSION_49_
-#include <linux/dma-buf.h>
-#endif
 #endif
 
 #ifdef _ANDROID_
@@ -106,9 +99,9 @@ struct venc_debug_cap {
 };
 #ifdef USE_ION
 struct venc_ion {
-    int dev_fd;
-    int data_fd;
-    struct ion_allocation_data alloc_data;
+    int ion_device_fd;
+    struct ion_fd_data fd_ion_data;
+    struct ion_allocation_data ion_alloc_data;
 };
 
 #endif
