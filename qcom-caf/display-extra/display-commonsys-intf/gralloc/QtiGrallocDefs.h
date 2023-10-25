@@ -1,8 +1,6 @@
 /*
  * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
  *
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
- *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
@@ -27,11 +25,6 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-/*
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
- * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
 #ifndef __QTIGRALLOCDEFS_H__
@@ -84,8 +77,6 @@
 /* This flag indicates video HW usage */
 #define GRALLOC_USAGE_PRIVATE_VIDEO_HW           1ULL << 52
 
-/* This flag indicates trusted VM use case */
-#define GRALLOC_USAGE_PRIVATE_TRUSTED_VM         1ULL << 53
 
 // OEM specific HAL formats
 #define HAL_PIXEL_FORMAT_RGBA_5551 6
@@ -133,9 +124,6 @@
 #define HAL_PIXEL_FORMAT_NV12_UBWC_FLEX_2_BATCH 0x128
 #define HAL_PIXEL_FORMAT_NV12_UBWC_FLEX_4_BATCH 0x129
 #define HAL_PIXEL_FORMAT_NV12_UBWC_FLEX_8_BATCH 0x130
-#define HAL_PIXEL_FORMAT_NV12_FLEX_2_BATCH 0x140
-#define HAL_PIXEL_FORMAT_NV12_FLEX_4_BATCH 0x141
-#define HAL_PIXEL_FORMAT_NV12_FLEX_8_BATCH 0x142
 
 // FSC Formats
 #define HAL_PIXEL_FORMAT_RGB888_UBWC_FSC 0x131

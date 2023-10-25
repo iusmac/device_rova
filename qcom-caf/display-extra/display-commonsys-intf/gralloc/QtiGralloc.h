@@ -1,8 +1,6 @@
 /*
  * Copyright (c) 2020 The Linux Foundation. All rights reserved.
  *
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
- *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
@@ -27,10 +25,6 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
- * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
 #ifndef __QTIGRALLOC_H__
@@ -100,13 +94,7 @@ static const MetadataType MetadataType_CVPMetadata = {VENDOR_QTI, QTI_CVP_METADA
 static const MetadataType MetadataType_VideoHistogramStats = {VENDOR_QTI,
                                                               QTI_VIDEO_HISTOGRAM_STATS};
 
-static const MetadataType MetadataType_VideoTranscodeStats = {VENDOR_QTI,
-                                                              QTI_VIDEO_TRANSCODE_STATS};
-
 static const MetadataType MetadataType_VideoTimestampInfo = {VENDOR_QTI, QTI_VIDEO_TS_INFO};
-
-static const MetadataType MetadataType_VideoEarlyNotifyLineCount = {VENDOR_QTI,
-                                                                    QTI_EARLYNOTIFY_LINECOUNT};
 
 static const MetadataType MetadataType_FD = {VENDOR_QTI, QTI_FD};
 
@@ -137,13 +125,6 @@ static const MetadataType MetadataType_RgbDataAddress = {VENDOR_QTI, QTI_RGB_DAT
 
 static const MetadataType MetadataType_ColorSpace = {VENDOR_QTI, QTI_COLORSPACE};
 static const MetadataType MetadataType_YuvPlaneInfo = {VENDOR_QTI, QTI_YUV_PLANE_INFO};
-static const MetadataType MetadataType_BufferPermission = {VENDOR_QTI, QTI_BUFFER_PERMISSION};
-static const MetadataType MetadataType_MemHandle = {VENDOR_QTI, QTI_MEM_HANDLE};
-
-static const MetadataType MetadataType_TimedRendering = {VENDOR_QTI, QTI_TIMED_RENDERING};
-static const MetadataType MetadataType_CustomContentMetadata = {VENDOR_QTI,
-                                                                QTI_CUSTOM_CONTENT_METADATA};
-
 // 0 is also used as invalid value in standard metadata
 static const MetadataType MetadataType_Invalid = {VENDOR_QTI, 0};
 
@@ -171,16 +152,10 @@ Error decodeCVPMetadata(hidl_vec<uint8_t> &in, CVPMetadata *out);
 Error encodeCVPMetadata(CVPMetadata &in, hidl_vec<uint8_t> *out);
 Error decodeVideoHistogramMetadata(hidl_vec<uint8_t> &in, VideoHistogramMetadata *out);
 Error encodeVideoHistogramMetadata(VideoHistogramMetadata &in, hidl_vec<uint8_t> *out);
-Error decodeVideoTranscodeStatsMetadata(hidl_vec<uint8_t> &in, VideoTranscodeStatsMetadata *out);
-Error encodeVideoTranscodeStatsMetadata(VideoTranscodeStatsMetadata &in, hidl_vec<uint8_t> *out);
 Error decodeVideoTimestampInfo(hidl_vec<uint8_t> &in, VideoTimestampInfo *out);
 Error encodeVideoTimestampInfo(VideoTimestampInfo &in, hidl_vec<uint8_t> *out);
 Error decodeYUVPlaneInfoMetadata(hidl_vec<uint8_t> &in, qti_ycbcr *out);
 Error encodeYUVPlaneInfoMetadata(qti_ycbcr *in, hidl_vec<uint8_t> *out);
-Error decodeBufferPermission(hidl_vec<uint8_t> &in, BufferPermission *out);
-Error encodeBufferPermission(BufferPermission *in, hidl_vec<uint8_t> *out);
-Error decodeCustomContentMetadata(hidl_vec<uint8_t> &in, void *out);
-Error encodeCustomContentMetadata(const void *in, hidl_vec<uint8_t> *out);
 }  // namespace qtigralloc
 
 #endif  //__QTIGRALLOC_H__
