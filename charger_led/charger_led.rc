@@ -1,4 +1,5 @@
 service vendor.charger_led /vendor/bin/charger_led
+    class charger
     user system
     group system
     file /dev/kmsg w
@@ -23,3 +24,20 @@ on charger
     chown system system /sys/class/leds/white/brightness
 
     start vendor.charger_led
+
+on late-init
+    write /sys/class/leds/red/blink 0
+    write /sys/class/leds/red/breath 0
+    write /sys/class/leds/red/brightness 0
+
+    write /sys/class/leds/green/blink 0
+    write /sys/class/leds/green/breath 0
+    write /sys/class/leds/green/brightness 0
+
+    write /sys/class/leds/blue/blink 0
+    write /sys/class/leds/blue/breath 0
+    write /sys/class/leds/blue/brightness 0
+
+    write /sys/class/leds/white/blink 0
+    write /sys/class/leds/white/breath 0
+    write /sys/class/leds/white/brightness 0
