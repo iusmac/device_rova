@@ -43,9 +43,6 @@ sys.post_boot.parsed           u:object_r:vendor_mpctl_prop:s0
 persist.net.doxlat             u:object_r:vendor_xlat_prop:s0
 ro.product.wt.boardid          u:object_r:exported_default_prop:s0
 
-# PowerHAL
-vendor.powerhal.               u:object_r:vendor_power_prop:s0
-
 # Thermal Engine
 sys.thermal.                   u:object_r:vendor_thermal_engine_prop:s0
 
