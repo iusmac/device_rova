@@ -1,4 +1,4 @@
-<manifest version="2.0" type="device" target-level="5">
+<manifest version="2.0" type="device" target-level="6">
     <hal format="hidl">
         <name>android.hardware.audio</name>
         <transport>hwbinder</transport>
@@ -244,5 +244,4 @@
         <transport>hwbinder</transport>
         <fqname>@3.0::IKeymasterDevice/default</fqname>
     </hal>
-    <kernel target-level="6"/>
 </manifest>
