@@ -142,9 +142,7 @@ PRODUCT_PACKAGES += \
     hwcomposer.qcom
 
 PRODUCT_PACKAGES += \
-    android.hardware.memtrack@1.0-impl \
-    android.hardware.memtrack@1.0-service \
-    memtrack.msm8937
+    vendor.qti.hardware.memtrack-service
 
 PRODUCT_PACKAGES += \
     libdisplayconfig \
