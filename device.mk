@@ -439,6 +439,7 @@ PRODUCT_PACKAGES += \
     libwui
 
 PRODUCT_PACKAGES += \
+    libcrypto-v33 \
     libprotobuf-cpp-full-3.9.1-vendorcompat
 
 # Shipping level
