@@ -498,7 +498,7 @@ OVERRIDE_ENABLE_UFFD_GC := false
 PRODUCT_PACKAGES += \
     usb_compositions.conf \
     android.hardware.usb@1.3-service.basic \
-    android.hardware.usb.gadget@1.2-service-qti
+    android.hardware.usb.gadget-service.qti
 
 # Add common definitions for Qualcomm
 $(call inherit-product, hardware/qcom-caf/common/common.mk)
