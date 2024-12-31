@@ -208,7 +208,7 @@ void set_dalvik_heap_size()
     } else if (sys.totalram > 1024ull * 1024 * 1024) {
         // from - phone-xhdpi-2048-dalvik-heap.mk
         heapstartsize = "8m";
-        heapgrowthlimit = "192m";
+        heapgrowthlimit = "256m";
         heapsize = "512m";
         heaptargetutilization = "0.75";
         heapminfree = "512k";
