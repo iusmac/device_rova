@@ -931,46 +931,24 @@ vendor/etc/seccomp_policy/imsrtp.policy
 
 # Media
 vendor/etc/seccomp_policy/mediacodec.policy
--vendor/lib/libAlacSwDec.so;DISABLE_DEPS
--vendor/lib/libApeSwDec.so;DISABLE_DEPS
 -vendor/lib/libMpeg4SwEncoder.so;DISABLE_DEPS
--vendor/lib/libOmxAacDec.so;DISABLE_DEPS
--vendor/lib/libOmxAlacDec.so;DISABLE_DEPS
--vendor/lib/libOmxAlacDecSw.so;DISABLE_DEPS
--vendor/lib/libOmxAmrDec.so;DISABLE_DEPS
--vendor/lib/libOmxAmrwbplusDec.so;DISABLE_DEPS
--vendor/lib/libOmxApeDec.so;DISABLE_DEPS
--vendor/lib/libOmxApeDecSw.so;DISABLE_DEPS
--vendor/lib/libOmxEvrcDec.so;DISABLE_DEPS
 -vendor/lib/libOmxG711Dec.so;DISABLE_DEPS
 -vendor/lib/libOmxQcelp13Dec.so;DISABLE_DEPS
 -vendor/lib/libOmxSwVdec.so;DISABLE_DEPS
 -vendor/lib/libOmxSwVencMpeg4.so;DISABLE_DEPS
 -vendor/lib/libOmxVideoDSMode.so;DISABLE_DEPS
 -vendor/lib/libOmxVpp.so;DISABLE_DEPS
--vendor/lib/libOmxWmaDec.so;DISABLE_DEPS
 -vendor/lib/libmmosal.so;DISABLE_DEPS
 -vendor/lib/libswvdec.so;DISABLE_DEPS
 -vendor/lib/libvpplibrary.so;DISABLE_DEPS
 -vendor/lib/libwfdcommonutils_proprietary.so;DISABLE_DEPS
 -vendor/lib/libwfdmmservice.so;DISABLE_DEPS
--vendor/lib64/libAlacSwDec.so;DISABLE_DEPS
--vendor/lib64/libApeSwDec.so;DISABLE_DEPS
 -vendor/lib64/libMpeg4SwEncoder.so;DISABLE_DEPS
--vendor/lib64/libOmxAacDec.so;DISABLE_DEPS
--vendor/lib64/libOmxAlacDec.so;DISABLE_DEPS
--vendor/lib64/libOmxAlacDecSw.so;DISABLE_DEPS
--vendor/lib64/libOmxAmrDec.so;DISABLE_DEPS
--vendor/lib64/libOmxAmrwbplusDec.so;DISABLE_DEPS
--vendor/lib64/libOmxApeDec.so;DISABLE_DEPS
--vendor/lib64/libOmxApeDecSw.so;DISABLE_DEPS
--vendor/lib64/libOmxEvrcDec.so;DISABLE_DEPS
 -vendor/lib64/libOmxG711Dec.so;DISABLE_DEPS
 -vendor/lib64/libOmxQcelp13Dec.so;DISABLE_DEPS
 -vendor/lib64/libOmxSwVdec.so;DISABLE_DEPS
 -vendor/lib64/libOmxSwVencMpeg4.so;DISABLE_DEPS
 -vendor/lib64/libOmxVpp.so;DISABLE_DEPS
--vendor/lib64/libOmxWmaDec.so;DISABLE_DEPS
 -vendor/lib64/libswvdec.so;DISABLE_DEPS
 -vendor/lib64/libvpplibrary.so;DISABLE_DEPS
 
