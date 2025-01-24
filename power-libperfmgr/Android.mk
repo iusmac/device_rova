@@ -24,7 +24,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE_RELATIVE_PATH := hw
 
 LOCAL_SHARED_LIBRARIES := \
-    android.hardware.power-V4-ndk \
+    android.hardware.power-ndk_shared \
     libbase \
     libbinder_ndk \
     libcutils \
@@ -33,17 +33,30 @@ LOCAL_SHARED_LIBRARIES := \
     libperfmgr \
     libprocessgroup \
     libutils \
-    pixel-power-ext-V1-ndk
+    pixel-power-ext-V1-ndk \
+    android.hardware.common.fmq-V1-ndk \
+    libfmq
+
+LOCAL_STATIC_LIBRARIES := \
+    libgmock \
+    libgtest
 
 LOCAL_SRC_FILES := \
+    BackgroundWorker.cpp \
+    GpuCalculationHelpers.cpp \
+    GpuCapacityNode.cpp \
     service.cpp \
     InteractionHandler.cpp \
     Power.cpp \
     PowerExt.cpp \
     PowerHintSession.cpp \
-    PowerSessionManager.cpp
+    PowerSessionManager.cpp \
+    UClampVoter.cpp \
+    SessionRecords.cpp \
+    SessionTaskMap.cpp \
+    SessionValueEntry.cpp
 
-LOCAL_CFLAGS := -Wno-unused-parameter -Wno-unused-variable
+LOCAL_CFLAGS := -std=gnu++20 -Wthread-safety -Wno-unused-parameter -Wno-unused-variable
 
 ifneq ($(TARGET_POWERHAL_MODE_EXT),)
     LOCAL_CFLAGS += -DMODE_EXT

@@ -47,9 +47,8 @@ ndk::ScopedAStatus PowerExt::setMode(const std::string &mode, bool enabled) {
     } else {
         HintManager::GetInstance()->EndHint(mode);
     }
-    if (HintManager::GetInstance()->GetAdpfProfile() &&
-        HintManager::GetInstance()->GetAdpfProfile()->mReportingRateLimitNs > 0) {
-        PowerSessionManager::getInstance()->updateHintMode(mode, enabled);
+    if (HintManager::GetInstance()->IsAdpfSupported()) {
+        PowerSessionManager<>::getInstance()->updateHintMode(mode, enabled);
     }
 
     return ndk::ScopedAStatus::ok();
@@ -57,6 +56,10 @@ ndk::ScopedAStatus PowerExt::setMode(const std::string &mode, bool enabled) {
 
 ndk::ScopedAStatus PowerExt::isModeSupported(const std::string &mode, bool *_aidl_return) {
     bool supported = HintManager::GetInstance()->IsHintSupported(mode);
+
+    if (!supported && HintManager::GetInstance()->IsAdpfProfileSupported(mode)) {
+        supported = true;
+    }
     LOG(INFO) << "PowerExt mode " << mode << " isModeSupported: " << supported;
     *_aidl_return = supported;
     return ndk::ScopedAStatus::ok();
@@ -64,10 +67,6 @@ ndk::ScopedAStatus PowerExt::isModeSupported(const std::string &mode, bool *_aid
 
 ndk::ScopedAStatus PowerExt::setBoost(const std::string &boost, int32_t durationMs) {
     LOG(DEBUG) << "PowerExt setBoost: " << boost << " duration: " << durationMs;
-    if (HintManager::GetInstance()->GetAdpfProfile() &&
-        HintManager::GetInstance()->GetAdpfProfile()->mReportingRateLimitNs > 0) {
-        PowerSessionManager::getInstance()->updateHintBoost(boost, durationMs);
-    }
 
     if (durationMs > 0) {
         HintManager::GetInstance()->DoHint(boost, std::chrono::milliseconds(durationMs));
@@ -82,6 +81,9 @@ ndk::ScopedAStatus PowerExt::setBoost(const std::string &boost, int32_t duration
 
 ndk::ScopedAStatus PowerExt::isBoostSupported(const std::string &boost, bool *_aidl_return) {
     bool supported = HintManager::GetInstance()->IsHintSupported(boost);
+    if (!supported && HintManager::GetInstance()->IsAdpfProfileSupported(boost)) {
+        supported = true;
+    }
     LOG(INFO) << "PowerExt boost " << boost << " isBoostSupported: " << supported;
     *_aidl_return = supported;
     return ndk::ScopedAStatus::ok();

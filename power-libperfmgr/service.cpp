@@ -31,15 +31,15 @@
 
 using aidl::google::hardware::power::impl::pixel::Power;
 using aidl::google::hardware::power::impl::pixel::PowerExt;
-using aidl::google::hardware::power::impl::pixel::PowerHintMonitor;
-using aidl::google::hardware::power::impl::pixel::PowerSessionManager;
 using ::android::perfmgr::HintManager;
 
 constexpr std::string_view kPowerHalInitProp("vendor.powerhal.init");
 
 int main() {
+    android::base::SetDefaultTag(LOG_TAG);
+    android::base::SetMinimumLogSeverity(android::base::INFO);
     // Parse config but do not start the looper
-    std::shared_ptr<HintManager> hm = HintManager::GetInstance();
+    HintManager *hm = HintManager::GetInstance();
     if (!hm) {
         LOG(FATAL) << "HintManager Init failed";
     }
@@ -64,10 +64,6 @@ int main() {
     binder_status_t status = AServiceManager_addService(pw->asBinder().get(), instance.c_str());
     CHECK(status == STATUS_OK);
     LOG(INFO) << "Xiaomi Rova Power HAL AIDL Service with Extension is started.";
-
-    if (HintManager::GetInstance()->GetAdpfProfile()) {
-        PowerHintMonitor::getInstance()->start();
-    }
 
     std::thread initThread([&]() {
         ::android::base::WaitForProperty(kPowerHalInitProp.data(), "1");

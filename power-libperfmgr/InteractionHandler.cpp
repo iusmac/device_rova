@@ -48,8 +48,9 @@ namespace {
 
 static const bool kDisplayIdleSupport =
         ::android::base::GetBoolProperty("vendor.powerhal.disp.idle_support", true);
-static const std::array<const char *, 2> kDispIdlePath = {"/sys/class/drm/card0/device/idle_state",
-                                                          "/sys/class/graphics/fb0/idle_state"};
+static const std::array<const char *, 3> kDispIdlePath = {"/sys/class/drm/card0/device/idle_state",
+                                                          "/sys/class/graphics/fb0/idle_state",
+                                                          "/sys/class/graphics/fb0/device/idle_state"};
 static const uint32_t kWaitMs =
         ::android::base::GetUintProperty("vendor.powerhal.disp.idle_wait", /*default*/ 100U);
 static const uint32_t kMinDurationMs =
