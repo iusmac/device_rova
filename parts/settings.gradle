@@ -32,6 +32,5 @@ include ':SettingsLib:Utils'
 android {
     compileSdk 34
     minSdk 34
-    // TODO: b/317358817 com.android.settings plugin doesn't recognize targetSdk
-    // targetSdk 34
+    targetSdk 34
 }
