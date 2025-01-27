@@ -24,7 +24,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE_RELATIVE_PATH := hw
 
 LOCAL_SHARED_LIBRARIES := \
-    android.hardware.power-ndk_shared \
     libbase \
     libbinder_ndk \
     libcutils \
@@ -36,6 +35,11 @@ LOCAL_SHARED_LIBRARIES := \
     pixel-power-ext-V1-ndk \
     android.hardware.common.fmq-V1-ndk \
     libfmq
+
+# Keep these libraries in sync with the android.hardware.power-ndk_shared
+# module located in hardware/interfaces/power/aidl/Android.bp
+LOCAL_SHARED_LIBRARIES += \
+    android.hardware.power-V5-ndk
 
 LOCAL_STATIC_LIBRARIES := \
     libgmock \
