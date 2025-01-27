@@ -1354,7 +1354,7 @@ static bool a2dp_set_backend_cfg(uint8_t direction)
      */
     if (((a2dp.bt_encoder_format == CODEC_TYPE_LDAC) ||
          (a2dp.bt_decoder_format == CODEC_TYPE_SBC) ||
-         (a2dp.bt_decoder_format == AUDIO_FORMAT_AAC) ||
+         (a2dp.bt_decoder_format == CODEC_TYPE_AAC) ||
          (a2dp.bt_encoder_format == CODEC_TYPE_APTX_AD)) &&
         (sampling_rate == 48000 || sampling_rate == 44100 )) {
         sampling_rate = sampling_rate *2;
