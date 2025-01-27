@@ -173,6 +173,10 @@ TARGET_KERNEL_RECOVERY_CONFIG := \
     vendor/xiaomi/msm8937/common.config \
     vendor/xiaomi/msm8937/mi8917.config
 
+# Kernel Clang Flags
+KERNEL_CC := CC=clang
+override KERNEL_TOOLCHAIN_PREFIX_arm := arm-linux-android-
+
 # DebugFS
 PRODUCT_SET_DEBUGFS_RESTRICTIONS ?= true
 
