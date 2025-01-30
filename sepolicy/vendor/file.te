@@ -4,6 +4,7 @@ type proc_boot_reason, fs_type, proc_type;
 # Camera
 type sysfs_camera_fusion_id, fs_type, sysfs_type;
 type camera_socket, file_type, data_file_type;
+type sysfs_torch, fs_type, sysfs_type;
 
 # FDT
 type fdt_model, fs_type, sysfs_type;
