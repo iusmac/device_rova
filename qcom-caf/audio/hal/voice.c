@@ -697,7 +697,7 @@ int voice_set_volume(struct audio_device *adev, float volume)
             volume = 1.0;
         }
 
-        vol = lrint(volume * 100.0);
+        vol = lrint(volume * 10.0) * 10;
 
         // Voice volume levels from android are mapped to driver volume levels as follows.
         // 0 -> 5, 20 -> 4, 40 ->3, 60 -> 2, 80 -> 1, 100 -> 0
