@@ -22,8 +22,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Validate Gradle wrapper checksum
-      uses: gradle/wrapper-validation-action@v2
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -32,9 +30,7 @@ runs:
     - name: SettingsLibs cache warm up
       uses: ./.github/actions/settingslibs-cache-warm-up
     - name: Set up Gradle cache
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-home-cache-cleanup: true
+      uses: gradle/actions/setup-gradle@v4
     - name: Build with Gradle
       shell: bash
       env:
@@ -48,7 +44,7 @@ runs:
     - name: Generate code coverage summary
       if: inputs.check-build == 'true'
       id: coverage
-      uses: PavanMudigonda/jacoco-reporter@v5.0
+      uses: PavanMudigonda/jacoco-reporter@v5.1
       with:
         coverage_results_path: build/reports/kover/reportDebug.xml
         github_token: ${{ github.token }}
@@ -67,10 +63,11 @@ runs:
         echo "| :x: Number of Lines Missed | ${{ steps.coverage.outputs.missed_lines }} |" >> $GITHUB_STEP_SUMMARY
         echo "| Total Number of Lines | ${{ steps.coverage.outputs.total_lines }} |" >> $GITHUB_STEP_SUMMARY
     - name: Post Build with Gradle
+      if: ${{ !cancelled() }}
       shell: bash
       run: ./.github/scripts/post-build-with-gradle.sh
     - name: Upload artifacts
-      if: inputs.upload-artifacts == 'true'
+      if: inputs.upload-artifacts == 'true' && !cancelled()
       uses: actions/upload-artifact@v4
       with:
         name: 7SIM-CI-${{ github.run_id }}
