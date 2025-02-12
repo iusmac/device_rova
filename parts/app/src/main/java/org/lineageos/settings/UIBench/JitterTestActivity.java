@@ -27,6 +27,9 @@ import android.view.Window.OnFrameMetricsAvailableListener;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import org.lineageos.settings.R;
 
 public class JitterTestActivity extends Activity {
@@ -81,6 +84,22 @@ public class JitterTestActivity extends Activity {
         mUiFrameTimeReport.setText("0123456789");
         mRenderThreadTimeReport.setText(",.!()[]{};");
         getWindow().addOnFrameMetricsAvailableListener(mMetricsListener, sMetricsHandler);
+
+        // EdgeToEdge
+        ViewCompat.setOnApplyWindowInsetsListener(content,
+                (v, windowInsets) -> {
+                    final var insets = windowInsets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                            | WindowInsetsCompat.Type.ime()
+                            | WindowInsetsCompat.Type.displayCutout());
+                    final int statusBarHeight = getWindow().getDecorView().getRootWindowInsets()
+                        .getInsets(WindowInsetsCompat.Type.statusBars()).top;
+                    // Apply the insets paddings to the view.
+                    v.setPadding(insets.left, statusBarHeight, insets.right, /*bottom*/ 0);
+                    // Return CONSUMED if you don't want the window insets to keep being passed down
+                    // to descendant views.
+                    return WindowInsetsCompat.CONSUMED;
+                });
     }
 
     public static final class PointGraphView extends View {
