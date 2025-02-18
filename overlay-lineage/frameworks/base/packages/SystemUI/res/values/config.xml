@@ -17,4 +17,7 @@
 <resources>
     <!-- Whether to enable HEVC toggle for screenrecord -->
     <bool name="config_screenRecordHEVC">false</bool>
+
+    <!-- Show 5G toggle in internet dialog when available -->
+    <bool name="config_supportsVONR">false</bool>
 </resources>
