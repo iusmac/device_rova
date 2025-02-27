@@ -504,6 +504,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     vendor.lineage.touch-service.xiaomi_rova
 
+# UFFD GC
+PRODUCT_ENABLE_UFFD_GC := true
+
 # USB
 PRODUCT_PACKAGES += \
     usb_compositions.conf \
