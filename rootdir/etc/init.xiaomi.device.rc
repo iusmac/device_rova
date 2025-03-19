@@ -60,10 +60,10 @@ on init
     # spidev
     chown system system /dev/spidev7.1
 
-on property:ro.vendor.xiaomi.device=rolex
+on early-boot && property:ro.vendor.xiaomi.device=rolex
     setprop ro.hardware.consumerir led
 
-on property:ro.vendor.xiaomi.device=riva
+on early-boot && property:ro.vendor.xiaomi.device=riva
     setprop ro.hardware.consumerir spidev
 
 # GPS
