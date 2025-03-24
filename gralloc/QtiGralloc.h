@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020 The Linux Foundation. All rights reserved.
  *
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022, 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -146,6 +146,9 @@ static const MetadataType MetadataType_CustomContentMetadata = {VENDOR_QTI,
                                                                 QTI_CUSTOM_CONTENT_METADATA};
 static const MetadataType MetadataType_BufferDequeueDuration = {VENDOR_QTI,
                                                                 QTI_BUFFER_DEQUEUE_DURATION};
+static const MetadataType MetadataType_MultiViewInfo = {VENDOR_QTI, QTI_MULTI_VIEW_INFO};
+
+static const MetadataType MetadataType_BaseView = {VENDOR_QTI, QTI_BASE_VIEW};
 
 // 0 is also used as invalid value in standard metadata
 static const MetadataType MetadataType_Invalid = {VENDOR_QTI, 0};

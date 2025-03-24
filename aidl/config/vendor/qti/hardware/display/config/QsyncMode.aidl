@@ -26,14 +26,46 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
+/**
+ * @file QsyncMode.aidl
+ * @brief Defines the different qsync modes
+ *
+ * This enumeration specifies the different modes of qsync.
+ */
 package vendor.qti.hardware.display.config;
 
 @VintfStability
+/** @cond Backing specifies the storage type of an AIDL enum type */
 @Backing(type="int")
+/** @endcond */
+
+/**
+ * @enum QsyncMode
+ */
 enum QsyncMode {
+    /**
+     * @brief No qsync
+     */
     NONE = 0,
+
+    /**
+     * @brief Wait for fences for one frame
+     */
     WAIT_FOR_FENCES_ONE_FRAME = 1,
+
+    /**
+     * @brief Wait for fences for each frame
+     */
     WAIT_FOR_FENCES_EACH_FRAME = 2,
+
+    /**
+     * @brief Wait for commit for each frame
+     */
     WAIT_FOR_COMMIT_EACH_FRAME = 3,
 }

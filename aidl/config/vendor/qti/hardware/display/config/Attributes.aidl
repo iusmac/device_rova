@@ -26,18 +26,60 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
+/**
+ * @file Attributes.aidl
+ * @brief Struct for the display attributes
+ *
+ * This struct contains the different attributes of a display such as its vsync period, resolution,
+ * and, panel type.
+ */
 package vendor.qti.hardware.display.config;
 
 import vendor.qti.hardware.display.config.DisplayPortType;
 
 @VintfStability
+/**
+ * @struct Attributes
+ */
 parcelable Attributes {
+    /**
+     * @brief Vsync period of the display
+     */
     int vsyncPeriod;
+
+    /**
+     * @brief Horizontal resolution of the display
+     */
     int xRes;
+
+    /**
+     * @brief Vertical resolution of the display
+     */
     int yRes;
+
+    /**
+     * @brief Horizontal DPI (Dots Per Inch) of the display
+     */
     float xDpi;
+
+    /**
+     * @brief Vertical DPI (Dots Per Inch) of the display
+     */
     float yDpi;
+
+    /**
+     * @brief Type of the display panel
+     */
     DisplayPortType panelType;
+
+    /**
+     * @brief Indicates if the display is YUV
+     */
     boolean isYuv;
 }

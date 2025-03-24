@@ -26,12 +26,36 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
+/**
+ * @file CameraSmoothOp.aidl
+ * @brief Defines the different camera smooth operations
+ *
+ * This enumeration defines the possible states for the camera smooth operation.
+ */
 package vendor.qti.hardware.display.config;
 
 @VintfStability
+/** @cond Backing specifies the storage type of an AIDL enum type */
 @Backing(type="int")
+/** @endcond */
+
+/**
+ * @enum CameraSmoothOp
+ */
 enum CameraSmoothOp {
+    /**
+     * @brief This state indicates that the camera smooth operation is disabled
+     */
     OFF = 0,
+
+    /**
+     * @brief This state indicates that the camera smooth operation is enabled
+     */
     ON = 1,
 }

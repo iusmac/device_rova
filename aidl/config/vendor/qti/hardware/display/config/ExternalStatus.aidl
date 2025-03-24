@@ -26,15 +26,51 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
+/**
+ * @file ExternalStatus.aidl
+ * @brief Defines the status of an external display
+ *
+ * This enum is used to specify the different statuses that an external display can have.
+ */
 package vendor.qti.hardware.display.config;
 
 @VintfStability
+/** @cond Backing specifies the storage type of an AIDL enum type */
 @Backing(type="int")
+/** @endcond */
+
+/**
+ * @enum ExternalStatus
+ */
 enum ExternalStatus {
+    /**
+     * @brief Invalid status
+     */
     INVALID = 0,
+
+    /**
+     * @brief External display is offline
+     */
     OFFLINE = 1,
+
+    /**
+     * @brief External display is online
+     */
     ONLINE = 2,
+
+    /**
+     * @brief External display is paused
+     */
     PAUSE = 3,
+
+    /**
+     * @brief External display is resumed
+     */
     RESUME = 4,
 }

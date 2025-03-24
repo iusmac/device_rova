@@ -28,8 +28,17 @@
  */
 /*
  * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
+/**
+ * @file IDisplayConfig.aidl
+ * @brief Interface for display configuration operations
+ *
+ * This file contains the interface definitions for various display configuration
+ * operations such as querying display attributes, setting display status, and
+ * configuring dynamic refresh rates.
  */
 package vendor.qti.hardware.display.config;
 
@@ -50,9 +59,12 @@ import vendor.qti.hardware.display.config.CacV2Config;
 import vendor.qti.hardware.display.config.CacV2ConfigExt;
 
 @VintfStability
+/**
+ * @interface IDisplayConfig
+ */
 interface IDisplayConfig {
-    /*
-     * Query whether a given display type is connected.
+    /**
+     * @brief Query whether a given display type is connected.
      *
      * @param dpy display type
      *
@@ -60,8 +72,8 @@ interface IDisplayConfig {
      */
     boolean isDisplayConnected(in DisplayType dpy);
 
-    /*
-     * Set the secondary display status (pause/resume/offline) etc.
+    /**
+     * @brief Set the secondary display status (pause/resume/offline) etc.
      *
      * @param dpy display type
      * @param status next status to be set
@@ -70,18 +82,18 @@ interface IDisplayConfig {
      */
     void setDisplayStatus(in DisplayType dpy, in ExternalStatus status);
 
-    /*
-     * Enable/Disable/Set refresh rate dynamically.
+    /**
+     * @brief Enable/Disable/Set refresh rate dynamically.
      *
      * @param op operation code defined in DisplayDynRefreshRateOp
-     * @param refreshRate refresh rate value
+     * @param refrestRate refresh rate value
      *
      * @return error is NONE upon success
      */
     void configureDynRefreshRate(in DynRefreshRateOp op, in int refrestRate);
 
-    /*
-     * Query the number of configurations a given display can support.
+    /**
+     * @brief Query the number of configurations a given display can support.
      *
      * @param dpy display type
      *
@@ -89,8 +101,8 @@ interface IDisplayConfig {
      */
     int getConfigCount(in DisplayType dpy);
 
-    /*
-     * Query the config index of a given display type.
+    /**
+     * @brief Query the config index of a given display type.
      *
      * @param[in] dpy display type
      *
@@ -98,8 +110,8 @@ interface IDisplayConfig {
      */
     int getActiveConfig(in DisplayType dpy);
 
-    /*
-     * Set a new display configuration pointed by the index.
+    /**
+     * @brief Set a new display configuration pointed by the index.
      *
      * @param dpy display type
      * @param config config index
@@ -108,8 +120,8 @@ interface IDisplayConfig {
      */
     void setActiveConfig(in DisplayType dpy, in int config);
 
-    /*
-     * Query the display attributes of the specified config index.
+    /**
+     * @brief Query the display attributes of the specified config index.
      *
      * @param configIndex config index
      * @param dpy display type
@@ -118,8 +130,8 @@ interface IDisplayConfig {
      */
     Attributes getDisplayAttributes(in int configIndex, in DisplayType dpy);
 
-    /*
-     * Set the panel brightness of the primary display.
+    /**
+     * @brief Set the panel brightness of the primary display.
      *
      * @param level brightness level
      *
@@ -127,15 +139,15 @@ interface IDisplayConfig {
      */
     void setPanelBrightness(in int level);
 
-    /*
-     * Query the panel brightness of the primary display.
+    /**
+     * @brief Query the panel brightness of the primary display.
      *
      * @return level brightness level
      */
     int getPanelBrightness();
 
-    /*
-     * Indicates display about a change in minimum encryption level.
+    /**
+     * @brief Indicates display about a change in minimum encryption level.
      *
      * @param dpy display type
      * @param minEncLevel encryption level
@@ -144,15 +156,15 @@ interface IDisplayConfig {
      */
     void minHdcpEncryptionLevelChanged (in DisplayType dpy, in int minEncLevel);
 
-    /*
-     * Requests display to recompose and invalidate the display pipeline.
+    /**
+     * @brief Requests display to recompose and invalidate the display pipeline.
      *
      * @return error is NONE upon success
      */
     void refreshScreen();
 
-    /*
-     * Enable/Disable partial update.
+    /**
+     * @brief Enable/Disable partial update.
      *
      * @param dpy display type
      * @param enable enable/disable
@@ -161,8 +173,8 @@ interface IDisplayConfig {
      */
     void controlPartialUpdate(in DisplayType dpy, in boolean enable);
 
-    /*
-     * Toggle screen update.
+    /**
+     * @brief Toggle screen update.
      *
      * @param on if true, pause display and drop incoming draw cycles
      *
@@ -170,8 +182,8 @@ interface IDisplayConfig {
      */
     void toggleScreenUpdate(in boolean on);
 
-    /*
-     * Set idle timeout value for video mode panels.
+    /**
+     * @brief Set idle timeout value for video mode panels.
      *
      * @param value idle timeout value
      *
@@ -179,8 +191,8 @@ interface IDisplayConfig {
      */
     void setIdleTimeout(in int value);
 
-    /*
-     * Query the HDR capabilities of a given display type.
+    /**
+     * @brief Query the HDR capabilities of a given display type.
      *
      * @param dpy display type.
      *
@@ -188,8 +200,8 @@ interface IDisplayConfig {
      */
     HDRCapsParams getHDRCapabilities(in DisplayType dpy);
 
-    /*
-     * Set the camera application's status (start/stop).
+    /**
+     * @brief Set the camera application's status (start/stop).
      *
      * @param on if true, camera is started
      *
@@ -197,15 +209,15 @@ interface IDisplayConfig {
      */
     void setCameraLaunchStatus(in int on);
 
-    /*
-     * Query the bandwidth transaction status.
+    /**
+     * @brief Query the bandwidth transaction status.
      *
      * @return true if transaction is still pending
      */
     boolean displayBWTransactionPending();
 
-    /*
-     * Set display animating property.
+    /**
+     * @brief Set display animating property.
      *
      * @param displayId display Id
      * @param animating if true, the display is animating
@@ -214,8 +226,8 @@ interface IDisplayConfig {
      */
     void setDisplayAnimating(in long displayId, in boolean animating);
 
-    /*
-     * Enable/disable idle power collapse.
+    /**
+     * @brief Enable/disable idle power collapse.
      *
      * @param enable enable/disable
      * @param synchronous commit
@@ -224,17 +236,17 @@ interface IDisplayConfig {
      */
     void controlIdlePowerCollapse(in boolean enable, in boolean synchronous);
 
-    /*
-     * Query whether UBWC writeback is supported.
+    /**
+     * @brief Query whether UBWC writeback is supported.
      *
      * @return true if supported, false if not supported
      */
     boolean getWriteBackCapabilities();
 
-    /*
-     * Set the region of interest of display dpps ad4
+    /**
+     * @brief Set the region of interest of display dpps ad4
      *
-     * @param display_id ID of this display
+     * @param displayId ID of this display
      * @param hStart start in hotizontal direction
      * @param hEnd end in hotizontal direction
      * @param vStart start in vertical direction
@@ -247,24 +259,24 @@ interface IDisplayConfig {
     void setDisplayDppsAdROI(in int displayId, in int hStart, in int hEnd, in int vStart,
                              in int vEnd, in int factorIn, in int factorOut);
 
-    /*
-     * Update vsync source to next active display upon the power state
+    /**
+     * @brief Update vsync source to next active display upon the power state
      * change to off.
      *
      * @return error is NONE upon success
      */
     void updateVSyncSourceOnPowerModeOff();
 
-    /*
-     * Update vsync source to next active display upon the power state
+    /**
+     * @brief Update vsync source to next active display upon the power state
      * change to doze.
      *
      * @return error is NONE upon success
      */
     void updateVSyncSourceOnPowerModeDoze();
 
-    /*
-     * Sets new power mode on the specificied display.
+    /**
+     * @brief Sets new power mode on the specificied display.
      *
      * @param dispId display identifier used between client & service
      * @param powerMode new power mode
@@ -273,8 +285,8 @@ interface IDisplayConfig {
      */
     void setPowerMode(in int dispId, in PowerMode powerMode);
 
-    /*
-     * Query if power mode override is supported by underlying implementation
+    /**
+     * @brief Query if power mode override is supported by underlying implementation
      * for the specified display.
      *
      * @param dispId display identifier used between client & service
@@ -283,8 +295,8 @@ interface IDisplayConfig {
      */
     boolean isPowerModeOverrideSupported(in int dispId);
 
-    /*
-     * Query if hdr is supported by the underlying implementation for the specified display.
+    /**
+     * @brief Query if hdr is supported by the underlying implementation for the specified display.
      *
      * @param dispId display identifier used between client & service
      *
@@ -292,8 +304,8 @@ interface IDisplayConfig {
      */
     boolean isHDRSupported(in int dispId);
 
-    /*
-     * Query if wide color gamut is supported by the underlying implementation
+    /**
+     * @brief Query if wide color gamut is supported by the underlying implementation
      * for the specified display.
      *
      * @param dispId display identifier used between client & service
@@ -302,8 +314,8 @@ interface IDisplayConfig {
      */
     boolean isWCGSupported(in int dispId);
 
-    /*
-     * Set layer as a mask type (e.g. round corner) identified by the layer id.
+    /**
+     * @brief Set layer as a mask type (e.g. round corner) identified by the layer id.
      *
      * @param dispId display identifier used between client & service
      * @param layerId layer id used for communication with hwc
@@ -312,8 +324,8 @@ interface IDisplayConfig {
      */
     void setLayerAsMask(in int dispId, in long layerId);
 
-    /*
-     * Query the value corresponding to the specified property string from hwc.
+    /**
+     * @brief Query the value corresponding to the specified property string from hwc.
      *
      * @param propName name of the property
      *
@@ -321,16 +333,16 @@ interface IDisplayConfig {
      */
     String getDebugProperty(in String propName);
 
-    /*
-     * Query the attributes for the active builtin display. If all
+    /**
+     * @brief Query the attributes for the active builtin display. If all
      * builtin displays are active, it returns primary display attributes.
      *
      * @return active display attributes
      */
     Attributes getActiveBuiltinDisplayAttributes();
 
-    /*
-     * Set the min and max luminance attributes required for dynamic
+    /**
+     * @brief Set the min and max luminance attributes required for dynamic
      * tonemapping of external device.
      *
      * @param dispId display identifier used between client & service
@@ -341,8 +353,8 @@ interface IDisplayConfig {
      */
     void setPanelLuminanceAttributes(in int dispId, in float minLum, in float maxLum);
 
-    /*
-     * Query if the underlying display is of Built-In Type.
+    /**
+     * @brief Query if the underlying display is of Built-In Type.
      *
      * @param dispId display identifier used between client & service
      *
@@ -350,15 +362,15 @@ interface IDisplayConfig {
      */
     boolean isBuiltInDisplay(in int dispId);
 
-    /*
-     * Query if asynchronous Virtual Display Creation is supported
+    /**
+     * @brief Query if asynchronous Virtual Display Creation is supported
      *
      * @return true if async Virtual display creation is supported
      */
     boolean isAsyncVDSCreationSupported();
 
-    /*
-     * Creates Virtual Display based on width, height, format parameters.
+    /**
+     * @brief Creates Virtual Display based on width, height, format parameters.
      *
      * @param width Width of the virtual display
      * @param height Height of the virtual display
@@ -368,8 +380,8 @@ interface IDisplayConfig {
      */
     void createVirtualDisplay(in int width, in int height, in int format);
 
-    /*
-     * Query the supported bit clock values of a given display ID.
+    /**
+     * @brief Query the supported bit clock values of a given display ID.
      *
      * @param dispId display id
      *
@@ -377,8 +389,8 @@ interface IDisplayConfig {
      */
     long[] getSupportedDSIBitClks(in int dispId);
 
-    /*
-     * Query the current bit clock value of a given display ID.
+    /**
+     * @brief Query the current bit clock value of a given display ID.
      *
      * @param dispId display id.
      *
@@ -386,8 +398,8 @@ interface IDisplayConfig {
      */
     long getDSIClk(in int dispId);
 
-    /*
-     * Set the bit clock value of a given display ID.
+    /**
+     * @brief Set the bit clock value of a given display ID.
      *
      * @param dispId display id
      * @param bitClk desired bit clock value
@@ -396,8 +408,8 @@ interface IDisplayConfig {
      */
     void setDSIClk(in int dispId, in long bitClk);
 
-    /*
-     * Set the output buffer to be filled with the contents of the next
+    /**
+     * @brief Set the output buffer to be filled with the contents of the next
      * composition performed for this display. Client can specify cropping
      * rectangle for the partial concurrent writeback.
      * Buffer must be ready for writeback before this API is called.
@@ -405,6 +417,7 @@ interface IDisplayConfig {
      * CWB output buffer will be returned as failure in callback and without
      * any change in buffer.
      *
+     * @param callback registered callback for IDisplayConfig
      * @param dispId display id where concurrent writeback shall be captured
      * @param rect cropping rectangle which shall be applied on blended output
      * @param postProcessed whether to capture post processed or mixer output
@@ -415,8 +428,8 @@ interface IDisplayConfig {
     void setCWBOutputBuffer(in IDisplayConfigCallback callback, in int dispId, in Rect rect,
                             in boolean postProcessed, in NativeHandle buffer);
 
-    /*
-     * Set the desired qsync mode which will ideally take effect from next
+    /**
+     * @brief Set the desired qsync mode which will ideally take effect from next
      * composition cycle. Mode change may take longer than one cycle if there
      * is a conflict with current operation mode.
      *
@@ -427,8 +440,8 @@ interface IDisplayConfig {
      */
     void setQsyncMode(in int dispId, in QsyncMode mode);
 
-    /*
-     * Query if the specified display config has smart panel.
+    /**
+     * @brief Query if the specified display config has smart panel.
      *
      * @param dispId display Id
      * @param configId display config index
@@ -437,18 +450,18 @@ interface IDisplayConfig {
      */
     boolean isSmartPanelConfig(in int dispId, in int configId);
 
-    /*
-     * Query if the given format is supported by rotator.
+    /**
+     * @brief Query if the given format is supported by rotator.
      *
-     * @param format pass HAL_PIXEL_FORMAT for the validation
+     * @param halFormat pass HAL_PIXEL_FORMAT for the validation
      * @param ubwc true if the given format is ubwc format otherwise false
      *
      * @return true if supported or false
      */
     boolean isRotatorSupportedFormat(in int halFormat, in boolean ubwc);
 
-    /*
-     * Enable/Display qsync callback.
+    /**
+     * @brief Enable/Display qsync callback.
      *
      * @param enable true if enabling qsync callback
      *
@@ -456,8 +469,8 @@ interface IDisplayConfig {
      */
     void controlQsyncCallback(in boolean enable);
 
-    /*
-     * Notify TUI transition events to HW Composer.
+    /**
+     * @brief Notify TUI transition events to HW Composer.
      *
      * @param dpy display type
      * @param eventType TUI Event Type
@@ -466,8 +479,8 @@ interface IDisplayConfig {
      */
     void sendTUIEvent(in DisplayType dpy, in TUIEventType eventType);
 
-    /*
-     * Query the display HW Id of a given display from HWC HAL
+    /**
+     * @brief Query the display HW Id of a given display from HWC HAL
      *
      * @param dispId display Id
      *
@@ -475,8 +488,8 @@ interface IDisplayConfig {
      */
     int getDisplayHwId(in int dispId);
 
-    /*
-     * Query the supported refresh rates from Display HAL. The API would return a vector of
+    /**
+     * @brief Query the supported refresh rates from Display HAL. The API would return a vector of
      * supported fps in the current config group.
      *
      * @param dpy display type
@@ -485,8 +498,8 @@ interface IDisplayConfig {
      */
     int[] getSupportedDisplayRefreshRates(in DisplayType dpy);
 
-    /*
-     * Query if the rounded corner feature is supported.
+    /**
+     * @brief Query if the rounded corner feature is supported.
      *
      * @param dispId display Id
      *
@@ -494,8 +507,8 @@ interface IDisplayConfig {
      */
     boolean isRCSupported(in int dispId);
 
-    /*
-     * Control the idle status callback.
+    /**
+     * @brief Control the idle status callback.
      *
      * @param enable true if idle callback is enabled
      *
@@ -503,8 +516,8 @@ interface IDisplayConfig {
      */
     void controlIdleStatusCallback(in boolean enable);
 
-    /*
-     * Query if the config switch is supported on the display.
+    /**
+     * @brief Query if the config switch is supported on the display.
      *
      * @param dispId display ID
      * @param config config bit mask
@@ -513,8 +526,8 @@ interface IDisplayConfig {
      */
     boolean isSupportedConfigSwitch(in int dispId, in int config);
 
-    /*
-     * Query the display type information for a given physical display id.
+    /**
+     * @brief Query the display type information for a given physical display id.
      *
      * @param physicalDispId physical display ID
      *
@@ -522,8 +535,8 @@ interface IDisplayConfig {
      */
     DisplayType getDisplayType(in long physicalDispId);
 
-    /*
-     * Set the camera smooth info
+    /**
+     * @brief Set the camera smooth info
      *
      * @param op enable or disable camera smooth
      * @param fps camera fps
@@ -533,11 +546,11 @@ interface IDisplayConfig {
     void setCameraSmoothInfo(in CameraSmoothOp op, in int fps);
 
     /**
-     * Register a callback for any display config info.
+     * @brief Register a callback for any display config info.
      *
      * Registering a new callback must not unregister the old one; the old
      * callback remains registered until one of the following happens:
-     * - A client explicitly calls {@link unregisterCallback} to unregister it.
+     * - A client explicitly calls {@link unRegisterCallback} to unregister it.
      * - The client process that hosts the callback dies.
      *
      * @param callback the callback to register.
@@ -546,7 +559,7 @@ interface IDisplayConfig {
     long registerCallback(in IDisplayConfigCallback callback);
 
     /**
-     * Explicitly unregister a callback that is previously registered through
+     * @brief Explicitly unregister a callback that is previously registered through
      * {@link registerCallback}.
      *
      * @param handle the callback handle to unregister
@@ -554,8 +567,8 @@ interface IDisplayConfig {
      */
     void unRegisterCallback(in long handle);
 
-    /*
-     * Notify idle state to HWC HAL for a given display ID
+    /**
+     * @brief Notify idle state to HWC HAL for a given display ID
      *
      * @param dispId display ID
      *
@@ -563,8 +576,8 @@ interface IDisplayConfig {
      */
     void notifyDisplayIdleState(in int[] dispId);
 
-    /*
-     * Notify client is up
+    /**
+     * @brief Notify client is up
      *
      * @param NONE
      *
@@ -572,8 +585,8 @@ interface IDisplayConfig {
      */
     void setClientUp();
 
-    /*
-     * Query the port ID for a given display ID.
+    /**
+     * @brief Query the port ID for a given display ID.
      *
      * @param dispId display id
      *
@@ -581,8 +594,8 @@ interface IDisplayConfig {
      */
     int getDisplayPortId(in int dispId);
 
-    /*
-     * Query if CAC V2 is supported on the display.
+    /**
+     * @brief Query if CAC V2 is supported on the display.
      *
      * @param dispId display ID
      *
@@ -590,8 +603,8 @@ interface IDisplayConfig {
      */
     boolean isCacV2Supported(in int dispId);
 
-    /*
-     * Configure CAC V2 to HWC HAL for a given display ID
+    /**
+     * @brief Configure CAC V2 to HWC HAL for a given display ID
      *
      * @param dispId display ID
      * @param config CAC configuration parameters
@@ -601,12 +614,12 @@ interface IDisplayConfig {
      */
     void configureCacV2(in int dispId, in CacV2Config config, in boolean enable);
 
-    /*
-     * Configure CAC V2 to HWC HAL for a given display ID per eye
+    /**
+     * @brief Configure CAC V2 to HWC HAL for a given display ID per eye
      *
      * @param dispId display ID
-     * @param leftconfig CAC configuration parameters for left eye
-     * @param rightconfig CAC configuration parameters for right eye
+     * @param leftConfig CAC configuration parameters for left eye
+     * @param rightConfig CAC configuration parameters for right eye
      * @param enable control CAC enable/disable
      *
      * @return error is NONE upon success
@@ -614,12 +627,12 @@ interface IDisplayConfig {
     void configureCacV2PerEye(in int dispId, in CacV2Config leftConfig, in CacV2Config rightConfig,
                               in boolean enable);
 
-    /*
-     * Configure CAC V2 to HWC HAL with the lens center offsets for a given display ID per eye
+    /**
+     * @brief Configure CAC V2 to HWC HAL with the lens center offsets for a given display ID per eye
      *
      * @param dispId display ID
-     * @param leftconfig CAC configuration parameters for left eye
-     * @param rightconfig CAC configuration parameters for right eye
+     * @param leftConfig CAC configuration parameters for left eye
+     * @param rightConfig CAC configuration parameters for right eye
      * @param enable control CAC enable/disable
      *
      * @return error is NONE upon success
@@ -627,8 +640,8 @@ interface IDisplayConfig {
     void configureCacV2ExtPerEye(in int dispId, in CacV2ConfigExt leftConfig,
                                  in CacV2ConfigExt rightConfig, in boolean enable);
 
-    /*
-     * Allow idle fallback
+    /**
+     * @brief Allow idle fallback
      *
      * @param NONE
      *
@@ -636,8 +649,8 @@ interface IDisplayConfig {
      */
     void allowIdleFallback();
 
-    /*
-     * Set the App content fps
+    /**
+     * @brief Set the App content fps
      *
      * @param name App package name
      * @param fps App content fps

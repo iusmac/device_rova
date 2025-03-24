@@ -26,16 +26,56 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
+/**
+ * @file Concurrency.aidl
+ * @brief Defines the display concurrency modes
+ *
+ * This enumeration states the different concurrency modes supported.
+ */
 package vendor.qti.hardware.display.config;
 
 @VintfStability
+/** @cond Backing specifies the storage type of an AIDL enum type */
 @Backing(type="int")
+/** @endcond */
+
+/**
+ * @enum Concurrency
+ */
 enum Concurrency {
+    /**
+     * @brief No concurrency
+     */
     NONE = 0,
+
+    /**
+     * @brief Wireless display concurrency
+     */
     WFD = 1,
+
+    /**
+     * @brief DisplayPort concurrency
+     */
     DP = 2,
+
+    /**
+     * @brief Dual display concurrency
+     */
     DUAL = 3,
+
+    /**
+     * @brief Concurrent writeback concurrency
+     */
     CWB = 4,
+
+    /**
+     * @brief Camera concurrency
+     */
     CAMERA = 5,
 }
