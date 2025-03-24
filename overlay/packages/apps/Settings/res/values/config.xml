@@ -33,8 +33,4 @@
     -->
     <integer name="config_vibration_supported_intensity_levels">3</integer>
 
-    <!-- Settings intelligence package name -->
-    <string name="config_settingsintelligence_package_name" translatable="false">
-        com.google.android.settings.intelligence
-    </string>
 </resources>
