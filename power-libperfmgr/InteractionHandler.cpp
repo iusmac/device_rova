@@ -74,7 +74,11 @@ static int FbIdleOpen(void) {
         if (fd >= 0)
             return fd;
     }
-    ALOGE("Unable to open fb idle state path (%d)", errno);
+    if (kDisplayIdleSupport) {
+        ALOGE("Unable to open fb idle state path (%d)", errno);
+    } else {
+        ALOGV("Display idle support is disabled");
+    }
     return -1;
 }
 

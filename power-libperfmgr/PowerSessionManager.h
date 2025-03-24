@@ -23,6 +23,7 @@
 #include <mutex>
 #include <optional>
 
+#include "AdpfTypes.h"
 #include "AppHintDesc.h"
 #include "BackgroundWorker.h"
 #include "GpuCapacityNode.h"
@@ -50,10 +51,11 @@ class PowerSessionManager : public Immobile {
     void addPowerSession(const std::string &idString,
                          const std::shared_ptr<AppHintDesc> &sessionDescriptor,
                          const std::shared_ptr<AppDescriptorTrace> &sessionTrace,
-                         const std::vector<int32_t> &threadIds);
-    void removePowerSession(int64_t sessionId);
+                         const std::vector<int32_t> &threadIds, const ProcessTag procTag);
+    void removePowerSession(int64_t sessionId, const ProcessTag procTag);
     // Replace current threads in session with threadIds
-    void setThreadsFromPowerSession(int64_t sessionId, const std::vector<int32_t> &threadIds);
+    void setThreadsFromPowerSession(int64_t sessionId, const std::vector<int32_t> &threadIds,
+                                    const ProcessTag procTag);
     // Pause and resume power hint session
     void pause(int64_t sessionId);
     void resume(int64_t sessionId);
@@ -79,6 +81,8 @@ class PowerSessionManager : public Immobile {
     void updateHboostStatistics(int64_t sessionId, SessionJankyLevel jankyLevel,
                                 int32_t numOfFrames);
 
+    void updateFrameBuckets(int64_t sessionId, const FrameBuckets &lastReportedFrames);
+
     // Singleton
     static PowerSessionManager *getInstance() {
         static PowerSessionManager instance{};
@@ -92,6 +96,7 @@ class PowerSessionManager : public Immobile {
     // Only for testing
     void clear();
     std::shared_ptr<void> getSession(int64_t sessionId);
+    bool getGameModeEnableState();
 
   private:
     std::optional<bool> isAnyAppSessionActive();
@@ -137,7 +142,9 @@ class PowerSessionManager : public Immobile {
     std::optional<std::unique_ptr<GpuCapacityNode>> const mGpuCapacityNode;
 
     std::mutex mSessionMapMutex;
-    std::map<int, std::weak_ptr<void>> mSessionMap GUARDED_BY(mSessionMapMutex);
+    std::unordered_map<int, std::weak_ptr<void>> mSessionMap GUARDED_BY(mSessionMapMutex);
+
+    std::atomic<bool> mGameModeEnabled{false};
 };
 
 }  // namespace pixel

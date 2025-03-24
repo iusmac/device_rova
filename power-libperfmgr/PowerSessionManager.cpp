@@ -27,7 +27,6 @@
 #include <sys/syscall.h>
 #include <utils/Trace.h>
 
-#include "AdpfTypes.h"
 #include "AppDescriptorTrace.h"
 #include "AppHintDesc.h"
 #include "tests/mocks/MockHintManager.h"
@@ -40,6 +39,7 @@ namespace impl {
 namespace pixel {
 
 using ::android::perfmgr::HintManager;
+constexpr char kGameModeName[] = "GAME";
 
 namespace {
 /* there is no glibc or bionic wrapper */
@@ -77,20 +77,29 @@ static int set_uclamp(int tid, UclampRange range) {
 }
 }  // namespace
 
-// TODO(jimmyshiu@): Deprecated. Remove once all powerhint.json up-to-date.
 template <class HintManagerT>
 void PowerSessionManager<HintManagerT>::updateHintMode(const std::string &mode, bool enabled) {
     ALOGD("%s %s:%b", __func__, mode.c_str(), enabled);
+    if (mode.compare(kGameModeName) == 0) {
+        mGameModeEnabled = enabled;
+    }
+
+    // TODO(jimmyshiu@): Deprecated. Remove once all powerhint.json up-to-date.
     if (enabled && HintManager::GetInstance()->GetAdpfProfileFromDoHint()) {
         HintManager::GetInstance()->SetAdpfProfileFromDoHint(mode);
     }
 }
 
 template <class HintManagerT>
+bool PowerSessionManager<HintManagerT>::getGameModeEnableState() {
+    return mGameModeEnabled;
+}
+
+template <class HintManagerT>
 void PowerSessionManager<HintManagerT>::addPowerSession(
         const std::string &idString, const std::shared_ptr<AppHintDesc> &sessionDescriptor,
         const std::shared_ptr<AppDescriptorTrace> &sessionTrace,
-        const std::vector<int32_t> &threadIds) {
+        const std::vector<int32_t> &threadIds, const ProcessTag procTag) {
     if (!sessionDescriptor) {
         ALOGE("sessionDescriptor is null. PowerSessionManager failed to add power session: %s",
               idString.c_str());
@@ -119,11 +128,12 @@ void PowerSessionManager<HintManagerT>::addPowerSession(
         ALOGE("sessionTaskMap failed to add power session: %" PRId64, sessionDescriptor->sessionId);
     }
 
-    setThreadsFromPowerSession(sessionDescriptor->sessionId, threadIds);
+    setThreadsFromPowerSession(sessionDescriptor->sessionId, threadIds, procTag);
 }
 
 template <class HintManagerT>
-void PowerSessionManager<HintManagerT>::removePowerSession(int64_t sessionId) {
+void PowerSessionManager<HintManagerT>::removePowerSession(int64_t sessionId,
+                                                           const ProcessTag procTag) {
     // To remove a session we also need to undo the effects the session
     // has on currently enabled votes which means setting vote to inactive
     // and then forceing a uclamp update to occur
@@ -140,9 +150,19 @@ void PowerSessionManager<HintManagerT>::removePowerSession(int64_t sessionId) {
         mSessionTaskMap.remove(sessionId);
     }
 
-    for (auto tid : removedThreads) {
-        if (!SetTaskProfiles(tid, {"NoResetUclampGrp"})) {
-            ALOGE("Failed to set NoResetUclampGrp task profile for tid:%d", tid);
+    if (procTag == ProcessTag::SYSTEM_UI) {
+        for (auto tid : removedThreads) {
+            if (!SetTaskProfiles(tid, {"SCHED_QOS_SENSITIVE_EXTREME_CLEAR"})) {
+                ALOGE("Failed to set SCHED_QOS_SENSITIVE_EXTREME_CLEAR task profile for tid:%d",
+                      tid);
+            }
+        }
+    } else {
+        for (auto tid : removedThreads) {
+            if (!SetTaskProfiles(tid, {"SCHED_QOS_SENSITIVE_STANDARD_CLEAR"})) {
+                ALOGE("Failed to set SCHED_QOS_SENSITIVE_STANDARD_CLEAR task profile for tid:%d",
+                      tid);
+            }
         }
     }
 
@@ -151,7 +171,7 @@ void PowerSessionManager<HintManagerT>::removePowerSession(int64_t sessionId) {
 
 template <class HintManagerT>
 void PowerSessionManager<HintManagerT>::setThreadsFromPowerSession(
-        int64_t sessionId, const std::vector<int32_t> &threadIds) {
+        int64_t sessionId, const std::vector<int32_t> &threadIds, const ProcessTag procTag) {
     std::vector<pid_t> addedThreads;
     std::vector<pid_t> removedThreads;
     forceSessionActive(sessionId, false);
@@ -159,14 +179,33 @@ void PowerSessionManager<HintManagerT>::setThreadsFromPowerSession(
         std::lock_guard<std::mutex> lock(mSessionTaskMapMutex);
         mSessionTaskMap.replace(sessionId, threadIds, &addedThreads, &removedThreads);
     }
-    for (auto tid : addedThreads) {
-        if (!SetTaskProfiles(tid, {"ResetUclampGrp"})) {
-            ALOGE("Failed to set ResetUclampGrp task profile for tid:%d", tid);
+    if (procTag == ProcessTag::SYSTEM_UI) {
+        for (auto tid : addedThreads) {
+            if (!SetTaskProfiles(tid, {"SCHED_QOS_SENSITIVE_EXTREME_SET"})) {
+                ALOGE("Failed to set SCHED_QOS_SENSITIVE_EXTREME_SET task profile for tid:%d", tid);
+            }
+        }
+    } else {
+        for (auto tid : addedThreads) {
+            if (!SetTaskProfiles(tid, {"SCHED_QOS_SENSITIVE_STANDARD_SET"})) {
+                ALOGE("Failed to set SCHED_QOS_SENSITIVE_STANDARD_SET task profile for tid:%d",
+                      tid);
+            }
         }
     }
-    for (auto tid : removedThreads) {
-        if (!SetTaskProfiles(tid, {"NoResetUclampGrp"})) {
-            ALOGE("Failed to set NoResetUclampGrp task profile for tid:%d", tid);
+    if (procTag == ProcessTag::SYSTEM_UI) {
+        for (auto tid : removedThreads) {
+            if (!SetTaskProfiles(tid, {"SCHED_QOS_SENSITIVE_EXTREME_CLEAR"})) {
+                ALOGE("Failed to set SCHED_QOS_SENSITIVE_EXTREME_CLEAR task profile for tid:%d",
+                      tid);
+            }
+        }
+    } else {
+        for (auto tid : removedThreads) {
+            if (!SetTaskProfiles(tid, {"SCHED_QOS_SENSITIVE_STANDARD_CLEAR"})) {
+                ALOGE("Failed to set SCHED_QOS_SENSITIVE_STANDARD_CLEAR task profile for tid:%d",
+                      tid);
+            }
         }
     }
     forceSessionActive(sessionId, true);
@@ -380,17 +419,17 @@ void PowerSessionManager<HintManagerT>::disableBoosts(int64_t sessionId) {
 
 template <class HintManagerT>
 void PowerSessionManager<HintManagerT>::enableSystemTopAppBoost() {
-    if (HintManager::GetInstance()->IsHintSupported(kDisableBoostHintName)) {
+    if (HintManagerT::GetInstance()->IsHintSupported(kDisableBoostHintName)) {
         ALOGV("PowerSessionManager::enableSystemTopAppBoost!!");
-        HintManager::GetInstance()->EndHint(kDisableBoostHintName);
+        HintManagerT::GetInstance()->EndHint(kDisableBoostHintName);
     }
 }
 
 template <class HintManagerT>
 void PowerSessionManager<HintManagerT>::disableSystemTopAppBoost() {
-    if (HintManager::GetInstance()->IsHintSupported(kDisableBoostHintName)) {
+    if (HintManagerT::GetInstance()->IsHintSupported(kDisableBoostHintName)) {
         ALOGV("PowerSessionManager::disableSystemTopAppBoost!!");
-        HintManager::GetInstance()->DoHint(kDisableBoostHintName);
+        HintManagerT::GetInstance()->DoHint(kDisableBoostHintName);
     }
 }
 
@@ -448,7 +487,7 @@ void PowerSessionManager<HintManagerT>::handleEvent(const EventSessionTimeout &e
 template <class HintManagerT>
 void PowerSessionManager<HintManagerT>::applyUclampLocked(
         int64_t sessionId, std::chrono::steady_clock::time_point timePoint) {
-    auto config = HintManager::GetInstance()->GetAdpfProfile();
+    auto config = HintManagerT::GetInstance()->GetAdpfProfile();
     {
         // TODO(kevindubois) un-indent this in followup patch to reduce churn.
         auto sessValPtr = mSessionTaskMap.findSession(sessionId);
@@ -492,7 +531,7 @@ void PowerSessionManager<HintManagerT>::applyGpuVotesLocked(
         return;
     }
 
-    auto const gpuVotingOn = HintManager::GetInstance()->GetAdpfProfile()->mGpuBoostOn;
+    auto const gpuVotingOn = HintManagerT::GetInstance()->GetAdpfProfile()->mGpuBoostOn;
     if (mGpuCapacityNode && gpuVotingOn) {
         auto const capacity = mSessionTaskMap.getSessionsGpuCapacity(timePoint);
         (*mGpuCapacityNode)->set_gpu_capacity(capacity);
@@ -580,6 +619,18 @@ template <class HintManagerT>
 void PowerSessionManager<HintManagerT>::clear() {
     std::scoped_lock lock(mSessionMapMutex);
     mSessionMap.clear();
+}
+
+template <class HintManagerT>
+void PowerSessionManager<HintManagerT>::updateFrameBuckets(int64_t sessionId,
+                                                           const FrameBuckets &lastReportedFrames) {
+    std::lock_guard<std::mutex> lock(mSessionTaskMapMutex);
+    auto sessValPtr = mSessionTaskMap.findSession(sessionId);
+    if (nullptr == sessValPtr) {
+        return;
+    }
+
+    sessValPtr->sessFrameBuckets.addUpNewFrames(lastReportedFrames);
 }
 
 template <class HintManagerT>

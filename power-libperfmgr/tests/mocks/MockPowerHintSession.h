@@ -44,19 +44,6 @@ class MockPowerHintSession {
     MOCK_METHOD(bool, isModeSet, (android::hardware::power::SessionMode mode), (const));
     MOCK_METHOD(void, dumpToStream, (std::ostream & stream));
     MOCK_METHOD(android::hardware::power::SessionTag, getSessionTag, (), (const));
-
-    class MockSessionTracker {
-      public:
-        MOCK_METHOD(void, registerSession,
-                    (std::shared_ptr<MockPowerHintSession> & session, int64_t sessionId));
-        MOCK_METHOD(void, unregisterSession, (int64_t sessionId));
-        MOCK_METHOD(std::shared_ptr<MockPowerHintSession>, getSession, (int64_t sessionId));
-    };
-
-    static testing::NiceMock<MockSessionTracker> *getTracker() {
-        static testing::NiceMock<MockSessionTracker> instance{};
-        return &instance;
-    }
 };
 
 }  // namespace aidl::google::hardware::power::mock::pixel

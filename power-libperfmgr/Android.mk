@@ -39,7 +39,7 @@ LOCAL_SHARED_LIBRARIES := \
 # Keep these libraries in sync with the android.hardware.power-ndk_shared
 # module located in hardware/interfaces/power/aidl/Android.bp
 LOCAL_SHARED_LIBRARIES += \
-    android.hardware.power-V5-ndk
+    android.hardware.power-V6-ndk
 
 LOCAL_STATIC_LIBRARIES := \
     libgmock \
@@ -47,6 +47,8 @@ LOCAL_STATIC_LIBRARIES := \
 
 LOCAL_SRC_FILES := \
     BackgroundWorker.cpp \
+    ChannelGroup.cpp \
+    ChannelManager.cpp \
     GpuCalculationHelpers.cpp \
     GpuCapacityNode.cpp \
     service.cpp \
@@ -55,8 +57,10 @@ LOCAL_SRC_FILES := \
     PowerExt.cpp \
     PowerHintSession.cpp \
     PowerSessionManager.cpp \
+    SupportManager.cpp \
     UClampVoter.cpp \
     SessionRecords.cpp \
+    SessionChannel.cpp \
     SessionTaskMap.cpp \
     SessionValueEntry.cpp
 

@@ -30,11 +30,6 @@ namespace power {
 namespace impl {
 namespace pixel {
 
-template <class T>
-constexpr size_t enum_size() {
-    return static_cast<size_t>(*(ndk::enum_range<T>().end() - 1)) + 1;
-}
-
 // The App Hint Descriptor struct manages information necessary
 // to calculate the next uclamp min value from the PID function
 // and is separate so that it can be used as a pointer for
@@ -85,6 +80,8 @@ struct AppDescriptorTrace {
         trace_cpu_duration = StringPrintf("adpf.%s-%s", idString.c_str(), "cpu_duration");
         trace_gpu_duration = StringPrintf("adpf.%s-%s", idString.c_str(), "gpu_duration");
         trace_gpu_capacity = StringPrintf("adpf.%s-%s", idString.c_str(), "gpu_capacity");
+        trace_game_mode_fps = "adpf.sf.gameModeFPS";
+        trace_game_mode_fps_jitters = "adpf.sf.gameModeFPSJitters";
     }
 
     // Trace values
@@ -119,6 +116,8 @@ struct AppDescriptorTrace {
     std::string trace_cpu_duration;
     std::string trace_gpu_duration;
     std::string trace_gpu_capacity;
+    std::string trace_game_mode_fps;
+    std::string trace_game_mode_fps_jitters;
 };
 
 }  // namespace pixel
