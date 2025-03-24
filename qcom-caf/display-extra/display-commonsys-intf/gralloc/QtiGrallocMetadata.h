@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
  *
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022, 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -82,6 +82,8 @@
 // Heap Name
 #define QTI_HEAP_NAME 10032
 #define QTI_BUFFER_DEQUEUE_DURATION 10033
+#define QTI_BASE_VIEW 10047
+#define QTI_MULTI_VIEW_INFO 10048
 // Used to indicate to framework that internal definitions are used instead
 #define COMPRESSION_QTI_UBWC 20001
 #define INTERLACED_QTI 20002
@@ -232,5 +234,12 @@ union BufferPermission {
 
 #define GET_STANDARD_METADATA_STATUS_INDEX(x) x
 #define GET_VENDOR_METADATA_STATUS_INDEX(x) x - QTI_VT_TIMESTAMP
+
+enum : uint32_t {
+  QTI_PRIV_VIEW_MASK_PRIMARY = 0x00000001,
+  QTI_PRIV_VIEW_MASK_SECONDARY = 0x00000002,
+  QTI_PRIV_VIEW_MASK_PRIMARY_DEPTH = 0x00000004,
+  QTI_PRIV_VIEW_MASK_SECONDARY_DEPTH = 0x00000008,
+};
 
 #endif  //__QTIGRALLOCMETADATA_H__

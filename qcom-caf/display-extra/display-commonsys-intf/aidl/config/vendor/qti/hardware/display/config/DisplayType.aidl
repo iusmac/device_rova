@@ -26,15 +26,51 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
+/**
+ * @file DisplayType.aidl
+ * @brief Defines the different types of display
+ *
+ * This enumeration specifies the different types of displays that can be used.
+ */
 package vendor.qti.hardware.display.config;
 
 @VintfStability
+/** @cond Backing specifies the storage type of an AIDL enum type */
 @Backing(type="int")
+/** @endcond */
+
+/**
+ * @enum DisplayType
+ */
 enum DisplayType {
+    /**
+     * @brief Invalid display type
+     */
     INVALID = 0,
+
+    /**
+     * @brief Primary display
+     */
     PRIMARY = 1,
+
+    /**
+     * @brief External display
+     */
     EXTERNAL = 2,
+
+    /**
+     * @brief Virtual display
+     */
     VIRTUAL = 3,
+
+    /**
+     * @brief Built-in display
+     */
     BUILTIN2 = 4,
 }

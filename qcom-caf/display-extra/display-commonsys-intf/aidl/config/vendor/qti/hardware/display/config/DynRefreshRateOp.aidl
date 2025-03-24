@@ -26,13 +26,47 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
+
+/**
+ * @file DynRefreshRateOp.aidl
+ * @brief Defines the different operations for dynamic refresh rate
+ *
+ * This enum is used to specify the different operations that can be performed
+ * related to dynamic refresh rate.
+ */
 package vendor.qti.hardware.display.config;
 
 @VintfStability
+/** @cond Backing specifies the storage type of an AIDL enum type */
 @Backing(type="int")
+/** @endcond */
+
+/**
+ * @enum DynRefreshRateOp
+ */
 enum DynRefreshRateOp {
+    /**
+     * @brief Invalid operation
+     */
     INVALID = 0,
+
+    /**
+     * @brief Disable dynamic refresh rate metadata
+     */
     DISABLE_METADATA = 1,
+
+    /**
+     * @brief Enable dynamic refresh rate metadata
+     */
     ENABLE_METADATA = 2,
+
+    /**
+     * @brief Set binder for dynamic refresh rate
+     */
     SET_BINDER = 3,
 }

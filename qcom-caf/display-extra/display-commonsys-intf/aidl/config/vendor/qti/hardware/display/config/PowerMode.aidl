@@ -26,14 +26,46 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
+/**
+ * @file PowerMode.aidl
+ * @brief Defines the power modes for the display
+ *
+ * This enumeration defines the different power modes that the display is in.
+ */
 package vendor.qti.hardware.display.config;
 
 @VintfStability
+/** @cond Backing specifies the storage type of an AIDL enum type */
 @Backing(type="int")
+/** @endcond */
+
+/**
+ * @enum PowerMode
+ */
 enum PowerMode {
+    /**
+     * @brief Device is powered off
+     */
     OFF = 0,
+
+    /**
+     * @brief Device is in doze mode
+     */
     DOZE = 1,
+
+    /**
+     * @brief Device is powered on
+     */
     ON = 2,
+
+    /**
+     * @brief Device is in doze suspend mode
+     */
     DOZE_SUSPEND = 3,
 }

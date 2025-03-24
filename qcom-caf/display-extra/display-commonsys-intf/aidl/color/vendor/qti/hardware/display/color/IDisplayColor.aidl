@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022, 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -7,6 +7,11 @@ package vendor.qti.hardware.display.color;
 
 import vendor.qti.hardware.display.color.Result;
 import vendor.qti.hardware.display.color.SprModeInfo;
+import vendor.qti.hardware.display.color.PAConfig;
+import vendor.qti.hardware.display.color.PARange;
+import vendor.qti.hardware.display.color.PAEnable;
+import vendor.qti.hardware.display.color.DisplayInfo;
+import vendor.qti.hardware.display.color.DisplayNumInfo;
 
 @VintfStability
 interface IDisplayColor {
@@ -71,4 +76,75 @@ interface IDisplayColor {
      * @return OK on success or error if any parameters are invalid.
      */
     Result setSPRMode(in int ctxHandle, in int dispId, in SprModeInfo info);
+
+    /**
+     * Query number of available displays.
+     *
+     * Clients can query number of various displays supported i.e.
+     *   - Primary display
+     *   - External display (if supported)
+     *
+     * @param  ctxHandle context handle.
+     * @param out dispNumInfo number of supported displays and flags reserved
+     * @return OK on success or error if any parameters are invalid.
+     */
+    Result getNumDisplay(in long ctxHandle, out DisplayNumInfo dispNumInfo);
+
+    /**
+     * Query IDs of available displays.
+     *
+     * Clients can query IDs of all the displays.
+     *
+     * @param  ctxHandle context handle.
+     * @param out display_id list of display IDs.
+     * @return OK on success or error if any parameters are invalid.
+     */
+    Result getDisplayId(in long ctxHandle, out long[] display_id);
+
+    /**
+     * Enumarate a requested display.
+     *
+     * Enumarates client requested display identified by the index.
+     *
+     * @param  ctxHandle context handle.
+     * @param  index display index.
+     * @param out dispInfo display information @DisplayInfo.
+     * @return OK on success or error if any parameters are invalid.
+     */
+    Result getDisplay(in long ctxHandle, in int index, out DisplayInfo dispInfo);
+
+    /**
+     * Get supported global picture adjustment range.
+     *
+     * Gets supported picture adjustment range for hue, saturation, value and
+     * contrast.
+     *
+     * @param  ctxHandle context handle.
+     * @param  dispId display id.
+     * @param out range supported picture adjustment range.
+     * @return OK on success or error if any parameters are invalid.
+     */
+    Result getGlobalPARange(in long ctxHandle, in int dispId, out PARange range);
+
+    /**
+     * Get global picture adjustment configuration.
+     *
+     * @param  ctxHandle context handle.
+     * @param  dispId display id.
+     * @param out paEnable picture adjustment enabled on hw or cache.
+     * @param out cfg user applied specific picture adjustment coefficients.
+     * @return OK on success or error if any parameters are invalid.
+     */
+    Result getGlobalPA(in long ctxHandle, in int dispId, out PAEnable paEnable, out PAConfig cfg);
+
+    /**
+     * Set global picture adjustment configuration.
+     *
+     * @param  ctxHandle context handle.
+     * @param  dispId display id.
+     * @param  enable enables picture adjustment on hw or cache.
+     * @param  cfg user specific picture adjustment coefficients.
+     * @return OK on success or BAD_VALUE if any parameters are invalid.
+     */
+    Result setGlobalPA(in long ctxHandle, in int dispId, in int enable, in PAConfig cfg);
 }

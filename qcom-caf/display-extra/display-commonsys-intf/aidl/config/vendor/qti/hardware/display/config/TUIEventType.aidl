@@ -26,14 +26,46 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
+/**
+ * @file TUIEventType.aidl
+ * @brief Defines the different stages of TUI
+ *
+ * This defines the different stages of Trusted User Interface (TUI).
+ */
 package vendor.qti.hardware.display.config;
 
 @VintfStability
+/** @cond Backing specifies the storage type of an AIDL enum type */
 @Backing(type="int")
+/** @endcond */
+
+/**
+ * @enum TUIEventType
+ */
 enum TUIEventType {
+    /**
+     * @brief No TUI event
+     */
     NONE = 0,
+
+    /**
+     * @brief Prepare for TUI transition
+     */
     PREPARE_TUI_TRANSITION = 1,
+
+    /**
+     * @brief Start of TUI transition
+     */
     START_TUI_TRANSITION = 2,
+
+    /**
+     * @brief End TUI transition
+     */
     END_TUI_TRANSITION = 3,
 }

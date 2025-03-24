@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
  *
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022, 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -30,7 +30,7 @@
  */
 
 /*
- * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -54,7 +54,7 @@
 /* This flag is used to indicate 10 bit format.
  * When both GRALLOC_USAGE_PRIVATE_ALLOC_UBWC & GRALLOC_USAGE_PRIVATE_10BIT
  * are set then it will indicate UBWC_TP10 format.
- * When only GRALLOC_USAGE_PRIVATE_10BIT is set it will indicate linear P010 format.
+ * When only GRALLOC_USAGE_PRIVATE_10BIT is set it will indicate linear P010/P210 format.
  */
 #define GRALLOC_USAGE_PRIVATE_10BIT (UINT32_C(1) << 30)
 
@@ -93,11 +93,16 @@
 /* This flag is used to indicate UBWC_NV124R format usage */
 #define GRALLOC_USAGE_PRIVATE_ALLOC_UBWC_4R      1ULL << 55
 
-/* This flag is used to indicate UBWC - 8:5 compression ratio */
-#define GRALLOC_USAGE_PRIVATE_UBWC_L_8_TO_5      1ULL << 56
+/* Bit 56 is reserved */
 
 /* This flag is used to indicate UBWC - 2:1 compression ratio */
 #define GRALLOC_USAGE_PRIVATE_UBWC_L_2_TO_1      1ULL << 57
+
+/* This flag is used to indicate multiview use case */
+#define GRALLOC_USAGE_PRIVATE_MULTIVIEW      1ULL << 58
+
+/* This flag is used to indicate UBWC - 8:5 compression ratio */
+#define GRALLOC_USAGE_PRIVATE_UBWC_L_8_TO_5      1ULL << 59
 
 // OEM specific HAL formats
 #define HAL_PIXEL_FORMAT_RGBA_5551 6
@@ -132,6 +137,8 @@
 #define HAL_PIXEL_FORMAT_YCbCr_420_P010 0x36  // HAL_PIXEL_FORMAT_YCBCR_P010
 #define HAL_PIXEL_FORMAT_YCbCr_420_P010_UBWC 0x124
 #define HAL_PIXEL_FORMAT_YCbCr_420_P010_VENUS 0x7FA30C0A
+#define HAL_PIXEL_FORMAT_YCbCr_422_P210_UBWC 0x133
+#define HAL_PIXEL_FORMAT_YCbCr_422_P210 0x3c
 
 #define HAL_PIXEL_FORMAT_CbYCrY_422_I 0x120
 #define HAL_PIXEL_FORMAT_BGR_888 0x121
