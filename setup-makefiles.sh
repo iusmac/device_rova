@@ -9,6 +9,7 @@
 set -e
 
 export DEVICE=rova
+export DEVICE_COMMON="$DEVICE"
 export VENDOR=xiaomi
 
 # Load extract_utils and do some sanity checks
