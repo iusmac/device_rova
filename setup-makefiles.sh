@@ -28,7 +28,7 @@ source "${HELPER}"
 setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" true
 
 # Warning headers and guards
-write_headers
+write_headers "$DEVICE"
 
 # The standard blobs
 write_makefiles "${MY_DIR}/proprietary-files.txt" true
