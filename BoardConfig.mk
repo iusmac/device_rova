@@ -170,6 +170,7 @@ TARGET_KERNEL_RECOVERY_CONFIG := \
     vendor/feature/ntfs.config \
     vendor/feature/no-camera-stack.config \
     vendor/feature/no-wlan-driver.config \
+    vendor/feature/no-ksu.config \
     vendor/xiaomi/msm8937/common.config \
     vendor/xiaomi/msm8937/mi8917.config
 
