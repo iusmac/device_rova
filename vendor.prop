@@ -271,6 +271,7 @@ ro.soc.model=MSM8937
 persist.vendor.qcomsysd.enabled=1
 
 # USB
+ro.usb.uvc.disable_video_encode_flag=true
 ro.usb.uvc.enabled=true
 vendor.usb.controller=msm_hsusb
 vendor.usb.diag.func.name=diag
