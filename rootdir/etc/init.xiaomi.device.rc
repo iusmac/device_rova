@@ -113,7 +113,7 @@ on property:ro.product.vendor.model=*
     setprop vendor.usb.product_string ${ro.product.vendor.model}
 
 on property:sys.boot_completed=1 && property:vendor.usb.uvc.function.init=1
-    write /config/usb_gadget/g1/functions/uvc.0/streaming_maxpacket ${ro.usb.uvc.payload_transfer_size}
+    write /config/usb_gadget/g1/functions/uvc.0/streaming_maxpacket ${vendor.usb.uvc.payload_transfer_size}
 
     rm /config/usb_gadget/g1/functions/uvc.0/streaming/class/fs/h1
     rm /config/usb_gadget/g1/functions/uvc.0/streaming/class/hs/h1
