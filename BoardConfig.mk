@@ -118,7 +118,7 @@ DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
 
 # Init
-TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_rova
+$(call soong_config_set,libinit,vendor_init_lib,//$(DEVICE_PATH):libinit_rova)
 SOONG_CONFIG_NAMESPACES += XIAOMI_MSM8937_INITDIR
 SOONG_CONFIG_XIAOMI_MSM8937_INITDIR := ADB
 ifeq ($(ENABLE_DEBUG_MODE),true)
