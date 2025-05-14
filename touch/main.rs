@@ -26,7 +26,7 @@ fn main() {
     }
 
     binder::ProcessState::start_thread_pool();
-    let my_service = KeyDisablerHal::default();
+    let my_service = KeyDisablerHal;
     let my_service_binder = BnKeyDisabler::new_binder(
         my_service,
         binder::BinderFeatures::default(),
