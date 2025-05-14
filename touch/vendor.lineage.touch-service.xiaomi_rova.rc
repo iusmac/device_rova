@@ -1,0 +1,5 @@
+service vendor.touch-hal-xiaomi_rova /vendor/bin/hw/vendor.lineage.touch-service.xiaomi_rova
+    interface aidl vendor.lineage.touch.IKeyDisabler/default
+    class hal
+    user system
+    group system

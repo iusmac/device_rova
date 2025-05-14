@@ -491,7 +491,7 @@ PRODUCT_PACKAGES += \
 
 # Touch features
 PRODUCT_PACKAGES += \
-    vendor.lineage.touch@1.0-service.xiaomi_rova
+    vendor.lineage.touch-service.xiaomi_rova
 
 # UFFD GC
 OVERRIDE_ENABLE_UFFD_GC := false
