@@ -104,6 +104,8 @@
 /* This flag is used to indicate UBWC - 8:5 compression ratio */
 #define GRALLOC_USAGE_PRIVATE_UBWC_L_8_TO_5      1ULL << 59
 
+/* Bit 60 is reserved */
+
 // OEM specific HAL formats
 #define HAL_PIXEL_FORMAT_RGBA_5551 6
 #define HAL_PIXEL_FORMAT_RGBA_4444 7
