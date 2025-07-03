@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.lineageos.settings"
     android:sharedUserId="android.uid.system"
     android:versionCode="1"
@@ -34,7 +35,9 @@
         android:label="@string/device_settings_app_name"
         android:icon="@mipmap/ic_launcher"
         android:persistent="true"
-        android:theme="@style/Theme.SubSettingsBase">
+        android:enableOnBackInvokedCallback="true"
+        android:theme="@style/Theme.SubSettingsBase"
+        tools:ignore="UnusedAttribute">
 
         <receiver android:name=".BootCompletedReceiver"
               android:exported="false">
