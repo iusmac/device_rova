@@ -12,6 +12,7 @@ import android.os.Build.VERSION_CODES.S
 import android.os.Bundle
 import android.os.Looper
 import android.os.SystemClock
+import android.telephony.SubscriptionInfo
 import android.telephony.SubscriptionManager
 import android.text.InputType
 import android.util.Log
@@ -227,11 +228,12 @@ class SchedulerActivityTest {
             // For the very first subscription change event debouncing is not applied
             assertThat(shadowOf(activityWorkerLooper).nextScheduledTaskTime, `is`(Duration.ZERO))
 
-            shadowOf(mSubscriptionManager).setAvailableSubscriptionInfos(null)
+            val emptySubInfoList = kotlin.emptyArray<SubscriptionInfo>()
+            shadowOf(mSubscriptionManager).setAvailableSubscriptionInfos(*emptySubInfoList)
             ShadowSystemClock.advanceBy(Duration.ofMillis(1))
-            shadowOf(mSubscriptionManager).setAvailableSubscriptionInfos(null)
+            shadowOf(mSubscriptionManager).setAvailableSubscriptionInfos(*emptySubInfoList)
             ShadowSystemClock.advanceBy(Duration.ofMillis(1))
-            shadowOf(mSubscriptionManager).setAvailableSubscriptionInfos(null)
+            shadowOf(mSubscriptionManager).setAvailableSubscriptionInfos(*emptySubInfoList)
 
             val debounceDelayDuration = shadowOf(activityWorkerLooper).nextScheduledTaskTime
                 .minus(Duration.ofMillis(SystemClock.uptimeMillis()))
@@ -1435,10 +1437,6 @@ class SchedulerActivityTest {
                         assertThat(mItemAdapter.getPosition(selectedSchedule.id), `is`(1))
                     }
                 }
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -1459,12 +1457,15 @@ class SchedulerActivityTest {
                     }
                 }
                 onView(withId(R.id.digital_clock)).captureRoboImage()
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
 
         private companion object {
@@ -1725,11 +1726,6 @@ class SchedulerActivityTest {
                         assertThat(typeface, `is`(nullValue()))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -1821,6 +1817,14 @@ class SchedulerActivityTest {
             }
         }
 
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
+        }
+
         private companion object {
             fun onClockView(): ViewInteraction = onView(
                 both(withId(R.id.digital_clock))
@@ -1881,11 +1885,6 @@ class SchedulerActivityTest {
                     }
                 }
                 onEditLabel().check(matches(withEffectiveVisibility(Visibility.GONE)))
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -1988,11 +1987,6 @@ class SchedulerActivityTest {
                     }
                 }
                 onEditLabel().check(matches(withAlpha(ScheduleItemViewHolder.CLOCK_DISABLED_ALPHA)))
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2028,6 +2022,15 @@ class SchedulerActivityTest {
                 onEditLabel().captureRoboImage()
             }
         }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
+        }
+
 
         private companion object {
             fun onEditLabel(): ViewInteraction = onView(
@@ -2067,13 +2070,17 @@ class SchedulerActivityTest {
                 val appendLabel = " with appended text"
                 onEditText().perform(typeText(appendLabel), pressImeActionButton())
                 assertThat(schedule.label, `is`(label + appendLabel))
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
+        }
+
 
         private companion object {
             fun onEditText(): ViewInteraction = onView(withId(android.R.id.edit)).inRoot(isDialog())
@@ -2103,13 +2110,17 @@ class SchedulerActivityTest {
                     }
                 }
                 onEditLabel().captureRoboImage()
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
+        }
+
 
         private companion object {
             fun onEditLabel(): ViewInteraction = onView(
@@ -2140,11 +2151,6 @@ class SchedulerActivityTest {
                 scenario.onActivity {
                     assertThat(it.fragment.mSelectedSchedule, `is`(withId(schedule.id)))
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2166,6 +2172,14 @@ class SchedulerActivityTest {
                     assertThat(it.fragment.mSelectedSchedule, `is`(nullValue()))
                 }
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
 
         private companion object {
@@ -2196,11 +2210,6 @@ class SchedulerActivityTest {
                         assertThat(mSelectedSchedule.enabled, `is`(newEnabled))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2224,11 +2233,6 @@ class SchedulerActivityTest {
                         assertThat(mSelectedSchedule.enabled, `is`(newEnabled))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2266,12 +2270,15 @@ class SchedulerActivityTest {
                 scenario.onActivity {
                     assertThat(it.fragment.mSelectedSchedule.enabled, `is`(newEnabled))
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
     }
 
@@ -2477,11 +2484,6 @@ class SchedulerActivityTest {
                 scenario.onActivity {
                     assertThat(it.fragment.mSelectedSchedule, `is`(withSubscriptionEnabled(false)))
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2504,6 +2506,14 @@ class SchedulerActivityTest {
                     }
                 }
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
 
         private companion object {
@@ -2534,11 +2544,6 @@ class SchedulerActivityTest {
                         assertThat(mSelectedSchedule.subscriptionEnabled, `is`(newEnabled))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2562,11 +2567,6 @@ class SchedulerActivityTest {
                         assertThat(mSelectedSchedule.subscriptionEnabled, `is`(newEnabled))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2604,11 +2604,6 @@ class SchedulerActivityTest {
                 scenario.onActivity {
                     assertThat(it.fragment.mSelectedSchedule.subscriptionEnabled, `is`(newEnabled))
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2629,11 +2624,6 @@ class SchedulerActivityTest {
                     }
                 }
                 onActionView().captureRoboImage()
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2655,12 +2645,15 @@ class SchedulerActivityTest {
                     }
                 }
                 onActionView().captureRoboImage()
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
 
         private companion object {
@@ -2771,11 +2764,6 @@ class SchedulerActivityTest {
                     onDayOfWeek(index + 1).perform(click())
                     onDayOfWeek().captureRoboImage()
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2797,11 +2785,6 @@ class SchedulerActivityTest {
                 scenario.onActivity {
                     assertThat(it.fragment.mSelectedSchedule, `is`(withId(schedule.id)))
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2824,12 +2807,15 @@ class SchedulerActivityTest {
                     assertThat(it.fragment.mSelectedSchedule.daysOfWeek,
                         `is`(mDaysOfWeekFactory.create(SUNDAY, MONDAY, TUESDAY)))
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
 
         private companion object {
@@ -2884,11 +2870,6 @@ class SchedulerActivityTest {
                             `is`(wantedEnabled))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2916,11 +2897,6 @@ class SchedulerActivityTest {
                             `is`(wantedEnabled))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -2961,12 +2937,15 @@ class SchedulerActivityTest {
                     assertThat(it.fragment.mSelectedSchedule.daysOfWeek.isBitOn(wantedDay),
                         `is`(wantedEnabled))
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule update request,
-                // that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
     }
 
@@ -3057,11 +3036,6 @@ class SchedulerActivityTest {
                         assertThat(mExpandedScheduleId, `is`(not(schedule.id)))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule removal
-                // request, that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -3089,6 +3063,14 @@ class SchedulerActivityTest {
                 onView(withId(R.id.delete_confirm_container))
                     .check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
 
         private companion object {
@@ -3127,11 +3109,6 @@ class SchedulerActivityTest {
                         assertThat(mSelectedSchedule, `is`(nullValue()))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule removal
-                // request, that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -3155,11 +3132,6 @@ class SchedulerActivityTest {
                         assertThat(mSelectedSchedule, `is`(nullValue()))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule removal
-                // request, that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -3198,12 +3170,15 @@ class SchedulerActivityTest {
                         assertThat(mSelectedSchedule, `is`(nullValue()))
                     }
                 }
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule removal
-                // request, that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
     }
 
@@ -3645,7 +3620,7 @@ class SchedulerActivityTest {
                         assertFalse(animator.isRunning())
                         expand(schedule.id)
                         // Run one frame to start the animation
-                        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(1))
+                        shadowOf(Looper.getMainLooper()).idleFor(ShadowChoreographer.getFrameDelay())
                         assertTrue(animator.isRunning())
                     }
 
@@ -3658,11 +3633,12 @@ class SchedulerActivityTest {
                         assertThat(mItemAdapter.itemCount, `is`(1))
                         assertTrue(listView.itemAnimator!!.isRunning())
 
-                        // Resume the choreographer and wait for another 249ms to reach 250ms
-                        // (RecyclerView's default animation change duration), in order to finish
-                        // the expansion animation and run all deferred tasks simultaneously
+                        // Resume the choreographer and draw the remaining frames, in order to
+                        // finish the expansion animation and run all deferred tasks simultaneously
+                        val delta = Duration.ofMillis(listView.itemAnimator!!.moveDuration)
+                            .minus(ShadowChoreographer.getFrameDelay())
                         ShadowChoreographer.setPaused(false)
-                        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(249))
+                        shadowOf(Looper.getMainLooper()).idleFor(delta)
                         assertFalse(listView.itemAnimator!!.isRunning())
                         assertThat(mItemAdapter.itemCount, `is`(2))
                     }
@@ -3744,12 +3720,15 @@ class SchedulerActivityTest {
                     }
                 }
                 scenario.recreate()
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async schedule removal
-                // request, that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async schedule update request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
     }
 }
