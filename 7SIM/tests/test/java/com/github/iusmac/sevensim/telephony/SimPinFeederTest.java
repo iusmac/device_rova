@@ -18,7 +18,6 @@ import com.github.iusmac.sevensim.R;
 import com.github.iusmac.sevensim.test.MockitoHiltAndroidTestBase;
 import com.github.iusmac.sevensim.test.ShadowITelephony;
 import com.github.iusmac.sevensim.test.ShadowSubscriptionManagerHiddenApi;
-import com.github.iusmac.sevensim.test.ShadowSubscriptionManagerOnSubscriptionsChangedListener;
 import com.github.iusmac.sevensim.test.ShadowTelephonyManagerHiddenApi;
 import com.github.iusmac.sevensim.test.TestUtils;
 
@@ -199,7 +198,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     }
 
     @Test
-    @Config(shadows = ShadowSubscriptionManagerOnSubscriptionsChangedListener.class)
     public void test_ShouldFinishAfterExceedingFixedWaitTimeoutForSimStatusChangeEventWhenAvailableSimCardsDoNotRequirePin() {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
             .setId(1)
@@ -222,7 +220,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldNotUnlockWhenAttemptsRemainingIsLessThanThree() {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
@@ -252,7 +249,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(minSdk = Build.VERSION_CODES.S, shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldUnlockWhenAttemptsRemainingIsAtLeastThree_SinceS() {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
@@ -282,7 +278,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(sdk = Build.VERSION_CODES.R, shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     @SuppressWarnings("deprecation")
     public void test_ShouldUnlockWhenAttemptsRemainingIsAtLeastThree_R() {
@@ -313,7 +308,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(sdk = Build.VERSION_CODES.R, shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     @SuppressWarnings("deprecation")
     public void test_ShouldNotUnlockOnPinAttemptsRemainingRetrievalFailure_R() {
@@ -343,7 +337,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Config(sdk = Build.VERSION_CODES.Q, shadows = {
         ShadowITelephony.class,
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldUnlockWhenAttemptsRemainingIsAtLeastThree_Q() throws RemoteException {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
@@ -375,7 +368,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Config(sdk = Build.VERSION_CODES.Q, shadows = {
         ShadowITelephony.class,
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldNotUnlockOnPinAttemptsRemainingRetrievalFailure_Q()
             throws RemoteException {
@@ -407,7 +399,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Config(sdk = Build.VERSION_CODES.Q, shadows = {
         ShadowITelephony.class,
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldRetryUnlockOnRemoteException_Q() throws RemoteException {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
@@ -443,7 +434,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldUnflagPinEntityWhenIsNotInvalidAnymore() {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
@@ -485,7 +475,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
         ShadowSubscriptionManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldIgnoreDisabledSimSubscriptions() {
         Shadow.<ShadowSubscriptionManagerHiddenApi>extract(mSubscriptionManager)
@@ -538,7 +527,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldFinishWhenConsumedAllPinEntities() {
         final var subInfo1 = SubscriptionInfoBuilder.newBuilder()
@@ -575,7 +563,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldNotUnlockRemainingSimCardsWhenCancelledWhileUnlocking() {
         final var subInfo1 = SubscriptionInfoBuilder.newBuilder()
@@ -626,7 +613,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldRetryUnlockOnPinResultFailure() {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
@@ -656,7 +642,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldDelegateHandleBadPinEntityToPinStorageWhenIncorrectPin() {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
@@ -692,7 +677,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldNotifyUserWhenUnlockFailed() {
         final var subInfo = SubscriptionInfoBuilder.newBuilder()
@@ -724,7 +708,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldWaitSimCardEnterIntoPinStateToUnlock() {
         final var subInfo1 = SubscriptionInfoBuilder.newBuilder()
@@ -783,7 +766,6 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
     @Test
     @Config(shadows = {
         ShadowTelephonyManagerHiddenApi.class,
-        ShadowSubscriptionManagerOnSubscriptionsChangedListener.class,
     })
     public void test_ShouldNotWaitForSimStatusChangeEventWhenAlreadyChangedWhileUnlocking() {
         final var subInfo1 = SubscriptionInfoBuilder.newBuilder()
@@ -831,6 +813,7 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
         verify(mTelephonyManager, times(1)).supplyIccLockPin(pinEntity2.getClearPin());
     }
 
+    @SuppressWarnings("AssignmentExpression")
     private SimPinFeeder createTaskWith(final List<PinEntity> decryptedPinEntities) {
         return mTask = mSimPinFeederFactory.create(TASK_WAIT_TIMEOUT_DURATION,
                 decryptedPinEntities);
@@ -900,8 +883,11 @@ public final class SimPinFeederTest extends MockitoHiltAndroidTestBase {
         await()
             .dontCatchUncaughtExceptions()
             .pollInSameThread()
-            .atMost(TASK_WAIT_TIMEOUT_DURATION)
-            .atLeast(TASK_WAIT_TIMEOUT_DURATION.minusMillis(250L))
+            // Note that, we need to allow a +/-250ms time discrepancy to account for JVM
+            // optimizations that can make the Thread termination faster, or slower due to OS-level
+            // factors like thread scheduling, system load, kernel timer precision, etc.
+            .between(TASK_WAIT_TIMEOUT_DURATION.minusMillis(250L),
+                    TASK_WAIT_TIMEOUT_DURATION.plusMillis(250L))
             .pollInterval(Duration.ofMillis(50))
             .until(() -> mTask.getState() == TERMINATED);
     }

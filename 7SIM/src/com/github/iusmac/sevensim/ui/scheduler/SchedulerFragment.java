@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.VisibleForTesting;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.preference.PreferenceFragmentCompat;
@@ -170,33 +171,28 @@ public final class SchedulerFragment extends Hilt_SchedulerFragment
         final Intent data = result.getData();
         final String action = data.getAction();
         switch (action) {
-            case ACTION_AUTH_HANDLE_ON_ENABLED_STATE_CHANGED:
+            case ACTION_AUTH_HANDLE_ON_ENABLED_STATE_CHANGED ->
                 handleOnEnabledStateChanged(data.getBooleanExtra(EXTRA_ENABLED, false));
-                break;
 
-                case ACTION_AUTH_HANDLE_ON_SUBSCRIPTION_ENABLED_STATE_CHANGED:
+            case ACTION_AUTH_HANDLE_ON_SUBSCRIPTION_ENABLED_STATE_CHANGED ->
                 handleOnSubscriptionEnabledStateChanged(data
                         .getBooleanExtra(EXTRA_SIM_ENABLED, false));
-                break;
 
-            case ACTION_AUTH_HANDLE_ON_DAYS_OF_WEEK_CHANGED:
+            case ACTION_AUTH_HANDLE_ON_DAYS_OF_WEEK_CHANGED ->
                 handleOnDayOfWeekChanged(data.getIntExtra(EXTRA_DAY_OF_WEEK, 0),
                         data.getBooleanExtra(EXTRA_DAY_OF_WEEK_ENABLED, false));
-                break;
 
-            case ACTION_AUTH_HANDLE_ON_TIME_PICKED:
+            case ACTION_AUTH_HANDLE_ON_TIME_PICKED ->
                 handleOnTimePicked(data.getStringExtra(EXTRA_TIME));
-                break;
 
-            case ACTION_AUTH_HANDLE_ON_SCHEDULE_DELETED:
+            case ACTION_AUTH_HANDLE_ON_SCHEDULE_DELETED ->
                 handleOnScheduleDeleted();
-                break;
 
-            case ACTION_AUTH_HANDLE_ON_PIN_CHANGED:
+            case ACTION_AUTH_HANDLE_ON_PIN_CHANGED ->
                 mViewModel.handleOnPinChanged(data.getStringExtra(EXTRA_PIN));
-                break;
 
-            default: mLogger.wtf("onAuthResult(result=%s) : unhandled action: %s.", result, action);
+            default ->
+                mLogger.wtf("onAuthResult(result=%s) : unhandled action: %s.", result, action);
         }
     }
 
@@ -737,6 +733,7 @@ public final class SchedulerFragment extends Hilt_SchedulerFragment
     }
 
     @Override
+    @SuppressWarnings("AssignmentExpression")
     protected RecyclerView.Adapter<?> onCreateAdapter(final PreferenceScreen preferenceScreen) {
         final ConcatAdapter.Config adapterConfig = new ConcatAdapter.Config.Builder()
             .setStableIdMode(ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS)
@@ -749,19 +746,16 @@ public final class SchedulerFragment extends Hilt_SchedulerFragment
     @Override
     public void onFragmentResult(final String requestKey, final Bundle bundle) {
         switch (requestKey) {
-            case PIN_PROMPT_RESULT_REQUEST_KEY:
+            case PIN_PROMPT_RESULT_REQUEST_KEY ->
                 handleOnPinChanged(bundle.getString(EditTextDialogFragment.EXTRA_TEXT));
-                break;
 
-            case EDIT_LABEL_RESULT_REQUEST_KEY:
+            case EDIT_LABEL_RESULT_REQUEST_KEY ->
                 handleOnLabelChanged(bundle.getString(EditTextDialogFragment.EXTRA_TEXT));
-                break;
 
-            case TIME_PICKER_RESULT_REQUEST_KEY:
+            case TIME_PICKER_RESULT_REQUEST_KEY ->
                 handleOnTimePicked(bundle.getString(TimePickerDialogFragment.EXTRA_TIME));
-                break;
 
-            default:
+            default ->
                 mLogger.wtf(new RuntimeException("Unhandled fragment result: " + requestKey +
                             ",bundle = " + bundle));
         }
@@ -785,6 +779,7 @@ public final class SchedulerFragment extends Hilt_SchedulerFragment
     }
 
     @Override
+    @SuppressWarnings("AssignmentExpression")
     public void onViewStateRestored(final Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
 
@@ -849,11 +844,13 @@ public final class SchedulerFragment extends Hilt_SchedulerFragment
 
             // Adjust the AppBarLayout expansion depending on the current screen orientation for a
             // better view of the expanded schedule if there's one otherwise try to accomodate as
-            // much items as possible
-            if (mAppBarLayout != null) {
+            // much items as possible.
+            // NOTE: need to ensure the adapter contains the empty view or at least one schedule to
+            // avoid animating the expansion when activity is first displayed
+            int itemCount;
+            if (mAppBarLayout != null && (itemCount = mConcatAdapter.getItemCount()) > 0) {
                 final boolean expanded;
                 if (UiUtils.isLandscape(getContext())) {
-                    int itemCount = mConcatAdapter.getItemCount();
                     if (mEmptyViewPref.isVisible()) {
                         // Exclude the empty view from the total item count if visible, since it's
                         // part of the RecyclerView and will be effectively visible if and only if
@@ -918,7 +915,14 @@ public final class SchedulerFragment extends Hilt_SchedulerFragment
 
             // Add the spacing below to avoid the last schedule item being covered by FAB buttons
             if (!UiUtils.isLandscape(getContext())) {
-                mRecyclerView.setPadding(0, 0, 0, res.getDimensionPixelSize(R.dimen.fab_height));
+                int navBarHeight = 0;
+                if (Utils.IS_AT_LEAST_V) {
+                    // Include navbar height as after Android 15, the app is displayed edge-to-edge
+                    navBarHeight = getActivity().getWindow().getDecorView().getRootWindowInsets()
+                        .getInsets(WindowInsetsCompat.Type.navigationBars()).top;
+                }
+                mRecyclerView.setPadding(0, 0, 0, res.getDimensionPixelSize(R.dimen.fab_height) +
+                        navBarHeight);
                 mRecyclerView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
             } else {
                 // In landscape we want all the vertical space and FABs on one side

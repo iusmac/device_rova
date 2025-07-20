@@ -143,6 +143,8 @@ public final class SimPinFeeder extends Thread {
                                 mPinStorageLazy.get().handleBadPinEntity(pinEntity);
                                 break;
 
+                            case PinResultWrapper.PIN_RESULT_TYPE_ABORTED:
+                            case PinResultWrapper.PIN_RESULT_TYPE_FAILURE:
                             default:
                                 mLogger.w("Retry attempt %d of 3 failed to unlock SIM card: %s.",
                                         retries, simCard);

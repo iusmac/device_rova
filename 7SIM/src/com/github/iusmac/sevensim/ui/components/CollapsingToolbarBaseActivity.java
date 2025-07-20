@@ -2,6 +2,7 @@ package com.github.iusmac.sevensim.ui.components;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toolbar;
 
@@ -12,6 +13,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarDelegate;
+import com.android.settingslib.collapsingtoolbar.EdgeToEdgeUtils;
+import com.android.settingslib.widget.SettingsThemeHelper;
 
 import com.github.iusmac.sevensim.ui.components.toolbar.ToolbarDecorator;
 
@@ -38,7 +41,12 @@ public abstract class CollapsingToolbarBaseActivity extends FragmentActivity {
     protected void onCreate(final @Nullable Bundle savedInstanceState) {
         mViewModel = onCreateViewModel();
 
+        EdgeToEdgeUtils.enable(this);
         super.onCreate(savedInstanceState);
+
+        if (SettingsThemeHelper.isExpressiveTheme(this)) {
+            setTheme(com.android.settingslib.widget.theme.R.style.Theme_SubSettingsBase_Expressive);
+        }
 
         final View view = getToolbarDelegate().onCreateView(getLayoutInflater(), null);
         super.setContentView(view);
@@ -107,6 +115,15 @@ public abstract class CollapsingToolbarBaseActivity extends FragmentActivity {
             finishAfterTransition();
         }
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
