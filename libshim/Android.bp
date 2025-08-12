@@ -51,3 +51,10 @@ cc_library_shared {
         "ims/libgui.cpp"
     ],
 }
+
+cc_library_shared {
+    name: "libwui",
+
+    shared_libs: ["libgui_vendor"],
+    vendor: true,
+}
