@@ -1,4 +1,9 @@
 soong_namespace {
+    imports: [
+        "device/xiaomi/rova/qcom-caf",
+        "vendor/qcom/opensource/display",
+        "vendor/xiaomi/rova",
+    ],
 }
 
 soong_config_module_type {
