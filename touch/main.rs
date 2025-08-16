@@ -9,8 +9,7 @@ mod keydisabler_hal;
 use crate::keydisabler_hal::KeyDisablerHal;
 
 use vendor_lineage_touch::aidl::vendor::lineage::touch::IKeyDisabler::{
-    IKeyDisabler,
-    BnKeyDisabler,
+    BnKeyDisabler, IKeyDisabler,
 };
 
 use log::LevelFilter;
@@ -19,7 +18,9 @@ const LOG_TAG: &str = "KeyDisablerHal";
 
 fn main() {
     let logger_success = logger::init(
-        logger::Config::default().with_tag_on_device(LOG_TAG).with_max_level(LevelFilter::Trace),
+        logger::Config::default()
+            .with_tag_on_device(LOG_TAG)
+            .with_max_level(LevelFilter::Trace),
     );
     if !logger_success {
         panic!("{LOG_TAG}: Failed to start logger.");
@@ -27,10 +28,8 @@ fn main() {
 
     binder::ProcessState::start_thread_pool();
     let my_service = KeyDisablerHal;
-    let my_service_binder = BnKeyDisabler::new_binder(
-        my_service,
-        binder::BinderFeatures::default(),
-    );
+    let my_service_binder =
+        BnKeyDisabler::new_binder(my_service, binder::BinderFeatures::default());
     let service_name = format!("{}/default", KeyDisablerHal::get_descriptor());
     binder::add_service(&service_name, my_service_binder.as_binder())
         .expect("Failed to register service");

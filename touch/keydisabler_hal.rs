@@ -6,9 +6,7 @@
 use binder::{Interface, Result as BinderResult, StatusCode};
 use std::fs;
 
-use vendor_lineage_touch::aidl::vendor::lineage::touch::{
-    IKeyDisabler::IKeyDisabler,
-};
+use vendor_lineage_touch::aidl::vendor::lineage::touch::IKeyDisabler::IKeyDisabler;
 
 const CONTROL_PATH: &str = "/proc/sys/dev/xiaomi_msm8937_touchscreen/disable_keys";
 
@@ -30,10 +28,9 @@ impl IKeyDisabler for KeyDisablerHal {
     }
 
     fn setEnabled(&self, enabled: bool) -> BinderResult<()> {
-        fs::write(CONTROL_PATH, if enabled { "1" } else { "0" })
-            .map_err(|err| {
-                log::error!("Failed to write to {}: {}", CONTROL_PATH, err);
-                StatusCode::UNKNOWN_ERROR.into()
-            })
+        fs::write(CONTROL_PATH, if enabled { "1" } else { "0" }).map_err(|err| {
+            log::error!("Failed to write to {}: {}", CONTROL_PATH, err);
+            StatusCode::UNKNOWN_ERROR.into()
+        })
     }
 }
