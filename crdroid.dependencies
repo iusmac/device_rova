@@ -1,0 +1,10 @@
+[
+    {
+        "repository": "crdroidandroid/android_kernel_xiaomi_rova",
+        "target_path": "kernel/xiaomi/rova"
+    },
+    {
+        "repository": "crdroidandroid/android_vendor_xiaomi_rova",
+        "target_path": "vendor/xiaomi/rova"
+    }
+]
