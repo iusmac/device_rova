@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,14 +20,11 @@
 // with such a backward incompatible change, it has a high risk of breaking
 // later when a module using the interface is updated, e.g., Mainline modules.
 
-package vendor.qti.hardware.display.aiqe;
-@VintfStability
-interface IDisplayAiqe {
-  void setSsrcMode(in int disp_id, in String mode_name);
-  void enableCopr(in int disp_id, in boolean enable);
-  int[] getCoprStats(in int disp_id);
-  void setABCState(in int dispId, in int enable);
-  void setABCReconfig(in int dispId);
-  void setABCMode(in int dispId, in String mode_name);
-  void setAIScalerMode(in int dispId, in int mode_id);
+package vendor.qti.hardware.display.composer3;
+@Backing(type="int") @VintfStability
+enum QtiLayerType {
+  UNKNOWN = 0,
+  APP = 1,
+  GAME = 2,
+  BROWSER = 3,
 }

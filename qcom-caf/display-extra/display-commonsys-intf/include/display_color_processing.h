@@ -28,9 +28,9 @@
 */
 
 /*
- *  Changes from Qualcomm Innovation Center are provided under the following license:
+ *  Changes from Qualcomm Innovation Center, Inc. are provided under the following license:
  *
- *  Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ *  Copyright (c) 2022, 2025 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted (subject to the limitations in the
@@ -72,6 +72,7 @@
 extern "C" {
 #endif
 
+#define DISP_DE_VER_3005 0x00003005
 #define DISP_DE_LPF_BLEND
 #define LUT3D_ENTRIES_SIZE (17 * 17 * 17)
 #define LUT3D_GC_ENTRIES_SIZE 1024
@@ -132,12 +133,17 @@ static const uint32_t kDeTuningFlagThrHigh = 0x20;
 static const uint32_t kDeTuningFlagContentQualLevel = 0x40;
 static const uint32_t kDeTuningFlagDeBlend = 0x80;
 static const uint32_t kDeTuningFlagDeLpfBlend = 0x100;
+static const uint32_t kDeTuningFlagSharpenLevel1 = 0x200;
+static const uint32_t kDeTuningFlagSharpenLevel2 = 0x400;
+static const uint32_t kDeTuningFlagFilterConfig = 0x800;
+static const uint32_t kDeTuningFlagPolarityEn = 0x1000;
 
 typedef enum {
   kDeContentQualUnknown,
   kDeContentQualLow,
   kDeContentQualMedium,
   kDeContentQualHigh,
+  kDeContentQualExtreme,
   kDeContentQualMax,
 } PPDEContentQualLevel;
 
@@ -147,6 +153,23 @@ typedef enum {
   kDeContentTypeGraphics,
   kDeContentTypeMax,
 } PPDEContentType;
+
+typedef enum {
+  kDeFilterEdgeDirected,
+  kDeFilterCircular,
+  kDeFilterSeparable,
+  kDeFilterBilinear,
+  kDeFilterMax,
+} PPDEScalingFilterConfig;
+
+typedef enum {
+  kDeOptimizationQuality,
+  kDeOptimizationBalanced,
+  kDeOptimizationPower,
+  kDeOptimizationBalancedHigh,
+  kDeOptimizationBalancedLow,
+  kDeOptimizationMax,
+} PPDEScalingOptimizationMode;
 
 /*
 struct PPDETuningCfg
@@ -165,6 +188,13 @@ struct PPDETuningCfg {
   uint32_t de_lpf_h;
   uint32_t de_lpf_m;
   uint32_t de_lpf_l;
+  int16_t sharpen_level1;
+  int16_t sharpen_level2;
+  PPDEScalingFilterConfig filter_config;
+  uint32_t polarity_en;
+  uint32_t halo_suppression_factor;
+  uint32_t detail_suppression_factor;
+  PPDEScalingOptimizationMode optimization_mode;
 };
 
 struct PPDETuningCfgData {

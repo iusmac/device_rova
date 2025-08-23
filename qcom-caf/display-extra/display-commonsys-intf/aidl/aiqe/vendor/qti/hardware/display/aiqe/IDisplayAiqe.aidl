@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2024-2025 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -55,4 +55,12 @@ interface IDisplayAiqe {
      * @return error is NONE upon success
      */
     void setABCMode(in int dispId, in String mode_name);
+    /**
+     * Set AI Scaler feature mode ID
+     *
+     * @param dispId ID of the display to target.
+     * @param mode_id AI Scaler mode ID to be set
+     * @return error is NONE upon success
+     */
+    void setAIScalerMode(in int dispId, in int mode_id);
 }
