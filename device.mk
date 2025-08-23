@@ -550,6 +550,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/prima/WCNSS_cfg.dat \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
 
+$(call soong_config_set_bool,wcnss_service,uses_qcom_wcnss_qmi,true)
+$(call soong_config_set,wcnss_service,wcnss_qmi_include_dir,$(LOCAL_PATH)/wifi/include)
+
 # Wifi firmware symlinks
 ifneq ($(TARGET_EXCLUDE_DEFAULT_WIFI_FIRMWARE_SYMLINKS),true)
 PRODUCT_PACKAGES += \
