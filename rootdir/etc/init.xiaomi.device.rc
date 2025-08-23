@@ -23,7 +23,7 @@ on post-fs-data
 # Restart camera provider after vendor.qcamerasvr is running
 on property:init.svc.vendor.qcamerasvr=running
     exec /bin/sleep 1s
-    restart vendor.camera-provider-2-4
+    restart vendor.camera.provider
 
 service vendor.xiaomi_device_script /vendor/bin/init.xiaomi.device.sh
     class early_hal
