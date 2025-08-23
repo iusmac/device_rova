@@ -202,6 +202,16 @@
         "25000"
       ],
       "ResetOnInit": true
+    },
+    {
+      "Name": "DoubleTapToWake",
+      "Path": "/proc/sys/dev/xiaomi_msm8937_touchscreen/enable_dt2w",
+      "Values": [
+        "0",
+        "1"
+      ],
+      "DefaultIndex": 0,
+      "ResetOnInit": true
     }
   ],
   "Actions": [
@@ -396,6 +406,12 @@
       "Node": "CPUUpRateLimit",
       "Duration": 0,
       "Value": "2500"
+    },
+    {
+      "PowerHint": "DOUBLE_TAP_TO_WAKE",
+      "Node": "DoubleTapToWake",
+      "Duration": 0,
+      "Value": "1"
     }
   ]
 }
