@@ -30,8 +30,8 @@ include ':SettingsLib:SettingsTheme'
 include ':SettingsLib:Utils'
 
 android {
-    compileSdk 34
-    minSdk 34
-    targetSdk 34
-    buildToolsVersion '34.0.0'
+    compileSdk 36
+    minSdk 36
+    targetSdk 36
+    buildToolsVersion '36.0.0'
 }
