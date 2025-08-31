@@ -56,6 +56,10 @@ android {
         disable 'ProtectedPermissions'
         disable 'MissingTranslation'
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

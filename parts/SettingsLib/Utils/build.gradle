@@ -32,11 +32,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_9
     }
 
-    afterEvaluate {
-        generateReleaseBuildConfig.enabled = false
-        generateDebugBuildConfig.enabled = false
-    }
-
     sourceSets {
         main {
             res.srcDirs = ['../fwb/packages/SettingsLib/Utils/res']
