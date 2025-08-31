@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -26,6 +27,7 @@ android {
     sourceSets {
         main {
             res.srcDirs = ['../fwb/packages/SettingsLib/SettingsTheme/res']
+            java.srcDirs = ['../fwb/packages/SettingsLib/SettingsTheme/src']
         }
     }
 }
@@ -33,4 +35,6 @@ android {
 dependencies {
     implementation libs.material
     implementation libs.preference
+
+    implementation project(':SettingsLib:SettingsThemeFlags')
 }

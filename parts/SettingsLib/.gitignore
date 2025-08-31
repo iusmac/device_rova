@@ -11,7 +11,11 @@
 !/IllustrationPreference/build.gradle
 /MainSwitchPreference/*
 !/MainSwitchPreference/build.gradle
+/SettingsFlags/*
+!/SettingsFlags/build.gradle
+!/SettingsFlags/src/
 /SettingsTheme/*
 !/SettingsTheme/build.gradle
-/Utils/*
-!/Utils/build.gradle
+/SettingsThemeFlags/*
+!/SettingsThemeFlags/build.gradle
+!/SettingsThemeFlags/src/

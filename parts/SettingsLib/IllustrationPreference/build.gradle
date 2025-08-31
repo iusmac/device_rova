@@ -36,4 +36,6 @@ dependencies {
     implementation libs.preference
 
     implementation project(':SettingsLib:Color')
+    implementation project(':SettingsLib:SettingsFlags')
+    implementation project(':SettingsLib:SettingsTheme')
 }

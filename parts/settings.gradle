@@ -26,8 +26,9 @@ include ':SettingsLib:Color'
 include ':SettingsLib:FooterPreference'
 include ':SettingsLib:IllustrationPreference'
 include ':SettingsLib:MainSwitchPreference'
+include ':SettingsLib:SettingsFlags'
 include ':SettingsLib:SettingsTheme'
-include ':SettingsLib:Utils'
+include ':SettingsLib:SettingsThemeFlags'
 
 android {
     compileSdk 36

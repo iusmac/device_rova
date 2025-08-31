@@ -57,6 +57,7 @@ dependencies {
     implementation project(path: ':SettingsLib:FooterPreference')
     implementation project(path: ':SettingsLib:IllustrationPreference')
     implementation project(path: ':SettingsLib:MainSwitchPreference')
+    implementation project(path: ':SettingsLib:SettingsTheme')
 
     implementation libs.hilt_android
     kapt libs.hilt_compiler
