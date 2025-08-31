@@ -24,11 +24,6 @@ android {
         abortOnError false
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_9
-        targetCompatibility JavaVersion.VERSION_1_9
-    }
-
     sourceSets {
         main {
             res.srcDirs = ['../fwb/packages/SettingsLib/SettingsTheme/res']

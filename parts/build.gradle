@@ -41,6 +41,16 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '2.1.10' apply false
 }
 
+allprojects {
+    plugins.withType(JavaBasePlugin).configureEach {
+        java {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(21))
+            }
+        }
+    }
+}
+
 tasks.register('clean') {
     delete rootProject.buildDir
 }
