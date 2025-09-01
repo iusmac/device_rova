@@ -245,7 +245,3 @@ on property:init.svc.vendor.per_mgr=running
 
 on property:sys.shutdown.requested=*
     stop vendor.per_proxy
-
-on property:init.svc.statsd=running
-    # Disable native stats collection service
-    stop statsd
