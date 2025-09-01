@@ -63,10 +63,6 @@ public class DefaultSystemSettings {
     }
 
     public void onBootCompleted() {
-        if (isFirstRun("disable-nav-keys")) {
-            writeDisableNavkeysOption(true);
-        }
-
         if (isFirstRun("enable-battery-light")) {
             writeBatteryLightOption(true);
         }
@@ -81,17 +77,6 @@ public class DefaultSystemSettings {
 
         tweakActivityManagerSettings();
         writeAnimationSettings();
-    }
-
-    private void writeDisableNavkeysOption(final boolean enabled) {
-        final boolean virtualKeysEnabled = LineageSettings.System.getIntForUser(
-                mContext.getContentResolver(), LineageSettings.System.FORCE_SHOW_NAVBAR, 0,
-                UserHandle.USER_CURRENT) != 0;
-        if (enabled != virtualKeysEnabled) {
-            LineageSettings.System.putIntForUser(mContext.getContentResolver(),
-                    LineageSettings.System.FORCE_SHOW_NAVBAR, enabled ? 1 : 0,
-                    UserHandle.USER_CURRENT);
-        }
     }
 
     private void writeBatteryLightOption(final boolean enabled) {
