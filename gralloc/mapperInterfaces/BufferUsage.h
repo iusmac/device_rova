@@ -1,7 +1,5 @@
-/*
- * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
- * SPDX-License-Identifier: BSD-3-Clause-Clear
- */
+// Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+// SPDX-License-Identifier: BSD-3-Clause-Clear
 
 #ifndef __COMMON_BUFFERUSAGE_H__
 #define __COMMON_BUFFERUSAGE_H__
@@ -118,6 +116,11 @@ typedef enum vendor_qti_hardware_display_common_BufferUsage : uint64_t {
 
   /* UBWC - 8:5 compression ratio */
   QTI_ALLOC_UBWC_L_8_TO_5 = 1ULL << 59,
+
+  /* Bit 60 is reserved */
+
+  /* Batch mode commit use case */
+  QTI_PRIVATE_BATCH_COMMIT = 1ULL << 61,
 } vendor_qti_hardware_display_common_BufferUsage;
 
 inline vendor_qti_hardware_display_common_BufferUsage operator|(
@@ -147,5 +150,6 @@ inline vendor_qti_hardware_display_common_BufferUsage operator|=(
   lhs = lhs | rhs;
   return lhs;
 }
-};
+
+};  // namespace gralloc
 #endif  // __COMMON_BUFFERUSAGE_H__

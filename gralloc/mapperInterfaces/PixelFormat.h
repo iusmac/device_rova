@@ -26,8 +26,8 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Changes from Qualcomm Innovation Center are provided under the following license:
- * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+ * ​​​​​Changes from Qualcomm Technologies, Inc. are provided under the following license:
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -35,7 +35,8 @@
 #define __COMMON_PIXELFORMAT_H__
 
 #include <cstdint>
-namespace gralloc{
+namespace gralloc {
+
 typedef enum vendor_qti_hardware_display_common_PixelFormat : uint32_t {
   // Range is 0x0 to 0x100 except for formats where fourcc code is used
   PIXEL_FORMAT_UNSPECIFIED = 0,
@@ -364,8 +365,19 @@ typedef enum vendor_qti_hardware_display_common_PixelFormat : uint32_t {
   NV12_UBWC_FLEX_2_BATCH = 0x128,
   NV12_UBWC_FLEX_4_BATCH = 0x129,
   NV12_UBWC_FLEX_8_BATCH = 0x130,
+
+  /* Camera MipMap Formats */
+  NV12_UBWC_MIPMAP = 0x223,
+  NV12_MIPMAP = 0x224,
+  TP10_UBWC_MIPMAP = 0x225,
+  P010_MIPMAP = 0x226,
+
+  YCBCR_P010_HEIF = 0x151, // YCBCR_P010_512
+  YCBCR_P010_1024 = 0x152,
+  NV12_1024 = 0x153,
   /* --------------------------------------------------------------------------------*/
 
 } vendor_qti_hardware_display_common_PixelFormat;
-};
+
+};  // namespace gralloc
 #endif  // __COMMON_PIXELFORMAT_H__

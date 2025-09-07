@@ -13,5 +13,6 @@ PRODUCT_PACKAGES += vendor.display.config@1.0 \
                     vendor.qti.hardware.display.config-V7-ndk \
                     vendor.qti.hardware.display.config-V8-ndk \
                     vendor.qti.hardware.display.config-V9-ndk \
+                    vendor.qti.hardware.display.config-V10-ndk \
                     vendor.qti.hardware.display.config-V11-ndk \
-                    vendor.qti.hardware.display.config-V10-ndk
+                    vendor.qti.hardware.display.config-V13-ndk
