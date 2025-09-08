@@ -1,0 +1,249 @@
+//libgrallocutils
+cc_library_shared {
+    name: "libgrallocutils",
+    defaults: ["display_defaults"],
+    vendor: true,
+
+    header_libs: [
+        "display_headers",
+        "qti_kernel_headers",
+    ],
+    shared_libs: [
+        "libqdMetaData",
+        "libdl",
+        "android.hardware.graphics.common@1.2",
+        "android.hardware.graphics.mapper@2.0",
+        "android.hardware.graphics.mapper@2.1",
+        "android.hardware.graphics.mapper@3.0",
+        "android.hardware.graphics.mapper@4.0",
+    ],
+    cflags: [
+        "-DLOG_TAG=\"qdgralloc\"",
+        "-Wno-sign-conversion",
+        "-D__QTI_DISPLAY_GRALLOC__",
+    ],
+    srcs: [
+        "gr_utils.cpp",
+        "gr_adreno_info.cpp",
+    ],
+}
+
+libion_include_dirs = ["system/memory/libion/include", "system/memory/libion/kernel-headers"]
+
+//libgralloccore
+cc_library_shared {
+    name: "libgralloccore",
+    defaults: ["display_defaults"],
+    vendor: true,
+
+    include_dirs: select(soong_config_variable("qtidisplay", "target_kernel_version"), {
+        "4.14": libion_include_dirs,
+        "4.19": libion_include_dirs,
+        default: [],
+    }),
+    header_libs: [
+        "display_headers",
+        "qti_kernel_headers",
+    ],
+    shared_libs: [
+        "libqdMetaData",
+        "libdl",
+        "libgrallocutils",
+        "libgralloctypes",
+        "libgralloc.qti",
+        "libhidlbase",
+        "android.hardware.graphics.mapper@2.1",
+        "android.hardware.graphics.mapper@3.0",
+        "android.hardware.graphics.mapper@4.0",
+    ] + select(soong_config_variable("qtidisplay", "target_kernel_version"), {
+        "4.14": ["libion"],
+        "4.19": ["libion"],
+        default: [],
+    }),
+    cflags: [
+        "-DLOG_TAG=\"qdgralloc\"",
+        "-Wno-sign-conversion",
+        "-D__QTI_DISPLAY_GRALLOC__",
+    ] + select(soong_config_variable("qtidisplay", "gralloc4"), {
+        "true": ["-DTARGET_USES_GRALLOC4"],
+        default: [],
+    }),
+    srcs: [
+        "gr_ion_alloc.cpp",
+        "gr_allocator.cpp",
+        "gr_buf_mgr.cpp",
+    ],
+}
+
+soong_config_module_type {
+    name: "target_board_platform_cc_library_shared",
+    module_type: "cc_library_shared",
+    config_namespace: "ANDROID",
+    value_variables: ["target_board_platform"],
+    properties: [
+        "name",
+    ],
+}
+
+//gralloc.qcom
+target_board_platform_cc_library_shared {
+    name: "gralloc.qcom",
+    soong_config_variables: {
+        target_board_platform: {
+            name: "gralloc.%s",
+            conditions_default: {
+                name: "gralloc.qcom",
+            },
+        },
+    },
+    defaults: ["display_defaults"],
+    vendor: true,
+    relative_install_path: "hw",
+    header_libs: [
+        "display_headers",
+        "qti_kernel_headers",
+    ],
+    shared_libs: [
+        "libgrallocutils",
+        "libqdMetaData",
+        "libsync",
+        "libgralloccore",
+        "android.hardware.graphics.mapper@2.0",
+        "android.hardware.graphics.mapper@2.1",
+        "android.hardware.graphics.mapper@3.0",
+        "android.hardware.graphics.mapper@4.0",
+    ] + select(soong_config_variable("qtidisplay", "target_kernel_version"), {
+        "4.14": ["libion"],
+        "4.19": ["libion"],
+        default: [],
+    }),
+    cflags: [
+        "-DLOG_TAG=\"qdgralloc\"",
+        "-Wno-enum-enum-conversion",
+    ],
+    srcs: [
+        "gr_device_impl.cpp",
+    ],
+}
+
+//mapper
+cc_library_shared {
+    name: "android.hardware.graphics.mapper@3.0-impl-qti-display",
+    defaults: ["display_defaults"],
+    vendor: true,
+    relative_install_path: "hw",
+    header_libs: [
+        "display_headers",
+        "qti_kernel_headers",
+    ],
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libqdMetaData",
+        "libgrallocutils",
+        "libgralloccore",
+        "libsync",
+        "libgralloctypes",
+        "vendor.qti.hardware.display.mapper@3.0",
+        "vendor.qti.hardware.display.mapperextensions@1.0",
+        "android.hardware.graphics.mapper@2.0",
+        "android.hardware.graphics.mapper@2.1",
+        "vendor.qti.hardware.display.mapperextensions@1.1",
+        "android.hardware.graphics.mapper@3.0",
+    ],
+    cflags: [
+        "-DLOG_TAG=\"qdgralloc\"",
+        "-Wno-sign-conversion",
+        "-D__QTI_DISPLAY_GRALLOC__",
+    ],
+    srcs: [
+        "QtiMapper.cpp",
+        "QtiMapperExtensions.cpp",
+    ],
+    vintf_fragments: ["android.hardware.graphics.mapper-impl-qti-display.xml"],
+}
+
+
+cc_library_shared {
+    name: "android.hardware.graphics.mapper@4.0-impl-qti-display",
+    sanitize: {
+        integer_overflow: true,
+    },
+    defaults: ["display_defaults"],
+    vendor: true,
+    relative_install_path: "hw",
+    header_libs: [
+        "display_headers",
+        "qti_kernel_headers",
+    ],
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libqdMetaData",
+        "libgrallocutils",
+        "libgralloccore",
+        "libsync",
+        "libgralloctypes",
+        "vendor.qti.hardware.display.mapper@4.0",
+        "vendor.qti.hardware.display.mapperextensions@1.0",
+        "android.hardware.graphics.mapper@2.0",
+        "android.hardware.graphics.mapper@2.1",
+        "vendor.qti.hardware.display.mapperextensions@1.1",
+        "android.hardware.graphics.mapper@3.0",
+        "android.hardware.graphics.mapper@4.0",
+    ],
+    cflags: [
+        "-DLOG_TAG=\"qdgralloc\"",
+        "-Wno-sign-conversion",
+        "-D__QTI_DISPLAY_GRALLOC__",
+    ],
+    srcs: [
+        "QtiMapper4.cpp",
+        "QtiMapperExtensions.cpp",
+    ],
+    vintf_fragments: ["android.hardware.graphics.mapper-impl-qti-display.xml"],
+}
+
+//allocator
+cc_library_shared {
+    name: "vendor.qti.hardware.display.allocator-service",
+    defaults: ["display_defaults"],
+    vendor: true,
+    relative_install_path: "hw",
+    header_libs: [
+        "display_headers",
+        "qti_kernel_headers",
+    ],
+    shared_libs: [
+        "libhidlbase",
+        "libqdMetaData",
+        "libgrallocutils",
+        "libgralloccore",
+        "libgralloctypes",
+        "vendor.qti.hardware.display.allocator@4.0",
+        "vendor.qti.hardware.display.allocator@3.0",
+        "vendor.qti.hardware.display.mapper@4.0",
+        "vendor.qti.hardware.display.mapper@3.0",
+        "android.hardware.graphics.mapper@4.0",
+        "android.hardware.graphics.mapper@3.0",
+        "android.hardware.graphics.mapper@2.1",
+        "android.hardware.graphics.allocator@4.0",
+        "android.hardware.graphics.allocator@3.0",
+        "vendor.qti.hardware.display.mapperextensions@1.0",
+        "vendor.qti.hardware.display.mapperextensions@1.1",
+    ],
+    cflags: [
+        "-DLOG_TAG=\"qdgralloc\"",
+        "-Wno-sign-conversion",
+        "-D__QTI_DISPLAY_GRALLOC__",
+    ] + select(soong_config_variable("qtidisplay", "gralloc4"), {
+        "true": ["-DTARGET_USES_GRALLOC4"],
+        default: [],
+    }),
+    srcs: [
+        "QtiAllocator.cpp",
+        "service.cpp",
+    ],
+    init_rc: ["vendor.qti.hardware.display.allocator-service.rc"],
+    vintf_fragments: ["vendor.qti.hardware.display.allocator-service.xml"],
+}

@@ -8,7 +8,6 @@ cc_library_shared {
         "libqservice",
     ],
     cflags: [
-        "-DDEBUG_CALC_FPS",
         "-DLOG_TAG=\"qdutils\"",
         "-Wno-sign-conversion",
     ],

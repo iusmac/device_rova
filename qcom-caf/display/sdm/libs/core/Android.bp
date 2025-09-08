@@ -1,0 +1,59 @@
+cc_library_shared {
+    name: "libsdmcore",
+    vendor: true,
+    header_libs: [
+        "display_headers",
+        "qti_kernel_headers",
+    ],
+    cflags: [
+        "-Wno-unused-parameter",
+        "-fexceptions",
+        "-DLOG_TAG=\"SDM\"",
+    ] + select(soong_config_variable("qtidisplay", "drmpp"), {
+        "true": ["-DPP_DRM_ENABLE"],
+        default: [],
+    }) + select(soong_config_variable("qtidisplay", "headless"), {
+        "true": ["-DTARGET_HEADLESS"],
+        default: ["-DCOMPILE_DRM"],
+    }),
+    shared_libs: [
+        "libdl",
+        "libsdmutils",
+        "libdrm",
+        "libdrmutils",
+    ],
+
+    srcs: [
+        "core_interface.cpp",
+        "core_impl.cpp",
+        "display_base.cpp",
+        "display_primary.cpp",
+        "display_hdmi.cpp",
+        "display_virtual.cpp",
+        "comp_manager.cpp",
+        "strategy.cpp",
+        "resource_default.cpp",
+        "color_manager.cpp",
+        "hw_events_interface.cpp",
+        "hw_info_interface.cpp",
+        "hw_interface.cpp",
+        "fb/hw_info.cpp",
+        "fb/hw_device.cpp",
+        "fb/hw_primary.cpp",
+        "fb/hw_hdmi.cpp",
+        "fb/hw_virtual.cpp",
+        "fb/hw_color_manager.cpp",
+        "fb/hw_scale.cpp",
+        "fb/hw_events.cpp",
+    ] + select(soong_config_variable("qtidisplay", "headless"), {
+        "true": [],
+        default: [
+            "drm/hw_info_drm.cpp",
+            "drm/hw_device_drm.cpp",
+            "drm/hw_events_drm.cpp",
+            "drm/hw_scale_drm.cpp",
+            "drm/hw_color_manager_drm.cpp",
+        ],
+    }),
+
+}
