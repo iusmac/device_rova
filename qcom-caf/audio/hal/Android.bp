@@ -1,3 +1,10 @@
+cc_library_headers {
+    name: "msm8974_audio_hal_common_headers",
+    vendor_available: true,
+    export_include_dirs: [".", "msm8974"],
+
+}
+
 soong_config_module_type {
     name: "target_board_platform_cc_library_shared",
     module_type: "cc_library_shared",

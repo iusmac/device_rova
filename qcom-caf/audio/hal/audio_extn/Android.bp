@@ -5,11 +5,6 @@ cc_defaults {
         "-Werror",
     ],
 
-    local_include_dirs: [
-        "../",
-        "../msm8974",
-    ],
-
     include_dirs: [
         "external/tinyalsa/include",
         "external/tinycompress/include",
@@ -20,6 +15,7 @@ cc_defaults {
     header_libs: [
         "libhardware_headers",
         "qti_kernel_headers",
+        "msm8974_audio_hal_common_headers",
     ],
 
     shared_libs: [
