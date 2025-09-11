@@ -21,7 +21,10 @@ cc_library_shared {
         "-DLOG_TAG=\"qdgralloc\"",
         "-Wno-sign-conversion",
         "-D__QTI_DISPLAY_GRALLOC__",
-    ],
+    ] + select(soong_config_variable("qtidisplay", "gralloc4"), {
+        "true": ["-DTARGET_USES_GRALLOC4"],
+        default: [],
+    }),
     srcs: [
         "gr_utils.cpp",
         "gr_adreno_info.cpp",
