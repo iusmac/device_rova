@@ -203,7 +203,7 @@ cc_library_shared {
 }
 
 //allocator
-cc_library_shared {
+cc_binary {
     name: "vendor.qti.hardware.display.allocator-service",
     defaults: ["display_defaults"],
     vendor: true,
