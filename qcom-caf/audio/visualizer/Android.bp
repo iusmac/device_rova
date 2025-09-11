@@ -14,8 +14,19 @@ cc_library_shared {
 
     cflags: [
         "-fvisibility=hidden",
+        "-Wall",
         "-Werror",
         "-Wno-gnu-designator",
+        "-Wno-shorten-64-to-32",
+        "-Wno-sign-compare",
+        "-Wno-tautological-compare",
+        "-Wno-typedef-redefinition",
+        "-Wno-unused-function",
+        "-Wno-unused-label",
+        "-Wno-unused-local-typedef",
+        "-Wno-unused-parameter",
+        "-Wno-unused-value",
+        "-Wno-unused-variable",
     ],
 
     include_dirs: [
