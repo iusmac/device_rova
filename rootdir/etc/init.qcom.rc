@@ -575,6 +575,10 @@ service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /system/vendor/etc/m
     disabled
 
 on charger
+    # Display
+    chmod 0660 /dev/graphics/fb0
+    chown system graphics /dev/graphics/fb0
+
     setprop persist.sys.usb.config mass_storage
     start vendor.qcom-post-boot
 
