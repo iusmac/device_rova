@@ -509,6 +509,10 @@ $(call inherit-product, hardware/qcom-caf/common/common.mk)
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.vibrator.service
 
+# Webcam
+PRODUCT_PACKAGES += \
+	DeviceAsWebcam
+
 # Whitelisted app
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/qti_whitelist.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/qti_whitelist.xml \
