@@ -19,7 +19,8 @@ package org.lineageos.settings.soundcontrol;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
+
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -28,7 +29,7 @@ import javax.inject.Inject;
 import org.lineageos.settings.preferences.CustomSeekBarPreference;
 import org.lineageos.settings.R;
 
-@AndroidEntryPoint(PreferenceFragmentCompat.class)
+@AndroidEntryPoint(SettingsBasePreferenceFragment.class)
 public class SoundControlSettingsFragment extends Hilt_SoundControlSettingsFragment implements
         Preference.OnPreferenceChangeListener {
 

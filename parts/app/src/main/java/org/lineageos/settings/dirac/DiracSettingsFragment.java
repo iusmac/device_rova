@@ -25,9 +25,9 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceFragmentCompat;
 
 import com.android.settingslib.widget.MainSwitchPreference;
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -35,7 +35,7 @@ import javax.inject.Inject;
 
 import org.lineageos.settings.R;
 
-@AndroidEntryPoint(PreferenceFragmentCompat.class)
+@AndroidEntryPoint(SettingsBasePreferenceFragment.class)
 public class DiracSettingsFragment extends Hilt_DiracSettingsFragment implements
         Preference.OnPreferenceChangeListener, OnCheckedChangeListener {
 
