@@ -85,6 +85,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
 
+import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -417,6 +418,72 @@ class SimListActivityTest {
         }
 
         @Test
+        @Config(minSdk = Q, qualifiers = "+ru") // use the verbose Russian locale to get text wrapping
+        fun `test should separate date-time in SIM entries by new line when in portrait`() {
+            val subInfo = SubscriptionInfoBuilder.newBuilder().apply {
+                setId(1)
+                setDisplayName("SIM 1")
+                setIconTint(Color.BLUE)
+            }.buildSubscriptionInfo()
+            shadowOf(mSubscriptionManager).setAvailableSubscriptionInfos(subInfo)
+
+            // Insert a schedule for the SIM card in database to be displayed in the summary
+            runBlocking {
+                val insertJob = async(Dispatchers.Default) {
+                    val schedule = SubscriptionScheduleEntity().apply {
+                        setSubscriptionId(subInfo.subscriptionId)
+                        setSubscriptionEnabled(false)
+                        setEnabled(true)
+                        setDaysOfWeek(mDaysOfWeekFactory.create(*arrayOf(TUESDAY)))
+                        setTime(LocalTime.of(18, 30))
+                    }
+                    mAppDatabaseDE.subscriptionSchedulerDao().insert(schedule)
+                }
+                withTimeout(5.seconds) { insertJob.await() }
+            }
+
+            onActivity {
+                // Ensure ViewModel finished updating UI before capturing the initial state
+                waitActivityWorkerThreadUntilIdle()
+                shadowOf(Looper.getMainLooper()).idle()
+                onSimEntryAt(0).captureRoboImage(idleFor = SCROLL_BAR_FADE_DURATION)
+            }
+        }
+
+        @Test
+        @Config(minSdk = Q, qualifiers = "+land +ru") // use the verbose Russian locale to get text wrapping
+        fun `test should separate date-time in SIM entries by space when in landscape`() {
+            val subInfo = SubscriptionInfoBuilder.newBuilder().apply {
+                setId(1)
+                setDisplayName("SIM 1")
+                setIconTint(Color.BLUE)
+            }.buildSubscriptionInfo()
+            shadowOf(mSubscriptionManager).setAvailableSubscriptionInfos(subInfo)
+
+            // Insert a schedule for the SIM card in database to be displayed in the summary
+            runBlocking {
+                val insertJob = async(Dispatchers.Default) {
+                    val schedule = SubscriptionScheduleEntity().apply {
+                        setSubscriptionId(subInfo.subscriptionId)
+                        setSubscriptionEnabled(false)
+                        setEnabled(true)
+                        setDaysOfWeek(mDaysOfWeekFactory.create(*arrayOf(TUESDAY)))
+                        setTime(LocalTime.of(18, 30))
+                    }
+                    mAppDatabaseDE.subscriptionSchedulerDao().insert(schedule)
+                }
+                withTimeout(5.seconds) { insertJob.await() }
+            }
+
+            onActivity {
+                // Ensure ViewModel finished updating UI before capturing the initial state
+                waitActivityWorkerThreadUntilIdle()
+                shadowOf(Looper.getMainLooper()).idle()
+                onSimEntryAt(0).captureRoboImage(idleFor = SCROLL_BAR_FADE_DURATION)
+            }
+        }
+
+        @Test
         @Config(minSdk = Q)
         fun `test should show No SIM cards inserted entry ONLY when appropriate`() = onActivity {
             // Ensure ViewModel finished updating UI before capturing the initial state
@@ -532,11 +599,6 @@ class SimListActivityTest {
 
                 onSimEntryAt(0).perform(switchClick())
                     .captureRoboImage(idleFor = SCROLL_BAR_FADE_DURATION)
-
-                // Wait for the ViewModel to complete before exiting the test, otherwise the
-                // database will be closed too early while there's an async SIM state change
-                // request, that still interacts with it
-                waitActivityWorkerThreadUntilIdle()
             }
         }
 
@@ -735,6 +797,14 @@ class SimListActivityTest {
                 assertThat(sub, `is`(not(Optional.empty())))
                 assertThat(sub.get().getSimState(), `is`(SimState.ENABLED))
             }
+        }
+
+        @After
+        fun tearDown() {
+            // Wait for the ViewModel to complete before exiting the test, otherwise the database
+            // will be closed too early while there's an async SIM state change request, that still
+            // interacts with it
+            waitActivityWorkerThreadUntilIdle()
         }
 
         private companion object {

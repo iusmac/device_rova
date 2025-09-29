@@ -274,7 +274,7 @@ class SchedulerActivityTest {
         lateinit var mSubscriptionManager: SubscriptionManager
 
         @Test
-        @Config(minSdk = S, qualifiers = "+land +h270dp")
+        @Config(minSdk = S, qualifiers = "+land +h285dp")
         fun `test expanded toolbar is not overlapped by FABs in landscape on extra-small screen`() {
             onActivity(Subscription().apply {
                 setSimName("SIM with very long name")
@@ -556,6 +556,8 @@ class SchedulerActivityTest {
             scenario.onActivity {
                 it.fragment.handleOnPinChanged(pinEntity.clearPin)
             }
+            // Wait 'till asynchronous PIN change request completes
+            waitActivityWorkerThreadUntilIdle()
             // Wait for Room to populate observable PIN LiveData
             waitDatabasesUntilIdle()
             // Ensure ViewModel finished updating UI
