@@ -12,7 +12,7 @@ android_app {
     system_ext_specific: true,
 
     min_sdk_version: "29",
-    target_sdk_version: "35",
+    target_sdk_version: "36",
 
     static_libs: [
         "SettingsLibBannerMessagePreference",
@@ -44,10 +44,10 @@ android_app {
     },
 
     aaptflags: [
-        "--version-name", "2.1.0", // x-release-please-version
+        "--version-name", "2.3.0", // x-release-please-version
         "--version-code",
         "2" + // x-release-please-major
-        "1" + // x-release-please-minor
+        "3" + // x-release-please-minor
         "0",  // x-release-please-patch
     ],
 
