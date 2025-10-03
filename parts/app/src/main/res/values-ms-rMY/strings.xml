@@ -16,7 +16,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Penambah Bunyi Mi</string>
     <string name="dirac_summary">Optimumkan kualiti audio</string>
@@ -60,4 +60,11 @@
 
     <!-- Misc -->
     <string name="not_now">"Bukan sekarang"</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Bateri sangat lemah"</string>
+    <string name="batterylow_about">"Anda akan diberi amaran apabila tahap bateri sangat rendah dan peranti akan dimatikan tidak lama lagi."</string>
+    <string name="batterylow_percentage_summary">"Tetapkan ambang bateri rendah"</string>
+    <string name="batterylow_off_summary">"Mati"</string>
+    <string name="batterylow_heads_up_message">"Bateri tinggal <xliff:g id="percentage" example="20%">%s</xliff:g>. Cas telefon anda atau ia akan segera mati."</string>
 </resources>

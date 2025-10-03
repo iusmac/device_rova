@@ -16,7 +16,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">Papildomi nustatymai</string>
 
@@ -68,4 +68,11 @@
     <string name="ramplus_mode_moderate">Vidutinis</string>
     <string name="ramplus_mode_slight">Silpnas</string>
     <string name="ramplus_mode_extreme">Stiprus</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Baterija kritiškai išsikrovusi"</string>
+    <string name="batterylow_about">"Būsite įspėti, kai baterijos lygis bus kritiškai žemas ir įrenginys netrukus išsijungs."</string>
+    <string name="batterylow_percentage_summary">"Nustatyti žemos baterijos slenkstį"</string>
+    <string name="batterylow_off_summary">"Išjungta"</string>
+    <string name="batterylow_heads_up_message">"Likę <xliff:g id="percentage" example="20%">%s</xliff:g> baterijos. Įkraukite telefoną, kitaip jis netrukus išsijungs."</string>
 </resources>

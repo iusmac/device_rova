@@ -105,4 +105,11 @@
     <string name="ramplus_mode_moderate">Умеренный</string>
     <string name="ramplus_mode_slight">Слабый</string>
     <string name="ramplus_mode_extreme">Экстремальный</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Критически низкий заряд батареи"</string>
+    <string name="batterylow_about">"Вы получите предупреждение, когда уровень заряда батареи критически низок и устройство вскоре выключится."</string>
+    <string name="batterylow_percentage_summary">"Установить порог низкого заряда батареи"</string>
+    <string name="batterylow_off_summary">"Отключено"</string>
+    <string name="batterylow_heads_up_message">"Осталось <xliff:g id="percentage" example="20%">%s</xliff:g> батареи. Зарядите телефон, иначе он скоро выключится."</string>
 </resources>

@@ -99,4 +99,11 @@
     <string name="ramplus_mode_moderate">Orta</string>
     <string name="ramplus_mode_slight">Az</string>
     <string name="ramplus_mode_extreme">Çok Yüksek</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Pil kritik derecede düşük"</string>
+    <string name="batterylow_about">"Pil seviyesi kritik derecede düştüğünde ve cihaz yakında kapanmak üzereyken uyarılacaksınız."</string>
+    <string name="batterylow_percentage_summary">"Düşük pil eşiğini ayarla"</string>
+    <string name="batterylow_off_summary">"Kapalı"</string>
+    <string name="batterylow_heads_up_message">"<xliff:g id="percentage" example="20%">%s</xliff:g> pil kaldı. Telefonunuzu şarj edin, aksi halde yakında kapanacaktır."</string>
 </resources>

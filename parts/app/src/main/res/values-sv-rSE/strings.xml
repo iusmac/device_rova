@@ -87,4 +87,11 @@
     <string name="ramplus_mode_moderate">Måttlig</string>
     <string name="ramplus_mode_slight">Lätt</string>
     <string name="ramplus_mode_extreme">Extrem</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Kritiskt låg batterinivå"</string>
+    <string name="batterylow_about">"Du kommer att varnas när batterinivån är kritiskt låg och enheten snart stängs av."</string>
+    <string name="batterylow_percentage_summary">"Ange låg batterigräns"</string>
+    <string name="batterylow_off_summary">"Av"</string>
+    <string name="batterylow_heads_up_message">"<xliff:g id="percentage" example="20%">%s</xliff:g> batteri kvar. Ladda din telefon, annars stängs den snart av."</string>
 </resources>

@@ -16,7 +16,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">การตั้งค่าขั้นสูง</string>
 
@@ -68,4 +68,11 @@
     <string name="ramplus_mode_moderate">ปานกลาง</string>
     <string name="ramplus_mode_slight">เงียบ</string>
     <string name="ramplus_mode_extreme">สุดขีด</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"แบตเตอรี่เหลือน้อยมาก"</string>
+    <string name="batterylow_about">"คุณจะได้รับการเตือนเมื่อระดับแบตเตอรี่ต่ำมากและใกล้จะปิดเครื่อง"</string>
+    <string name="batterylow_percentage_summary">"ตั้งค่าเกณฑ์แบตเตอรี่ต่ำ"</string>
+    <string name="batterylow_off_summary">"ปิด"</string>
+    <string name="batterylow_heads_up_message">"เหลือแบตเตอรี่ <xliff:g id="percentage" example="20%">%s</xliff:g> ชาร์จโทรศัพท์ มิฉะนั้นจะปิดเครื่องในไม่ช้า"</string>
 </resources>

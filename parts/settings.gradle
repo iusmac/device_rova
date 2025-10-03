@@ -29,6 +29,7 @@ include ':SettingsLib:MainSwitchPreference'
 include ':SettingsLib:SettingsFlags'
 include ':SettingsLib:SettingsTheme'
 include ':SettingsLib:SettingsThemeFlags'
+include ':SettingsLib:SliderPreference'
 
 android {
     compileSdk 36

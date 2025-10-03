@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">使用米音提升音質</string>
     <string name="dirac_summary">米音</string>
@@ -61,4 +61,11 @@
     <string name="ramplus_mode_moderate">中等</string>
     <string name="ramplus_mode_slight">輕微</string>
     <string name="ramplus_mode_extreme">極端</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"電池電量嚴重不足"</string>
+    <string name="batterylow_about">"當電池電量嚴重不足並即將關機時，您將收到警告。"</string>
+    <string name="batterylow_percentage_summary">"設定低電量臨界值"</string>
+    <string name="batterylow_off_summary">"關閉"</string>
+    <string name="batterylow_heads_up_message">"剩餘電量 <xliff:g id="percentage" example="20%">%s</xliff:g>。請充電，否則手機很快會關機。"</string>
 </resources>

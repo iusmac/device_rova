@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Mi Sound Enhancer</string>
     <string name="dirac_summary">បង្កើនប្រសិទ្ធភាពគុណភាពសម្លេង</string>
@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">បែបជនបទ</string>
     <string name="dirac_preset_dance">រាំ</string>
     <string name="dirac_preset_metal">តន្ត្រីលោហៈ</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"ថ្មទាបខ្លាំង"</string>
+    <string name="batterylow_about">"អ្នកនឹងត្រូវបានព្រមាននៅពេលកម្រិតថ្មទាបខ្លាំង ហើយកំពុងតែបិទក្នុងពេលឆាប់ៗ។"</string>
+    <string name="batterylow_percentage_summary">"កំណត់កម្រិតថ្មទាប"</string>
+    <string name="batterylow_off_summary">"បិទ"</string>
+    <string name="batterylow_heads_up_message">"ថ្មនៅសល់ <xliff:g id="percentage" example="20%">%s</xliff:g>។ សាកទូរស័ព្ទរបស់អ្នក មិនដូច្នោះទេ វានឹងបិទឆាប់ៗនេះ។"</string>
 </resources>

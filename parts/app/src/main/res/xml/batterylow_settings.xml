@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.lineageos.settings.preferences.SliderPreference
+        android:key="@string/batterylow_level_service_key_seekbar"
+        android:defaultValue="@integer/batterylow_level_default_threshold"
+        android:min="0"
+        android:max="@integer/batterylow_level_max_threshold"
+        android:summary="@string/batterylow_percentage_summary"
+        app:textStart="@string/batterylow_off_summary"
+        app:seekBarIncrement="1"
+        app:showSeekBarValue="true" />
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="footer_preference"
+        android:title="@string/batterylow_about"
+        android:selectable="false" />
+
+</PreferenceScreen>

@@ -16,7 +16,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">Lisäasetukset</string>
 
@@ -74,4 +74,11 @@
     <string name="ramplus_mode_moderate">Keskitaso</string>
     <string name="ramplus_mode_slight">Kevyt</string>
     <string name="ramplus_mode_extreme">Vahva</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Akun varaus kriittisen alhainen"</string>
+    <string name="batterylow_about">"Sinua varoitetaan, kun akun varaus on kriittisen alhainen ja laite on pian sammumassa."</string>
+    <string name="batterylow_percentage_summary">"Aseta alhaisen akun raja"</string>
+    <string name="batterylow_off_summary">"Pois päältä"</string>
+    <string name="batterylow_heads_up_message">"Akkua jäljellä <xliff:g id="percentage" example="20%">%s</xliff:g>. Lataa puhelimesi tai se sammuu pian."</string>
 </resources>

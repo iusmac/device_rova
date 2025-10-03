@@ -96,4 +96,11 @@
     <string name="ramplus_mode_moderate">Stredná</string>
     <string name="ramplus_mode_slight">Nepatrná</string>
     <string name="ramplus_mode_extreme">Extrémna</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Batéria kriticky nízka"</string>
+    <string name="batterylow_about">"Budete upozornení, keď je úroveň batérie kriticky nízka a zariadenie sa čoskoro vypne."</string>
+    <string name="batterylow_percentage_summary">"Nastaviť prah nízkej batérie"</string>
+    <string name="batterylow_off_summary">"Vypnuté"</string>
+    <string name="batterylow_heads_up_message">"Zostáva <xliff:g id="percentage" example="20%">%s</xliff:g> batérie. Nabite telefón, inak sa čoskoro vypne."</string>
 </resources>

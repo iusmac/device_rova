@@ -51,6 +51,7 @@ android {
 
 dependencies {
     implementation libs.core
+    implementation libs.material
     implementation libs.preference
 
     implementation project(path: ':SettingsLib:CollapsingToolbarBaseActivity')
@@ -58,6 +59,7 @@ dependencies {
     implementation project(path: ':SettingsLib:IllustrationPreference')
     implementation project(path: ':SettingsLib:MainSwitchPreference')
     implementation project(path: ':SettingsLib:SettingsTheme')
+    implementation project(path: ':SettingsLib:SliderPreference')
 
     implementation libs.hilt_android
     kapt libs.hilt_compiler

@@ -98,4 +98,11 @@
     <string name="ramplus_mode_moderate">標準</string>
     <string name="ramplus_mode_slight">弱い</string>
     <string name="ramplus_mode_extreme">強い</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"バッテリー残量が非常に少ない"</string>
+    <string name="batterylow_about">"バッテリー残量が非常に少なく、まもなくシャットダウンする場合に警告が表示されます。"</string>
+    <string name="batterylow_percentage_summary">"低バッテリーのしきい値を設定"</string>
+    <string name="batterylow_off_summary">"OFF"</string>
+    <string name="batterylow_heads_up_message">"残りバッテリー <xliff:g id="percentage" example="20%">%s</xliff:g>。充電してください。間もなく電源が切れます。"</string>
 </resources>

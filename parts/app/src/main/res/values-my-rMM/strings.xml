@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Mi အသံကောင်းမွန်စေသူ</string>
     <string name="dirac_summary">အသံ အရည်အသွေးကို မြှင့်တင်မည်</string>
@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">ကျေးလက်ဂီတ</string>
     <string name="dirac_preset_dance">ဒန့်စ်</string>
     <string name="dirac_preset_metal">မက်တယ်လ် ဂီတ</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"ဘက်ထရီအလွန်နည်းနေသည်"</string>
+    <string name="batterylow_about">"ဘက်ထရီအဆင့်အလွန်နည်းနေသောအခါ နှင့် မကြာမီ ပိတ်မည့်အချိန်တွင် သင့်အား သတိပေးပါမည်။"</string>
+    <string name="batterylow_percentage_summary">"နိမ့်သော ဘက်ထရီ စံချိန် သတ်မှတ်ပါ"</string>
+    <string name="batterylow_off_summary">"ပိတ်"</string>
+    <string name="batterylow_heads_up_message">"လက်ကျန် ဘက်ထရီ <xliff:g id="percentage" example="20%">%s</xliff:g>။ ဖုန်းအားသွင်းပါ မဟုတ်လျှင်မကြာမီ ပိတ်သွားပါမည်။"</string>
 </resources>

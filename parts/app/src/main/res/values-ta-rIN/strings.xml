@@ -78,4 +78,11 @@
     <string name="smart_charging_reset_stats_title">Reset battery statistics</string>
     <string name="smart_charging_reset_stats_summary">Reset battery statistics after reaching user defined charging level</string>
     <string name="smart_charging_footer">Smart Charging allows you to set maximum charging level to extend the lifespan of your battery. When enabled, battery stops charging at Stop trigger level and resumes charging at Start trigger level. Stop trigger level should be always greater than Start trigger level.</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"மின்கலம் மிகவும் குறைந்துள்ளது"</string>
+    <string name="batterylow_about">"மின்கல நிலை மிகவும் குறைவாக இருக்கும் போது மற்றும் சாதனம் விரைவில் அணையப்போகும் போது உங்களுக்கு எச்சரிக்கை வழங்கப்படும்."</string>
+    <string name="batterylow_percentage_summary">"குறைந்த பேட்டரி வரம்பை அமைக்கவும்"</string>
+    <string name="batterylow_off_summary">"ஆஃப்"</string>
+    <string name="batterylow_heads_up_message">"மீதமுள்ள பேட்டரி <xliff:g id="percentage" example="20%">%s</xliff:g>। உங்கள் கைப்பேசியை சார்ஜ் செய்யுங்கள், இல்லையெனில் அது விரைவில் அணைந்துவிடும்."</string>
 </resources>

@@ -19,3 +19,5 @@
 /SettingsThemeFlags/*
 !/SettingsThemeFlags/build.gradle
 !/SettingsThemeFlags/src/
+/SliderPreference/*
+!/SliderPreference/build.gradle

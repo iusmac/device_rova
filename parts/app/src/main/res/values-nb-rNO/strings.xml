@@ -16,7 +16,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">Avanserte innstillinger</string>
 
@@ -69,4 +69,11 @@
     <string name="ramplus_mode_moderate">Moderat</string>
     <string name="ramplus_mode_slight">Liten</string>
     <string name="ramplus_mode_extreme">Ekstrem</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Kritisk lavt batterinivå"</string>
+    <string name="batterylow_about">"Du vil bli advart når batterinivået er kritisk lavt og enheten snart slår seg av."</string>
+    <string name="batterylow_percentage_summary">"Angi lavt batteriterskel"</string>
+    <string name="batterylow_off_summary">"Av"</string>
+    <string name="batterylow_heads_up_message">"<xliff:g id="percentage" example="20%">%s</xliff:g> batteri igjen. Lad opp telefonen, ellers slår den seg snart av."</string>
 </resources>

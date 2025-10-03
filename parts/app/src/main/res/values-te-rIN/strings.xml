@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">ఆధునిక సెట్టింగులు</string>
 
@@ -59,4 +59,11 @@
     <string name="dirac_preset_country">కంట్రీ</string>
     <string name="dirac_preset_dance">నృత్యం</string>
     <string name="dirac_preset_metal">మెటల్</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"బ్యాటరీ అత్యంత తక్కువగా ఉంది"</string>
+    <string name="batterylow_about">"బ్యాటరీ స్థాయి అత్యంత తక్కువగా ఉన్నప్పుడు మరియు పరికరం త్వరలో ఆపబడబోతున్నప్పుడు మీకు హెచ్చరిక ఇవ్వబడుతుంది."</string>
+    <string name="batterylow_percentage_summary">"తక్కువ బ్యాటరీ పరిమితిని సెట్ చేయండి"</string>
+    <string name="batterylow_off_summary">"ఆఫ్"</string>
+    <string name="batterylow_heads_up_message">"మిగిలిన బ్యాటరీ <xliff:g id="percentage" example="20%">%s</xliff:g>। మీ ఫోన్‌ని చార్జ్ చేయండి, లేకపోతే అది త్వరలో ఆఫ్ అవుతుంది."</string>
 </resources>

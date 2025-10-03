@@ -89,4 +89,11 @@
     <string name="volume_gain_summary">喇叭增益 / 耳機增益 / 麥克風增益</string>
     <string name="volume_gain_title">喇叭增益 / 耳機增益</string>
     <string name="microphone_gain_title">麥克風增益</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"電池電量嚴重不足"</string>
+    <string name="batterylow_about">"當電池電量嚴重不足並即將關機時，您將收到警告。"</string>
+    <string name="batterylow_percentage_summary">"設定低電量臨界值"</string>
+    <string name="batterylow_off_summary">"關閉"</string>
+    <string name="batterylow_heads_up_message">"剩餘電量 <xliff:g id="percentage" example="20%">%s</xliff:g>。請充電，否則手機很快會關機。"</string>
 </resources>

@@ -92,4 +92,11 @@
     <string name="ramplus_mode_moderate">Μεσαία</string>
     <string name="ramplus_mode_slight">Μικρή</string>
     <string name="ramplus_mode_extreme">Μεγάλη</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Κρίσιμα χαμηλή μπαταρία"</string>
+    <string name="batterylow_about">"Θα ειδοποιηθείτε όταν το επίπεδο της μπαταρίας είναι κρίσιμα χαμηλό και πρόκειται να απενεργοποιηθεί σύντομα."</string>
+    <string name="batterylow_percentage_summary">"Ορίστε όριο χαμηλής μπαταρίας"</string>
+    <string name="batterylow_off_summary">"Ανενεργή"</string>
+    <string name="batterylow_heads_up_message">"Απομένει <xliff:g id="percentage" example="20%">%s</xliff:g> μπαταρία. Φορτίστε το τηλέφωνο, αλλιώς θα απενεργοποιηθεί σύντομα."</string>
 </resources>

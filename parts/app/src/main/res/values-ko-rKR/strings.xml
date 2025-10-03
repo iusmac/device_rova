@@ -94,4 +94,11 @@
     <string name="ramplus_mode_moderate">보통</string>
     <string name="ramplus_mode_slight">조금</string>
     <string name="ramplus_mode_extreme">최대</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"배터리가 매우 부족합니다"</string>
+    <string name="batterylow_about">"배터리 잔량이 매우 낮고 곧 전원이 꺼질 때 경고를 받게 됩니다."</string>
+    <string name="batterylow_percentage_summary">"배터리 부족 임계값 설정"</string>
+    <string name="batterylow_off_summary">"사용 안함"</string>
+    <string name="batterylow_heads_up_message">"배터리 <xliff:g id="percentage" example="20%">%s</xliff:g> 남음. 지금 충전하지 않으면 곧 종료됩니다."</string>
 </resources>

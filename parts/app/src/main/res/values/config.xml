@@ -67,4 +67,8 @@
     <integer name="sound_control_microphone_gain_min_default_value">-10</integer>
 
     <string name="clear_speaker_key_switch" translatable="false">"clear_speaker_pref"</string>
+
+    <integer name="batterylow_level_max_threshold">5</integer>
+    <integer name="batterylow_level_default_threshold">3</integer>
+    <string name="batterylow_level_service_key_seekbar" translatable="false">"batterylow_level_service_seekbar"</string>
 </resources>

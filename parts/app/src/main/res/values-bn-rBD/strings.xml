@@ -78,4 +78,11 @@
     <string name="smart_charging_reset_stats_title">ব্যাটারির পরিসংখ্যান রিসেট করুন</string>
     <string name="smart_charging_reset_stats_summary">ব্যবহারকারীর নির্ধারিত চার্জিং সীমা পৌঁছানোর পরে ব্যাটারি পরিসংখ্যান পুনরায় চালু</string>
     <string name="smart_charging_footer">স্মার্ট চার্জিং আপনাকে ব্যাটারির আয়ু বাড়ানোর জন্য সর্বোচ্চ চার্জিং লেভেল সেট করতে দেয়। সক্রিয় করা হলে, ব্যাটারি স্টপ ট্রিগার লেভেলে চার্জ করা বন্ধ করে এবং স্টার্ট ট্রিগার লেভেলে চার্জিং আবার শুরু করে। স্টপ ট্রিগার লেভেল সবসময় স্টার্ট ট্রিগার লেভেলের চেয়ে বড় হওয়া উচিত।.</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"ব্যাটারির চার্জ অত্যন্ত কম"</string>
+    <string name="batterylow_about">"ব্যাটারির স্তর অত্যন্ত কম হলে এবং শীঘ্রই বন্ধ হতে চলেছে তখন আপনাকে সতর্ক করা হবে।"</string>
+    <string name="batterylow_percentage_summary">"কম ব্যাটারির সীমা নির্ধারণ করুন"</string>
+    <string name="batterylow_off_summary">"বন্ধ"</string>
+    <string name="batterylow_heads_up_message">"অবশিষ্ট ব্যাটারি <xliff:g id="percentage" example="20%">%s</xliff:g>। আপনার ফোন চার্জ করুন, নইলে শীঘ্রই বন্ধ হয়ে যাবে।"</string>
 </resources>

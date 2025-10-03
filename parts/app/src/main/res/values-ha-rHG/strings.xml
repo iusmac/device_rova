@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Kyautata Sautin Mi</string>
     <string name="dirac_summary">Gyara kyaun sauti</string>
@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">Ƙasa</string>
     <string name="dirac_preset_dance">Rawa</string>
     <string name="dirac_preset_metal">Mital</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Batir yana ƙarewa sosai"</string>
+    <string name="batterylow_about">"Za a gargade ku idan matakin batir ya yi ƙasa ƙwarai kuma zai kashe nan ba da jimawa ba."</string>
+    <string name="batterylow_percentage_summary">"Saita iyakar baturi ƙasa"</string>
+    <string name="batterylow_off_summary">"Kashe"</string>
+    <string name="batterylow_heads_up_message">"Ragowar baturi <xliff:g id="percentage" example="20%">%s</xliff:g>. Caji wayarka ko zata kashe nan bada jimawa ba."</string>
 </resources>

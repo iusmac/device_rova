@@ -92,4 +92,11 @@
     <string name="ramplus_mode_moderate">Sedang</string>
     <string name="ramplus_mode_slight">Sedikit</string>
     <string name="ramplus_mode_extreme">Ekstrim</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Baterai sangat lemah"</string>
+    <string name="batterylow_about">"Anda akan diperingatkan ketika baterai sangat lemah dan perangkat akan segera mati."</string>
+    <string name="batterylow_percentage_summary">"Atur ambang baterai lemah"</string>
+    <string name="batterylow_off_summary">"Nonaktif"</string>
+    <string name="batterylow_heads_up_message">"Sisa baterai <xliff:g id="percentage" example="20%">%s</xliff:g>. Segera isi daya ponsel Anda atau akan segera mati."</string>
 </resources>

@@ -37,4 +37,11 @@
     <string name="ramplus_mode_moderate">مامناوەند</string>
     <string name="ramplus_mode_slight">کەم</string>
     <string name="ramplus_mode_extreme">زۆر</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Baterîya pir kêm e"</string>
+    <string name="batterylow_about">"Agahtîyên dê were dayîn dema ku asta baterîya pir kêm e û dê zû were girtin."</string>
+    <string name="batterylow_percentage_summary">"Asta baterîya kêm mîheng bike"</string>
+    <string name="batterylow_off_summary">"Girtî"</string>
+    <string name="batterylow_heads_up_message">"Baterîya mayî <xliff:g id="percentage" example="20%">%s</xliff:g>. Telefonê xwe bar bike an jî wê zû qediya bibe."</string>
 </resources>

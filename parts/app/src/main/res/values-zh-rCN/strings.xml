@@ -99,4 +99,11 @@
     <string name="ramplus_mode_moderate">中等</string>
     <string name="ramplus_mode_slight">轻微</string>
     <string name="ramplus_mode_extreme">极致</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"电池电量严重不足"</string>
+    <string name="batterylow_about">"当电池电量严重不足并即将关机时，您将收到警告。"</string>
+    <string name="batterylow_percentage_summary">"设置低电量阈值"</string>
+    <string name="batterylow_off_summary">"已关闭"</string>
+    <string name="batterylow_heads_up_message">"剩余电量 <xliff:g id="percentage" example="20%">%s</xliff:g>。请充电，否则手机将很快关机。"</string>
 </resources>

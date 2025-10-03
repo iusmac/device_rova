@@ -88,4 +88,11 @@
     <string name="ramplus_mode_moderate">Moderat</string>
     <string name="ramplus_mode_slight">Slab</string>
     <string name="ramplus_mode_extreme">Extrem</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Baterie critic scăzută"</string>
+    <string name="batterylow_about">"Vei fi avertizat când nivelul bateriei este critic de scăzut și dispozitivul urmează să se închidă."</string>
+    <string name="batterylow_percentage_summary">"Setează pragul bateriei scăzute"</string>
+    <string name="batterylow_off_summary">"Dezactivată"</string>
+    <string name="batterylow_heads_up_message">"Au mai rămas <xliff:g id="percentage" example="20%">%s</xliff:g> baterie. Încarcă telefonul sau se va închide în curând."</string>
 </resources>

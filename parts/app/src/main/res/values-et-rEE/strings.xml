@@ -87,4 +87,11 @@
     <string name="ramplus_mode_moderate">Mõõdukas</string>
     <string name="ramplus_mode_slight">Kerge</string>
     <string name="ramplus_mode_extreme">Ekstreemne</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Aku kriitiliselt madal"</string>
+    <string name="batterylow_about">"Teid hoiatatakse, kui aku tase on kriitiliselt madal ja seade varsti välja lülitub."</string>
+    <string name="batterylow_percentage_summary">"Määra madala aku tase"</string>
+    <string name="batterylow_off_summary">"Väljas"</string>
+    <string name="batterylow_heads_up_message">"Alles on <xliff:g id="percentage" example="20%">%s</xliff:g> akut. Laadige oma telefon, vastasel juhul lülitub see peagi välja."</string>
 </resources>

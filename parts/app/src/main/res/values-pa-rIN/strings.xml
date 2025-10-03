@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Mi ਧੁਨੀ ਵਰਧਕ</string>
     <string name="dirac_summary">ਆਡੀਓ ਗੁਣਵੱਤਾ ਅਨੁਕੂਲਿਤ ਕਰੋ</string>
@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">ਦੇਸ਼</string>
     <string name="dirac_preset_dance">ਡਾਂਸ</string>
     <string name="dirac_preset_metal">ਮੈਟਲ</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"ਬੈਟਰੀ ਬਹੁਤ ਘੱਟ ਹੈ"</string>
+    <string name="batterylow_about">"ਜਦੋਂ ਬੈਟਰੀ ਦਾ ਪੱਧਰ ਬਹੁਤ ਘੱਟ ਹੋਵੇਗਾ ਅਤੇ ਡਿਵਾਈਸ ਜਲਦੀ ਬੰਦ ਹੋਣ ਵਾਲਾ ਹੋਵੇਗਾ ਤਾਂ ਤੁਹਾਨੂੰ ਚੇਤਾਵਨੀ ਦਿੱਤੀ ਜਾਵੇਗੀ।"</string>
+    <string name="batterylow_percentage_summary">"ਘੱਟ ਬੈਟਰੀ ਸੀਮਾ ਸੈਟ ਕਰੋ"</string>
+    <string name="batterylow_off_summary">"ਬੰਦ"</string>
+    <string name="batterylow_heads_up_message">"ਬੈਟਰੀ ਬਾਕੀ <xliff:g id="percentage" example="20%">%s</xliff:g>। ਆਪਣਾ ਫੋਨ ਚਾਰਜ ਕਰੋ, ਨਹੀਂ ਤਾਂ ਇਹ ਜਲਦੀ ਬੰਦ ਹੋ ਜਾਵੇਗਾ।"</string>
 </resources>

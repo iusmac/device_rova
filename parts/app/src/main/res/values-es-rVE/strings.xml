@@ -48,4 +48,11 @@
     <string name="ramplus_mode_moderate">Moderado</string>
     <string name="ramplus_mode_slight">Ligero</string>
     <string name="ramplus_mode_extreme">Fuerte</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Batería críticamente baja"</string>
+    <string name="batterylow_about">"Se te avisará cuando el nivel de la batería sea críticamente bajo y esté a punto de apagarse."</string>
+    <string name="batterylow_percentage_summary">"Establecer umbral de batería baja"</string>
+    <string name="batterylow_off_summary">"Desactivado"</string>
+    <string name="batterylow_heads_up_message">"Queda un <xliff:g id="percentage" example="20%">%s</xliff:g> de batería. Carga tu teléfono o se apagará pronto."</string>
 </resources>

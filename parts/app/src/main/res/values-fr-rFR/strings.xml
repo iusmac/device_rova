@@ -94,4 +94,11 @@
     <string name="ramplus_mode_moderate">Moyen</string>
     <string name="ramplus_mode_slight">Léger</string>
     <string name="ramplus_mode_extreme">Extrême</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Batterie extrêmement faible"</string>
+    <string name="batterylow_about">"Vous serez averti lorsque le niveau de la batterie sera extrêmement faible et sur le point de s’éteindre."</string>
+    <string name="batterylow_percentage_summary">"Définir le seuil de batterie faible"</string>
+    <string name="batterylow_off_summary">"Désactivé"</string>
+    <string name="batterylow_heads_up_message">"Il reste <xliff:g id="percentage" example="20%">%s</xliff:g> de batterie. Rechargez votre téléphone ou il s’éteindra bientôt."</string>
 </resources>

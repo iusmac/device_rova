@@ -16,6 +16,7 @@ declare -a LIBS=(
     'IllustrationPreference'
     'MainSwitchPreference'
     'SettingsTheme'
+    'SliderPreference'
 )
 
 function main() {

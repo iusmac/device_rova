@@ -16,7 +16,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">Configuració avançada</string>
 
@@ -68,4 +68,11 @@
     <string name="ramplus_mode_moderate">Moderat</string>
     <string name="ramplus_mode_slight">Lleuger</string>
     <string name="ramplus_mode_extreme">Extrem</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Bateria críticament baixa"</string>
+    <string name="batterylow_about">"Se t'avisarà quan el nivell de la bateria sigui críticament baix i estigui a punt de tancar-se."</string>
+    <string name="batterylow_percentage_summary">"Estableix el llindar de bateria baixa"</string>
+    <string name="batterylow_off_summary">"Desactivat"</string>
+    <string name="batterylow_heads_up_message">"Queda un <xliff:g id="percentage" example="20%">%s</xliff:g> de bateria. Carrega el telèfon o s’apagarà aviat."</string>
 </resources>

@@ -80,4 +80,11 @@
     <!-- Misc -->
     <string name="not_now">"Не цяпер"</string>
     <string name="next_update_time">Наступнае абнаўленне: а %1$s</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Крытычна нізкі зарад батарэі"</string>
+    <string name="batterylow_about">"Вас папярэдзяць, калі ўзровень зараду батарэі крытычна нізкі і хутка адключыцца."</string>
+    <string name="batterylow_percentage_summary">"Усталяваць парог нізкага зараду батарэі"</string>
+    <string name="batterylow_off_summary">"Выключана"</string>
+    <string name="batterylow_heads_up_message">"Засталося <xliff:g id="percentage" example="20%">%s</xliff:g> батарэі. Заўядзіце тэлефон, інакш ён хутка выключыцца."</string>
 </resources>

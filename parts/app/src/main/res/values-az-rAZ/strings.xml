@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">Xüsusi tənzimləmələr</string>
 
@@ -59,4 +59,11 @@
     <string name="dirac_preset_country">Kantri</string>
     <string name="dirac_preset_dance">Rəqs</string>
     <string name="dirac_preset_metal">Metal</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Batareya kritik dərəcədə azdır"</string>
+    <string name="batterylow_about">"Batareya səviyyəsi kritik dərəcədə az olduqda və tezliklə sönməyə hazır olduqda siz xəbərdar ediləcəksiniz."</string>
+    <string name="batterylow_percentage_summary">"Aşağı batareya həddi təyin edin"</string>
+    <string name="batterylow_off_summary">"Deaktiv"</string>
+    <string name="batterylow_heads_up_message">"<xliff:g id="percentage" example="20%">%s</xliff:g> batareya qalıb. Telefonunuzu doldurun, əks halda tezliklə sönəcək."</string>
 </resources>

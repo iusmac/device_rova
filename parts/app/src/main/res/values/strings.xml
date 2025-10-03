@@ -122,4 +122,11 @@
     <string name="ramplus_mode_moderate">Moderate</string>
     <string name="ramplus_mode_slight">Slight</string>
     <string name="ramplus_mode_extreme">Extreme</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">Very low battery</string>
+    <string name="batterylow_about">You will be warned when the battery level is critically low and about to shut down soon.</string>
+    <string name="batterylow_percentage_summary">Set low battery threshold</string>
+    <string name="batterylow_off_summary">Off</string>
+    <string name="batterylow_heads_up_message"><xliff:g id="percentage" example="20%">%s</xliff:g> battery left. Charge your phone or it will shut down soon.</string>
 </resources>

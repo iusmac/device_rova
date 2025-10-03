@@ -17,10 +17,12 @@
  */
 package org.lineageos.settings;
 
+import android.annotation.ColorInt;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -37,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.NumberFormat;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -318,5 +321,29 @@ public class PartsUtils {
         return Settings.Global.getInt(context.getContentResolver(),
                 Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
                 Build.TYPE.equals("eng") ? 1 : 0) != 0;
+    }
+
+    /** Formats an integer from 0..100 as a percentage. */
+    public static String formatPercentage(int percentage) {
+        return formatPercentage(((double) percentage) / 100.0);
+    }
+
+    /** Formats a double from 0.0..1.0 as a percentage. */
+    public static String formatPercentage(double percentage) {
+        return NumberFormat.getPercentInstance().format(percentage);
+    }
+
+    @ColorInt
+    public static int getColorAttrDefaultColor(Context context, int attr) {
+        return getColorAttrDefaultColor(context, attr, 0);
+    }
+
+    /** Get color styled attribute {@code attr}, default to {@code defValue} if not found. */
+    @ColorInt
+    public static int getColorAttrDefaultColor(Context context, int attr, @ColorInt int defValue) {
+        TypedArray ta = context.obtainStyledAttributes(new int[] {attr});
+        @ColorInt int colorAccent = ta.getColor(0, defValue);
+        ta.recycle();
+        return colorAccent;
     }
 }

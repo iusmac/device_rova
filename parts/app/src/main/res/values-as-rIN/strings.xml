@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">এডভান্স ছেটিংসমূহ</string>
 
@@ -59,4 +59,11 @@
     <string name="dirac_preset_country">কাণ্ট্ৰি</string>
     <string name="dirac_preset_dance">নৃত্য</string>
     <string name="dirac_preset_metal">মেটেল</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"ব্যাটাৰি অত্যন্ত কম"</string>
+    <string name="batterylow_about">"বেটাৰীৰ স্তৰ অত্যন্ত কম হ'লে আৰু শীঘ্ৰে বন্ধ হ'বলৈ থাকিলে আপোনাক সতর্ক কৰা হ'ব।"</string>
+    <string name="batterylow_percentage_summary">"কম ব্যাটাৰী সীমা নিৰ্ধাৰণ কৰক"</string>
+    <string name="batterylow_off_summary">"অফ অৱস্থাত আছে"</string>
+    <string name="batterylow_heads_up_message">"অৱশিষ্ট ব্যাটাৰী <xliff:g id="percentage" example="20%">%s</xliff:g>। আপোনাৰ ফোন চাৰ্জ কৰক, নহ'লে সোনকালে বন্ধ হব।"</string>
 </resources>

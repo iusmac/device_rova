@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Mi Sound засилувач</string>
     <string name="dirac_summary">Оптимизирај квалитет на звук</string>
@@ -59,4 +59,11 @@
 
     <!-- Misc -->
     <string name="next_update_time">Sledno azuriranje:vo %1$s</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Критично ниска батерија"</string>
+    <string name="batterylow_about">"Ќе бидете предупредени кога нивото на батеријата е критично ниско и уредот ќе се исклучи наскоро."</string>
+    <string name="batterylow_percentage_summary">"Поставете праг за ниска батерија"</string>
+    <string name="batterylow_off_summary">"Исклучено"</string>
+    <string name="batterylow_heads_up_message">"Преостаната батерија <xliff:g id="percentage" example="20%">%s</xliff:g>. Наполнете го телефонот или наскоро ќе се исклучи."</string>
 </resources>

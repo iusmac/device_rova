@@ -99,4 +99,11 @@
     <string name="ramplus_mode_moderate">Mittel</string>
     <string name="ramplus_mode_slight">Schwach</string>
     <string name="ramplus_mode_extreme">Extrem</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Kritisch niedriger Batteriestand"</string>
+    <string name="batterylow_about">"Sie werden gewarnt, wenn der Batteriestand kritisch niedrig ist und das Gerät bald herunterfährt."</string>
+    <string name="batterylow_percentage_summary">"Niedrigen Batteriestand festlegen"</string>
+    <string name="batterylow_off_summary">"Aus"</string>
+    <string name="batterylow_heads_up_message">"Noch <xliff:g id="percentage" example="20%">%s</xliff:g> Akku übrig. Lade dein Telefon, sonst schaltet es sich bald aus."</string>
 </resources>

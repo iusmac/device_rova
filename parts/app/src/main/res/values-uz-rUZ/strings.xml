@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Mi Ovoz kuchaytirgichi</string>
     <string name="dirac_summary">Audio sifatini optimallashtirish</string>
@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">Mamlakat</string>
     <string name="dirac_preset_dance">Raqs</string>
     <string name="dirac_preset_metal">Metall</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Batareya juda past darajada"</string>
+    <string name="batterylow_about">"Batareya darajasi juda past bo‘lsa va qurilma tez orada o‘chib qolsa, siz ogohlantirilasiz."</string>
+    <string name="batterylow_percentage_summary">"Past batareya chegarasini o‘rnating"</string>
+    <string name="batterylow_off_summary">"Oʻchiq"</string>
+    <string name="batterylow_heads_up_message">"Batareya <xliff:g id="percentage" example="20%">%s</xliff:g> qoldi. Telefonni zaryad qiling, aks holda tez orada o‘chadi."</string>
 </resources>

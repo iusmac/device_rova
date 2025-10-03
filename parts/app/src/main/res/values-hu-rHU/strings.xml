@@ -99,4 +99,11 @@
     <string name="ramplus_mode_moderate">Mérsékelt</string>
     <string name="ramplus_mode_slight">Enyhe</string>
     <string name="ramplus_mode_extreme">Extrém</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Akkumulátor kritikusan alacsony"</string>
+    <string name="batterylow_about">"Figyelmeztetést kap, amikor az akkumulátor töltöttségi szintje kritikusan alacsony és hamarosan leáll."</string>
+    <string name="batterylow_percentage_summary">"Alacsony akkumulátor-küszöb beállítása"</string>
+    <string name="batterylow_off_summary">"Ki"</string>
+    <string name="batterylow_heads_up_message">"Hátralévő akkumulátor: <xliff:g id="percentage" example="20%">%s</xliff:g>. Töltse fel telefonját, különben hamarosan kikapcsol."</string>
 </resources>

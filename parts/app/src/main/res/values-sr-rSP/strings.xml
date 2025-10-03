@@ -16,7 +16,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">Напредна подешавања</string>
 
@@ -68,4 +68,11 @@
     <string name="ramplus_mode_moderate">Уређено</string>
     <string name="ramplus_mode_slight">Благо</string>
     <string name="ramplus_mode_extreme">Екстремно</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Батерија критично ниска"</string>
+    <string name="batterylow_about">"Бићете упозорени када је ниво батерије критично низак и уређај ће се ускоро искључити."</string>
+    <string name="batterylow_percentage_summary">"Поставите праг за ниску батерију"</string>
+    <string name="batterylow_off_summary">"Искључено"</string>
+    <string name="batterylow_heads_up_message">"Преостало је <xliff:g id="percentage" example="20%">%s</xliff:g> батерије. Напуните телефон или ће се ускоро искључити."</string>
 </resources>

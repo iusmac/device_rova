@@ -94,4 +94,11 @@
     <string name="ramplus_mode_moderate">Umiarkowany</string>
     <string name="ramplus_mode_slight">Niewielki</string>
     <string name="ramplus_mode_extreme">Ekstremalny</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Bateria krytycznie niska"</string>
+    <string name="batterylow_about">"Zostaniesz ostrzeżony, gdy poziom baterii będzie krytycznie niski i urządzenie wkrótce się wyłączy."</string>
+    <string name="batterylow_percentage_summary">"Ustaw próg niskiego poziomu baterii"</string>
+    <string name="batterylow_off_summary">"Wyłączone"</string>
+    <string name="batterylow_heads_up_message">"Pozostało <xliff:g id="percentage" example="20%">%s</xliff:g> baterii. Naładuj telefon, w przeciwnym razie wkrótce się wyłączy."</string>
 </resources>

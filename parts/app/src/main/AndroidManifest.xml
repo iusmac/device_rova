@@ -206,5 +206,33 @@
             <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
                        android:value="true" />
         </service>
+
+        <activity
+            android:name=".batterylow.BatteryLowActivity"
+            android:exported="true"
+            android:label="@string/batterylow_title">
+            <intent-filter>
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.android.settings.action.IA_SETTINGS" />
+            </intent-filter>
+            <meta-data
+                android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.battery_saver_settings" />
+            <meta-data
+                android:name="com.android.settings.summary"
+                android:value="@string/batterylow_about" />
+            <meta-data
+                android:name="com.android.settings.order"
+                android:value="100" />
+        </activity>
+
+        <service android:name=".batterylow.BatteryLowService"
+                android:exported="false">
+        </service>
+
     </application>
 </manifest>

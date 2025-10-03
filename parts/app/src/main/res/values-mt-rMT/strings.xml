@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Mi Sound Enhancer</string>
     <string name="dirac_summary">Tejjeb il-kwalità tal-ħoss</string>
@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">Country</string>
     <string name="dirac_preset_dance">Dance</string>
     <string name="dirac_preset_metal">Metal</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Batterija kritika baxxa"</string>
+    <string name="batterylow_about">"Tkun imwissi meta l-livell tal-batterija jkun kritiku baxx u l-apparat dalwaqt jitfi."</string>
+    <string name="batterylow_percentage_summary">"Issettja limit ta’ batterija baxxa"</string>
+    <string name="batterylow_off_summary">"Mitfi"</string>
+    <string name="batterylow_heads_up_message">"Fadal <xliff:g id="percentage" example="20%">%s</xliff:g> batterija. Iċċarġja t-telefon tiegħek jew dalwaqt jintefa."</string>
 </resources>

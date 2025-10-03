@@ -93,4 +93,11 @@
     <string name="ramplus_mode_moderate">معتدل</string>
     <string name="ramplus_mode_slight">طفيف</string>
     <string name="ramplus_mode_extreme">المتطرفة</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"بطارية منخفضة للغاية"</string>
+    <string name="batterylow_about">"سيتم تحذيرك عندما يكون مستوى البطارية منخفضًا للغاية وقارب على الإيقاف."</string>
+    <string name="batterylow_percentage_summary">"تعيين حد البطارية المنخفض"</string>
+    <string name="batterylow_off_summary">"الميزة غير مفعّلة"</string>
+    <string name="batterylow_heads_up_message">"تبقى <xliff:g id="percentage" example="20%">%s</xliff:g> من البطارية. اشحن هاتفك وإلا سيتوقف عن العمل قريبًا."</string>
 </resources>

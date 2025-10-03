@@ -75,4 +75,11 @@
     <string name="smart_charging_reset_stats_title">بیٹری کے اعدادوشمار کو دوبارہ ترتیب دیں۔</string>
     <string name="smart_charging_reset_stats_summary">صارف کی طے شدہ چارجنگ لیول تک پہنچنے کے بعد بیٹری کے اعدادوشمار کو دوبارہ ترتیب دیں۔</string>
     <string name="smart_charging_footer">اسمارٹ چارجنگ آپ کو اپنی بیٹری کی عمر بڑھانے کے لیے زیادہ سے زیادہ چارجنگ لیول سیٹ کرنے کی اجازت دیتی ہے۔ فعال ہونے پر، بیٹری اسٹاپ ٹرگر لیول پر چارج ہونا بند کر دیتی ہے اور اسٹارٹ ٹرگر لیول پر چارج ہونا دوبارہ شروع کر دیتی ہے۔ اسٹاپ ٹرگر لیول ہمیشہ اسٹارٹ ٹرگر لیول سے بڑا ہونا چاہیے۔.</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"بیٹری انتہائی کم ہے"</string>
+    <string name="batterylow_about">"جب بیٹری کی سطح انتہائی کم ہوگی اور آلہ جلد ہی بند ہونے والا ہوگا تو آپ کو خبردار کیا جائے گا۔"</string>
+    <string name="batterylow_percentage_summary">"کم بیٹری کی حد مقرر کریں"</string>
+    <string name="batterylow_off_summary">"آف"</string>
+    <string name="batterylow_heads_up_message">"بیٹری باقی ہے <xliff:g id="percentage" example="20%">%s</xliff:g>۔ اپنا فون چارج کریں ورنہ یہ جلد ہی بند ہو جائے گا۔"</string>
 </resources>

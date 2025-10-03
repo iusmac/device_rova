@@ -27,6 +27,7 @@ android_app {
         "SettingsLibFooterPreference",
         "SettingsLibIllustrationPreference",
         "SettingsLibMainSwitchPreference",
+        "SettingsLibSliderPreference",
         "hilt_android",
     ],
 

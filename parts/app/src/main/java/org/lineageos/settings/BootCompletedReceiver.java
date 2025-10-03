@@ -25,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import javax.inject.Inject;
 
+import org.lineageos.settings.batterylow.BatteryLow;
 import org.lineageos.settings.soundcontrol.SoundControl;
 import org.lineageos.settings.dirac.DiracUtils;
 import org.lineageos.settings.smartcharging.SmartChargingManager;
@@ -51,10 +52,14 @@ public class BootCompletedReceiver extends Hilt_BootCompletedReceiver {
     @Inject
     RamPlusManager mRamPlusManager;
 
+    @Inject
+    BatteryLow mBatteryLow;
+
     @Override
     public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
 
+        mBatteryLow.onBootCompleted();
         mSoundControl.onBootCompleted();
         mDiracUtils.onBootCompleted();
         mSmartChargingManager.onBootCompleted();

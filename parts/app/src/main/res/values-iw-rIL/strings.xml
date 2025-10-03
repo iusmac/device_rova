@@ -16,7 +16,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Device specific settings -->
     <string name="device_settings_app_name">הגדרות מתקדמות</string>
 
@@ -69,4 +69,11 @@
     <string name="ramplus_mode_moderate">בינוני</string>
     <string name="ramplus_mode_slight">חלש</string>
     <string name="ramplus_mode_extreme">חזק מאוד</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"הסוללה כמעט מרוקנת"</string>
+    <string name="batterylow_about">"תקבל אזהרה כאשר רמת הסוללה תהיה נמוכה מאוד והמכשיר יכבה בקרוב."</string>
+    <string name="batterylow_percentage_summary">"הגדר סף סוללה נמוכה"</string>
+    <string name="batterylow_off_summary">"כבוי"</string>
+    <string name="batterylow_heads_up_message">"נותרה סוללה <xliff:g id="percentage" example="20%">%s</xliff:g>. טען את הטלפון שלך או שהוא יכבה בקרוב."</string>
 </resources>

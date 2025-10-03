@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Mi ხმის გამაუმჯობესებელი</string>
     <string name="dirac_summary">აუდიო ოპტიმიზაცია</string>
@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">ქვეყანა</string>
     <string name="dirac_preset_dance">ცეკვა</string>
     <string name="dirac_preset_metal">მეტალი</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"ბატარეის კრიტიკულად დაბალი დონე"</string>
+    <string name="batterylow_about">"თქვენ გაფრთხილდებით, როდესაც ბატარეის დონე კრიტიკულად დაბალია და მოწყობილობა მალე გამოირთვება."</string>
+    <string name="batterylow_percentage_summary">"დააყენეთ დაბალი ბატარეის ზღვარი"</string>
+    <string name="batterylow_off_summary">"გამორთული"</string>
+    <string name="batterylow_heads_up_message">"დარჩენილია ბატარეის <xliff:g id="percentage" example="20%">%s</xliff:g>. ჩართეთ დამუხტვა, წინააღმდეგ შემთხვევაში ტელეფონი მალე გამოირთვება."</string>
 </resources>

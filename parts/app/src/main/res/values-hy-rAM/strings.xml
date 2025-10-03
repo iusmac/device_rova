@@ -15,7 +15,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Dirac settings -->
     <string name="dirac_title">Mi Ձայնի բարելավում</string>
     <string name="dirac_summary">Օպտիմիզացնել ձայնի որակը</string>
@@ -56,4 +56,11 @@
     <string name="dirac_preset_country">Քանտրի</string>
     <string name="dirac_preset_dance">Պար</string>
     <string name="dirac_preset_metal">Մետալ</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Մարտկոցը վտանգավոր կերպով ցածր է"</string>
+    <string name="batterylow_about">"Դուք նախազգուշացվեք, երբ մարտկոցի մակարդակը վտանգավոր կերպով ցածր է և սարքը պատրաստվում է անջատվել։"</string>
+    <string name="batterylow_percentage_summary">"Սահմանել ցածր մարտկոցի շեմը"</string>
+    <string name="batterylow_off_summary">"Անջատված է"</string>
+    <string name="batterylow_heads_up_message">"Մնացել է մարտկոցի <xliff:g id="percentage" example="20%">%s</xliff:g>։ Լիցքավորեք հեռախոսը, հակառակ դեպքում այն շուտով կհանգչի։"</string>
 </resources>

@@ -87,4 +87,11 @@
     <string name="uibench_title">UiBench</string>
     <string name="jitter_test_title">Jitter</string>
     <string name="jitter_test_summary">Tính jitter khi render</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Pin ở mức rất thấp"</string>
+    <string name="batterylow_about">"Bạn sẽ được cảnh báo khi mức pin ở mức rất thấp và thiết bị sắp tắt nguồn."</string>
+    <string name="batterylow_percentage_summary">"Đặt ngưỡng pin yếu"</string>
+    <string name="batterylow_off_summary">"Đang tắt"</string>
+    <string name="batterylow_heads_up_message">"Còn <xliff:g id="percentage" example="20%">%s</xliff:g> pin. Hãy sạc điện thoại của bạn nếu không máy sẽ sớm tắt."</string>
 </resources>

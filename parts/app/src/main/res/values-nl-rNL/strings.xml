@@ -87,4 +87,11 @@
     <string name="ramplus_mode_moderate">Normaal</string>
     <string name="ramplus_mode_slight">Licht</string>
     <string name="ramplus_mode_extreme">Extreem</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Batterij is kritiek laag"</string>
+    <string name="batterylow_about">"U wordt gewaarschuwd wanneer het batterijniveau kritiek laag is en het apparaat bijna wordt uitgeschakeld."</string>
+    <string name="batterylow_percentage_summary">"Stel lage batterijgrens in"</string>
+    <string name="batterylow_off_summary">"Uit"</string>
+    <string name="batterylow_heads_up_message">"<xliff:g id="percentage" example="20%">%s</xliff:g> batterij over. Laad je telefoon op of hij schakelt binnenkort uit."</string>
 </resources>

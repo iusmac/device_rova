@@ -82,4 +82,11 @@
 
     <!-- Misc -->
     <string name="not_now">"Не сега"</string>
+
+    <!-- Battery low service -->
+    <string name="batterylow_title">"Критично ниско ниво на батерията"</string>
+    <string name="batterylow_about">"Ще бъдете предупредени, когато нивото на батерията е критично ниско и предстои изключване."</string>
+    <string name="batterylow_percentage_summary">"Задайте праг на ниска батерия"</string>
+    <string name="batterylow_off_summary">"Изкл."</string>
+    <string name="batterylow_heads_up_message">"Остават <xliff:g id="percentage" example="20%">%s</xliff:g> от батерията. Заредете телефона си или скоро ще се изключи."</string>
 </resources>
