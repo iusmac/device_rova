@@ -16,6 +16,7 @@ import com.android.settingslib.collapsingtoolbar.CollapsingToolbarDelegate;
 import com.android.settingslib.collapsingtoolbar.EdgeToEdgeUtils;
 import com.android.settingslib.widget.SettingsThemeHelper;
 
+import com.github.iusmac.sevensim.R;
 import com.github.iusmac.sevensim.ui.components.toolbar.ToolbarDecorator;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -31,8 +32,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
  * the box.
  */
 public abstract class CollapsingToolbarBaseActivity extends FragmentActivity {
-    private static final int SCRIM_ANIMATION_DURATION = 250;
-
     private CollapsingToolbarDelegate mToolbardelegate;
     private ToolbarDecorator mToolbarDecorator;
     private ViewModel mViewModel;
@@ -44,7 +43,8 @@ public abstract class CollapsingToolbarBaseActivity extends FragmentActivity {
         EdgeToEdgeUtils.enable(this);
         super.onCreate(savedInstanceState);
 
-        if (SettingsThemeHelper.isExpressiveTheme(this)) {
+        final boolean isExpressiveTheme = SettingsThemeHelper.isExpressiveTheme(this);
+        if (isExpressiveTheme) {
             setTheme(com.android.settingslib.widget.theme.R.style.Theme_SubSettingsBase_Expressive);
         }
 
@@ -53,9 +53,10 @@ public abstract class CollapsingToolbarBaseActivity extends FragmentActivity {
 
         final ToolbarDecorator toolbarDecorator = getToolbarDecorator();
         if (toolbarDecorator.isCollapsingToolbarSupported()) {
-            // Override the default AOSP's value of 50ms, which is too short and makes the scrim
-            // flicker on <60Hz displays
-            getCollapsingToolbarLayout().setScrimAnimationDuration(SCRIM_ANIMATION_DURATION);
+            final int scrimAnimationDuration = getResources().getInteger(isExpressiveTheme ?
+                    R.integer.collapsingtoolbar_scrim_anim_duration_expressive
+                    : R.integer.collapsingtoolbar_scrim_anim_duration);
+            getCollapsingToolbarLayout().setScrimAnimationDuration(scrimAnimationDuration);
             // Enforce fade in/out and translate collapse effect for the title so that it's
             // consistent with the subtitle that doesn't support scaling, which may be selected if
             // using non-AOSP sources
@@ -66,6 +67,9 @@ public abstract class CollapsingToolbarBaseActivity extends FragmentActivity {
             // other text
             getCollapsingToolbarLayout()
                 .setContentScrimResource(com.android.settingslib.widget.theme.R.color.settingslib_colorSurfaceHeader);
+            // Our use case requires the CollapsingToolbar to be permanently lifted above the
+            // scrollable content (safe to disable; less animations, better performance)
+            getAppBarLayout().setLiftable(false);
         } else {
             // For better UX (e.g. l10n), apply the marquee effect on the title for non-collapsing
             // Toolbar
