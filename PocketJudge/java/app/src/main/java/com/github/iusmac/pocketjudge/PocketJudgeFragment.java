@@ -30,9 +30,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.TwoStatePreference;
+
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -40,7 +41,7 @@ import javax.inject.Inject;
 
 import static com.github.iusmac.pocketjudge.BuildConfig.DEBUG;
 
-@AndroidEntryPoint(PreferenceFragmentCompat.class)
+@AndroidEntryPoint(SettingsBasePreferenceFragment.class)
 public class PocketJudgeFragment extends Hilt_PocketJudgeFragment
         implements Preference.OnPreferenceChangeListener {
     private static final String TAG = "PocketJudge";
