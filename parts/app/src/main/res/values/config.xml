@@ -35,6 +35,7 @@
     <string name="smart_charging_key_charging_temp" translatable="false">"seek_bar_temp"</string>
     <string name="smart_charging_key_charging_current_max" translatable="false">"current_max_pref"</string>
     <string name="smart_charging_key_reset_stats" translatable="false">"reset_stats"</string>
+    <string name="smart_charging_key_notif_disabled" translatable="false">"notif_disabled"</string>
     <string name="smart_charging_sysfs_charging_enabled_path" translatable="false">"/sys/class/power_supply/battery/charging_enabled"</string>
     <string name="smart_charging_sysfs_charging_current_max_path" translatable="false">"/sys/class/power_supply/usb/current_max"</string>
     <string name="smart_charging_sysfs_charger_present_path" translatable="false">"/sys/class/power_supply/usb/present"</string>

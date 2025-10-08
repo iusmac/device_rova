@@ -78,6 +78,7 @@
     <string name="smart_charging_warning">Peatumise tase peaks alati olema suurem, kui algtase</string>
     <string name="smart_charging_reset_stats_title">Lähtesta aku statistika</string>
     <string name="smart_charging_reset_stats_summary">Lähtesta aku statistika pärast kasutaja määratletud laadimistaseme saavutamist</string>
+    <string name="smart_charging_notif_disabled_title">"Keela teavitus"</string>
     <string name="smart_charging_footer">Nutikas laadimine võimaldab teil määrata maksimaalne laadimistase, parandamaks aku eluiga. Lubamisel lõpetab aku laadimise nutika laadimise peatumise tasemel ning jätkab laadimist nutika laadimise algtasemel. Peatumise tase peaks alati olema suurem, kui algtase.</string>
 
     <!-- Misc -->

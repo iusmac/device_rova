@@ -78,6 +78,7 @@
     <string name="smart_charging_warning">充電を停止する閾値は充電を開始する閾値より大きく設定してください。</string>
     <string name="smart_charging_reset_stats_title">バッテリー統計情報をリセット</string>
     <string name="smart_charging_reset_stats_summary">ユーザーが設定した充電レベルに到達後、バッテリー統計情報をリセットする</string>
+    <string name="smart_charging_notif_disabled_title">"通知を無効にする"</string>
     <string name="smart_charging_footer">Smart Chargingは充電を停止/開始する閾（しきい）値を設定してバッテリーの寿命を延ばすことができます。この機能を有効にすると、バッテリーは充電を停止する閾値を上回ると充電を停止し、充電を開始する閾値を下回ると充電を再開します。充電を停止する閾値は充電を開始する閾値より大きく設定してください。</string>
 
     <!-- Misc -->

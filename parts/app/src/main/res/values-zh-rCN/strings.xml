@@ -78,6 +78,7 @@
     <string name="smart_charging_warning">停止触发级别应该总是大于起始触发级别</string>
     <string name="smart_charging_reset_stats_title">重置电池统计信息</string>
     <string name="smart_charging_reset_stats_summary">达到用户定义的充电级别后重置电池统计</string>
+    <string name="smart_charging_notif_disabled_title">"关闭通知"</string>
     <string name="smart_charging_footer">智能充电允许您设置最大充电级别来延长电池寿命。 如果启用，电池将停止在停止触发级别充电并恢复在开始触发级别充电。 停止触发级别应该总是大于起始触发级别</string>
 
     <!-- Misc -->

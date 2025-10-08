@@ -78,6 +78,7 @@
     <string name="smart_charging_warning">Durma noktası her zaman başlama noktasından büyük olmalıdır</string>
     <string name="smart_charging_reset_stats_title">Pil istatistiklerini sıfırla</string>
     <string name="smart_charging_reset_stats_summary">Kullanıcı tanımladığı şarj değerine ulaşınca pil istatistiklerini sıfırlayın</string>
+    <string name="smart_charging_notif_disabled_title">"Bildirimi devre dışı bırak"</string>
     <string name="smart_charging_footer">Akıllı şarj etme size maksimum şarj etme düzeyini belirlemenizi ve pilinizin ömrünü uzatmanızı sağlar. Aktif edildiği zaman, pil durma noktasına ulaştığında şarj olmayı durdurur ve başlama noktasına gelince şarj olmaya devam eder. Durma noktası her zaman başlama noktasından büyük olmalıdır.</string>
 
     <!-- Misc -->

@@ -108,7 +108,9 @@ public final class SmartChargingManager {
         // cable
         if (mSmartChargingNotificationManager.isNotificationDismissed()) {
             mSmartChargingNotificationManager.setNotificationDismissed(false);
-            mSmartChargingNotificationManager.showNotification();
+            if (!mSmartCharging.isNotificationDisabled()) {
+                mSmartChargingNotificationManager.showNotification();
+            }
         }
 
         final boolean isCharged = mSmartCharging.getChargingLimit() <=
@@ -158,6 +160,10 @@ public final class SmartChargingManager {
         if (mSmartCharging.isPlugged()) {
             startBatteryMonitoring();
         }
+
+        if (mSmartCharging.isNotificationDisabled()) {
+            mSmartChargingNotificationManager.removeNotification();
+        }
     }
 
     void enable() {
@@ -189,7 +195,8 @@ public final class SmartChargingManager {
 
         reevaluate();
 
-        if (!mSmartChargingNotificationManager.isNotificationDismissed()) {
+        if (!mSmartChargingNotificationManager.isNotificationDismissed() &&
+                !mSmartCharging.isNotificationDisabled()) {
             mSmartChargingNotificationManager.showNotification();
         }
     }

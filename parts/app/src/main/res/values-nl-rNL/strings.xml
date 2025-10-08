@@ -78,6 +78,7 @@
     <string name="smart_charging_warning">Start triggerniveau moet altijd groter zijn dan stop triggerniveau</string>
     <string name="smart_charging_reset_stats_title">Accustatistieken resetten</string>
     <string name="smart_charging_reset_stats_summary">Accustatistieken resetten na bereiken door gebruiker ingesteld laadniveau</string>
+    <string name="smart_charging_notif_disabled_title">"Melding uitschakelen"</string>
     <string name="smart_charging_footer">Met Slim opladen kun je het maximale oplaadniveau instellen om de levensduur van je batterij te verlengen. Wanneer ingeschakeld, stopt de accu het opladen op Stop triggerniveau en hervat het opladen op Start triggerniveau. Start triggerniveau moet altijd groter zijn dan stop triggerniveau.</string>
 
     <!-- Misc -->

@@ -63,6 +63,7 @@ public class SmartChargingFragment extends Hilt_SmartChargingFragment implements
     private SeekBarPreference mSeekBarChargingTempPreference;
     private ListPreference mChargingCurrentMaxListPref;
     private SwitchPreferenceCompat mResetStatsPreference;
+    private SwitchPreferenceCompat mNotifDisabledPreference;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -95,6 +96,10 @@ public class SmartChargingFragment extends Hilt_SmartChargingFragment implements
         mResetStatsPreference = findPreference(getString(R.string.smart_charging_key_reset_stats));
         mResetStatsPreference.setEnabled(mSmartChargingSwitch.isChecked());
         mResetStatsPreference.setOnPreferenceChangeListener(this);
+
+        mNotifDisabledPreference = findPreference(getString(R.string.smart_charging_key_notif_disabled));
+        mNotifDisabledPreference.setEnabled(mSmartChargingSwitch.isChecked());
+        mNotifDisabledPreference.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -110,6 +115,7 @@ public class SmartChargingFragment extends Hilt_SmartChargingFragment implements
         mSeekBarChargingTempPreference.setEnabled(isChecked);
         mChargingCurrentMaxListPref.setEnabled(isChecked);
         mResetStatsPreference.setEnabled(isChecked);
+        mNotifDisabledPreference.setEnabled(isChecked);
     }
 
     @Override
@@ -143,7 +149,8 @@ public class SmartChargingFragment extends Hilt_SmartChargingFragment implements
             R.string.smart_charging_key_charging_resume,
             R.string.smart_charging_key_charging_temp,
             R.string.smart_charging_key_charging_current_max,
-            R.string.smart_charging_key_reset_stats };
+            R.string.smart_charging_key_reset_stats,
+            R.string.smart_charging_key_notif_disabled };
 
         for (int keyId : keyIds) {
             if (key.equals(getString(keyId))) {

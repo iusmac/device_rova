@@ -78,6 +78,7 @@
     <string name="smart_charging_warning">「停止充電百分比」應始終大於「開始充電百分比」</string>
     <string name="smart_charging_reset_stats_title">重置電池統計數據</string>
     <string name="smart_charging_reset_stats_summary">在達到使用者設定的電量百分比後，重置電池統計數據</string>
+    <string name="smart_charging_notif_disabled_title">"關閉通知"</string>
     <string name="smart_charging_footer">智慧充電允許您設定最大充電百分比，以延長電池的使用壽命。 啟用後，電池將在達到「停止充電百分比」時停止充電，並在達到「開始充電百分比」時重新開始充電。 「停止充電百分比」應始終大於「開始充電百分比」。</string>
 
     <!-- Misc -->

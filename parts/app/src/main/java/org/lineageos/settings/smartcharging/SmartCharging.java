@@ -113,4 +113,9 @@ public class SmartCharging {
                     R.string.smart_charging_key_charging_current_max), mResources.getString(
                         R.string.smart_charging_current_default_value));
     }
+
+    boolean isNotificationDisabled() {
+        return mSharedPrefs.getBoolean(mResources.getString(
+                    R.string.smart_charging_key_notif_disabled), false);
+    }
 }
