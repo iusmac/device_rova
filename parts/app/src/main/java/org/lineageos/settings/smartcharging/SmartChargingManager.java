@@ -82,6 +82,13 @@ public final class SmartChargingManager {
             // monitoring as expected
             setLastStopChargingReason(SmartChargingStopReason.UNKNOWN);
         } else {
+            // Delay battery monitoring start to avoid racing with the kernel's PMIC (power management
+            // integrated circuit) voter driver used to negotiate the max current when plugged in
+            try {
+                Thread.sleep(1500);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
             startBatteryMonitoring();
         }
     }
