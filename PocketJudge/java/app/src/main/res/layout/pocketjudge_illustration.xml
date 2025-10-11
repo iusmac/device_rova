@@ -10,25 +10,33 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="412dp"
-    android:layout_height="300dp"
-    android:layout_gravity="center"
-    android:gravity="center_vertical"
-    android:paddingHorizontal="16dp"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
     android:orientation="vertical">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+
+    <FrameLayout
+        android:layout_width="412dp"
+        android:layout_height="300dp"
         android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:src="@drawable/illustration_background"
-        android:contentDescription="@null" />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:src="@drawable/pocket_judge_phone"
-        android:contentDescription="@null" />
-</FrameLayout>
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/illustration_background"
+            android:contentDescription="@null" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/pocket_judge_phone"
+            android:contentDescription="@null" />
+    </FrameLayout>
+</LinearLayout>
