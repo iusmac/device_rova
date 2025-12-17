@@ -148,8 +148,7 @@ TARGET_KERNEL_CONFIG += \
 endif
 TARGET_KERNEL_CONFIG += \
     vendor/feature/pocket-judge.config \
-    vendor/feature/net.config \
-    vendor/feature/ksu_susfs.config
+    vendor/feature/net.config
 TARGET_KERNEL_VERSION := 4.19
 TARGET_KERNEL_ADDITIONAL_FLAGS := \
     LLVM=1
