@@ -142,10 +142,8 @@ TARGET_KERNEL_CONFIG := \
     vendor/feature/wireguard.config \
     vendor/xiaomi/msm8937/common.config \
     vendor/xiaomi/msm8937/mi8917.config
-ifneq ($(shell grep CONFIG_KSU_STATIC_HOOKS $(TARGET_KERNEL_SOURCE)/techpack/KernelSU/kernel/ksu.c || true),)
 TARGET_KERNEL_CONFIG += \
-    vendor/feature/ksu_static_hooks.config
-endif
+    vendor/feature/ksu_manual_hook.config
 TARGET_KERNEL_CONFIG += \
     vendor/feature/pocket-judge.config \
     vendor/feature/net.config
