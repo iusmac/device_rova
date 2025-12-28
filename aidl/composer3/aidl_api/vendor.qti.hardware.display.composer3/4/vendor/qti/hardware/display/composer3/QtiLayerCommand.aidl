@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,4 +26,6 @@ parcelable QtiLayerCommand {
   long layer;
   vendor.qti.hardware.display.composer3.QtiLayerType qtiLayerType;
   vendor.qti.hardware.display.composer3.QtiLayerFlags qtiLayerFlags;
+  @nullable vendor.qti.hardware.display.composer3.QtiPrivacyRegion[] qtiPrivacyRegions;
+  @nullable vendor.qti.hardware.display.composer3.QtiCornerRadius qtiCornerRadius;
 }

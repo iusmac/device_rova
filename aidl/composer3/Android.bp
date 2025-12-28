@@ -14,7 +14,10 @@ aidl_interface {
         },
     },
 
-    imports: ["android.hardware.graphics.composer3-V4"],
+    imports: [
+        "android.hardware.graphics.composer3-V4",
+        "android.hardware.graphics.common-V7",
+    ],
     versions_with_info: [
         {
             version: "1",
@@ -30,7 +33,10 @@ aidl_interface {
         },
         {
             version: "4",
-            imports: ["android.hardware.graphics.composer3-V4"],
+            imports: [
+                "android.hardware.graphics.composer3-V4",
+                "android.hardware.graphics.common-V7",
+            ],
         },
 
     ],
