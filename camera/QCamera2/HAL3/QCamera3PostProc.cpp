@@ -2748,10 +2748,7 @@ QCamera3Exif *QCamera3PostProcessor::getExifData(metadata_buffer_t *metadata,
         LOGE("No memory for QCamera3Exif");
         return NULL;
     }
-    QCamera3HardwareInterface* hal_obj = NULL;
-    if (m_parent != NULL) {
-        hal_obj = (QCamera3HardwareInterface*)m_parent->mUserData;
-    } else {
+    if (m_parent == NULL) {
         LOGE("m_parent is NULL, Error");
         return NULL;
     }

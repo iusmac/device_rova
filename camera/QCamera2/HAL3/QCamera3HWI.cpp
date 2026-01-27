@@ -1924,9 +1924,7 @@ int QCamera3HardwareInterface::configureStreamsPerfLocked(
         uint32_t stream_usage = newStream->usage;
         mStreamConfigInfo.stream_sizes[mStreamConfigInfo.num_streams].width = (int32_t)newStream->width;
         mStreamConfigInfo.stream_sizes[mStreamConfigInfo.num_streams].height = (int32_t)newStream->height;
-        struct camera_info *p_info = NULL;
         pthread_mutex_lock(&gCamLock);
-        p_info = get_cam_info(mCameraId, &mStreamConfigInfo.sync_type);
         pthread_mutex_unlock(&gCamLock);
         if ((newStream->stream_type == CAMERA3_STREAM_BIDIRECTIONAL
                 || IS_USAGE_ZSL(newStream->usage)) &&
@@ -2614,15 +2612,10 @@ void QCamera3HardwareInterface::deriveMinFrameDuration()
 int64_t QCamera3HardwareInterface::getMinFrameDuration(const camera3_capture_request_t *request)
 {
     bool hasJpegStream = false;
-    bool hasRawStream = false;
     for (uint32_t i = 0; i < request->num_output_buffers; i ++) {
         const camera3_stream_t *stream = request->output_buffers[i].stream;
         if (stream->format == HAL_PIXEL_FORMAT_BLOB)
             hasJpegStream = true;
-        else if (stream->format == HAL_PIXEL_FORMAT_RAW_OPAQUE ||
-                stream->format == HAL_PIXEL_FORMAT_RAW10 ||
-                stream->format == HAL_PIXEL_FORMAT_RAW16)
-            hasRawStream = true;
     }
 
     if (!hasJpegStream)
@@ -3670,7 +3663,7 @@ int32_t QCamera3HardwareInterface::orchestrateRequest(
         /* Modify setting to set compensation */
         modified_meta = request->settings;
         int32_t expCompensation = GB_HDR_HALF_STEP_EV;
-        uint8_t aeLock = 1;
+        //uint8_t aeLock = 1;
         modified_meta.update(ANDROID_CONTROL_AE_EXPOSURE_COMPENSATION, &expCompensation, 1);
         //modified_meta.update(ANDROID_CONTROL_AE_LOCK, &aeLock, 1);
         camera_metadata_t *modified_settings = modified_meta.release();
@@ -3689,7 +3682,7 @@ int32_t QCamera3HardwareInterface::orchestrateRequest(
 
         modified_meta = modified_settings;
         expCompensation = 0;
-        aeLock = 1;
+        //aeLock = 1;
         modified_meta.update(ANDROID_CONTROL_AE_EXPOSURE_COMPENSATION, &expCompensation, 1);
         //modified_meta.update(ANDROID_CONTROL_AE_LOCK, &aeLock, 1);
         modified_settings = modified_meta.release();
@@ -3726,7 +3719,7 @@ int32_t QCamera3HardwareInterface::orchestrateRequest(
         /* Capture 2X frame*/
         modified_meta = modified_settings;
         expCompensation = GB_HDR_2X_STEP_EV;
-        aeLock = 1;
+        //aeLock = 1;
         modified_meta.update(ANDROID_CONTROL_AE_EXPOSURE_COMPENSATION, &expCompensation, 1);
         //modified_meta.update(ANDROID_CONTROL_AE_LOCK, &aeLock, 1);
         modified_settings = modified_meta.release();
@@ -6775,38 +6768,37 @@ void QCamera3HardwareInterface::dumpMetadataToFile(tuning_params_t &meta,
         filePath.append(buf);
         int file_fd = open(filePath.c_str(), O_RDWR | O_CREAT, 0777);
         if (file_fd >= 0) {
-            ssize_t written_len = 0;
             meta.tuning_data_version = TUNING_DATA_VERSION;
             void *data = (void *)((uint8_t *)&meta.tuning_data_version);
-            written_len += write(file_fd, data, sizeof(uint32_t));
+            write(file_fd, data, sizeof(uint32_t));
             data = (void *)((uint8_t *)&meta.tuning_sensor_data_size);
             LOGD("tuning_sensor_data_size %d",(int)(*(int *)data));
-            written_len += write(file_fd, data, sizeof(uint32_t));
+            write(file_fd, data, sizeof(uint32_t));
             data = (void *)((uint8_t *)&meta.tuning_vfe_data_size);
             LOGD("tuning_vfe_data_size %d",(int)(*(int *)data));
-            written_len += write(file_fd, data, sizeof(uint32_t));
+            write(file_fd, data, sizeof(uint32_t));
             data = (void *)((uint8_t *)&meta.tuning_cpp_data_size);
             LOGD("tuning_cpp_data_size %d",(int)(*(int *)data));
-            written_len += write(file_fd, data, sizeof(uint32_t));
+            write(file_fd, data, sizeof(uint32_t));
             data = (void *)((uint8_t *)&meta.tuning_cac_data_size);
             LOGD("tuning_cac_data_size %d",(int)(*(int *)data));
-            written_len += write(file_fd, data, sizeof(uint32_t));
+            write(file_fd, data, sizeof(uint32_t));
             meta.tuning_mod3_data_size = 0;
             data = (void *)((uint8_t *)&meta.tuning_mod3_data_size);
             LOGD("tuning_mod3_data_size %d",(int)(*(int *)data));
-            written_len += write(file_fd, data, sizeof(uint32_t));
+            write(file_fd, data, sizeof(uint32_t));
             size_t total_size = meta.tuning_sensor_data_size;
             data = (void *)((uint8_t *)&meta.data);
-            written_len += write(file_fd, data, total_size);
+            write(file_fd, data, total_size);
             total_size = meta.tuning_vfe_data_size;
             data = (void *)((uint8_t *)&meta.data[TUNING_VFE_DATA_OFFSET]);
-            written_len += write(file_fd, data, total_size);
+            write(file_fd, data, total_size);
             total_size = meta.tuning_cpp_data_size;
             data = (void *)((uint8_t *)&meta.data[TUNING_CPP_DATA_OFFSET]);
-            written_len += write(file_fd, data, total_size);
+            write(file_fd, data, total_size);
             total_size = meta.tuning_cac_data_size;
             data = (void *)((uint8_t *)&meta.data[TUNING_CAC_DATA_OFFSET]);
-            written_len += write(file_fd, data, total_size);
+            write(file_fd, data, total_size);
             close(file_fd);
         }else {
             LOGE("fail to open file for metadata dumping");
@@ -10360,13 +10352,11 @@ int QCamera3HardwareInterface::translateToHalMetadata
     // TNR
     if (frame_settings.exists(QCAMERA3_TEMPORAL_DENOISE_ENABLE) &&
         frame_settings.exists(QCAMERA3_TEMPORAL_DENOISE_PROCESS_TYPE)) {
-        uint8_t b_TnrRequested = 0;
         cam_denoise_param_t tnr;
         tnr.denoise_enable = frame_settings.find(QCAMERA3_TEMPORAL_DENOISE_ENABLE).data.u8[0];
         tnr.process_plates =
             (cam_denoise_process_type_t)frame_settings.find(
             QCAMERA3_TEMPORAL_DENOISE_PROCESS_TYPE).data.i32[0];
-        b_TnrRequested = tnr.denoise_enable;
         if (ADD_SET_PARAM_ENTRY_TO_BATCH(mParameters, CAM_INTF_PARM_TEMPORAL_DENOISE, tnr)) {
             rc = BAD_VALUE;
         }
@@ -10964,7 +10954,6 @@ int32_t QCamera3HardwareInterface::extractSceneMode(
             }
         }
 
-        uint8_t bestshot = sceneMode;
         if (sceneMode == CAM_SCENE_MODE_HDR) {
             cam_hdr_param_t hdr_params;
             hdr_params.hdr_enable = 1;
@@ -10974,7 +10963,6 @@ int32_t QCamera3HardwareInterface::extractSceneMode(
                     CAM_INTF_PARM_HAL_BRACKETING_HDR, hdr_params)) {
                 rc = BAD_VALUE;
             }
-            bestshot = 0;
         }
     } else if ((ANDROID_CONTROL_MODE_OFF == metaMode) ||
             (ANDROID_CONTROL_MODE_AUTO == metaMode)) {
