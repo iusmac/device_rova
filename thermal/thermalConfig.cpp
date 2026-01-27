@@ -1064,7 +1064,7 @@ namespace implementation {
 	{
 		std::unordered_map<int, std::vector<struct target_therm_cfg>>::const_iterator it;
 		std::vector<struct target_therm_cfg>::iterator it_vec;
-		bool bcl_defined = false;
+		[[maybe_unused]] bool bcl_defined = false;
 		std::string soc_val;
 
 		if (cmnInst.readFromFile(socIDPath, soc_val) <= 0) {
