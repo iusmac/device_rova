@@ -166,14 +166,12 @@ bool Allocator::CheckForBufferSharing(uint32_t num_descriptors,
   unsigned int cur_heap_id = 0, prev_heap_id = 0;
   unsigned int cur_alloc_type = 0, prev_alloc_type = 0;
   unsigned int cur_ion_flags = 0, prev_ion_flags = 0;
-  bool cur_uncached = false, prev_uncached = false;
   unsigned int alignedw, alignedh;
   unsigned int max_size = 0;
 
   *max_index = -1;
   for (uint32_t i = 0; i < num_descriptors; i++) {
     // Check Cached vs non-cached and all the ION flags
-    cur_uncached = UseUncached(descriptors[i]->GetFormat(), descriptors[i]->GetUsage());
     GetIonHeapInfo(descriptors[i]->GetUsage(), &cur_heap_id, &cur_alloc_type, &cur_ion_flags);
 
     if (i > 0 && (cur_heap_id != prev_heap_id || cur_alloc_type != prev_alloc_type ||
@@ -190,7 +188,6 @@ bool Allocator::CheckForBufferSharing(uint32_t num_descriptors,
     }
 
     prev_heap_id = cur_heap_id;
-    prev_uncached = cur_uncached;
     prev_ion_flags = cur_ion_flags;
     prev_alloc_type = cur_alloc_type;
   }
