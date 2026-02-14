@@ -133,35 +133,29 @@ TARGET_KERNEL_CONFIG := \
     vendor/msm8937-perf_defconfig \
     vendor/msm8937-legacy.config \
     vendor/common.config \
+    vendor/xiaomi/msm8937/common.config \
+    vendor/xiaomi/msm8937/mi8917.config \
+    vendor/feature/exfat.config \
+    vendor/feature/ntfs.config
+ifndef BUILD_RECOVERY_KERNEL
+TARGET_KERNEL_CONFIG += \
     vendor/debugfs.config \
     vendor/feature/android-12.config \
-    vendor/feature/exfat.config \
-    vendor/feature/ntfs.config \
     vendor/feature/kprobes.config \
     vendor/feature/lmkd.config \
     vendor/feature/wireguard.config \
-    vendor/xiaomi/msm8937/common.config \
-    vendor/xiaomi/msm8937/mi8917.config
-TARGET_KERNEL_CONFIG += \
-    vendor/feature/ksu_manual_hook.config
-TARGET_KERNEL_CONFIG += \
+    vendor/feature/ksu_manual_hook.config \
     vendor/feature/pocket-judge.config \
     vendor/feature/net.config
+else
+TARGET_KERNEL_CONFIG += \
+    vendor/feature/no-camera-stack.config \
+    vendor/feature/no-wlan-driver.config \
+    vendor/feature/no-ksu.config
+endif # BUILD_RECOVERY_KERNEL
 TARGET_KERNEL_VERSION := 4.19
 TARGET_KERNEL_ADDITIONAL_FLAGS := \
     LLVM=1
-
-TARGET_KERNEL_RECOVERY_CONFIG := \
-    vendor/msm8937-perf_defconfig \
-    vendor/msm8937-legacy.config \
-    vendor/common.config \
-    vendor/feature/exfat.config \
-    vendor/feature/ntfs.config \
-    vendor/feature/no-camera-stack.config \
-    vendor/feature/no-wlan-driver.config \
-    vendor/feature/no-ksu.config \
-    vendor/xiaomi/msm8937/common.config \
-    vendor/xiaomi/msm8937/mi8917.config
 
 # Kernel Clang Flags
 KERNEL_CC := CC=clang
