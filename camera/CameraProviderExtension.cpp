@@ -21,6 +21,8 @@
 
 namespace {
 
+#define TORCH_DEFAULT_STRENGTH_LEVEL 200 // matches kernel driver
+
 #define TORCH_FLASHLIGHT_PATH(file) "/sys/class/leds/flashlight/" file
 #define TORCH_BRIGHTNESS_PATH TORCH_FLASHLIGHT_PATH("brightness")
 #define TORCH_MAX_BRIGHTNESS_PATH TORCH_FLASHLIGHT_PATH("max_brightness")
@@ -56,7 +58,7 @@ bool supportsTorchStrengthControlExt() {
 
 int32_t getTorchDefaultStrengthLevelExt() {
     const int32_t max = getTorchMaxStrengthLevelExt();
-    return std::min(127, max);
+    return std::min(TORCH_DEFAULT_STRENGTH_LEVEL, max);
 }
 
 int32_t getTorchMaxStrengthLevelExt() {
