@@ -5,6 +5,9 @@ genfscon proc  /sys/kernel/boot_reason   u:object_r:proc_boot_reason:s0
 genfscon sysfs /camera_fusion_id_back  u:object_r:sysfs_camera_fusion_id:s0
 genfscon sysfs /camera_fusion_id_front u:object_r:sysfs_camera_fusion_id:s0
 
+# Camera (flashlight)
+genfscon sysfs /devices/platform/soc/soc:flashlight/leds	u:object_r:sysfs_leds:s0
+
 # FDT
 genfscon sysfs /firmware/devicetree/base/model	u:object_r:fdt_model:s0
 

@@ -1,0 +1,7 @@
+cc_library_static {
+    name: "libcameraservice_extension",
+    srcs: ["CameraProviderExtension.cpp"],
+    include_dirs: [
+        "frameworks/av/services/camera/libcameraservice/common"
+    ],
+}

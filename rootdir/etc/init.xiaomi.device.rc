@@ -50,6 +50,12 @@ on property:ro.bootmode=charger && property:init.svc.vendor.qcom-post-boot=stopp
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
 
+# Camera
+on early-init
+    # LED
+    chown cameraserver root /sys/class/leds/flashlight/brightness
+    chown cameraserver root /sys/class/leds/flashlight/max_brightness
+
 # IR
 on init
     # LED
