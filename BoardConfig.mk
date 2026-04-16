@@ -79,6 +79,8 @@ BOARD_QTI_CAMERA_32BIT_ONLY := true
 TARGET_TS_MAKEUP := true
 TARGET_SUPPORT_HAL1 := false
 
+$(call soong_config_set,libcameraservice,ext_lib,//$(DEVICE_PATH):libcameraservice_extension.rova)
+
 # Debug mode
 ENABLE_DEBUG_MODE := false
 
