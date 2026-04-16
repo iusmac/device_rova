@@ -4,4 +4,7 @@ cc_library_static {
     include_dirs: [
         "frameworks/av/services/camera/libcameraservice/common"
     ],
+    shared_libs: [
+        "liblog",
+    ],
 }

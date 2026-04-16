@@ -18,14 +18,18 @@
 
 #include <algorithm>
 #include <fstream>
+#include <optional>
+#include <log/log.h>
 
 namespace {
 
 #define TORCH_DEFAULT_STRENGTH_LEVEL 200 // matches kernel driver
+#define TORCH_TRIGGER_SETTING "flashlight-trigger" // matches DTS in kernel
 
 #define TORCH_FLASHLIGHT_PATH(file) "/sys/class/leds/flashlight/" file
 #define TORCH_BRIGHTNESS_PATH TORCH_FLASHLIGHT_PATH("brightness")
 #define TORCH_MAX_BRIGHTNESS_PATH TORCH_FLASHLIGHT_PATH("max_brightness")
+#define TORCH_TRIGGER_SETTING_PATH TORCH_FLASHLIGHT_PATH("trigger")
 
 /**
  * Write value to path and close file.
@@ -45,6 +49,34 @@ T readValue(const std::string& path, const T& def) {
     T result;
     file >> result;
     return file.fail() ? def : result;
+}
+
+/**
+ * Search for value from the path using custom predicate and close file.
+ */
+template <typename T, typename Pred>
+std::optional<T> searchValue(const std::string& path, Pred pred) {
+    std::ifstream file(path);
+    T result;
+    while (file >> result) {
+        if (pred(result)) {
+            return result;
+        }
+    }
+    return std::nullopt;
+}
+
+bool isTorchTriggeringAllowed() {
+    auto node = TORCH_TRIGGER_SETTING_PATH;
+    // Search for "[word]" in file formatted as "opt1 [selected-opt2] opt3 ..."
+    return searchValue<std::string>(node, [](const auto& value) {
+        if (value.front() == '[' && value.back() == ']') {
+            const std::string_view opt_bracketless(value.data() + 1,
+                    value.size() - 2);
+            return opt_bracketless == TORCH_TRIGGER_SETTING;
+        }
+        return false;
+    }).has_value();
 }
 
 } // namespace
@@ -72,6 +104,20 @@ int32_t getTorchStrengthLevelExt() {
 }
 
 void setTorchStrengthLevelExt(int32_t torchStrength, bool enabled) {
-    auto node = TORCH_BRIGHTNESS_PATH;
-    writeValue(node, torchStrength);
+    if (!isTorchTriggeringAllowed()) {
+        ALOGW("%s: triggering torch has been disabled in driver.",
+                __FUNCTION__);
+        return;
+    }
+
+    // NOTE: do not set strength when cameraserver is turning off torch, as
+    // this will be done via camera HAL's CameraProviderManager::setTorchMode
+    // API, otherwise writing zero (0) to sysfs node will force the driver to
+    // switch the trigger mode to "none", making camera service being unable to
+    // toggle flashlight anymore. According to API specs, enabled=false param
+    // is only for cleanups and restoring purposes anyways..
+    if (enabled) {
+        auto node = TORCH_BRIGHTNESS_PATH;
+        writeValue(node, torchStrength);
+    }
 }

@@ -55,6 +55,7 @@ on early-init
     # LED
     chown cameraserver root /sys/class/leds/flashlight/brightness
     chown cameraserver root /sys/class/leds/flashlight/max_brightness
+    chown cameraserver root /sys/class/leds/flashlight/trigger
 
 # IR
 on init
