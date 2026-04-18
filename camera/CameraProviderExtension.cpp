@@ -35,9 +35,10 @@ namespace {
  * Write value to path and close file.
  */
 template <typename T>
-void writeValue(const std::string& path, const T& value) {
+std::ofstream::iostate writeValue(const std::string& path, const T& value) {
     std::ofstream file(path);
     file << value;
+    return file.rdstate();
 }
 
 /**
@@ -118,6 +119,9 @@ void setTorchStrengthLevelExt(int32_t torchStrength, bool enabled) {
     // is only for cleanups and restoring purposes anyways..
     if (enabled) {
         auto node = TORCH_BRIGHTNESS_PATH;
-        writeValue(node, torchStrength);
+        const auto state = writeValue(node, torchStrength);
+        if (state != std::ios_base::goodbit) {
+            ALOGE("%s: I/O Error: %d.", __FUNCTION__, state);
+        }
     }
 }
