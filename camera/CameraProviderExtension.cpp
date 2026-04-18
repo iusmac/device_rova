@@ -24,6 +24,10 @@
 namespace {
 
 #define TORCH_DEFAULT_STRENGTH_LEVEL 200 // matches kernel driver
+// NOTE: Limit to 254 as LED_FULL (255) is reserved for camera flash and fires
+// twice (LED_HALF (127) then LED_FULL); flash will turn off automatically on
+// timeout (configured in DTS) after the second fire.
+#define TORCH_DEFAULT_MAX_STRENGTH_LEVEL 254
 #define TORCH_TRIGGER_SETTING "flashlight-trigger" // matches DTS in kernel
 
 #define TORCH_FLASHLIGHT_PATH(file) "/sys/class/leds/flashlight/" file
@@ -96,7 +100,7 @@ int32_t getTorchDefaultStrengthLevelExt() {
 
 int32_t getTorchMaxStrengthLevelExt() {
     auto node = TORCH_MAX_BRIGHTNESS_PATH;
-    return readValue(node, 0);
+    return std::min(readValue(node, 0), TORCH_DEFAULT_MAX_STRENGTH_LEVEL);
 }
 
 int32_t getTorchStrengthLevelExt() {
