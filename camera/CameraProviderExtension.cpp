@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <fstream>
 #include <optional>
+
+// #define LOG_NDEBUG 0
 #include <log/log.h>
 
 namespace {
@@ -34,6 +36,13 @@ namespace {
 #define TORCH_BRIGHTNESS_PATH TORCH_FLASHLIGHT_PATH("brightness")
 #define TORCH_MAX_BRIGHTNESS_PATH TORCH_FLASHLIGHT_PATH("max_brightness")
 #define TORCH_TRIGGER_SETTING_PATH TORCH_FLASHLIGHT_PATH("trigger")
+
+const uint8_t torchStepsToStrengthMap[] = {
+    16, 29, 42, 54, 67, 80, 92, 105, 118, 131, 143, 156, 169, 181, 194,
+    TORCH_DEFAULT_STRENGTH_LEVEL, 215, 228, 241,
+    TORCH_DEFAULT_MAX_STRENGTH_LEVEL
+};
+#define TORCH_MAX_STRENGTH_STEPS std::size(torchStepsToStrengthMap)
 
 /**
  * Write value to path and close file.
@@ -84,6 +93,21 @@ bool isTorchTriggeringAllowed() {
     }).has_value();
 }
 
+int32_t getTorchMaxStrengthLevel() {
+    auto node = TORCH_MAX_BRIGHTNESS_PATH;
+    return std::min(readValue(node, 0), TORCH_DEFAULT_MAX_STRENGTH_LEVEL);
+}
+
+int32_t getTorchStepSize() {
+    const auto max = getTorchMaxStrengthLevel();
+    return max / TORCH_MAX_STRENGTH_STEPS;
+}
+
+inline int32_t convertStrengthLevelToSteps(int32_t torchStrength) {
+    // NOTE: round up to match the UI slider interpolation
+    return std::round(torchStrength / getTorchStepSize());
+}
+
 } // namespace
 
 bool supportsTorchStrengthControlExt() {
@@ -94,21 +118,22 @@ bool supportsTorchStrengthControlExt() {
 }
 
 int32_t getTorchDefaultStrengthLevelExt() {
-    const int32_t max = getTorchMaxStrengthLevelExt();
-    return std::min(TORCH_DEFAULT_STRENGTH_LEVEL, max);
+    const int32_t max = getTorchMaxStrengthLevel();
+    const auto torchStrength = std::min(TORCH_DEFAULT_STRENGTH_LEVEL, max);
+    return convertStrengthLevelToSteps(torchStrength);
 }
 
 int32_t getTorchMaxStrengthLevelExt() {
-    auto node = TORCH_MAX_BRIGHTNESS_PATH;
-    return std::min(readValue(node, 0), TORCH_DEFAULT_MAX_STRENGTH_LEVEL);
+    return TORCH_MAX_STRENGTH_STEPS;
 }
 
 int32_t getTorchStrengthLevelExt() {
     auto node = TORCH_BRIGHTNESS_PATH;
-    return readValue(node, 0);
+    const auto torchStrength = readValue(node, 0);
+    return convertStrengthLevelToSteps(torchStrength);
 }
 
-void setTorchStrengthLevelExt(int32_t torchStrength, bool enabled) {
+void setTorchStrengthLevelExt(int32_t steps, bool enabled) {
     if (!isTorchTriggeringAllowed()) {
         ALOGW("%s: triggering torch has been disabled in driver.",
                 __FUNCTION__);
@@ -123,7 +148,10 @@ void setTorchStrengthLevelExt(int32_t torchStrength, bool enabled) {
     // is only for cleanups and restoring purposes anyways..
     if (enabled) {
         auto node = TORCH_BRIGHTNESS_PATH;
-        const auto state = writeValue(node, torchStrength);
+        const auto torchStrength = torchStepsToStrengthMap[steps - 1];
+        ALOGV("%s: steps=%d, enabled=%d, torchStrength=%d.", __FUNCTION__,
+                steps, enabled, torchStrength);
+        const auto state = writeValue(node, std::to_string(torchStrength));
         if (state != std::ios_base::goodbit) {
             ALOGE("%s: I/O Error: %d.", __FUNCTION__, state);
         }
