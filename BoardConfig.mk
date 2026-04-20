@@ -138,7 +138,8 @@ TARGET_KERNEL_CONFIG := \
     vendor/xiaomi/msm8937/common.config \
     vendor/xiaomi/msm8937/mi8917.config \
     vendor/feature/exfat.config \
-    vendor/feature/ntfs.config
+    vendor/feature/ntfs.config \
+    vendor/feature/panic_indicator.config
 ifndef BUILD_RECOVERY_KERNEL
 TARGET_KERNEL_CONFIG += \
     vendor/debugfs.config \
