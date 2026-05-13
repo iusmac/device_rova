@@ -99,10 +99,15 @@
     <string name="smart_charging_current_max_entry_2000">2000 mA</string>
     <string name="smart_charging_current_max_entry_1800">1800 mA</string>
     <string name="smart_charging_current_max_entry_1500">1500 mA</string>
+    <string name="smart_charging_current_max_entry_1300">1300 mA</string>
     <string name="smart_charging_current_max_entry_1200">1200 mA</string>
     <string name="smart_charging_current_max_entry_1000">1000 mA</string>
+    <string name="smart_charging_current_max_entry_900">900 mA (USB 3.0)</string>
     <string name="smart_charging_current_max_entry_700">700 mA</string>
-    <string name="smart_charging_current_max_entry_500">500 mA</string>
+    <string name="smart_charging_current_max_entry_600">600 mA</string>
+    <string name="smart_charging_current_max_entry_500">500 mA (USB 2.0)</string>
+    <string name="smart_charging_current_max_entry_450">450 mA</string>
+    <string name="smart_charging_current_max_entry_300">300 mA</string>
     <string name="smart_charging_reset_stats_title">Reset battery stats</string>
     <string name="smart_charging_reset_stats_summary">Reset battery statistics after reaching user defined charging level</string>
     <string name="smart_charging_notif_disabled_title">Disable notification</string>

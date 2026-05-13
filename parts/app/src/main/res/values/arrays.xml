@@ -116,10 +116,15 @@
         <item>@string/smart_charging_current_max_entry_2000</item>
         <item>@string/smart_charging_current_max_entry_1800</item>
         <item>@string/smart_charging_current_max_entry_1500</item>
+        <item>@string/smart_charging_current_max_entry_1300</item>
         <item>@string/smart_charging_current_max_entry_1200</item>
         <item>@string/smart_charging_current_max_entry_1000</item>
+        <item>@string/smart_charging_current_max_entry_900</item>
         <item>@string/smart_charging_current_max_entry_700</item>
+        <item>@string/smart_charging_current_max_entry_600</item>
         <item>@string/smart_charging_current_max_entry_500</item>
+        <item>@string/smart_charging_current_max_entry_450</item>
+        <item>@string/smart_charging_current_max_entry_300</item>
     </string-array>
 
     <string-array name="smartcharging_current_values">
@@ -127,10 +132,15 @@
         <item>"2000000"</item>
         <item>"1800000"</item>
         <item>"1500000"</item>
+        <item>"1300000"</item>
         <item>"1200000"</item>
         <item>"1000000"</item>
+        <item>"900000"</item>
         <item>"700000"</item>
+        <item>"600000"</item>
         <item>"500000"</item>
+        <item>"450000"</item>
+        <item>"300000"</item>
     </string-array>
 
     <!-- RAM+ -->
