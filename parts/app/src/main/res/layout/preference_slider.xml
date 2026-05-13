@@ -55,8 +55,8 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <SeekBar
-            android:id="@+id/seekbar"
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/title"
@@ -65,6 +65,8 @@
             android:layout_toEndOf="@+id/selected_value"
             android:gravity="center"
             android:paddingStart="8dp"
-            android:paddingEnd="8dp" />
+            android:paddingEnd="8dp"
+            android:theme="@style/Theme.Material3.DayNight"
+            style="@style/SettingslibSliderStyle.Expressive" />
     </RelativeLayout>
 </FrameLayout>

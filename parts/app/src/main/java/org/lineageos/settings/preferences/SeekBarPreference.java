@@ -22,12 +22,13 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.core.content.res.TypedArrayUtils;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
+
+import com.google.android.material.slider.Slider;
 
 import org.lineageos.settings.PartsUtils;
 import org.lineageos.settings.R;
@@ -36,7 +37,8 @@ import static org.lineageos.settings.BuildConfig.DEBUG;
 
 @SuppressLint("RestrictedApi")
 public class SeekBarPreference extends Preference
-        implements SeekBar.OnSeekBarChangeListener,
+        implements Slider.OnChangeListener,
+                   Slider.OnSliderTouchListener,
                    View.OnClickListener, View.OnLongClickListener {
     private final String TAG = getClass().getName();
 
@@ -53,7 +55,7 @@ public class SeekBarPreference extends Preference
     protected int mValue;
 
     protected TextView mValueTextView;
-    protected SeekBar mSeekBar;
+    protected Slider mSlider;
 
     protected boolean mTrackingTouch = false;
     protected int mTrackingValue;
@@ -91,7 +93,7 @@ public class SeekBarPreference extends Preference
             defaultValueId = androidx.preference.R.styleable.Preference_android_defaultValue;
         }
         mDefaultValue = a.getInt(defaultValueId, mMinValue);
-        mDefaultValue = mValue = getLimitedValue(mDefaultValue);
+        mValue = mDefaultValue;
         a.recycle();
 
         a = context.obtainStyledAttributes(attrs,
@@ -122,27 +124,23 @@ public class SeekBarPreference extends Preference
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
-        mSeekBar = (SeekBar) holder.findViewById(R.id.seekbar);
-        mSeekBar.setMin(getSeekValue(mMinValue));
-        mSeekBar.setMax(getSeekValue(mMaxValue));
-        mSeekBar.setProgress(getSeekValue(mValue));
-        mSeekBar.setEnabled(isEnabled());
+        mSlider = (Slider) holder.findViewById(R.id.slider);
+        mSlider.setValueFrom(mMinValue);
+        mSlider.setValueTo(mMaxValue);
+        mSlider.setValue(mValue);
+        mSlider.setEnabled(isEnabled());
+        if (mInterval != 0) {
+            mSlider.setStepSize(mInterval);
+        }
 
         mValueTextView = (TextView) holder.findViewById(R.id.selected_value);
 
         updateValueViews();
 
-        mSeekBar.setOnSeekBarChangeListener(this);
+        mSlider.addOnChangeListener(this);
+        mSlider.addOnSliderTouchListener(this);
         mValueTextView.setOnClickListener(this);
         mValueTextView.setOnLongClickListener(this);
-    }
-
-    protected int getLimitedValue(int v) {
-        return v < mMinValue ? mMinValue : (v > mMaxValue ? mMaxValue : v);
-    }
-
-    protected int getSeekValue(int v) {
-        return 0 - Math.floorDiv(mMinValue - v, mInterval);
     }
 
     protected String getTextValue(int v) {
@@ -161,15 +159,15 @@ public class SeekBarPreference extends Preference
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        int newValue = getLimitedValue(mMinValue + (progress * mInterval));
+    public void onValueChange(Slider slider, float value, boolean fromUser) {
+        int newValue = (int) value;
         if (mTrackingTouch && !mContinuousUpdates) {
             mTrackingValue = newValue;
             updateValueViews();
         } else if (mValue != newValue) {
             // change rejected, revert to the previous value
             if (!callChangeListener(newValue)) {
-                mSeekBar.setProgress(getSeekValue(mValue));
+                mSlider.setValue(mValue);
                 return;
             }
             // change accepted, store it
@@ -182,16 +180,16 @@ public class SeekBarPreference extends Preference
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
+    public void onStartTrackingTouch(Slider slider) {
         mTrackingValue = mValue;
         mTrackingTouch = true;
     }
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
+    public void onStopTrackingTouch(Slider slider) {
         mTrackingTouch = false;
         if (!mContinuousUpdates) {
-            onProgressChanged(mSeekBar, getSeekValue(mTrackingValue), false);
+            onValueChange(mSlider, mTrackingValue, false);
         }
         notifyChanged();
     }
@@ -221,7 +219,6 @@ public class SeekBarPreference extends Preference
     }
 
     public void setDefaultValue(int newValue, boolean update) {
-        newValue = getLimitedValue(newValue);
         if (mDefaultValue != newValue) {
             mDefaultValue = newValue;
             if (update)
@@ -232,8 +229,8 @@ public class SeekBarPreference extends Preference
     public void setMax(int max) {
         if (mMaxValue != max) {
             mMaxValue = max;
-            if (mSeekBar != null) {
-                mSeekBar.setMax(mMaxValue - mMinValue);
+            if (mSlider != null) {
+                mSlider.setValueTo(max);
             }
         }
     }
@@ -241,24 +238,25 @@ public class SeekBarPreference extends Preference
     public void setMin(int min) {
         if (mMinValue != min) {
             mMinValue = min;
-            if (mSeekBar != null) {
-                mSeekBar.setMax(mMaxValue - mMinValue);
+            if (mSlider != null) {
+                mSlider.setValueFrom(min);
             }
         }
     }
 
     public void setValue(int newValue) {
-        mValue = getLimitedValue(newValue);
-        if (mSeekBar != null) {
-            mSeekBar.setProgress(getSeekValue(mValue));
+        mValue = newValue;
+        if (mSlider != null) {
+            mSlider.setValue(mValue);
         }
     }
 
     public void setValue(int newValue, boolean update) {
-        newValue = getLimitedValue(newValue);
         if (mValue != newValue) {
             if (update) {
-                mSeekBar.setProgress(getSeekValue(newValue));
+                if (mSlider != null) {
+                    mSlider.setValue(newValue);
+                }
             } else {
                 mValue = newValue;
             }
@@ -278,6 +276,6 @@ public class SeekBarPreference extends Preference
 
     public void refresh(int newValue) {
         // this will ...
-        setValue(newValue, mSeekBar != null);
+        setValue(newValue, mSlider != null);
     }
 }
