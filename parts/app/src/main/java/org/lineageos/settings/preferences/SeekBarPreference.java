@@ -124,11 +124,15 @@ public class SeekBarPreference extends Preference
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
+        // SeekBarPreference is not clickable under normal conditions.
+        holder.itemView.setClickable(false);
+
         mSlider = (Slider) holder.findViewById(R.id.slider);
         mSlider.setValueFrom(mMinValue);
         mSlider.setValueTo(mMaxValue);
         mSlider.setValue(mValue);
         mSlider.setEnabled(isEnabled());
+        mSlider.setClickable(isSelectable());
         if (mInterval != 0) {
             mSlider.setStepSize(mInterval);
         }
