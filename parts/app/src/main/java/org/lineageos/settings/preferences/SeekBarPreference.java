@@ -28,6 +28,7 @@ import androidx.core.content.res.TypedArrayUtils;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
+import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.Slider;
 
 import org.lineageos.settings.PartsUtils;
@@ -60,6 +61,9 @@ public class SeekBarPreference extends Preference
     protected boolean mTrackingTouch = false;
     protected int mTrackingValue;
 
+    // Whether to show the Slider value TextView next to the bar
+    private boolean mShowSliderValue;
+
     public SeekBarPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
@@ -85,6 +89,9 @@ public class SeekBarPreference extends Preference
 
         a = context.obtainStyledAttributes(attrs, androidx.preference.R.styleable.Preference,
                 defStyleAttr, defStyleRes);
+
+        mShowSliderValue = a.getBoolean(
+                androidx.preference.R.styleable.SeekBarPreference_showSeekBarValue, false);
 
         final int defaultValueId;
         if (a.hasValue(androidx.preference.R.styleable.Preference_defaultValue)) {
@@ -136,6 +143,11 @@ public class SeekBarPreference extends Preference
         if (mInterval != 0) {
             mSlider.setStepSize(mInterval);
         }
+        if (mShowSliderValue) {
+            mSlider.setLabelBehavior(LabelFormatter.LABEL_FLOATING);
+        } else {
+            mSlider.setLabelBehavior(LabelFormatter.LABEL_GONE);
+        }
 
         mValueTextView = (TextView) holder.findViewById(R.id.selected_value);
 
@@ -143,6 +155,7 @@ public class SeekBarPreference extends Preference
 
         mSlider.addOnChangeListener(this);
         mSlider.addOnSliderTouchListener(this);
+        mSlider.setLabelFormatter((value) -> getTextValue((int) value));
         mValueTextView.setOnClickListener(this);
         mValueTextView.setOnLongClickListener(this);
     }
@@ -273,6 +286,13 @@ public class SeekBarPreference extends Preference
 
     public int getDefaultValue() {
         return mDefaultValue;
+    }
+
+    public void setShowSliderValue(final boolean showSliderValue) {
+        if (showSliderValue != mShowSliderValue) {
+            mShowSliderValue = showSliderValue;
+            notifyChanged();
+        }
     }
 
     // need some methods here to set/get other attrs at runtime,
