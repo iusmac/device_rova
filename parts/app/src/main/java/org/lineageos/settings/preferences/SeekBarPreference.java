@@ -16,6 +16,7 @@
 
 package org.lineageos.settings.preferences;
 
+import android.annotation.IntDef;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -35,6 +36,12 @@ import com.google.android.material.slider.TickVisibilityMode;
 import org.lineageos.settings.PartsUtils;
 import org.lineageos.settings.R;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import static android.view.HapticFeedbackConstants.SCROLL_LIMIT;
+import static android.view.HapticFeedbackConstants.SEGMENT_FREQUENT_TICK;
+
 import static org.lineageos.settings.BuildConfig.DEBUG;
 
 @SuppressLint("RestrictedApi")
@@ -44,12 +51,25 @@ public class SeekBarPreference extends Preference
                    View.OnClickListener, View.OnLongClickListener {
     private final String TAG = getClass().getName();
 
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef(flag = true, value = {
+        HAPTIC_FEEDBACK_MODE_NONE,
+        HAPTIC_FEEDBACK_MODE_ON_TICKS,
+        HAPTIC_FEEDBACK_MODE_ON_ENDS,
+    })
+    @interface HapticFeedbackMode {}
+    public static final int HAPTIC_FEEDBACK_MODE_NONE = 0;
+    public static final int HAPTIC_FEEDBACK_MODE_ON_TICKS = 1 << 0;
+    public static final int HAPTIC_FEEDBACK_MODE_ON_ENDS = 1 << 1;
+
     private Context mContext;
 
     protected int mInterval = 1;
     protected String mUnits = "";
     protected boolean mContinuousUpdates = false;
     protected boolean mTickVisible;
+    protected @HapticFeedbackMode int mHapticFeedbackMode =
+        HAPTIC_FEEDBACK_MODE_ON_TICKS | HAPTIC_FEEDBACK_MODE_ON_ENDS;
 
     protected int mMinValue = 1;
     protected int mMaxValue = 256;
@@ -149,6 +169,7 @@ public class SeekBarPreference extends Preference
                     ? TickVisibilityMode.TICK_VISIBILITY_AUTO_LIMIT
                     : TickVisibilityMode.TICK_VISIBILITY_HIDDEN);
         }
+        setHapticFeedbackMode(mHapticFeedbackMode);
         if (mShowSliderValue) {
             mSlider.setLabelBehavior(LabelFormatter.LABEL_FLOATING);
         } else {
@@ -184,6 +205,14 @@ public class SeekBarPreference extends Preference
     @Override
     public void onValueChange(Slider slider, float value, boolean fromUser) {
         int newValue = (int) value;
+        if (mTrackingTouch) {
+            if ((mHapticFeedbackMode & HAPTIC_FEEDBACK_MODE_ON_ENDS) != 0
+                    && (newValue == mMinValue || newValue == mMaxValue)) {
+                mSlider.performHapticFeedback(SCROLL_LIMIT);
+            } else if ((mHapticFeedbackMode & HAPTIC_FEEDBACK_MODE_ON_TICKS) != 0) {
+                mSlider.performHapticFeedback(SEGMENT_FREQUENT_TICK);
+            }
+        }
         if (mTrackingTouch && !mContinuousUpdates) {
             mTrackingValue = newValue;
             updateValueViews();
@@ -305,6 +334,13 @@ public class SeekBarPreference extends Preference
         if (tickVisible != mTickVisible) {
             mTickVisible = tickVisible;
             notifyChanged();
+        }
+    }
+
+    public void setHapticFeedbackMode(final @HapticFeedbackMode int hapticFeedbackMode) {
+        mHapticFeedbackMode = hapticFeedbackMode;
+        if (mSlider != null) {
+            mSlider.setHapticFeedbackEnabled(hapticFeedbackMode != HAPTIC_FEEDBACK_MODE_NONE);
         }
     }
 
