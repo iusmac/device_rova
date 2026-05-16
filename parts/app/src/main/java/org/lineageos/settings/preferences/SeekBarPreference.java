@@ -30,6 +30,7 @@ import androidx.preference.PreferenceViewHolder;
 
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.Slider;
+import com.google.android.material.slider.TickVisibilityMode;
 
 import org.lineageos.settings.PartsUtils;
 import org.lineageos.settings.R;
@@ -48,6 +49,7 @@ public class SeekBarPreference extends Preference
     protected int mInterval = 1;
     protected String mUnits = "";
     protected boolean mContinuousUpdates = false;
+    protected boolean mTickVisible;
 
     protected int mMinValue = 1;
     protected int mMaxValue = 256;
@@ -76,6 +78,7 @@ public class SeekBarPreference extends Preference
         }
         mContinuousUpdates = a.getBoolean(R.styleable.SeekBarPreference_continuousUpdates, mContinuousUpdates);
         mInterval = a.getInt(R.styleable.SeekBarPreference_interval, mInterval);
+        mTickVisible = mInterval != 0;
         a.recycle();
 
         a = context.obtainStyledAttributes(attrs,
@@ -142,6 +145,9 @@ public class SeekBarPreference extends Preference
         mSlider.setClickable(isSelectable());
         if (mInterval != 0) {
             mSlider.setStepSize(mInterval);
+            mSlider.setTickVisibilityMode(mTickVisible
+                    ? TickVisibilityMode.TICK_VISIBILITY_AUTO_LIMIT
+                    : TickVisibilityMode.TICK_VISIBILITY_HIDDEN);
         }
         if (mShowSliderValue) {
             mSlider.setLabelBehavior(LabelFormatter.LABEL_FLOATING);
@@ -291,6 +297,13 @@ public class SeekBarPreference extends Preference
     public void setShowSliderValue(final boolean showSliderValue) {
         if (showSliderValue != mShowSliderValue) {
             mShowSliderValue = showSliderValue;
+            notifyChanged();
+        }
+    }
+
+    public void setTickVisible(final boolean tickVisible) {
+        if (tickVisible != mTickVisible) {
+            mTickVisible = tickVisible;
             notifyChanged();
         }
     }
