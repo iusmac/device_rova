@@ -39,6 +39,8 @@ import org.lineageos.settings.R;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import static android.view.HapticFeedbackConstants.CONFIRM;
+import static android.view.HapticFeedbackConstants.REJECT;
 import static android.view.HapticFeedbackConstants.SCROLL_LIMIT;
 import static android.view.HapticFeedbackConstants.SEGMENT_FREQUENT_TICK;
 
@@ -56,11 +58,13 @@ public class SeekBarPreference extends Preference
         HAPTIC_FEEDBACK_MODE_NONE,
         HAPTIC_FEEDBACK_MODE_ON_TICKS,
         HAPTIC_FEEDBACK_MODE_ON_ENDS,
+        HAPTIC_FEEDBACK_MODE_ON_RESULT_VALIDATION,
     })
     @interface HapticFeedbackMode {}
     public static final int HAPTIC_FEEDBACK_MODE_NONE = 0;
     public static final int HAPTIC_FEEDBACK_MODE_ON_TICKS = 1 << 0;
     public static final int HAPTIC_FEEDBACK_MODE_ON_ENDS = 1 << 1;
+    public static final int HAPTIC_FEEDBACK_MODE_ON_RESULT_VALIDATION = 1 << 2;
 
     private Context mContext;
 
@@ -69,7 +73,8 @@ public class SeekBarPreference extends Preference
     protected boolean mContinuousUpdates = false;
     protected boolean mTickVisible;
     protected @HapticFeedbackMode int mHapticFeedbackMode =
-        HAPTIC_FEEDBACK_MODE_ON_TICKS | HAPTIC_FEEDBACK_MODE_ON_ENDS;
+        HAPTIC_FEEDBACK_MODE_ON_TICKS | HAPTIC_FEEDBACK_MODE_ON_ENDS |
+        HAPTIC_FEEDBACK_MODE_ON_RESULT_VALIDATION;
 
     protected int mMinValue = 1;
     protected int mMaxValue = 256;
@@ -219,8 +224,14 @@ public class SeekBarPreference extends Preference
         } else if (mValue != newValue) {
             // change rejected, revert to the previous value
             if (!callChangeListener(newValue)) {
+                if ((mHapticFeedbackMode & HAPTIC_FEEDBACK_MODE_ON_RESULT_VALIDATION) != 0) {
+                    mSlider.performHapticFeedback(REJECT);
+                }
                 mSlider.setValue(mValue);
                 return;
+            }
+            if ((mHapticFeedbackMode & HAPTIC_FEEDBACK_MODE_ON_RESULT_VALIDATION) != 0) {
+                mSlider.performHapticFeedback(CONFIRM);
             }
             // change accepted, store it
             changeValue(newValue);
