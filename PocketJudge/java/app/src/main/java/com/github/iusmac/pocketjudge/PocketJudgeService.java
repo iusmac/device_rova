@@ -232,8 +232,6 @@ public class PocketJudgeService extends Hilt_PocketJudgeService {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 if (DEBUG) Log.d(TAG, "Receiving screen intent: ACTION_SCREEN_ON.");
 
-                mLastAction = EVENT_TURN_ON_SCREEN;
-
                 if (!mKeyguardManagerProvider.get().isKeyguardLocked()
                         || mLastAction == EVENT_UNLOCK) {
                     if (DEBUG) Log.d(TAG, "ACTION_SCREEN_ON: Screen is on but no keyguard. " +
@@ -241,6 +239,8 @@ public class PocketJudgeService extends Hilt_PocketJudgeService {
                 } else {
                     enableSensor();
                 }
+
+                mLastAction = EVENT_TURN_ON_SCREEN;
 
                 // Disable force wake screen with volume keys if the user
                 // doesn't want it
