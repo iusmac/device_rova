@@ -95,6 +95,9 @@ genfscon sysfs /devices/platform/soc/200f000.qcom,spmi/spmi-0/spmi0-00/200f000.q
 genfscon sysfs /devices/platform/soc/200f000.qcom,spmi/spmi-0/spmi0-01/200f000.qcom,spmi:qcom,pm8937@1:anlg-cdc@f000/msm_digital_codec/wakeup/wakeup	u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/200f000.qcom,spmi/spmi-0/spmi0-01/200f000.qcom,spmi:qcom,pm8937@1:anlg-cdc@f000/wakeup/wakeup			u:object_r:sysfs_wakeup:s0
 
+# Wakeup (flashlight)
+genfscon sysfs /devices/platform/soc/soc:flashlight/wakeup         u:object_r:sysfs_wakeup:s0
+
 # XiaomiParts (Sound-Control nodes)
 genfscon sysfs /kernel/sound_control/headphone_gain                u:object_r:sysfs_shgain:s0
 genfscon sysfs /kernel/sound_control/mic_gain                      u:object_r:sysfs_mgain:s0
