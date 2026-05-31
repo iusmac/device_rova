@@ -11,6 +11,7 @@
 # santoni Package version: santoni-user 7.1.2 N2G47H V11.0.2.0.NAMMIXM release-keys
 # sweet Package version: Redmi/sweet_global/sweet:12/SKQ1.210908.001/V13.0.3.0.SKFMIXM:user/release-keys
 # umi Package version: umi-user 13 RKQ1.211001.001 V14.0.5.0.TJBMIXM release-keys
+# OnePlus3 Package version: OnePlus3-user 9 PKQ1.181203.001 1911042108 release-keys
 
 # ACDB - from riva (Oreo)
 vendor/etc/acdbdata/QRD/QRD_Bluetooth_cal.acdb
@@ -1176,7 +1177,7 @@ system_ext/framework/uimremoteserverlibrary.jar
 vendor/etc/sensors/hals.conf
 -vendor/lib/libsensor1.so;DISABLE_DEPS
 
-# Sensors (SSC) - from daisy
+# Sensors (SSC) - from OnePlus3
 -vendor/lib64/libsensor_reg.so;DISABLE_DEPS
 -vendor/lib64/sensors.ssc.so;DISABLE_DEPS
 -vendor/lib64/libsensor1.so;DISABLE_DEPS
