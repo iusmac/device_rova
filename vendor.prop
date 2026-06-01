@@ -243,6 +243,8 @@ vendor.rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
 # Sensors
 persist.vendor.debug.sensors.hal=i
 ro.vendor.sensors.smd=false
+ro.vendor.sensors.pocket=false
+ro.vendor.sensors.pickup=false
 
 # SurfaceFlinger
 debug.sf.layer_caching_active_layer_timeout_ms=1000
