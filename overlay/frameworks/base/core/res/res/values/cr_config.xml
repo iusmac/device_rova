@@ -18,12 +18,6 @@
     <!-- Pocket Lock -->
     <bool name="config_pocketModeSupported">false</bool>
 
-    <!-- Whether device supports sensor based doze customizations -->
-    <bool name="config_dozePulsePickup">true</bool>
-    <bool name="config_dozePulseTilt">true</bool>
-    <bool name="config_dozePulseProximity">true</bool>
-    <bool name="config_deviceHaveWakeUpProximity">true</bool>
-
     <!-- Vibrator pattern for feedback meant to replicate soft ticks (feels like texture underneath
          the user's fingers), in gestures called repeatedly (such as dragging a slider thumb).
 
