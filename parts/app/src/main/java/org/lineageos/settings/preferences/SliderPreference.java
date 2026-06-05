@@ -8,8 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceViewHolder;
 
+import static com.android.settingslib.widget.SliderPreference.HAPTIC_FEEDBACK_MODE_NONE;
+
 public class SliderPreference extends com.android.settingslib.widget.SliderPreference {
     private CharSequence mTextEnd;
+    private int mHapticFeedbackMode = HAPTIC_FEEDBACK_MODE_NONE;
 
     public SliderPreference(@NonNull Context context, @Nullable AttributeSet attrs,
             int defStyleAttr) {
@@ -49,9 +52,25 @@ public class SliderPreference extends com.android.settingslib.widget.SliderPrefe
         if (endText != null && mTextEnd != null) {
             endText.setText(mTextEnd);
         }
+
+        applyHapticFeedbackMode();
     }
 
     public void setEndText(final @Nullable CharSequence text) {
         mTextEnd = text == null ? "" : text;
+    }
+
+    @Override
+    public void setHapticFeedbackMode(int hapticFeedbackMode) {
+        mHapticFeedbackMode = hapticFeedbackMode;
+        applyHapticFeedbackMode();
+    }
+
+    private void applyHapticFeedbackMode() {
+        final var slider = getSlider();
+        if (slider != null) {
+            slider.setHapticFeedbackEnabled(mHapticFeedbackMode != HAPTIC_FEEDBACK_MODE_NONE);
+        }
+        super.setHapticFeedbackMode(mHapticFeedbackMode);
     }
 }
