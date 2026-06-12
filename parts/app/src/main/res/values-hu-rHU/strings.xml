@@ -97,6 +97,32 @@
     <string name="jitter_test_summary">A renderelési jitter kiszámítása</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"A Low Memory Killer agresszivitásának szabályozása"</string>
+    <string name="ramplus_current_mode">"Aktuális mód"</string>
+    <string name="ramplus_mode_settings">"Módbeállítások"</string>
+    <string name="ramplus_about"><![CDATA[
+        A RAM+ lehetővé teszi a Low Memory Killer (LMK) agresszivitásának szabályozását az Ön személyes igényei szerint bármikor. Válasszon az alábbi három mód közül:
+        <h6>1. Mérsékelt (Kiegyensúlyozott - Alapértelmezett)</h6>
+        Az LMK a szokásos módon szabadít fel erőforrásokat, lehetővé téve néhány közepes/nagy méretű alkalmazás futtatását az előtérben.
+        <ul>
+            <li><b>Előnyök</b>: megfelelő többfeladatos munkavégzés (multitasking), optimális teljesítmény és kiegyensúlyozott akkumulátor-használat.</li>
+            <li><b>Hátrányok</b>: nem biztos, hogy alkalmas az erőforrás-igényes multitaskingra vagy a rendszer kiemelkedő válaszidejére.</li>
+        </ul>
+        <br>
+        <h6>2. Enyhe (Agresszív alkalmazásmegtartás)</h6>
+        Az LMK ritkán szabadít fel erőforrásokat, így sok közepes/nagy méretű alkalmazás futhat egyidejűleg az előtérben.
+        <ul>
+            <li><b>Előnyök</b>: a legjobb multitasking, vagy ideális egyetlen nagyigényű feladat/alkalmazás futtatásához.</li>
+            <li><b>Hátrányok</b>: megnövekedett akkumulátor-fogyasztás és romló teljesítmény a rendszer esetleges túlterheltsége (thrashing) miatt.</li>
+        </ul>
+        <br>
+        <h6>3. Extrém (Agresszív erőforrás-felszabadítás)</h6>
+        Az LMK gyakran szabadít fel erőforrásokat, így csak nagyon kevés közepes/nagy méretű alkalmazás futhat az előtérben.
+        <ul>
+            <li><b>Előnyök</b>: gyors válaszidő, jó teljesítmény és alacsony energiafogyasztás.</li>
+            <li><b>Hátrányok</b>: némileg gyengébb multitasking a Mérsékelt módhoz képest.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Mérsékelt</string>
     <string name="ramplus_mode_slight">Enyhe</string>
     <string name="ramplus_mode_extreme">Extrém</string>

@@ -97,6 +97,32 @@
     <string name="jitter_test_summary">Calcular jitter</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Controlar a agressividade do Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Modo atual"</string>
+    <string name="ramplus_mode_settings">"Configurações de modo"</string>
+    <string name="ramplus_about"><![CDATA[
+        O RAM+ permite manipular a agressividade do Low Memory Killer (LMK) de acordo com suas necessidades pessoais a qualquer momento. Escolha entre os três modos a seguir:
+        <h6>1. Moderado (Equilibrado - Padrão)</h6>
+        O LMK recupera recursos como de costume, permitindo que alguns aplicativos de médio/grande porte rodem em primeiro plano.
+        <ul>
+            <li><b>Prós</b>: multitarefa decente, desempenho ideal e uso equilibrado da bateria.</li>
+            <li><b>Contras</b>: pode não ser adequado para multitarefa exigente ou alta capacidade de resposta do sistema.</li>
+        </ul>
+        <br>
+        <h6>2. Leve (Retenção agressiva de apps)</h6>
+        O LMK raramente recupera recursos, permitindo que muitos aplicativos de médio/grande porte rodem em primeiro plano.
+        <ul>
+            <li><b>Prós</b>: melhor multitarefa ou execução de uma única tarefa/app pesado.</li>
+            <li><b>Contras</b>: maior consumo de bateria e degradação do desempenho devido ao travamento aleatório do sistema (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extremo (Recuperação agressiva de recursos)</h6>
+        O LMK recupera recursos com frequência, permitindo que pouquíssimos aplicativos de médio/grande porte rodem em primeiro plano.
+        <ul>
+            <li><b>Prós</b>: alta capacidade de resposta, bom desempenho e baixo consumo de energia.</li>
+            <li><b>Contras</b>: multitarefa ligeiramente pior em comparação com o modo Moderado.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Moderado</string>
     <string name="ramplus_mode_slight">Leve</string>
     <string name="ramplus_mode_extreme">Extremo</string>

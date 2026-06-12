@@ -96,6 +96,32 @@
     <string name="jitter_test_summary">レンダリングジッターを計算する</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Low Memory Killer の攻撃性を制御する"</string>
+    <string name="ramplus_current_mode">"現在のモード"</string>
+    <string name="ramplus_mode_settings">"モード設定"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ を使用すると、いつでも個人のニーズに応じて Low Memory Killer (LMK) の攻撃性を調整できます。次の3つのモードから選択してください：
+        <h6>1. 標準（バランス - デフォルト）</h6>
+        LMKは通常通りリソースを回収し、いくつかの中・大型アプリをフォアグラウンドで実行できるようにします。
+        <ul>
+            <li><b>メリット</b>: 適度なマルチタスク、最適なパフォーマンス、バランスの取れたバッテリー消費。</li>
+            <li><b>デメリット</b>: 高負荷なマルチタスクや、極めて高いシステム応答性が求められる環境には適さない場合があります。</li>
+        </ul>
+        <br>
+        <h6>2. 軽微（積極的なアプリ保持）</h6>
+        LMKはほとんどリソースを回収せず、多くの中・大型アプリをフォアグラウンドで実行し続けます。
+        <ul>
+            <li><b>メリット</b>: 最高のマルチタスク性能、または単一の重いタスク/アプリの実行に最適。</li>
+            <li><b>デメリット</b>: ランダムなシステムスラッシング（過負荷）により、バッテリー消費が増加し、パフォーマンスが低下する可能性があります。</li>
+        </ul>
+        <br>
+        <h6>3. 重度（積極的なリソース回収）</h6>
+        LMKは頻繁にリソースを回収し、フォアグラウンドで実行できる中・大型アプリの数を厳しく制限します。
+        <ul>
+            <li><b>メリット</b>: 高い応答性、優れたパフォーマンス、および低い消費電力。</li>
+            <li><b>デメリット</b>: 標準モードに比べてマルチタスク性能がわずかに低下します。</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">標準</string>
     <string name="ramplus_mode_slight">弱い</string>
     <string name="ramplus_mode_extreme">強い</string>

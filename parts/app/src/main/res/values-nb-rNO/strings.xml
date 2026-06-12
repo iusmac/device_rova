@@ -66,6 +66,32 @@
     <string name="next_update_time">Neste oppdatering om %1$s</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Kontroller Low Memory Killer-aggresivitet"</string>
+    <string name="ramplus_current_mode">"Gjeldende modus"</string>
+    <string name="ramplus_mode_settings">"Modusinnstillinger"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ lar deg justere aggressiviteten til Low Memory Killer (LMK) i henhold til dine personlige behov når som helst. Velg mellom følgende tre moduser:
+        <h6>1. Moderat (Balansert - Standard)</h6>
+        LMK frigjør ressurser som normalt, noe som lar noen få mellomstore/store apper kjøre i forgrunnen.
+        <ul>
+            <li><b>Fordeler</b>: Ganske bra multitasking, optimal ytelse og balansert batteribruk.</li>
+            <li><b>Ulemper</b>: Er kanskje ikke egnet for krevende multitasking eller ekstremt rask systemrespons.</li>
+        </ul>
+        <br>
+        <h6>2. Lett (Aggressiv app-bevaring)</h6>
+        LMK frigjør sjeldent ressurser, noe som lar mange mellomstore/store apper kjøre i forgrunnen.
+        <ul>
+            <li><b>Fordeler</b>: Beste multitasking eller kjøring av én enkelt tung oppgave/app.</li>
+            <li><b>Ulemper</b>: Økt batteriforbruk og redusert ytelse på grunn av tilfeldig system-thrashing.</li>
+        </ul>
+        <br>
+        <h6>3. Ekstrem (Aggressiv ressursfrigjøring)</h6>
+        LMK frigjør ressurser hyppig, noe som lar svært få mellomstore/store apper kjøre i forgrunnen.
+        <ul>
+            <li><b>Fordeler</b>: Høy responstid, god ytelse og lavt strømforbruk.</li>
+            <li><b>Ulemper</b>: Litt dårligere multitasking sammenlignet med Moderat modus.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Moderat</string>
     <string name="ramplus_mode_slight">Liten</string>
     <string name="ramplus_mode_extreme">Ekstrem</string>

@@ -85,6 +85,32 @@
     <string name="not_now">"Niet nu"</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Aggressiviteit van Low Memory Killer beheren"</string>
+    <string name="ramplus_current_mode">"Huidige modus"</string>
+    <string name="ramplus_mode_settings">"Modusinstellingen"</string>
+    <string name="ramplus_about"><![CDATA[
+        Met RAM+ kunt u de agressiviteit van de Low Memory Killer (LMK) op elk moment aanpassen aan uw persoonlijke behoeften. Kies uit de volgende drie modi:
+        <h6>1. Gematigd (Gebalanseerd - Standaard)</h6>
+        De LMK maakt geheugen vrij zoals gewoonlijk, waardoor een paar middelgrote/grote apps op de voorgrond kunnen blijven draaien.
+        <ul>
+            <li><b>Voordelen</b>: Redelijke multitasking, optimale prestaties en gebalanseerd batterijverbruik.</li>
+            <li><b>Nadelen</b>: Mogelijk niet geschikt voor zware multitasking or een extreem snelle systeemrespons.</li>
+        </ul>
+        <br>
+        <h6>2. Licht (Agressief app-behoud)</h6>
+        De LMK maakt zelden geheugen vrij, waardoor veel middelgrote/grote apps tegelijk op de voorgrond kunnen draaien.
+        <ul>
+            <li><b>Voordelen</b>: Beste multitasking of het uitvoeren van één enkele zware taak/app.</li>
+            <li><b>Nadelen</b>: Hoger batterijverbruik en verminderde prestaties als gevolg van onvoorspelbare systeembelasting (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extreem (Agressief geheugen vrijmaken)</h6>
+        De LMK maakt zeer frequent geheugen vrij, waardoor slechts een zeer klein aantal middelgrote/grote apps op de voorgrond kan draaien.
+        <ul>
+            <li><b>Voordelen</b>: Hoge responsiviteit, goede prestaties en een laag energieverbruik.</li>
+            <li><b>Nadelen</b>: Iets mindere multitasking vergeleken met de Gematigde modus.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Normaal</string>
     <string name="ramplus_mode_slight">Licht</string>
     <string name="ramplus_mode_extreme">Extreem</string>

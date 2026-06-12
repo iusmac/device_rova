@@ -103,6 +103,32 @@
     <string name="jitter_test_summary">Calcola il tremolio di rendering</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Controlla l'aggressività di Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Modalità attuale"</string>
+    <string name="ramplus_mode_settings">"Impostazioni modalità"</string>
+    <string name="ramplus_about">"<![CDATA[
+        RAM+ ti consente di modificare l'aggressività del Low Memory Killer (LMK) in base alle tue esigenze personali in qualsiasi momento. Scegli tra le seguenti tre modalità:
+        <h6>1. Moderato (Bilanciato - Predefinito)</h6>
+        L'LMK recupera le risorse come al solito, consentendo a poche app di medie/grandi dimensioni di essere eseguite in primo piano.
+        <ul>
+            <li><b>Pro</b>: multitasking decente, prestazioni ottimali e consumo della batteria bilanciato.</li>
+            <li><b>Contro</b>: potrebbe non essere adatto per multitasking intensivo o per un'elevata reattività del sistema.</li>
+        </ul>
+        <br>
+        <h6>2. Lieve (Conservazione aggressiva delle app)</h6>
+        L'LMK recupera raramente le risorse, consentendo a molte app di medie/grandi dimensioni di essere eseguite in primo piano.
+        <ul>
+            <li><b>Pro</b>: multitasking eccellente o ideale per l'esecuzione di una singola app/attività pesante.</li>
+            <li><b>Contro</b>: maggiore consumo di batteria e calo delle prestazioni a causa del continuo rallentamento del sistema (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Estremo (Recupero aggressivo delle risorse)</h6>
+        L'LMK recupera frequentemente le risorse, consentendo a pochissime app di medie/grandi dimensioni di essere eseguite in primo piano.
+        <ul>
+            <li><b>Pro</b>: alta reattività, buone prestazioni e basso consumo energetico.</li>
+            <li><b>Contro</b>: multitasking leggermente inferiore rispetto alla modalità Moderato.</li>
+        </ul>
+    ]]>"</string>
     <string name="ramplus_mode_moderate">Moderato</string>
     <string name="ramplus_mode_slight">Lieve</string>
     <string name="ramplus_mode_extreme">Estremo</string>

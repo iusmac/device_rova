@@ -64,6 +64,32 @@
     <string name="next_update_time">Hurrengo eguneratzea: %1$s barru</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Kontrolatu Low Memory Killer-en agresibitatea"</string>
+    <string name="ramplus_current_mode">"Uneko modua"</string>
+    <string name="ramplus_mode_settings">"Moduaren ezarpenak"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+-ek Low Memory Killer (LMK) funtzioaren agresibitatea zure behar pertsonalen arabera aldatzeko aukera ematen dizu edozein unetan. Aukeratu hurrengo hiru moduen artean:
+        <h6>1. Moderatua (Orekatua - Lehenetsia)</h6>
+        LMK-ek baliabideak ohi bezala berreskuratzen ditu, aplikazio ertain/handi gutxi batzuk plano nagusian exekutatzen utziz.
+        <ul>
+            <li><b>Alde onak</b>:ataza-aniztasun egokia, errendimendu optimoa eta bateriaren erabilera orekatua.</li>
+            <li><b>Alde txarrak</b>: agian ez da egokia ataza-aniztasun zorrotzetarako edo sistemaren erantzun-kiortasun handirako.</li>
+        </ul>
+        <br>
+        <h6>2. Arina (Aplikazioen atxikitze agresiboa)</h6>
+        LMK-ek oso gutxitan berreskuratzen ditu baliabideak, aplikazio ertain/handi asko plano nagusian exekutatzen utziz.
+        <ul>
+            <li><b>Alde onak</b>: ataza-aniztasun hoberena edo zeregin/aplikazio astun bakar bat exekutatzeko.</li>
+            <li><b>Alde txarrak</b>: bateria-kontsumo handiagoa eta errendimenduaren moteltzea sistemaren ausazko kolapsatzearen (thrashing) ondorioz.</li>
+        </ul>
+        <br>
+        <h6>3. Muturrekoa (Baliabideen berreskuratze agresiboa)</h6>
+        LMK-ek maiz berreskuratzen ditu baliabideak, aplikazio ertain/handi oso gutxi plano nagusian exekutatzen utziz.
+        <ul>
+            <li><b>Alde onak</b>: erantzun-kiortasun handia, errendimendu ona eta energia-kontsumo txikia.</li>
+            <li><b>Alde txarrak</b>: ataza-aniztasun apur bat okerragoa modu Moderatuarekin alderatuta.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Neurritsua</string>
     <string name="ramplus_mode_slight">Arina</string>
     <string name="ramplus_mode_extreme">Sendoa</string>

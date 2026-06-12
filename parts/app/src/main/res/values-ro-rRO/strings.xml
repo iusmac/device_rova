@@ -86,6 +86,32 @@
     <string name="next_update_time">Următoarea actualizare: în %1$s</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Controlează agresivitatea Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Mod curent"</string>
+    <string name="ramplus_mode_settings">"Setări mod"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ vă permite să modificați agresivitatea Low Memory Killer (LMK), în funcție de nevoile personale în orice moment. Alegeți dintre următoarele trei moduri:
+        <h6>1. Moderat (Echilibrat - Implicit)</h6>
+        LMK eliberează resursele ca de obicei, permițând câtorva aplicații medii/mari să ruleze în prim-plan.
+        <ul>
+            <li><b>Avantaje</b>: multitasking decent, performanță optimă și utilizare echilibrată a bateriei.</li>
+            <li><b>Dezavantaje</b>: poate să nu fie potrivit pentru multitasking solicitant sau reactivitate ridicată a sistemului.</li>
+        </ul>
+        <br>
+        <h6>2. Ușor (Reținere agresivă a aplicațiilor)</h6>
+        LMK eliberează rar resursele, permițând multor aplicații medii/mari să ruleze în prim-plan.
+        <ul>
+            <li><b>Avantaje</b>: cel mai bun multitasking sau rularea unei singure aplicații/sarcini grele.</li>
+            <li><b>Dezavantaje</b>: consum crescut de baterie și performanță degradată din cauza blocajelor aleatorii ale sistemului (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extrem (Eliberare agresivă a resurselor)</h6>
+        LMK eliberează frecvent resursele, permițând doar câtorva aplicații medii/mari să ruleze în prim-plan.
+        <ul>
+            <li><b>Avantaje</b>: reactivitate ridicată, performanță bună și consum redus de energie.</li>
+            <li><b>Dezavantaje</b>: multitasking puțin mai slab în comparație cu modul Moderat.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Moderat</string>
     <string name="ramplus_mode_slight">Slab</string>
     <string name="ramplus_mode_extreme">Extrem</string>

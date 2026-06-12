@@ -35,6 +35,32 @@
     <string name="smart_charging_footer">Smart Charging allows you to set maximum charging level to extend the lifespan of your battery. When enabled, battery stops charging at Stop trigger level and resumes charging at Start trigger level. Stop trigger level should be always greater than Start trigger level.</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Aggresivîteya Low Memory Killer kontrol bike"</string>
+    <string name="ramplus_current_mode">"Moda niha"</string>
+    <string name="ramplus_mode_settings">"Mîhengên modê"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ dihêle ku tû her demê, li gora hewcedariyên xwe yên kesane aggresivîteya Low Memory Killer (LMK) biguherînî. Ji sê modên jêrîn yekê hilbijêre:
+        <h6>1. Navîn (Hevseng - Default)</h6>
+        LMK wekî her car çavkaniyan paşve digire, dihêle ku çend sepanên navîn/mezin di pêşplanê de bixebitin.
+        <ul>
+            <li><b>Başî</b>: multitaskingek maqûl, performansa herî baş û karanîna pîlê ya hevseng.</li>
+            <li><b>Kêmasî</b>: dibe ku ji bo piralîûbûna daxwazkar an bersivdana pergala bilind ne guncan be.</li>
+        </ul>
+        <br>
+        <h6>2. Sivik (Ragirtina Sepanê ya Agresîf)</h6>
+        LMK kêm caran çavkaniyan paşve digire, dihêle ku gelek sepanên navîn/mezin di pêşplanê de bixebitin.
+        <ul>
+            <li><b>Başî</b>: piralîûbûna çêtirîn an meşandina serekî ya karek/sepanek giran.</li>
+            <li><b>Kêmasî</b>: xerakirina pîlê zêde dibe û performans ji ber thrashinga pergalê kêm dibe.</li>
+        </ul>
+        <br>
+        <h6>3. Zêde (Paşve girtina Çavkaniyan a Agresîf)</h6>
+        LMK pir caran çavkaniyan paşve digire, tenê rê dide ku pir kêm sepanên navîn/mezin di pêşplanê de bixebitin.
+        <ul>
+            <li><b>Başî</b>: bersivdana bilind, performansa baş û xerakirina hêzê ya kêm.</li>
+            <li><b>Kêmasî</b>: li gorî moda Navîn piralîûbûna hinekî xirabtir.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">مامناوەند</string>
     <string name="ramplus_mode_slight">کەم</string>
     <string name="ramplus_mode_extreme">زۆر</string>

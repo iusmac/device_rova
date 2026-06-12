@@ -97,6 +97,32 @@
     <string name="jitter_test_summary">Seyirme oluşumunu ölç</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Low Memory Killer saldırganlığını kontrol et"</string>
+    <string name="ramplus_current_mode">"Geçerli mod"</string>
+    <string name="ramplus_mode_settings">"Mod ayarları"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+, Low Memory Killer (LMK) saldırganlığını istediğiniz zaman kişisel ihtiyaçlarınıza göre ayarlamanıza olanak tanır. Aşağıdaki üç moddan birini seçin:
+        <h6>1. Orta (Dengeli - Varsayılan)</h6>
+        LMK, kaynakları her zamanki gibi geri kazanarak birkaç orta/büyük uygulamanın ön planda çalışmasına izin verir.
+        <ul>
+            <li><b>Artılar</b>: Yeterli çoklu görev (multitasking) performansı, optimum kararlılık ve dengeli pil kullanımı.</li>
+            <li><b>Eksiler</b>: Yoğun çoklu görev kullanımı veya çok yüksek sistem tepkiselliği için uygun olmayabilir.</li>
+        </ul>
+        <br>
+        <h6>2. Hafif (Agresif Uygulama Tutma)</h6>
+        LMK, kaynakları nadiren geri kazanır ve birçok orta/büyük uygulamanın ön planda çalışmaya devam etmesini sağlar.
+        <ul>
+            <li><b>Artılar</b>: En iyi çoklu görev performansı veya tek bir ağır görevi/uygulamayı çalıştırmak için idealdir.</li>
+            <li><b>Eksiler</b>: Rastgele sistem tıkanmaları (thrashing) nedeniyle artan pil tüketimi ve düşen performans.</li>
+        </ul>
+        <br>
+        <h6>3. Ekstrem (Agresif Kaynak Geri Kazanımı)</h6>
+        LMK, kaynakları sık sık geri kazanarak ön planda yalnızca çok az sayıda orta/büyük uygulamanın çalışmasına izin verir.
+        <ul>
+            <li><b>Artılar</b>: Yüksek sistem tepkiselliği, iyi performans ve düşük güç tüketimi.</li>
+            <li><b>Eksiler</b>: Orta moda kıyasla biraz daha zayıf çoklu görev performansı.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Orta</string>
     <string name="ramplus_mode_slight">Az</string>
     <string name="ramplus_mode_extreme">Çok Yüksek</string>

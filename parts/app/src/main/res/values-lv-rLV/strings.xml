@@ -65,6 +65,32 @@
     <string name="not_now">"Vēlāk"</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Kontrolēt Low Memory Killer agresivitāti"</string>
+    <string name="ramplus_current_mode">"Pašreizējais režīms"</string>
+    <string name="ramplus_mode_settings">"Režīma iestatījumi"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ ļauj jebkurā laikā pielāgot Low Memory Killer (LMK) agresivitāti atbilstoši jūsu personīgajām vajadzībām. Izvēlieties kādu no šiem trim režīmiem:
+        <h6>1. Mērens (Sabalansēts - Noklusējuma)</h6>
+        LMK atbrīvo resursus kā parasti, ļaujot dažām vidējām/lielām lietotnēm darboties priekšplānā.
+        <ul>
+            <li><b>Ieguvumi</b>: pienācīga daudzuzdevumu izpilde, optimāla veiktspēja un sabalansēts akumulatora patēriņš.</li>
+            <li><b>Trūkumi</b>: var nebūt piemērots prasīgai daudzuzdevumu izpildei vai augstai sistēmas atsaucībai.</li>
+        </ul>
+        <br>
+        <h6>2. Viegls (Agresīva lietotņu saglabāšana)</h6>
+        LMK reti atbrīvo resursus, ļaujot daudzām vidējām/lielām lietotnēm darboties priekšplānā.
+        <ul>
+            <li><b>Ieguvumi</b>: labākā daudzuzdevumu izpilde vai vienas smagas lietotnes/uzdevuma darbināšana.</li>
+            <li><b>Trūkumi</b>: palielināts akumulatora patēriņš un samazināta veiktspēja sistēmas nejaušas pārslogotības (thrashing) dēļ.</li>
+        </ul>
+        <br>
+        <h6>3. Ekstremāls (Agresīva resursu atbrīvošana)</h6>
+        LMK bieži atbrīvo resursus, ļaujot tikai ļoti mazam vidēju/lielu lietotņu skaitam darboties priekšplānā.
+        <ul>
+            <li><b>Ieguvumi</b>: augsta atsaucība, laba veiktspēja un zems enerģijas patēriņš.</li>
+            <li><b>Trūkumi</b>: nedaudz sliktāka daudzuzdevumu izpilde, salīdzinot ar mēreno režīmu.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Mērens</string>
     <string name="ramplus_mode_slight">Vājš</string>
     <string name="ramplus_mode_extreme">Ekstremāls</string>

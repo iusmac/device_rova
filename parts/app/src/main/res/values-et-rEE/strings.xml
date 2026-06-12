@@ -85,6 +85,32 @@
     <string name="not_now">"Mitte kohe"</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Low Memory Killeri agressiivsuse juhtimine"</string>
+    <string name="ramplus_current_mode">"Praegune režiim"</string>
+    <string name="ramplus_mode_settings">"Režiimi seaded"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ võimaldab teil igal ajal muuta Low Memory Killeri (LMK) agressiivsust vastavalt teie isiklikele vajadustele. Valige järgmise kolme režiimi vahel:
+        <h6>1. Mõõdukas (Tasakaalustatud - Vaikimisi)</h6>
+        LMK vabastab ressursse nagu tavaliselt, võimaldades mõnel keskmisel/suurel rakendusel taustal töötada.
+        <ul>
+            <li><b>Plussid</b>: korralik mitmetümandatöö, optimaalne jõudlus ja tasakaalustatud akukasutus.</li>
+            <li><b>Miinused</b>: ei pruugi sobida nõudliku mitmetümandatöö või süsteemi kiire reageerimise jaoks.</li>
+        </ul>
+        <br>
+        <h6>2. Kerge (Agressiivne rakenduste säilitamine)</h6>
+        LMK vabastab ressursse harva, võimaldades paljudel keskmistel/suurtel rakendustel taustal töötada.
+        <ul>
+            <li><b>Plussid</b>: parim mitmetümandatöö või ühe raske ülesande/rakenduse käitamiseks.</li>
+            <li><b>Miinused</b>: suurem akukulu ja vähenenud jõudlus süsteemi juhusliku ülekoormuse (thrashing) tõttu.</li>
+        </ul>
+        <br>
+        <h6>3. Äärmuslik (Agressiivne ressursside vabastamine)</h6>
+        LMK vabastab ressursse sageli, võimaldades vaid väga vähestel keskmistel/suurtel rakendustel taustal töötada.
+        <ul>
+            <li><b>Plussid</b>: kiire reageerimine, hea jõudlus ja madal energiatarve.</li>
+            <li><b>Miinused</b>: veidi halvem mitmetümandatöö võrreldes mõõduka režiimiga.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Mõõdukas</string>
     <string name="ramplus_mode_slight">Kerge</string>
     <string name="ramplus_mode_extreme">Ekstreemne</string>

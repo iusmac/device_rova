@@ -90,6 +90,32 @@
     <string name="jitter_test_summary">Hitung rendering jitter</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Kontrol agresivitas Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Mode saat ini"</string>
+    <string name="ramplus_mode_settings">"Setelan mode"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ memungkinkan Anda memanipulasi agresivitas Low Memory Killer (LMK), sesuai dengan kebutuhan pribadi Anda kapan saja. Pilih dari tiga mode berikut:
+        <h6>1. Moderat (Seimbang - Default)</h6>
+        LMK mengosongkan memori seperti biasa, memungkinkan beberapa aplikasi menengah/besar berjalan di latar depan.
+        <ul>
+            <li><b>Kelebihan</b>: multitasking yang lumayan, performa optimal, dan penggunaan baterai yang seimbang.</li>
+            <li><b>Kekurangan</b>: mungkin tidak cocok untuk multitasking berat atau responsivitas sistem yang tinggi.</li>
+        </ul>
+        <br>
+        <h6>2. Ringan (Retensi Aplikasi Agresif)</h6>
+        LMK jarang mengosongkan memori, memungkinkan banyak aplikasi menengah/besar berjalan di latar depan.
+        <ul>
+            <li><b>Kelebihan</b>: multitasking terbaik atau untuk menjalankan satu tugas/aplikasi yang berat.</li>
+            <li><b>Kekurangan</b>: konsumsi baterai meningkat dan performa menurun karena thrashing sistem yang tidak menentu.</li>
+        </ul>
+        <br>
+        <h6>3. Ekstrem (Pengosongan Memori Agresif)</h6>
+        LMK sering mengosongkan memori, hanya membiarkan sangat sedikit aplikasi menengah/besar berjalan di latar depan.
+        <ul>
+            <li><b>Kelebihan</b>: responsivitas tinggi, performa bagus, dan konsumsi daya rendah.</li>
+            <li><b>Kekurangan</b>: multitasking sedikit lebih buruk dibandingkan dengan mode Moderat.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Sedang</string>
     <string name="ramplus_mode_slight">Sedikit</string>
     <string name="ramplus_mode_extreme">Ekstrim</string>

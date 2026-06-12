@@ -97,6 +97,32 @@
     <string name="jitter_test_summary">Calcular jitter de renderização</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Controlar a agressividade do Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Modo atual"</string>
+    <string name="ramplus_mode_settings">"Definições de modo"</string>
+    <string name="ramplus_about"><![CDATA[
+        O RAM+ permite manipular a agressividade do Low Memory Killer (LMK) de acordo com as suas necessidades pessoais a qualquer momento. Escolha entre os três modos seguintes:
+        <h6>1. Moderado (Equilibrado - Predefinido)</h6>
+        O LMK recupera recursos como habitualmente, permitindo que alguns apps de médio/grande porte sejam executados em primeiro plano.
+        <ul>
+            <li><b>Prós</b>: multitarefa aceitável, desempenho ideal e uso equilibrado da bateria.</li>
+            <li><b>Contras</b>: pode não ser adequado para multitarefa exigente ou alta capacidade de resposta do sistema.</li>
+        </ul>
+        <br>
+        <h6>2. Ligeiro (Retenção agressiva de apps)</h6>
+        O LMK raramente recupera recursos, permitindo que muitos apps de médio/grande porte sejam executados em primeiro plano.
+        <ul>
+            <li><b>Prós</b>: melhor multitarefa ou execução de uma única tarefa/app pesado.</li>
+            <li><b>Contras</b>: maior consumo de bateria e degradação do desempenho devido ao abrandamento aleatório do sistema (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extremo (Recuperação agressiva de recursos)</h6>
+        O LMK recupera recursos frequentemente, permitindo que pouquíssimos apps de médio/grande porte sejam executados em primeiro plano.
+        <ul>
+            <li><b>Prós</b>: alta capacidade de resposta, bom desempenho e baixo consumo de energia.</li>
+            <li><b>Contras</b>: multitarefa ligeiramente pior em comparação com o modo Moderado.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Moderado</string>
     <string name="ramplus_mode_slight">Pouco</string>
     <string name="ramplus_mode_extreme">Extremo</string>

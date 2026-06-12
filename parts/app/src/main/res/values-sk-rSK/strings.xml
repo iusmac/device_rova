@@ -94,6 +94,32 @@
     <!-- UiBench -->
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Ovládať agresivitu funkcie Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Aktuálny režim"</string>
+    <string name="ramplus_mode_settings">"Nastavenia režimu"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ vám umožňuje upraviť agresivitu funkcie Low Memory Killer (LMK) podľa vašich osobných potrieb v akomkoľvek okamihu. Vyberte si z nasledujúcich troch režimov:
+        <h6>1. Moderovaný (Vyvážený – Predvolený)</h6>
+        LMK uvoľňuje prostriedky ako zvyčajne, čo umožňuje spustenie niekoľkých stredných/veľkých aplikácií na popredí.
+        <ul>
+            <li><b>Plusy</b>: slušný multitasking, optimálny výkon a vyvážené využitie batérie.</li>
+            <li><b>Mínusy</b>: nemusí byť vhodné pre náročný multitasking alebo vysokú odozvu systému.</li>
+        </ul>
+        <br>
+        <h6>2. Mierny (Agresívne držanie aplikácií)</h6>
+        LMK uvoľňuje prostriedky zriedka, čo umožňuje spustenie mnohých stredných/veľkých aplikácií na popredí.
+        <ul>
+            <li><b>Plusy</b>: najlepší multitasking alebo spustenie jednej náročnej úlohy/aplikácie.</li>
+            <li><b>Mínusy</b>: zvýšená spotreba batérie a znížený výkon v dôsledku náhodného zahlcovania systému (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extrémny (Agresívne uvoľňovanie prostriedkov)</h6>
+        LMK uvoľňuje prostriedky často, čo umožňuje spustenie len veľmi málo stredných/veľkých aplikácií na popredí.
+        <ul>
+            <li><b>Plusy</b>: vysoká odozva, dobrý výkon a nízka spotreba energie.</li>
+            <li><b>Mínusy</b>: mierne horší multitasking v porovnaní s režimom Moderovaný.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Stredná</string>
     <string name="ramplus_mode_slight">Nepatrná</string>
     <string name="ramplus_mode_extreme">Extrémna</string>

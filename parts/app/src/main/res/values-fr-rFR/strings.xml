@@ -92,6 +92,32 @@
     <string name="microphone_gain_title">Amplification microphone</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Contrôler l'agressivité du Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Mode actuel"</string>
+    <string name="ramplus_mode_settings">"Paramètres du mode"</string>
+    <string name="ramplus_about">"<![CDATA[
+        RAM+ vous permet de modifier l'agressivité du Low Memory Killer (LMK) selon vos besoins personnels à tout moment. Choisissez parmi les trois modes suivants :
+        <h6>1. Modéré (Équilibré - Par défaut)</h6>
+        Le LMK récupère les ressources comme d'habitude, permettant à quelques applications de taille moyenne/grande de s'exécuter au premier plan.
+        <ul>
+            <li><b>Avantages</b> : multitâche décent, performances optimales et utilisation équilibrée de la batterie.</li>
+            <li><b>Inconvénients</b> : peut ne pas convenir à un multitâche exigeant ou à une réactivité système élevée.</li>
+        </ul>
+        <br>
+        <h6>2. Léger (Rétention agressive des applications)</h6>
+        Le LMK récupère rarement les ressources, permettant à de nombreuses applications de taille moyenne/grande de s'exécuter au premier plan.
+        <ul>
+            <li><b>Avantages</b> : meilleur multitâche ou exécution d'une seule tâche/application lourde.</li>
+            <li><b>Inconvénients</b> : consommation de batterie accrue et baisse des performances dues à un emballement aléatoire du système (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extrême (Récupération agressive des ressources)</h6>
+        Le LMK récupère fréquemment les ressources, permettant à très peu d'applications de taille moyenne/grande de s'exécuter au premier plan.
+        <ul>
+            <li><b>Avantages</b> : haute réactivité, bonnes performances et faible consommation d'énergie.</li>
+            <li><b>Inconvénients</b> : multitâche légèrement moins performant par rapport au mode Modéré.</li>
+        </ul>
+    ]]>"</string>
     <string name="ramplus_mode_moderate">Moyen</string>
     <string name="ramplus_mode_slight">Léger</string>
     <string name="ramplus_mode_extreme">Extrême</string>

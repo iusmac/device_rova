@@ -65,6 +65,32 @@
     <string name="not_now">"Ne dabar"</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Valdyti „Low Memory Killer“ agresyvumą"</string>
+    <string name="ramplus_current_mode">"Dabartinis režimas"</string>
+    <string name="ramplus_mode_settings">"Režimo nustatymai"</string>
+    <string name="ramplus_about"><![CDATA[
+        „RAM+“ leidžia bet kada keisti „Low Memory Killer“ (LMK) agresyvumą pagal asmeninius poreikius. Pasirinkite vieną iš šių trijų režimų:
+        <h6>1. Vidutinis (Subalansuotas – Numatytasis)</h6>
+        LMK atlaisvina išteklius kaip įprasta, leisdamas kelioms vidutinėms / didelėms programoms veikti pagrindiniame plane.
+        <ul>
+            <li><b>Pliusai</b>: neblogas kelių užduočių vykdymas (multitasking), optimalus našumas ir subalansuotas baterijos naudojimas.</li>
+            <li><b>Minusai</b>: gali netikti reikliam kelių užduočių vykdymui arba itin greitam sistemos reagavimui.</li>
+        </ul>
+        <br>
+        <h6>2. Švelnus (Agresyvus programų išlaikymas)</h6>
+        LMK retai atlaisvina išteklius, leisdamas daugeliui vidutinių / didelių programų veikti pagrindiniame plane.
+        <ul>
+            <li><b>Pliusai</b>: geriausias kelių užduočių vykdymas arba vienos sunkios užduoties / programos paleidimas.</li>
+            <li><b>Minusai</b>: didesnės baterijos sąnaudos ir sumažėjęs našumas dėl atsitiktinio sistemos perkrovimo (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Ekstremalus (Agresyvus išteklių atlaisvinimas)</h6>
+        LMK dažnai atlaisvina išteklius, leisdamas tik labai nedideliam skaičiui vidutinių / didelių programų veikti pagrindiniame plane.
+        <ul>
+            <li><b>Pliusai</b>: greitas sistemos reagavimas, geras našumas ir mažos energijos sąnaudos.</li>
+            <li><b>Minusai</b>: šiek tiek prastesnis kelių užduočių vykdymas, palyginti su vidutiniu režimu.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Vidutinis</string>
     <string name="ramplus_mode_slight">Silpnas</string>
     <string name="ramplus_mode_extreme">Stiprus</string>

@@ -58,6 +58,32 @@
     <string name="dirac_preset_metal">金屬</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"控制 Low Memory Killer 的積極程度"</string>
+    <string name="ramplus_current_mode">"目前模式"</string>
+    <string name="ramplus_mode_settings">"模式設定"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ 允許您隨時根據個人需求調整 Low Memory Killer (LMK) 的積極程度。請從以下三種模式中進行選擇：
+        <h6>1. 溫和（平衡 - 預設）</h6>
+        LMK 照常回收資源，允許少數中/大型應用程式在前景運行。
+        <ul>
+            <li><b>優點</b>：良好的多任務處理能力、優化的性能和平衡的電池消耗。</li>
+            <li><b>缺點</b>：可能不適合高強度的多任務處理或極高的系統響應速度。</li>
+        </ul>
+        <br>
+        <h6>2. 輕微（積極保留應用程式）</h6>
+        LMK 很少回收資源，允許大量中/大型應用程式在前景同時運行。
+        <ul>
+            <li><b>優點</b>：最強的多任務處理能力，或適合運行單個大型任務/應用程式。</li>
+            <li><b>缺點</b>：由於隨機的系統抖動（thrashing），會增加電池消耗並降低性能。</li>
+        </ul>
+        <br>
+        <h6>3. 激進（積極回收資源）</h6>
+        LMK 頻繁回收資源，僅允許極少數中/大型應用程式在前景運行。
+        <ul>
+            <li><b>優點</b>：系統響應速度快、性能好且功耗低。</li>
+            <li><b>缺點</b>：與溫和模式相比，多任務處理能力略遜一筹。</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">中等</string>
     <string name="ramplus_mode_slight">輕微</string>
     <string name="ramplus_mode_extreme">極端</string>

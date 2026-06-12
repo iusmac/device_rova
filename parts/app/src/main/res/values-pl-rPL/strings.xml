@@ -92,6 +92,32 @@
     <string name="microphone_gain_title">Wzmocnienie mikrofonu</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Kontroluj agresywność Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Bieżący tryb"</string>
+    <string name="ramplus_mode_settings">"Ustawienia trybu"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ pozwala w dowolnym momencie dostosować agresywność mechanizmu Low Memory Killer (LMK) do własnych potrzeb. Wybierz jeden z trzech poniższych trybów:
+        <h6>1. Umiarkowany (Zrównoważony - Domyślny)</h6>
+        LMK zwalnia zasoby w standardowy sposób, pozwalając kilku średnim lub dużym aplikacjom działać na pierwszym planie.
+        <ul>
+            <li><b>Zalety</b>: przyzwoita wielozadaniowość, optymalna wydajność i zrównoważone zużycie baterii.</li>
+            <li><b>Wady</b>: może nie być odpowiedni do wymagającej wielozadaniowości lub szybkiego czasu reakcji systemu.</li>
+        </ul>
+        <br>
+        <h6>2. Lekki (Agresywne utrzymywanie aplikacji)</h6>
+        LMK rzadko zwalnia zasoby, pozwalając wielu średnim lub dużym aplikacjom działać na pierwszym planie.
+        <ul>
+            <li><b>Zalety</b>: najlepsza wielozadaniowość lub płynne działanie jednej, bardzo ciężkiej aplikacji.</li>
+            <li><b>Wady</b>: zwiększone zużycie baterii i ryzyko spadku wydajności z powodu przeciążenia systemu (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Ekstremalny (Agresywne zwalnianie zasobów)</h6>
+        LMK bardzo często zwalnia zasoby, pozwalając tylko nielicznym średnim lub dużym aplikacjom działać na pierwszym planie.
+        <ul>
+            <li><b>Zalety</b>: wysoka szybkość reakcji systemu, dobra wydajność i niskie zużycie energii.</li>
+            <li><b>Wady</b>: nieco gorsza wielozadaniowość w porównaniu z trybem Umiarkowanym.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Umiarkowany</string>
     <string name="ramplus_mode_slight">Niewielki</string>
     <string name="ramplus_mode_extreme">Ekstremalny</string>

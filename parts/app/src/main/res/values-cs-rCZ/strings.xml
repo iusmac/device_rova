@@ -96,6 +96,32 @@
     <string name="jitter_test_summary">Výpočet vykreslování Jitter</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Ovládat agresivitu funkce Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Aktuální režim"</string>
+    <string name="ramplus_mode_settings">"Nastavení režimu"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ vám umožňuje upravit agresivitu funkce Low Memory Killer (LMK) podle vašich osobních potřeb v jakémkoli okamžiku. Vyberte si z následujících tří režimů:
+        <h6>1. Moderované (Vyvážené – Výchozí)</h6>
+        LMK uvolňuje prostředky jako obvykle, což umožňuje spuštění několika středních/velkých aplikací na popředí.
+        <ul>
+            <li><b>Plusy</b>: slušný multitasking, optimální výkon a vyvážené využití baterie.</li>
+            <li><b>Mínusy</b>: nemusí být vhodné pro náročný multitasking nebo vysokou odezvu systému.</li>
+        </ul>
+        <br>
+        <h6>2. Mírné (Agresivní držení aplikací)</h6>
+        LMK uvolňuje prostředky zřídka, což umožňuje spuštění mnoha středních/velkých aplikací na popředí.
+        <ul>
+            <li><b>Plusy</b>: nejlepší multitasking nebo spuštění jedné náročné úlohy/aplikace.</li>
+            <li><b>Mínusy</b>: zvýšená spotřeba baterie a snížený výkon v důsledku náhodného zahlcování systému (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extrémní (Agresivní uvolňování prostředků)</h6>
+        LMK uvolňuje prostředky často, což umožňuje spuštění jen velmi málo středních/velkých aplikací na popředí.
+        <ul>
+            <li><b>Plusy</b>: vysoká odezva, dobrý výkon a nízká spotřeba energie.</li>
+            <li><b>Mínusy</b>: mírně horší multitasking ve srovnání s režimem Moderované.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Střední</string>
     <string name="ramplus_mode_slight">Mírný</string>
     <string name="ramplus_mode_extreme">Největší</string>

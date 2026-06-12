@@ -71,6 +71,32 @@
     <string name="microphone_gain_title">Mikrofonin äänenvoimakkuuden lisäys</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Hallitse Low Memory Killerin aggressiivisuutta"</string>
+    <string name="ramplus_current_mode">"Nykyinen tila"</string>
+    <string name="ramplus_mode_settings">"Tilan asetukset"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ mahdollistaa Low Memory Killerin (LMK) aggressiivisuuden säätämisen omien tarpeidesi mukaan milloin tahansa. Valitse seuraavista kolmesta tilasta:
+        <h6>1. Kohtuullinen (Tasapainotettu - Oletus)</h6>
+        LMK vapauttaa resursseja normaaliin tapaan, jolloin muutamat keskisuuret/suuret sovellukset voivat toimia etualalla.
+        <ul>
+            <li><b>Plussat</b>: Riittävä moniajo, optimaalinen suorituskyky ja tasapainoinen akun kulutus.</li>
+            <li><b>Miinukset</b>: Ei välttämättä sovellu vaativaan moniajoor tai erittäin nopeaan järjestelmän vasteaikaan.</li>
+        </ul>
+        <br>
+        <h6>2. Lievä (Aggressiivinen sovellusten säilytys)</h6>
+        LMK vapauttaa resursseja harvoin, jolloin monet keskisuuret/suuret sovellukset voivat toimia etualalla.
+        <ul>
+            <li><b>Plussat</b>: Paras moniajo tai yhden raskaan tehtävän/sovelluksen suorittaminen.</li>
+            <li><b>Miinukset</b>: Suurempi akun kulutus ja heikentynyt suorituskyky järjestelmän satunnaisen hidastumisen (thrashing) vuoksi.</li>
+        </ul>
+        <br>
+        <h6>3. Äärimmäinen (Aggressiivinen resurssien vapauttaminen)</h6>
+        LMK vapauttaa resursseja usein, jolloin vain erittäin harvat keskisuuret/suuret sovellukset voivat toimia etualalla.
+        <ul>
+            <li><b>Plussat</b>: Nopea vasteaika, hyvä suorituskyky ja alhainen virrankulutus.</li>
+            <li><b>Miinukset</b>: Hieman heikompi moniajo verrattuna Kohtuulliseen tilaan.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Keskitaso</string>
     <string name="ramplus_mode_slight">Kevyt</string>
     <string name="ramplus_mode_extreme">Vahva</string>

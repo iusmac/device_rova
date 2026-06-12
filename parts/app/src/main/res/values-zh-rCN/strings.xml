@@ -97,6 +97,31 @@
     <string name="jitter_test_summary">计算渲染抖动</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"控制 Low Memory Killer 的积极程度"</string>
+    <string name="ramplus_current_mode">"当前模式"</string>
+    <string name="ramplus_mode_settings">"模式设置"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ 允许您随时根据个人需求调整 Low Memory Killer (LMK) 的积极程度。请从以下三种模式中进行选择：
+        <h6>1. 温和（平衡 - 默认）</h6>
+        LMK 照常回收资源，允许少数中/大型应用在前台运行。
+        <ul>
+            <li><b>优点</b>：良好的多任务处理能力、优化的性能和平衡的电池消耗。</li>
+            <li><b>缺点</b>：可能不适合高强度的多任务处理或极高的系统响应速度。</li>
+        </ul>
+        <br>
+        <h6>2. 轻微（积极保留应用）</h6>
+        LMK 很少回收资源，允许大量中/大型应用在前台同时运行。
+        <ul>
+            <li><b>优点</b>：最强的多任务处理能力，或适合运行单个大型任务/应用。</li>
+        </ul>
+        <br>
+        <h6>3. 激进（积极回收资源）</h6>
+        LMK 频繁回收资源，仅允许极少数中/大型应用在前台运行。
+        <ul>
+            <li><b>优点</b>：系统响应速度快、性能好且功耗低。</li>
+            <li><b>缺点</b>：与温和模式相比，多任务 stiffness 略逊一筹。</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">中等</string>
     <string name="ramplus_mode_slight">轻微</string>
     <string name="ramplus_mode_extreme">极致</string>

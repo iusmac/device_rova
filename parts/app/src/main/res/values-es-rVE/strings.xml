@@ -46,6 +46,32 @@
 
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Controlar la agresividad de Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Modo actual"</string>
+    <string name="ramplus_mode_settings">"Ajustes de modo"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+ le permite manipular la agresividad de Low Memory Killer (LMK) de acuerdo con sus necesidades personales en cualquier momento. Elija entre los siguientes tres modos:
+        <h6>1. Moderado (Equilibrado - Predeterminado)</h6>
+        LMK reclama recursos como de costumbre, lo que permite que unas pocas aplicaciones medianas o grandes se ejecuten en primer plano.
+        <ul>
+            <li><b>Pros</b>: multitarea decente, rendimiento óptimo y uso equilibrado de la batería.</li>
+            <li><b>Contras</b>: puede no ser adecuado para una multitarea exigente o una alta capacidad de respuesta del sistema.</li>
+        </ul>
+        <br>
+        <h6>2. Ligero (Retención agresiva de aplicaciones)</h6>
+        LMK rara vez reclama recursos, lo que permite que muchas aplicaciones medianas o grandes se ejecuten en primer plano.
+        <ul>
+            <li><b>Pros</b>: mejor multitarea o ejecución de una sola tarea/aplicación pesada.</li>
+            <li><b>Contras</b>: mayor consumo de batería y degradación del rendimiento debido a la ralentización aleatoria del sistema (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extremo (Recuperación agresiva de recursos)</h6>
+        LMK reclama recursos con frecuencia, lo que permite que muy pocas aplicaciones medianas o grandes se ejecuten en primer plano.
+        <ul>
+            <li><b>Pros</b>: alta capacidad de respuesta, buen rendimiento y bajo consumo de energía.</li>
+            <li><b>Contras</b>: multitarea ligeramente peor en comparación con el modo Moderado.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">Moderado</string>
     <string name="ramplus_mode_slight">Ligero</string>
     <string name="ramplus_mode_extreme">Fuerte</string>

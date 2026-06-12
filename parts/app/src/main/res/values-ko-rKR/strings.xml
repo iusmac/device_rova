@@ -92,6 +92,32 @@
     <string name="microphone_gain_title">마이크 증폭</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Low Memory Killer 공격성 제어"</string>
+    <string name="ramplus_current_mode">"현재 모드"</string>
+    <string name="ramplus_mode_settings">"모드 설정"</string>
+    <string name="ramplus_about"><![CDATA[
+        RAM+를 사용하면 언제든지 개인의 필요에 따라 Low Memory Killer(LMK)의 공격성을 조절할 수 있습니다. 다음 세 가지 모드 중 선택하십시오:
+        <h6>1. 보통 (균형 잡힘 - 기본값)</h6>
+        LMK가 평소대로 리소스를 회수하여, 몇 개의 중형/대형 앱이 포그라운드에서 실행될 수 있도록 허용합니다.
+        <ul>
+            <li><b>장점</b>: 준수한 멀티태스킹, 최적의 성능 및 균형 잡힌 배터리 사용.</li>
+            <li><b>단점</b>: 고부하 멀티태스킹이나 극도로 빠른 시스템 반응성이 필요한 환경에는 적합하지 않을 수 있습니다.</li>
+        </ul>
+        <br>
+        <h6>2. 약하게 (공격적인 앱 유지)</h6>
+        LMK가 리소스를 거의 회수하지 않아, 많은 중형/대형 앱이 포그라운드에서 계속 실행될 수 있도록 허용합니다.
+        <ul>
+            <li><b>장점</b>: 최고의 멀티태스킹 성능 또는 단일 고부하 작업/앱 실행에 이상적.</li>
+            <li><b>단점</b>: 무작위적인 시스템 쓰레싱(과부하)으로 인해 배터리 소모가 증가하고 성능이 저하될 수 있습니다.</li>
+        </ul>
+        <br>
+        <h6>3. 강하게 (공격적인 리소스 회수)</h6>
+        LMK가 리소스를 자주 회수하여, 포그라운드에서 실행되는 중형/대형 앱의 개수를 엄격히 제한합니다.
+        <ul>
+            <li><b>장점</b>: 높은 반응성, 우수한 성능 및 낮은 전력 소모.</li>
+            <li><b>단점</b>: 보통 모드에 비해 멀티태스킹 성능이 약간 저하됩니다.</li>
+        </ul>
+    ]]></string>
     <string name="ramplus_mode_moderate">보통</string>
     <string name="ramplus_mode_slight">조금</string>
     <string name="ramplus_mode_extreme">최대</string>

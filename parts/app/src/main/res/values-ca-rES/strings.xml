@@ -65,6 +65,32 @@
     <string name="not_now">"Ara no"</string>
 
     <!-- RAM+ -->
+    <string name="ramplus_summary">"Controla l'agressivitat del Low Memory Killer"</string>
+    <string name="ramplus_current_mode">"Mode actual"</string>
+    <string name="ramplus_mode_settings">"Configuració del mode"</string>
+    <string name="ramplus_about">"<![CDATA[
+        RAM+ us permet manipular l'agressivitat del Low Memory Killer (LMK) segons les vostres necessitats personals en cada moment. Trieu entre els tres modes següents:
+        <h6>1. Moderat (Equilibrat - Per defecte)</h6>
+        El LMK recupera recursos com de costum, permetent que unes quantes aplicacions mitjanes/grans s'executin en primer pla.
+        <ul>
+            <li><b>Pros</b>: multitasca decent, rendiment òptim i ús equilibrat de la bateria.</li>
+            <li><b>Contres</b>: pot no ser adequat per a una multitasca exigent o una alta capacitat de resposta del sistema.</li>
+        </ul>
+        <br>
+        <h6>2. Lleuger (Retenció agressiva d'aplicacions)</h6>
+        El LMK poques vegades recupera recursos, permetent que moltes aplicacions mitjanes/grans s'executin en primer pla.
+        <ul>
+            <li><b>Pros</b>: millor multitasca o execució d'una sola tasca/aplicació pesada.</li>
+            <li><b>Contres</b>: major consum de bateria i degradació del rendiment a causa del bloqueig aleatori del sistema (thrashing).</li>
+        </ul>
+        <br>
+        <h6>3. Extrem (Recuperació agressiva de recursos)</h6>
+        El LMK recupera recursos freqüentment, permetent que molt poques aplicacions mitjanes/grans s'executin en primer pla.
+        <ul>
+            <li><b>Pros</b>: alta capacitat de resposta, bon rendiment i baix consum d'energia.</li>
+            <li><b>Contres</b>: multitasca lleugerament pitjor en comparació amb el mode Moderat.</li>
+        </ul>
+    ]]>"</string>
     <string name="ramplus_mode_moderate">Moderat</string>
     <string name="ramplus_mode_slight">Lleuger</string>
     <string name="ramplus_mode_extreme">Extrem</string>
