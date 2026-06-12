@@ -18,10 +18,12 @@
 
 package org.lineageos.settings.ramplus;
 
+import android.app.StatusBarManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.drawable.Icon;
 import android.service.quicksettings.TileService;
 import android.util.Log;
 
@@ -39,23 +41,26 @@ public final class RamPlusManager {
 
     private final Context mContext;
     private final SharedPreferences mSharedPrefs;
+    private final StatusBarManager mStatusBarManager;
     private final Resources mResources;
+    private final ComponentName mTileComponent;
 
     @Inject
     public RamPlusManager(final @ApplicationContext Context context,
-            final SharedPreferences sharedPrefs) {
+            final SharedPreferences sharedPrefs, final StatusBarManager statusBarManager) {
 
         mContext = context;
         mSharedPrefs = sharedPrefs;
+        mStatusBarManager = statusBarManager;
         mResources = context.getResources();
+        mTileComponent = new ComponentName(context, RamPlusService.class);
     }
 
     public void onBootCompleted() {
         if (DEBUG) Log.d(TAG, "onBootCompleted().");
 
         setMode(getCurrentMode());
-        TileService.requestListeningState(mContext, new ComponentName(mContext,
-                    RamPlusService.class));
+        refreshTileService();
     }
 
     RamPlusMode getNextMode(final RamPlusMode currentMode) {
@@ -84,13 +89,25 @@ public final class RamPlusManager {
 
         final int modeIdx = mode.ordinal();
 
-        setSwapFreeLowPercentage(mResources.getIntArray(
-                R.array.ramplus_swap_free_low_percentages)[modeIdx]);
+        final var defaultLowPercent = mResources.getIntArray(
+                R.array.ramplus_swap_free_low_percentages)[modeIdx];
+        setSwapFreeLowPercentage(getModeSwapFreeLowPercentageSetting(mode, defaultLowPercent));
         setLowMemMinOomScore(mResources.getIntArray(
                     R.array.ramplus_lowmem_min_oom_score_values)[modeIdx]);
 
         mSharedPrefs.edit().putString(mResources.getString(R.string.ramplus_key_mode),
                 mode.name()).apply();
+    }
+
+    void refreshTileService() {
+        TileService.requestListeningState(mContext, mTileComponent);
+    }
+
+    void requestAddTileService() {
+        final var label = mResources.getString(R.string.ramplus_qs_title);
+        final var icon = Icon.createWithResource(mContext, R.drawable.ic_ramplus);
+        mStatusBarManager.requestAddTileService(mTileComponent, label, icon,
+                mContext.getMainExecutor(), (result) -> {});
     }
 
     private void setSwapFreeLowPercentage(final int value) {
@@ -114,5 +131,15 @@ public final class RamPlusManager {
         if (oldValue != value) {
             PartsUtils.setintProp(prop, value);
         }
+    }
+
+    private int getModeSwapFreeLowPercentageSetting(final RamPlusMode mode, final int defValue) {
+        final var key = switch (mode) {
+            case MODERATE -> R.string.ramplus_slider_moderate_mode_percentage_key;
+            case SLIGHT -> R.string.ramplus_slider_slight_mode_percentage_key;
+            case EXTREME -> R.string.ramplus_slider_extreme_mode_percentage_key;
+            default -> throw new IllegalArgumentException("Unhandled mode: " + mode);
+        };
+        return mSharedPrefs.getInt(mResources.getString(key), defValue);
     }
 }

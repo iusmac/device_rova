@@ -1,6 +1,8 @@
 package org.lineageos.settings.preferences;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.view.View;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ import androidx.preference.PreferenceViewHolder;
 import static com.android.settingslib.widget.SliderPreference.HAPTIC_FEEDBACK_MODE_NONE;
 
 public class SliderPreference extends com.android.settingslib.widget.SliderPreference {
+    private CharSequence mTextStart;
     private CharSequence mTextEnd;
     private int mHapticFeedbackMode = HAPTIC_FEEDBACK_MODE_NONE;
 
@@ -48,16 +51,39 @@ public class SliderPreference extends com.android.settingslib.widget.SliderPrefe
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
+        TextView startText = (TextView) holder.findViewById(android.R.id.text1);
+        if (startText != null && mTextStart != null) {
+            startText.setText(mTextStart);
+        }
+
         TextView endText = (TextView) holder.findViewById(android.R.id.text2);
         if (endText != null && mTextEnd != null) {
             endText.setText(mTextEnd);
         }
 
+        // Show/hide the start/end text frame, if any exist
+        View labelFrame = holder.findViewById(
+                com.android.settingslib.widget.preference.slider.R.id.label_frame);
+        if (labelFrame != null) {
+            boolean isValidTextExist = mTextStart != null || mTextEnd != null;
+            labelFrame.setVisibility(isValidTextExist ? View.VISIBLE : View.GONE);
+        }
+
         applyHapticFeedbackMode();
     }
 
+    public void setStartText(final @Nullable CharSequence text) {
+        if (!TextUtils.equals(mTextStart, text)) {
+            mTextStart = text == null ? "" : text;
+            notifyChanged();
+        }
+    }
+
     public void setEndText(final @Nullable CharSequence text) {
-        mTextEnd = text == null ? "" : text;
+        if (!TextUtils.equals(mTextEnd, text)) {
+            mTextEnd = text == null ? "" : text;
+            notifyChanged();
+        }
     }
 
     @Override

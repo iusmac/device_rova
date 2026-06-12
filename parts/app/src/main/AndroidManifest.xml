@@ -194,6 +194,33 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ramplus.RamPlusActivity"
+            android:icon="@drawable/ic_ramplus"
+            android:label="@string/ramplus_qs_title"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.settings.action.IA_SETTINGS" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="com.android.settings.category"
+                android:value="com.android.settings.category.ia.system" />
+            <meta-data
+                android:name="com.android.settings.icon"
+                android:resource="@drawable/ic_ramplus" />
+            <meta-data android:name="com.android.settings.icon_tintable" android:value="true" />
+            <meta-data
+                android:name="com.android.settings.summary"
+                android:resource="@string/ramplus_summary" />
+            <meta-data
+                android:name="com.android.settings.order"
+                android:value="10" />
+        </activity>
+
         <service
             android:name=".ramplus.RamPlusService"
             android:icon="@drawable/ic_ramplus"

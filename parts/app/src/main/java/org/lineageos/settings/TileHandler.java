@@ -35,6 +35,8 @@ import android.util.Log;
 
 import org.lineageos.settings.dirac.DiracActivity;
 import org.lineageos.settings.dirac.DiracTileService;
+import org.lineageos.settings.ramplus.RamPlusActivity;
+import org.lineageos.settings.ramplus.RamPlusService;
 
 /**
  * This class opens the corresponding tile preferences activity when the
@@ -58,6 +60,8 @@ public final class TileHandler extends Activity {
 
                 if (qsName.equals(DiracTileService.class.getName())) {
                     aIntent.setClass(this, DiracActivity.class);
+                } else if (qsName.equals(RamPlusService.class.getName())) {
+                    aIntent.setClass(this, RamPlusActivity.class);
                 } else {
                     // Default to App Info activity
                     aIntent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);

@@ -145,9 +145,9 @@
 
     <!-- RAM+ -->
     <integer-array name="ramplus_swap_free_low_percentages">
-        <item>3</item> <!-- MODERATE -->
-        <item>1</item> <!-- SLIGHT -->
-        <item>8</item> <!-- EXTREME -->
+        <item>@integer/ramplus_moderate_mode_percentage</item> <!-- MODERATE -->
+        <item>@integer/ramplus_slight_mode_percentage</item> <!-- SLIGHT -->
+        <item>@integer/ramplus_extreme_mode_percentage</item> <!-- EXTREME -->
     </integer-array>
 
     <integer-array name="ramplus_lowmem_min_oom_score_values">

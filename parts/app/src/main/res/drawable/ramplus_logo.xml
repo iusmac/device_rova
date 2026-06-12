@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2026 iusmac <iusico.maxim@libero.it>
+
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 2 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="170dp"
+    android:viewportWidth="200"
+    android:viewportHeight="170">
+  <path
+      android:pathData="M104.81,95.78a12.38,12.38 0,0 1,24.77 0,12.38 12.38,0 0,1 -24.77,0"
+      android:fillColor="#bdf8d8"/>
+  <path
+      android:pathData="M134.98,95.78a12.38,12.38 0,1 1,24.76 0.03,12.38 12.38,0 0,1 -24.76,-0.03"
+      android:fillColor="#dadc3d"/>
+  <path
+      android:pathData="M165.15,95.78a12.38,12.38 0,1 1,24.76 0.03,12.38 12.38,0 0,1 -24.76,-0.03"
+      android:fillColor="#e7383d"/>
+  <path
+      android:pathData="m140.36,43.54 l-94.39,94.4a66,66 0,0 1,-12.9 -61.21l-21.31,-5.62a2.25,2.25 0,1 1,1.2 -4.34l21.68,5.68a68.6,68.6 0,0 1,15.83 -24.42,68 68,0 0,1 24.54,-15.88l-5.93,-21.65a2.25,2.25 0,1 1,4.35 -1.13l5.7,21.35a66.4,66.4 0,0 1,61.23 12.74zM101.64,55.82a5.69,5.69 0,1 0,-7.95 -7.94,5.7 5.7,0 0,0 7.95,7.94"
+      android:fillColor="#3ddb84"/>
+  <path
+      android:pathData="M84.92,92.53c1.28,1.53 48.73,49.4 53.3,54.04l-3.22,2.48a70,70 0,0 1,-6.88 4.51A64.4,64.4 0,0 1,80.28 160.48c-1.74,-0.46 -3.35,-1.13 -5,-1.65a63,63 0,0 1,-20.88 -12.18,69 69,0 0,1 -17.73,-23.67c-1.54,-3.51 48,-31.83 48.25,-30.44"
+      android:fillColor="#3ddb84"/>
+</vector>

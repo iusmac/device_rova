@@ -22,6 +22,15 @@
     <string name="ramplus_key_mode" translatable="false">"key_ram_plus_mode"</string>
     <string name="ramplus_prop_swap_free_low_percentage" translatable="false">"persist.device_config.lmkd_native.swap_free_low_percentage"</string>
     <string name="ramplus_prop_lowmem_min_oom_score" translatable="false">"persist.device_config.lmkd_native.lowmem_min_oom_score"</string>
+    <string name="ramplus_slider_slight_mode_percentage_key" translatable="false">"key_ram_plus_slight_mode_percentage"</string>
+    <string name="ramplus_slider_moderate_mode_percentage_key" translatable="false">"key_ram_plus_moderate_mode_percentage"</string>
+    <string name="ramplus_slider_extreme_mode_percentage_key" translatable="false">"key_ram_plus_extreme_mode_percentage"</string>
+    <integer name="ramplus_slider_slight_mode_index">0</integer>
+    <integer name="ramplus_slider_moderate_mode_index">1</integer>
+    <integer name="ramplus_slider_extreme_mode_index">2</integer>
+    <integer name="ramplus_slight_mode_percentage">1</integer>
+    <integer name="ramplus_moderate_mode_percentage">3</integer>
+    <integer name="ramplus_extreme_mode_percentage">8</integer>
 
     <string name="smart_charging_prop_last_stop_charging_reason" translatable="false">"service.smartcharging.last_stop_charging_reason"</string>
     <string name="smart_charging_prop_next_battery_monitor_trigger_time" translatable="false">"service.smartcharging.next_battery_monitor_trigger_time"</string>

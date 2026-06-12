@@ -17,6 +17,7 @@
 package org.lineageos.settings.inject;
 
 import android.app.AlarmManager;
+import android.app.StatusBarManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.session.MediaSessionManager;
@@ -67,5 +68,10 @@ public final class PartsModule {
             final @ApplicationContext Context context) {
 
         return NotificationManagerCompat.from(context);
+    }
+
+    @Provides
+    static StatusBarManager provideStatusBarManager(final @ApplicationContext Context context) {
+        return ContextCompat.getSystemService(context, StatusBarManager.class);
     }
 }

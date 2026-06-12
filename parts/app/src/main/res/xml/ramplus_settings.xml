@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.android.settingslib.widget.IllustrationPreference
+        app:lottie_rawRes="@drawable/ramplus_logo"/>
+
+    <org.lineageos.settings.preferences.SliderPreference
+        android:key="@string/ramplus_key_mode"
+        android:title="@string/ramplus_current_mode"
+        android:persistent="false"
+        app:min="@integer/ramplus_slider_slight_mode_index"
+        android:max="@integer/ramplus_slider_extreme_mode_index"
+        app:seekBarIncrement="1" />
+
+    <PreferenceCategory
+        android:title="@string/ramplus_mode_settings"
+        app:initialExpandedChildrenCount="0">
+
+        <org.lineageos.settings.preferences.SliderPreference
+            android:key="@string/ramplus_slider_slight_mode_percentage_key"
+            android:defaultValue="@integer/ramplus_slight_mode_percentage"
+            app:min="1"
+            android:max="10"
+            android:summary="@string/ramplus_mode_slight"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true" />
+
+        <org.lineageos.settings.preferences.SliderPreference
+            android:key="@string/ramplus_slider_moderate_mode_percentage_key"
+            android:defaultValue="@integer/ramplus_moderate_mode_percentage"
+            app:min="1"
+            android:max="10"
+            android:summary="@string/ramplus_mode_moderate"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true" />
+
+        <org.lineageos.settings.preferences.SliderPreference
+            android:key="@string/ramplus_slider_extreme_mode_percentage_key"
+            android:defaultValue="@integer/ramplus_extreme_mode_percentage"
+            app:min="1"
+            android:max="10"
+            android:summary="@string/ramplus_mode_extreme"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true" />
+
+    </PreferenceCategory>
+
+    <com.android.settingslib.widget.FooterPreference
+        android:key="footer_preference"
+        android:selectable="false" />
+
+</PreferenceScreen>
