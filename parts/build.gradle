@@ -5,6 +5,9 @@ buildscript {
         // https://android.googlesource.com/platform/external/dagger2
         def hilt_version = '2.55'
         libs = [
+            // https://mvnrepository.com/artifact/androidx.activity/activity
+            // https://android.googlesource.com/platform/prebuilts/sdk/+/refs/heads/main/current/androidx/m2repository/androidx/activity/activity/
+            activity             :  'androidx.activity:activity:1.12.0-alpha08',
             // https://mvnrepository.com/artifact/androidx.annotation/annotation
             // https://android.googlesource.com/platform/prebuilts/sdk/+/refs/heads/main/current/androidx/m2repository/androidx/annotation/annotation-jvm/
             annotation           :  'androidx.annotation:annotation:1.9.0-rc01',
@@ -24,7 +27,7 @@ buildscript {
             lottie               :  'com.airbnb.android:lottie:6.5.2',
             // https://mvnrepository.com/artifact/com.google.android.material/material
             // https://android.googlesource.com/platform/prebuilts/sdk/+/refs/heads/main/current/extras/material-design-x/com/google/android/material/material/
-            material             :  'com.google.android.material:material:1.13.0-alpha08',
+            material             :  'com.google.android.material:material:1.14.0-alpha02',
             // https://mvnrepository.com/artifact/androidx.preference/preference
             // https://android.googlesource.com/platform/prebuilts/sdk/+/refs/heads/main/current/androidx/m2repository/androidx/preference/preference/
             preference           :  'androidx.preference:preference:1.2.1', // TODO: AOSP sources use 1.3.0-alpha01; upgrade when available in Maven Cetnral
