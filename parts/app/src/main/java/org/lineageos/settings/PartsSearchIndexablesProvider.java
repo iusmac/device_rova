@@ -53,6 +53,7 @@ import static android.provider.SearchIndexablesContract.COLUMN_INDEX_NON_INDEXAB
 import org.lineageos.settings.BuildConfig;
 import org.lineageos.settings.batterylow.BatteryLowActivity;
 import org.lineageos.settings.dirac.DiracActivity;
+import org.lineageos.settings.ramplus.RamPlusActivity;
 import org.lineageos.settings.speaker.ClearSpeakerActivity;
 import org.lineageos.settings.smartcharging.SmartChargingActivity;
 import org.lineageos.settings.soundcontrol.SoundControlSettingsActivity;
@@ -78,6 +79,8 @@ public class PartsSearchIndexablesProvider extends SearchIndexablesProvider {
                     SoundControlSettingsActivity.class.getName(), iconResId));
         sResMap.add(new SearchIndexableResource(rank, R.xml.batterylow_settings,
                     BatteryLowActivity.class.getName(), iconResId));
+        sResMap.add(new SearchIndexableResource(rank, R.xml.ramplus_settings,
+                    RamPlusActivity.class.getName(), iconResId));
     }
 
     @Override
