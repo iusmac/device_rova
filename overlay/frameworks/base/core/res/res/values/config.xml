@@ -244,9 +244,9 @@
          The user is forbidden from setting the brightness below this level. -->
     <item name="config_screenBrightnessSettingMinimumFloat" format="float" type="dimen">1.0</item>
 
-    <!-- Default screen brightness setting.
+    <!-- Default screen brightness setting set.
          Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">69</integer>
+    <item name="config_screenBrightnessSettingDefaultFloat" format="float" type="dimen">0.27</item>
 
     <!-- Fast brightness animation ramp rate in brightness units per second-->
     <integer translatable="false" name="config_brightness_ramp_rate_fast">180</integer>
