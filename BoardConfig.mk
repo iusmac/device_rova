@@ -149,7 +149,8 @@ TARGET_KERNEL_CONFIG += \
     vendor/feature/wireguard.config \
     vendor/feature/ksu_manual_hook.config \
     vendor/feature/pocket-judge.config \
-    vendor/feature/net.config
+    vendor/feature/net.config \
+    vendor/feature/nomount.config
 else
 TARGET_KERNEL_CONFIG += \
     vendor/feature/no-camera-stack.config \
