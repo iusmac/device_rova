@@ -1,6 +1,7 @@
 soong_namespace {
     imports: [
         "device/xiaomi/rova/qcom-caf",
+        "hardware/google/pixel/power-libperfmgr",
         "hardware/lineage/interfaces/power-libperfmgr",
         "hardware/qcom-caf/common/libqti-perfd-client",
         "vendor/qcom/opensource/display",
