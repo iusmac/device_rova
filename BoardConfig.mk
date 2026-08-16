@@ -144,6 +144,7 @@ ifndef BUILD_RECOVERY_KERNEL
 TARGET_KERNEL_CONFIG += \
     vendor/debugfs.config \
     vendor/feature/android-12.config \
+    vendor/feature/compat-vdso.config \
     vendor/feature/kprobes.config \
     vendor/feature/lmkd.config \
     vendor/feature/wireguard.config \
