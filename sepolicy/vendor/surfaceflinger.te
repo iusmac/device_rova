@@ -1,1 +1,2 @@
 allow surfaceflinger hal_graphics_composer_default:dir { search };
+allow surfaceflinger vendor_hal_vnddisplayconfig_service:service_manager find;
