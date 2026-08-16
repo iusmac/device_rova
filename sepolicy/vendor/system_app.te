@@ -7,6 +7,7 @@ allow system_app fm_radio_device:chr_file r_file_perms;
 # Generic
 allow system_app proc_vmallocinfo:file r_file_perms;
 get_prop(system_app, vendor_bluetooth_prop)
+binder_call(system_app, hal_rcsservice)
 
 # XiaomiParts
 allow system_app {

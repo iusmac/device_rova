@@ -15,3 +15,5 @@ allow hal_power_default sysfs_devfreq:lnk_file r_file_perms;
 allow hal_power_default sysfs_kgsl:file rw_file_perms;
 allow hal_power_default sysfs_kgsl:lnk_file r_file_perms;
 allow hal_power_default self:capability { kill };
+
+allow hal_power_default vendor_hal_vnddisplayconfig_service:service_manager find;
