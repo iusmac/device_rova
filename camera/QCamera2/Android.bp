@@ -21,7 +21,10 @@ cc_library_shared {
         "-DQCAMERA_REDEFINE_LOG",
         "-DTARGET_TS_MAKEUP",
         "-DVENUS_PRESENT",
-    ],
+    ] + select(soong_config_variable("surfaceflinger", "register_displayservice"), {
+        true: ["-DUSE_LINEAGE_DISPLAYSERVICE"],
+        default: [],
+    }),
     include_dirs: [
         "device/xiaomi/rova/camera/mm-image-codec/qexif",
         "device/xiaomi/rova/camera/mm-image-codec/qomx_core",
@@ -68,12 +71,14 @@ cc_library_shared {
         "libqservice",
         "libbinder",
         "libion",
-        "android.frameworks.displayservice@1.0",
         "libhidlbase",
 
         "libts_face_beautify_hal",
         "libts_detected_face_hal",
-    ],
+    ] + select(soong_config_variable("surfaceflinger", "register_displayservice"), {
+        true: ["lineage.frameworks.displayservice@1.0"],
+        default: ["android.frameworks.displayservice@1.0"],
+    }),
     srcs: [
         "util/QCameraBufferMaps.cpp",
         "util/QCameraCmdThread.cpp",
