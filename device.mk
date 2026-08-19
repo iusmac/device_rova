@@ -130,7 +130,6 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 
 # Display
 PRODUCT_PACKAGES += \
-    android.frameworks.displayservice@1.0.vendor \
     vendor.qti.hardware.display.allocator-service \
     vendor.qti.hardware.display.mapper@2.0.vendor \
     vendor.qti.hardware.display.mapper@3.0.vendor \
@@ -162,6 +161,16 @@ PRODUCT_PACKAGES += \
     libEGL_adreno_libEGL_adreno_symlink64 \
     libGLESv2_adreno_libGLESv2_adreno_symlink64 \
     libq3dtools_adreno_libq3dtools_adreno_symlink64
+
+ifeq ($(LINEAGE_BUILD),)
+PRODUCT_PACKAGES += \
+    android.frameworks.displayservice@1.0.vendor
+else
+PRODUCT_PACKAGES += \
+    lineage.frameworks.displayservice@1.0.vendor
+
+$(call soong_config_set_bool,surfaceflinger,register_displayservice,true)
+endif
 
 # XiaomiParts
 PRODUCT_PACKAGES += \
