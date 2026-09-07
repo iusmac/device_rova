@@ -157,6 +157,7 @@ TARGET_KERNEL_CONFIG += \
     vendor/feature/no-wlan-driver.config \
     vendor/feature/no-ksu.config
 endif # BUILD_RECOVERY_KERNEL
+TARGET_COMPILE_WITH_MSM_KERNEL := true
 TARGET_KERNEL_VERSION := 4.19
 TARGET_KERNEL_ADDITIONAL_FLAGS := \
     LLVM=1
