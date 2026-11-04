@@ -18,9 +18,6 @@ type sysfs_fps, sysfs_type, fs_type;
 # Mach
 type sysfs_mi8937_mach, fs_type, sysfs_type;
 
-# Per boot
-type per_boot_file, file_type, data_file_type, core_data_file_type;
-
 # Power HAL
 type debugfs_sched_features, debugfs_type, fs_type;
 type proc_sysctl_autogroup, proc_type, fs_type;
