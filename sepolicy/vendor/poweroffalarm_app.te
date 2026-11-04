@@ -1,3 +1,0 @@
-allow poweroffalarm_app mnt_vendor_file:dir r_dir_perms;
-get_prop(poweroffalarm_app, vendor_alarm_boot_prop);
-get_prop(poweroffalarm_app, vendor_iop_prop)
