@@ -2,6 +2,7 @@ package org.lineageos.settings.preferences;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -54,11 +55,15 @@ public class SliderPreference extends com.android.settingslib.widget.SliderPrefe
         TextView startText = (TextView) holder.findViewById(android.R.id.text1);
         if (startText != null && mTextStart != null) {
             startText.setText(mTextStart);
+            startText.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            startText.setGravity(Gravity.START | Gravity.TOP);
         }
 
         TextView endText = (TextView) holder.findViewById(android.R.id.text2);
         if (endText != null && mTextEnd != null) {
             endText.setText(mTextEnd);
+            endText.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            endText.setGravity(Gravity.END | Gravity.TOP);
         }
 
         // Show/hide the start/end text frame, if any exist
