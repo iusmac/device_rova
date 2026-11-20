@@ -27,7 +27,6 @@ import androidx.core.text.HtmlCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroupAdapter;
 import androidx.preference.PreferenceViewHolder;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 
@@ -124,8 +123,12 @@ public class RamPlusFragment extends Hilt_RamPlusFragment
             final var iconStartView = (ImageView) holder.findViewById(
                     com.android.settingslib.widget.preference.slider.R.id.icon_start);
             if (iconStartView != null) {
-                getListView().post(() -> getListView().getItemAnimator().isRunning(() ->
-                            iconStartView.setImageResource(iconResId)));
+                getListView().post(() -> {
+                    if (isAdded() && getView() != null) {
+                        getListView().getItemAnimator().isRunning(() ->
+                                iconStartView.setImageResource(iconResId));
+                    }
+                });
             }
         } else { // lazily initialize when not laid out yet
             mModePref.setIconStart(iconResId);
