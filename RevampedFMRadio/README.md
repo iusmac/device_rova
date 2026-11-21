@@ -80,6 +80,8 @@ AOSP FMRadio | RevampedFMRadio
     </details>
 
 16. Support FM device loopback & audio routing for devices with newer audio HAL (CodeAurora version)
+17. Compatibility with BT SoC devices without `/dev/radio0` support:
+    - cherokee (through fm_helium HAL) ([PR#22](https://github.com/iusmac/RevampedFMRadio/pull/22) / Thanks to [Flopster101](https://github.com/Flopster101))
 
 ## Installation
 1. Clone the branch that corresponds to your device SoC, for example:
@@ -95,10 +97,10 @@ AOSP FMRadio | RevampedFMRadio
         **NOTE:** there's a high chance of getting something broken if you always fetch upstream changes. It's recommended to go with <em>in-tree</em> package within your device tree, and from time to time manually merge and check upstream changes.
 
 2. Add app to `device.mk`:
-```Makefile
-PRODUCT_PACKAGES += \
-    RevampedFMRadio
-```
+    ```Makefile
+    PRODUCT_PACKAGES += \
+        RevampedFMRadio
+    ```
 **Note**: _RevampedFMRadio_ package will override _FMRadio_ package if the ROM sources still ship it.
 
 <details><summary><h4>Qualcomm SoC-specific part</h4></summary>
@@ -111,25 +113,42 @@ PRODUCT_PACKAGES += \
    restore it.
 
 4. Add JNI library to `device.mk`:
-```Makefile
-PRODUCT_PACKAGES += \
-    libqcomfmjni
-```
+    ```Makefile
+    PRODUCT_PACKAGES += \
+        libqcomfmjni
+    ```
 5. Make sure you have `vendor.qcom.bluetooth.soc` prop in your <em>vendor.prop</em> file.
    You may already have something similar, like `vendor.bluetooth.soc`, but it's legacy. Rename if proprietary blobs support new prop name or duplicate the value using new prop name to ensure RevampedFMRadio can properly comunicate to your device's Bluetooth SoC.
-6. Allow app to read vendor properties mentioned in the previous step:
-```Console
-# sepolicy/vendor/system_app.te
-get_prop(system_app, vendor_bluetooth_prop)
-```
+6. Allow app to read/write vendor properties mentioned in the previous step:
+    ```Console
+    # sepolicy/vendor/system_app.te
+    get_prop(system_app, vendor_bluetooth_prop)
+    set_prop(system_app, vendor_fm_prop)
+    ```
+
+    Also, when `vendor.qcom.bluetooth.soc` prop is `cherokee`, app needs to connect to fm_helium HAL:
+    ```Console
+    # sepolicy/vendor/system_app.te
+    hal_client_domain(system_app, vendor_hal_fm)
+    ```
+
+7. Disable FM firmware support in JNI library, if device doesn't require it:
+    ```Console
+    # BoardConfig.mk (or device.mk or common.mk)
+    TARGET_QCOM_NO_FM_FIRMWARE := true
+    ```
+    **Note**: you may still need to add the above legacy flag if your Device Tree has already migrated to the newer flag (keep it for upward/forward-compatibility):
+    ```Console
+    $(call soong_config_set_bool,libfmjni,no_fm_firmware,true)
+    ```
 </details>
 <details><summary><h4>MediaTek SoC-specific part</h4></summary></summary>
 
 3. Add JNI library to `device.mk`:
-```Makefile
-PRODUCT_PACKAGES += \
-    libmtkfmjni
-```
+    ```Makefile
+    PRODUCT_PACKAGES += \
+        libmtkfmjni
+    ```
 
 4. You might need to remove the `libfmcust/libfmjni.so` prebuilt library from device-tree.
     > 💡 Our version of the `libfmjni` prebuilt library already includes hardcoded configurations for known SoCs from `libfmcust`.
@@ -141,3 +160,4 @@ Contributions are welcome! Fixes and improvements for different SoCs are highly 
 
 ## Credits
 - [iusmac (Max)](https://github.com/iusmac)
+- [Flopster101](https://github.com/Flopster101)
